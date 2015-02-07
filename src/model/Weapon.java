@@ -3,7 +3,7 @@ package model;
 public class Weapon {
     boolean ranged;
     int damage;
-    int reach;
+    int length;
 
     public void setRanged(boolean ranged) {
         this.ranged = ranged;
@@ -19,12 +19,12 @@ public class Weapon {
         this.damage = damage;
     }
 
-    public void getReach() {
-        return reach;
+    public void getLength() {
+        return length;
     }
 
-    public int setReach(int reach) {
-        this.reach = reach;
+    public int setLength(int length) {
+        this.length = length;
     }
 
 }
