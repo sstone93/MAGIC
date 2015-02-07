@@ -2,8 +2,10 @@ package model;
 
 public class Weapon {
     boolean ranged;
-    int damage;
-    int length;
+    int     damage;
+    int     length;
+    int     weight;
+    String  speed;
 
     public void setRanged(boolean ranged) {
         this.ranged = ranged;
@@ -25,6 +27,14 @@ public class Weapon {
 
     public int setLength(int length) {
         this.length = length;
+    }
+
+    public void getSpeed() {
+        return speed;
+    }
+
+    public String setSpeed(String speed) {
+        this.speed = speed;
     }
 
 }

@@ -1,26 +1,24 @@
 package model;
 
 public class Armour {
-    int health = 10;
-    String type;
+    String  weight;
+    String  health
+    String  type;
     boolean damaged;
 
-    public int getHealth() {
+    public String getWeight() {
+        return weight;
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight;
+    }
+
+    public String getHealth() {
         return health;
     }
-
-    public void addHealth(int health) {
-        this.health += health;
-    }
-    public void removeHealth(int health) {
-        this.health -= health;
-    }
-    public void setHealth(int health) {
+    public void setHealth(String health) {
         this.health = health;
-    }
-
-    public void resetHealth(int health) {
-        health = 10;
     }
 
     public String getType() {
