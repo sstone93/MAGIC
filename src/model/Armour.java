@@ -1,7 +1,7 @@
 package model;
 
 public class Armour {
-    int health;
+    int health = 10;
     String type;
     boolean damaged;
 
@@ -17,6 +17,10 @@ public class Armour {
     }
     public void setHealth(int health) {
         this.health = health;
+    }
+
+    public void resetHealth(int health) {
+        health = 10;
     }
 
     public String getType() {
