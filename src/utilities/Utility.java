@@ -1,4 +1,5 @@
 package utilities;
+import java.util.Random;
 
 public int roll(int max) {
     Random r = new Random();
