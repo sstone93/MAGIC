@@ -1,4 +1,4 @@
-package model;
+package utilities;
 
 public int roll(int max) {
     Random r = new Random();
