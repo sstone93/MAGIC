@@ -1,11 +1,12 @@
 package model;
+import Utility;
 
 public class Weapon {
     boolean ranged;
-    int     damage;
     int     length;
     int     weight;
     int     speed;
+    WeaponDamage damage;
 
     public void setRanged(boolean ranged) {
         this.ranged = ranged;
@@ -14,10 +15,10 @@ public class Weapon {
         return ranged;
     }
 
-    public int getDamage() {
+    public WeaponDamage getDamage() {
         return damage;
     }
-    public int setDamage(int damage) {
+    public WeaponDamage setDamage(WeaponDamage damage) {
         this.damage = damage;
     }
 
