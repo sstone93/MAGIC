@@ -5,7 +5,7 @@ public class Weapon {
     int     damage;
     int     length;
     int     weight;
-    String  speed;
+    int     speed;
 
     public void setRanged(boolean ranged) {
         this.ranged = ranged;
@@ -33,7 +33,7 @@ public class Weapon {
         return speed;
     }
 
-    public String setSpeed(String speed) {
+    public int setSpeed(int speed) {
         this.speed = speed;
     }
 
