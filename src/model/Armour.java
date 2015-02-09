@@ -5,6 +5,7 @@ public class Armour {
     String  health
     String  type;
     boolean damaged;
+    boolean active;
 
     public String getWeight() {
         return weight;
@@ -34,5 +35,13 @@ public class Armour {
 
     public void setDamaged(boolean damage) {
         damaged = damage;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }
