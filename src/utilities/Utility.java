@@ -6,4 +6,4 @@ public int roll(int max) {
     return r.nextInt(max) + 1;
 }
 
-public enum WeaponDamage {LIGHT, MEDIUM, HEAVY}
+public enum ItemWeight {LIGHT, MEDIUM, HEAVY}
