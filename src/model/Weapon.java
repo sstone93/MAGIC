@@ -8,8 +8,8 @@ public class Weapon {
     int     length; // on a scale of 0 - 18
     int     speed;
     int     sharpness; // higher = more harm inflicted
-    WeaponDamage weight;
-    WeaponDamage damage;
+    ItemWeight weight;
+    ItemWeight damage;
 
     public void setRanged(boolean ranged) {
         this.ranged = ranged;
@@ -56,17 +56,17 @@ public class Weapon {
         return sharpness;
     }
 
-    public WeaponDamage getWeight() {
+    public ItemWeight getWeight() {
         return weight;
     }
-    public WeaponDamage setWeight(WeaponDamage weight) {
+    public ItemWeight setWeight(ItemWeight weight) {
         this.weight = weight;
     }
 
-    public WeaponDamage getDamage() {
+    public ItemWeight getDamage() {
         return damage;
     }
-    public WeaponDamage setDamage(WeaponDamage damage) {
+    public ItemWeight setDamage(ItemWeight damage) {
         this.damage = damage;
     }
 }
