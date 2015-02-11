@@ -1,5 +1,7 @@
 package model;
 
+
+
 public class Player {
     int victoryPoints;
     int gold;

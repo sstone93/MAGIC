@@ -10,30 +10,30 @@ public class Weapon {
     public void setRanged(boolean ranged) {
         this.ranged = ranged;
     }
-    public void isRanged() {
+    public boolean isRanged() {
         return ranged;
     }
 
     public int getDamage() {
         return damage;
     }
-    public int setDamage(int damage) {
+    public void setDamage(int damage) {
         this.damage = damage;
     }
 
-    public void getLength() {
+    public int getLength() {
         return length;
     }
 
-    public int setLength(int length) {
+    public void setLength(int length) {
         this.length = length;
     }
 
-    public void getSpeed() {
+    public String getSpeed() {
         return speed;
     }
 
-    public String setSpeed(String speed) {
+    public void setSpeed(String speed) {
         this.speed = speed;
     }
 

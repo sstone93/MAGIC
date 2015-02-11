@@ -2,7 +2,7 @@ package model;
 
 public class Armour {
     String  weight;
-    String  health
+    String  health;
     String  type;
     boolean damaged;
 
