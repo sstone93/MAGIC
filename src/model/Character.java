@@ -22,7 +22,7 @@ public class Character {
     }
 
     public Weapon getStartingWeapon() {
-        return weapon;
+        return startingWeapon;
     }
 
     public void setStartingWeapon(Weapon weapon) {

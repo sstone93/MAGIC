@@ -1,40 +1,61 @@
 package model;
+import utils.Utility.ItemWeight;
 
 public class Weapon {
     boolean ranged;
-    int     damage;
-    int     length;
-    int     weight;
-    String  speed;
-
+    boolean active;
+    String attack; // the method of attack
+    int length; // on a scale of 0 - 18
+    int speed;
+    int sharpness; // higher = more harm inflicted
+    ItemWeight weight;
+    ItemWeight damage;
     public void setRanged(boolean ranged) {
         this.ranged = ranged;
     }
     public boolean isRanged() {
         return ranged;
     }
-
-    public int getDamage() {
-        return damage;
+    public void setActive(boolean active) {
+        this.active = active;
     }
-    public void setDamage(int damage) {
-        this.damage = damage;
+    public boolean isActive() {
+        return active;
     }
-
+    public void setAttack(String attack) {
+        this.attack = attack;
+    }
+    public String getAttack() {
+        return attack;
+    }
     public int getLength() {
         return length;
     }
-
     public void setLength(int length) {
-        this.length = length;
+      this.length = length;
     }
-
-    public String getSpeed() {
+    public int getSpeed() {
         return speed;
     }
-
-    public void setSpeed(String speed) {
+    public void setSpeed(int speed) {
         this.speed = speed;
     }
-
+    public void setSharpness(int sharp) {
+        sharpness = sharp;
+    }
+    public int getSharpness() {
+        return sharpness;
+    }
+    public ItemWeight getWeight() {
+        return weight;
+    }
+    public void setWeight(ItemWeight weight) {
+        this.weight = weight;
+    }
+    public ItemWeight getDamage() {
+        return damage;
+    }
+    public void setDamage(ItemWeight damage) {
+        this.damage = damage;
+    }
 }
