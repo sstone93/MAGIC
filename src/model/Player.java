@@ -1,6 +1,6 @@
 package model;
 
-
+import java.lang.reflect.Array;
 
 public class Player {
     int victoryPoints = 0;
@@ -29,7 +29,7 @@ public class Player {
 
     public boolean removeGold(int gold) {
         if (this.gold - gold <= 0) {
-            return false
+            return false;
         }
         this.gold -= gold;
         return true;
