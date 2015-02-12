@@ -1,6 +1,5 @@
 package view;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -10,6 +9,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 
+@SuppressWarnings("serial")
 public class View extends JFrame {
 
 	private JPanel contentPane;

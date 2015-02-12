@@ -8,20 +8,19 @@ import java.net.Socket;
 
 public class ServerThread extends Thread implements Serializable{
 	
-
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 8719452824623970769L;
 	private int ID = -1;
 	private Socket socket = null;
-	private Server server = null;
+	private NetworkServer server = null;
 	private ObjectInputStream streamIn = null;
 	private ObjectOutputStream streamOut = null;
 	
 	private boolean done = false;
 	
-	public ServerThread(Server server, Socket socket){
+	public ServerThread(NetworkServer server, Socket socket){
 		super();
 		this.server = server;
 		this.socket = socket;

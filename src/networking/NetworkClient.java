@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class Client implements Runnable{
+public class NetworkClient implements Runnable{
 	
 	private int ID = 0;
 	private Socket socket = null;
@@ -13,7 +13,7 @@ public class Client implements Runnable{
 	
 	public Object model;
 	
-	public Client(String serverName, int serverPort) throws UnknownHostException, IOException {
+	public NetworkClient(String serverName, int serverPort) throws UnknownHostException, IOException {
 			
 		System.out.println(ID + ": Establishing connection. Please wait...");
 		

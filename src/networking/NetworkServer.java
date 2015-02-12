@@ -3,19 +3,23 @@ package networking;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import controller.ServerController;
 import utils.Config;
 
-public class Server implements Runnable{
+public class NetworkServer implements Runnable{
 
 	int clientCount= 0;
 	private Thread thread = null;
 	private ServerSocket server = null;
 	public ServerThread clients[] = new ServerThread[Config.MAX_CLIENTS];
+	public ServerController controller = null;
 	
-	public Object model = null;
-	
-	public Server(int port){
+	public NetworkServer(int port, ServerController control){
 
+		//stores the parent ServerController
+		this.controller = control;
+		
 		try{
 			System.out.println("Binding to port " + port + ", please wait....");
 			server = new ServerSocket(port);
@@ -70,31 +74,27 @@ public class Server implements Runnable{
 	
 	public synchronized void handle(int ID, Object input) {
 
-		System.out.println("New Object Recieved: " + input);
+		System.out.println("New Message Recieved: " + input);
 
+		//handles random noise
 		if (input == null)
 			return;
 
-		if(input instanceof String){
+		//CURRENTLY HERE SO I CAN RE-USE THIS CODE LATER
+		
+		/*if(input instanceof String){
 
 			//this handles returing score error messages
 			System.out.println("Sending String Message to " + ID);
 			int pos = findClient(ID);
 			if(pos != -1){
 				clients[pos].send(input);
-			}
+			}*/
 
-			//HANDLES SENDING PLAYERS A NEW HAND
-		//} //else if (input instanceof Hand){
-			//System.out.println("Sending new Hand to " + ID);
-			///int pos = findClient(ID);
-			//if(pos != -1){
-			//	clients[pos].send(input);
-			//}
-		} else {
-			System.out.println("Model Told to Handle");
-			//model.handle(ID, input);
-		}	
+		//send message to controller to be handled
+		System.out.println("Controller Told to Handle");
+		this.controller.handle(ID, input);
+		
 	}
 	
 	public synchronized void remove(int ID){
@@ -145,10 +145,5 @@ public class Server implements Runnable{
 		} catch (InterruptedException e){
 			e.printStackTrace();
 		}
-	}
-	
-	@SuppressWarnings("unused")
-	public static void main(String args[]) {
-		Server server = new Server(Config.DEFAULT_PORT);
 	}
 }
