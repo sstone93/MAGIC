@@ -56,7 +56,7 @@ public class Game {
         }
         // unalert all weapons
         for (int i = 0; i <= playerCount; i++) {
-            Weapon[] weapons = players[i].getWeapons();
+            Weapon[] weapons = players[i].getWeapons()
             for (int j = 0; j < weapons.length; j++ ) {
                 weapons[j].setActive(false);
             }
@@ -73,30 +73,39 @@ public class Game {
 
     public void startDay() {
         currentDay++;
-        
-        // roll for which character goes first
-        // set their orders 
 
     }
 
-    public void endGame() {
-        // player has to discard any items an active move chit can't carry
+    public Player endGame() {
+        Player winner = null;
 
-        //great treasure score: number of treasures owned - great treasures needed for his victory requirements
+        // todo: player has to discard any items an active move chit can't carry
 
-        // fame score:recorded fame + fame of belongings - fame needed for victory requirements (do not count the fame reward of belongings)
+        for (int i = 0; i <= playerCount; i++ ) {
 
-        // notoriety score: recorded notoriety + notoreity value of belongings - notoriety needed for VR
-        // (belonging with negative notoriety values subtract from score)
+            int basicScore = 0;
+            int bonusScore = 0;
 
-        // gold score: recorded gold - gold for VR
+            //todo: great treasure score: number of treasures owned - great treasures needed for his victory requirements
 
-        // basic score: divides each category by its factor to convert to victory points (round all fractions down)
+            // fame score:recorded fame + fame of belongings - fame needed for victory requirements (do not count the fame reward of belongings)
+            int fameScore = players[i].getFame();
 
-        // bonus score: multiplies basic score in each category by the number of victory points he assigned to that category
+            // notoriety score: recorded notoriety + notoreity value of belongings - notoriety needed for VR
+            // (belongings with negative notoriety values subtract from score)
+            int notorietyScore = players[i].getNotoriety();
 
-        // total score: basic + bonus
+            // gold score: recorded gold - gold for VR
+            int goldScore = players[i].getGold();
+
+            // basic score: divides each category by its factor to convert to victory points (round all fractions down)
+
+            // bonus score: multiplies basic score in each category by the number of victory points he assigned to that category
+
+            int totalScore = bonusScore + basicScore;
+            player.setFinalScore(totalScore);
+        }
+
+        return winner;
     }
-
-
 }
