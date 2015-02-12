@@ -4,12 +4,13 @@ import utils.Utility.ItemWeight;
 public class Weapon {
     boolean ranged;
     boolean active;
-    String attack; // the method of attack
-    int length; // on a scale of 0 - 18
-    int speed;
-    int sharpness; // higher = more harm inflicted
+    String  attack; // the method of attack
+    int     length; // on a scale of 0 - 18
+    int     speed;
+    int     sharpness; // higher = more harm inflicted
     ItemWeight weight;
     ItemWeight damage;
+    
     public void setRanged(boolean ranged) {
         this.ranged = ranged;
     }

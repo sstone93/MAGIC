@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Arrays;
+
 public class Clearing {
     String type;
     String dwelling; // not sure what type this should actually be
@@ -26,6 +28,15 @@ public class Clearing {
 
     public void setDwelling(String dwelling) {
         this.dwelling = dwelling;
+    }
+
+    public boolean canChangeClearing(Clearing clearing) {
+        // if they're connected
+        if (Arrays.asList(connections).contains(clearing)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

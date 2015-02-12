@@ -9,11 +9,12 @@ public class Player {
     int fatigue       = 0;
     int fame          = 0;
     int notoriety     = 0;
+    boolean hidden    = false;
     Character character;
 
     Clearing location;
     Armour[] armour;
-    Weapon[] weapon;
+    Weapon[] weapons;
     Array[]  treasures;
 
     Player(Character character) {
@@ -33,6 +34,14 @@ public class Player {
         }
         this.gold -= gold;
         return true;
+    }
+
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    public void setHidden(boolean hide) {
+        hidden = hide;
     }
 
     public int getFatigue() {
@@ -78,5 +87,13 @@ public class Player {
 
     public void setLocation(Clearing location) {
         this.location = location;
+    }
+    
+    public Weapon[] getWeapons() {
+    	return weapons;
+    }
+    
+    public void addWeapon(Weapon weapon) {
+    	// add it to the array of weapons
     }
 }
