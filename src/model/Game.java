@@ -56,7 +56,7 @@ public class Game {
         }
         // unalert all weapons
         for (int i = 0; i <= playerCount; i++) {
-            Weapon[] weapons = players[i].getWeapons()
+            Weapon[] weapons = players[i].getWeapons();
             for (int j = 0; j < weapons.length; j++ ) {
                 weapons[j].setActive(false);
             }
@@ -73,6 +73,9 @@ public class Game {
 
     public void startDay() {
         currentDay++;
+        
+        // roll for which character goes first
+        // set their orders 
 
     }
 

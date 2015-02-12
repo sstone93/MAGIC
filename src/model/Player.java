@@ -9,6 +9,7 @@ public class Player {
     int fatigue       = 0;
     int fame          = 0;
     int notoriety     = 0;
+    int order; // in which order does the player play
     boolean hidden    = false;
     Character character;
 
@@ -35,7 +36,15 @@ public class Player {
         this.gold -= gold;
         return true;
     }
-
+    
+    public void setOrder(int order) {
+    	this.order = order;
+    }
+    
+    public int getOrder() {
+    	return order;
+    }
+    
     public boolean isHidden() {
         return hidden;
     }
