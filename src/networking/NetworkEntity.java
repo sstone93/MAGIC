@@ -44,7 +44,6 @@ public abstract class NetworkEntity {
 	 * @param ID The ID# of the thread being shutdown.
 	 */
 	public synchronized void remove(int ID){
-		//System.out.println("Removing client thread " + ID + " at " + findClient(ID));
 		int pos = findClient(ID);		//converts the ID into a position in the array
 		if (pos >= 0) {					//ensure the given position is actually valid
 			NetworkThread toTerminate = clients[pos];			//grabs the thread being shutdown
@@ -52,12 +51,12 @@ public abstract class NetworkEntity {
 			for (int i = pos + 1; i < clientCount; i++) {		//resorts the array of threads so that
 				clients[i - 1] = clients[i];					//there are no open spaces in the middle
 			}
-			clientCount--;				//Update the current number of threads
+			clientCount--;						//Update the current number of threads
 			try{
-				toTerminate.close();	//TODO This SHOULD properly terminate the thread being shut down.
-				toTerminate = null;		//allows the garbage collector to have it???
+				toTerminate.close();			//This SHOULD properly terminate the thread being shut down.
+				toTerminate = null;				//allows the garbage collector to have it???
 			} catch (IOException ioe) {
-				toTerminate = null;		//allows the garbage collector to have it???
+				toTerminate = null;				//allows the garbage collector to have it???
 				System.out.println("Error closing thread: " + ioe);
 			}
 		}

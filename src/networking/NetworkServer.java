@@ -15,7 +15,7 @@ import utils.Config;
 public class NetworkServer extends NetworkEntity implements Runnable{
 
 	private ServerSocket server = null;
-	//private ServerController controller = null;
+	private boolean busy = false;
 	
 	/**
 	 * Contructor for a NetworkServer
@@ -38,24 +38,25 @@ public class NetworkServer extends NetworkEntity implements Runnable{
 	 * @param socket The client socket being communicated with
 	 */
 	private void addThread(Socket socket){
+		busy = true;
 		if (clientCount < clients.length){							//if there is room for another client...
 			System.out.println("Client acceptied: " + socket);
-			clients[clientCount] = new NetworkThread(this, socket);
+			clients[clientCount] = new NetworkThread(this, socket, socket.getPort());
 			try {
 				clients[clientCount].open();						//creates a new thread to deal with the new client
 				clients[clientCount].start();
 				clientCount++;
 			} catch (IOException ioe){
+				busy = false;
 				System.out.println("Server Error adding new thread: ");
 			}
-			//checks to see if the clientCount has been reached and the game should start
-			//TODO HARD CODING TO TEST PROPER CLOSEDOWN OF NETWORK
-			if(clientCount == Config.MAX_CLIENTS){
-				this.stop();
+			if(clientCount == Config.MAX_CLIENTS){						//checks to see if the clientCount has been reached and the game should start
+				controller.handle(Config.DEFAULT_PORT, "START GAME");
 			}		
 		} else {
 			System.out.println("Client refused: maximum " + clients.length + " reached.");
 		}
+		busy = false;
 	}
 	
 	/**
@@ -84,29 +85,11 @@ public class NetworkServer extends NetworkEntity implements Runnable{
 	}
 	
 	/**
-	 * This is the old version of the stop method that involved a .join which I find dumb
-	 //TODO Ask the TA's why the join was important.
-	 */
-	/*public void stop2(){
-		System.out.println("Server - Begin Stopping.");
-		try{
-			if (thread != null){		//if the thread is currently exceduting
-				thread.join();			//TODO WAITS FOR THREAD TO FINISH BEFORE CONTINUING.
-				thread = null;			//stop the thing you just waited for to stop on its own???
-			}
-			System.out.println("NetworkServer was stopped.");
-		} catch (InterruptedException e){
-			System.out.println("Interrupted Exception in NetworkServer Stop Method");
-		}
-	}*/
-	
-	//TODO Maybe add a "State" variable to replace the old join? if the server is busy,
-	//wait until it is finished before shutting down?
-	/**
 	 * This is used to stop the Network Server
 	 */
 	public void stop(){
 		System.out.println("Server: Begin Shutdown.");
+		while (busy){}							//stops the server from shutting down while a thread is being added.
 		while (clientCount > 0){
 			this.remove(clients[0].getID());	//Close all threads 1 by 1
 		}

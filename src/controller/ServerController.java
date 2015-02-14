@@ -32,7 +32,12 @@ public class ServerController extends Handler{
 	 * @param message the contents of the message
 	 */
 	public void handle(int ID, Object message){
-		
+		if(message instanceof String){
+			String text = ((String) message );
+			if(text.equalsIgnoreCase("START GAME")){
+				System.out.println("Server Controller told to START THE GAME.");
+			}
+		}
 	}
 	
 	/**
@@ -41,6 +46,10 @@ public class ServerController extends Handler{
 	public void run(){
 		//start the network up
 		//populate the model as needed
+	}
+	
+	public void startGame(){
+		
 	}
 	
 	/**

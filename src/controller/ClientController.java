@@ -48,7 +48,12 @@ public class ClientController extends Handler{
 	 * 
 	 */
 	public void handle(int ID, Object message){
-		
+		if(message instanceof String){
+			String text = ((String) message );
+			if(text.equalsIgnoreCase("NC CLOSED")){
+				System.out.println("Your NetworkClient has CLOSED.");
+			}
+		}
 	}
 	
 	/**

@@ -25,11 +25,11 @@ public class NetworkThread extends Thread implements Serializable{
 	 * @param parent A reference to the NetworkEntity who spawned this thread
 	 * @param socket The socket that this thread will be operating on.
 	 */
-	public NetworkThread(NetworkEntity parent, Socket socket){
+	public NetworkThread(NetworkEntity parent, Socket socket, int ID){
 		super();
 		this.parent = parent;
 		this.socket = socket;
-		this.ID = socket.getPort();
+		this.ID = ID;
 	}
 	
 	/**
@@ -50,7 +50,7 @@ public class NetworkThread extends Thread implements Serializable{
 			streamOut.flush();
 			System.out.println("Sent Message: "+o);
 		} catch (IOException ioe) {
-			System.out.println(ID + "ERROR sending Message: ");
+			System.out.println("	"+ID + "ERROR sending Message: ");
 			parent.remove(ID);										//Parent properly handles killing off this thread
 		}
 	}
@@ -64,7 +64,7 @@ public class NetworkThread extends Thread implements Serializable{
 			try{						//Trys to read in a new object, if it does, send it to the NetworkEntity to be handled
 				parent.handle(ID, streamIn.readObject());
 			} catch (IOException ioe) {
-				//System.out.println(ID + ": ERROR reading input (Socket Closed?!?):");
+				System.out.println("	"+ID + ": ERROR reading input (Socket Closed?!?):");
 				parent.remove(ID);									//Parent properly handles killing off this thread
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();

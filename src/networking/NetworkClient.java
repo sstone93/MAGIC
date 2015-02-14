@@ -14,12 +14,11 @@ import utils.Config;
  */
 public class NetworkClient extends NetworkEntity  implements Runnable{
 	
-	//private ClientController controller = null;
 	private Socket socket = null;
 	
 	/**
-	 * 
-	 * @param control
+	 * Constructor for a NetworkClient
+	 * @param control This is a reference to the controller who created this object.
 	 */
 	public NetworkClient(ClientController control){
 		this.controller = control;		//stores the parent ServerController
@@ -40,23 +39,21 @@ public class NetworkClient extends NetworkEntity  implements Runnable{
 	}
 	
 	/**
-	 * 
+	 * This needs to be here to enable the threading, but it doesnt actually do anything, all action is taken during the constructor
 	 */
 	public void run(){
 	}
 	
-	//TODO UNDERSTAND WHY WE NEED TO THREAD LIKE THIS
 	/**
 	 * This method is called to start up the client.
 	 */
 	public void start() {
-		clients[0] = new NetworkThread(this, socket);		//TODO
+		clients[0] = new NetworkThread(this, socket, socket.getLocalPort());
 		try {
 			clients[0].open();
 			clients[0].start();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("IO Error in NetworkClient start");
 		}
 		if (thread == null){
 			thread = new Thread(this);
@@ -65,13 +62,8 @@ public class NetworkClient extends NetworkEntity  implements Runnable{
 		}
 	}
 	
-	//try to detect if it is a client who was removing their only thread (commiting suicide)
-	//TODO THE BELOW STOP METHOD IS NEVER CALLED!
-	//TODO Run is still blank?????
-	//TODO THE ID NUMBERS DONT LINE UP, WHY? DEFUALT PORT???
-	
 	/**
-	 * This removes a thread from the list and properly shuts it down
+	 * Overrided remove method. This removes a thread from the list and properly shuts it down (Client Specific).
 	 * @param ID The ID# of the thread being shutdown.
 	 */
 	public synchronized void remove(int ID){
@@ -85,7 +77,7 @@ public class NetworkClient extends NetworkEntity  implements Runnable{
 		System.out.println("Client: Begin Shutdown.");
 		NetworkThread toTerminate = clients[0];
 		try{
-			toTerminate.close();	//TODO This SHOULD properly terminate the thread being shut down.
+			toTerminate.close();	//This SHOULD properly terminate the thread being shut down.
 			toTerminate = null;		//allows the garbage collector to have it???
 		} catch (IOException ioe) {
 			toTerminate = null;		//allows the garbage collector to have it???
@@ -97,5 +89,6 @@ public class NetworkClient extends NetworkEntity  implements Runnable{
 			thread = null;
 		}
 		System.out.println("Client: Loop Thread Destroyed. See ya.");
+		controller.handle(socket.getLocalPort(), "NC CLOSED");
 	}
 }
