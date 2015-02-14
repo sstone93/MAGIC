@@ -1,45 +1,55 @@
 package controller;
 
-import utils.Config;
 import networking.NetworkServer;
 import model.ServerModel;
 
-public class ServerController {
+/**
+ * Main controller class for the server
+ * @author Nick
+ */
+public class ServerController extends Handler{
 	
 	public ServerModel model;
 	public NetworkServer network;
 	
+	/**
+	 * Constructor for a ServerController
+	 */
 	public ServerController(){
 
 		//instanciate the network, gives the network object a reference to this controller
-		this.network = new NetworkServer(Config.DEFAULT_PORT, this);
+		this.network = new NetworkServer(this);
+		System.out.println("Network Server Created.");
 
 		//instanciate the model
 		this.model = new ServerModel();
-		
+		System.out.println("Server Model Created.");
 	}
 	
 	/**
-	 * This is the method that 
-	 * @param ID Is this needed? TBD.
-	 * @param message
+	 * This is the method that handles incomming messages from the networking components
+	 * @param ID The ID of the client sending the message
+	 * @param message the contents of the message
 	 */
 	public void handle(int ID, Object message){
 		
 	}
 	
+	/**
+	 * (If actually needed, this will actually start up the client, bring it to life.
+	 */
 	public void run(){
-		
+		//start the network up
+		//populate the model as needed
 	}
 	
+	/**
+	 * Running this method will trigger the process of creating a MagicRealm server.
+	 * @param args Command line arguments, likely to remain unused
+	 */
 	public static void main(String args[]){
-		
-		//run this to startup the client side of the program
-		
-		//instanciate the client, enjoy the game
-		ServerController control = new ServerController();
-		control.run();
-
+		ServerController control = new ServerController();		//instanciate the controller
+		control.run();											//start the controller
 	}	
 
 }

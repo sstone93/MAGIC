@@ -1,67 +1,63 @@
 package controller;
 
-import java.io.IOException;
-
 import networking.NetworkClient;
 import model.ClientModel;
-import utils.Config;
 import view.View;
 
-public class ClientController {
+/**
+ * Main controller class for the client
+ * @author Nick
+ *
+ */
+public class ClientController extends Handler{
 	
 	public View view;
 	public ClientModel model;
 	public NetworkClient network;
 	
+	/**
+	 * Constructor for a ClientController
+	 */
 	public ClientController(){
-		
-		//run this to SETUP the client side of the program
-		
-		//instantiate the view
-			//give the view a reference to this controller
-		
-		//this.view = new View(ClientController this);
-		
-		
-				//view becomes the user interface?
-				
-		//instanciate the networking
-				
-		//need to give the networkclient a reference to this controller
-		network = null;
 
-		try{
-			this.network = new NetworkClient(Config.DEFAULT_HOST, Config.DEFAULT_PORT);
-		} catch (IOException e){
-			//System.exit(0);
-			System.out.println("Failed to create NetworkClient");
-		}
+		//instanciate the networking
+		this.network = new NetworkClient(this);
+		System.out.println("NetworkClient Successfully Created.");
 				
 		//instantiate the model
 		this.model = new ClientModel();
+		System.out.println("Client Model Successfully Created.");
+		
+		//instantiate the view
+		this.view = new View(this);
+		view.setVisible(true);									//Activates the GUI
+		System.out.println("View Successfully Created.");
 		
 	}
 	
+	/**
+	 * (If actually needed, this will actually start up the client, bring it to life.
+	 */
 	private void run(){
-		
-		//this will actually start up the client, bring it to life.
-		
 		//statup the view (all information/errors now displayed there)
 		//start the network up
-			//populate the model as needed
+		//populate the model as needed
+	}
+	
+	/**
+	 * 
+	 */
+	public void handle(int ID, Object message){
 		
 	}
 	
-	public void handle(Object message){
-		
-	}
-	
+	/**
+	 * Running this method will trigger the process of creating a MagicRealm client.
+	 * @param args Command line arguments, likely to remain unused
+	 */
 	public static void main(String args[]){
-		
-		//instanciate the client, enjoy the game
-		ClientController control = new ClientController();
-		control.run();
-
+		ClientController control = new ClientController();		//instanciate the controller
+		control.run();											//start the controller
 	}	
 
 }
