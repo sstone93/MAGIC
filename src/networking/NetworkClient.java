@@ -3,6 +3,7 @@ package networking;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+
 import controller.ClientController;
 import utils.Config;
 
@@ -42,8 +43,6 @@ public class NetworkClient extends NetworkEntity  implements Runnable{
 	 * 
 	 */
 	public void run(){
-		client = new ClientThread(this, socket);//currently lost
-		client.close();//also lost
 	}
 	
 	//TODO UNDERSTAND WHY WE NEED TO THREAD LIKE THIS
@@ -51,6 +50,14 @@ public class NetworkClient extends NetworkEntity  implements Runnable{
 	 * This method is called to start up the client.
 	 */
 	public void start() {
+		clients[0] = new NetworkThread(this, socket);		//TODO
+		try {
+			clients[0].open();
+			clients[0].start();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		if (thread == null){
 			thread = new Thread(this);
 			thread.start();
@@ -58,21 +65,37 @@ public class NetworkClient extends NetworkEntity  implements Runnable{
 		}
 	}
 	
-	//TODO Understand this
+	//try to detect if it is a client who was removing their only thread (commiting suicide)
+	//TODO THE BELOW STOP METHOD IS NEVER CALLED!
+	//TODO Run is still blank?????
+	//TODO THE ID NUMBERS DONT LINE UP, WHY? DEFUALT PORT???
+	
+	/**
+	 * This removes a thread from the list and properly shuts it down
+	 * @param ID The ID# of the thread being shutdown.
+	 */
+	public synchronized void remove(int ID){
+		this.stop();
+	}
+	
 	/**
 	 * This is used to stop the Network Server
 	 */
 	public void stop(){
-		try {
-			if (thread != null){
-				thread = null;
-			}
-			if(socket != null)
-				socket.close();
-			socket = null;
-			System.out.println("NetworkServer was stopped.");
-		} catch (IOException ioe){
-			System.out.println("IO Exception in NetworkClient Stop Method");
+		System.out.println("Client: Begin Shutdown.");
+		NetworkThread toTerminate = clients[0];
+		try{
+			toTerminate.close();	//TODO This SHOULD properly terminate the thread being shut down.
+			toTerminate = null;		//allows the garbage collector to have it???
+		} catch (IOException ioe) {
+			toTerminate = null;		//allows the garbage collector to have it???
+			System.out.println("Error closing thread: " + ioe);
 		}
+
+		System.out.println("Client: Connection Closed.");
+		if (thread != null){									//stops the endless loop
+			thread = null;
+		}
+		System.out.println("Client: Loop Thread Destroyed. See ya.");
 	}
 }

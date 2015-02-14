@@ -59,12 +59,12 @@ public class NetworkThread extends Thread implements Serializable{
 	 * Main loop of the thread, runs until .close() is called
 	 */
 	public void run() {
-		System.out.println("Server Thread " + ID + " running.");
+		System.out.println("	"+ID + ": Now Running.");
 		while (!done) {												
 			try{						//Trys to read in a new object, if it does, send it to the NetworkEntity to be handled
 				parent.handle(ID, streamIn.readObject());
 			} catch (IOException ioe) {
-				System.out.println(ID + ": ERROR reading input:");
+				//System.out.println(ID + ": ERROR reading input (Socket Closed?!?):");
 				parent.remove(ID);									//Parent properly handles killing off this thread
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
@@ -77,11 +77,12 @@ public class NetworkThread extends Thread implements Serializable{
 	 * @throws IOException
 	 */
 	public void open() throws IOException {
-		System.out.println(ID + ": OPENING buffer streams");
+		System.out.println("	"+ID + ": OPENING buffer streams");
 		streamOut = new ObjectOutputStream(socket.getOutputStream());
 		streamOut.flush();
+		System.out.println("	"+ID + ": Opened OUTPUT Stream OK");
 		streamIn = new ObjectInputStream(socket.getInputStream());
-		System.out.println(ID + ": Buffer Streams OPENED OK");
+		System.out.println("	"+ID + ": BOTH Buffer Streams OPENED OK");
 	}
 
 	/**
@@ -89,7 +90,7 @@ public class NetworkThread extends Thread implements Serializable{
 	 * @throws IOException Error in closing 
 	 */
 	public void close() throws IOException {
-		System.out.println(ID + ": CLOSING buffer streams");
+		System.out.println("	"+ID + ": CLOSING buffer streams");
 		this.done = true;		//tells the main loop to stop repeating.
 		if(socket != null)
 			socket.close();
@@ -97,6 +98,6 @@ public class NetworkThread extends Thread implements Serializable{
 			streamIn.close();
 		if(streamOut != null)
 			streamOut.close();
-		System.out.println(ID + ": Buffer Streams CLOSED OK");
+		System.out.println("	"+ID + ": Buffer Streams CLOSED OK");
 	}
 }
