@@ -4,6 +4,7 @@ import utils.Config;
 
 
 // include move, alert, rest, search, hide, resetDay, resetWeek, startDay, gameOver
+// blocking (including by monsters)
 public class Game {
 
     Player[] players = new Player[Config.MAX_CLIENTS] ;
