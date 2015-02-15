@@ -19,8 +19,3 @@ is it halts execution until the thread is done looping (thread == null), so
 some function must set that.
 
 More: The threading is used to allow the entity to run in the background rather than taking focus.
-
-wed 1.5 hrs = meeting
-wed 1 hr = work
-thurs 30min work
-fri 5 hours work
