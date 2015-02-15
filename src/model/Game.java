@@ -51,10 +51,11 @@ public class Game {
         player.setFatigue(0); // I'm assuming it resets the fatigue, which I'm pretty sure is wrong
     }
 
-    public void resetDay() {
+    // returns true if day was reset
+    // returns false if it's the 28th day
+    public boolean resetDay() {
         if (currentDay == 28) {
-            endGame();
-            return;
+            return false;
         }
         // unalert all weapons
         for (int i = 0; i <= playerCount; i++) {
@@ -63,6 +64,7 @@ public class Game {
                 weapons[j].setActive(false);
             }
         }
+        return true;
 
         // face up map chits (except lost city and lost castle) are turned face down
     }
