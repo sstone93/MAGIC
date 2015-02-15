@@ -111,4 +111,8 @@ public class Player {
     public void setFinalScore(int score) {
         finalScore = score;
     }
+
+    public int getFinalScore() {
+        return finalScore;
+    }
 }
