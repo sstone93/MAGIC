@@ -17,6 +17,7 @@ public class Board {
 	public Board(){
 		tiles = new Tile[20];
 		setupBoard();
+		System.out.println("Built Board with no Crashes");
 	}
 	
 	/**
@@ -100,4 +101,13 @@ public class Board {
 		t1.getClearing(c1).addConnection(t2.getClearing(c2));
 		t2.getClearing(c2).addConnection(t1.getClearing(c1));
 	}
+	
+	//TODO REMOVE THIS
+	//TODO WRITE PRINT METHODS FOR CLEARING, TILE AND BOARD (WITH NICE INDENTS)
+	//TODO ADD A TYPE PARAMETER TO A CONNECTION (FOR SECRET PASSAGEGES, MAKE A CONNECTION OBJECT MAYBE??)
+	public static void main(String[] args) {
+		Board test = new Board();
+		System.out.println(test);
+	}
+	
 }
