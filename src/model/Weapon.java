@@ -2,6 +2,7 @@ package model;
 import utils.Utility.ItemWeight;
 
 public class Weapon {
+    String  type;   // it's name
     boolean ranged;
     boolean active;
     String  attack; // the method of attack
@@ -10,7 +11,11 @@ public class Weapon {
     int     sharpness; // higher = more harm inflicted
     ItemWeight weight;
     ItemWeight damage;
-    
+
+    Weapon(String type) {
+        this.type = type;
+    }
+
     public void setRanged(boolean ranged) {
         this.ranged = ranged;
     }

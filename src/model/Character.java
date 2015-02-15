@@ -3,7 +3,7 @@ package model;
 public class Character {
     String name;
     Clearing startingLocation;
-    Weapon   startingWeapon;
+    Weapon[] startingWeapons;
 
     public String getName() {
         return name;
@@ -21,11 +21,7 @@ public class Character {
         return startingLocation;
     }
 
-    public Weapon getStartingWeapon() {
-        return startingWeapon;
-    }
-
-    public void setStartingWeapon(Weapon weapon) {
-        startingWeapon = weapon;
+    public Weapon[] getStartingWeapons() {
+        return startingWeapons;
     }
 }
