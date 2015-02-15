@@ -8,4 +8,10 @@ public class Utility {
     }
     
     public enum ItemWeight {LIGHT, MEDIUM, HEAVY}
+    
+    //new enum to represent the names of the tiles
+    public enum TileName {AWFULVALLEY, BADVALLEY, BORDERLAND, CAVERN, CAVES, CLIFF, CRAG, CURSTVALLEY,
+    	DARKVALLEY, DEEPWOODS, EVILVALLEY, HIGHPASS, LEDGES, LINDENWOODS, MAPLEWOODS, MOUNTAIN, NUTWOODS,
+    	OAKWOODS, PINEWOODS, RUINS
+    }
 }
