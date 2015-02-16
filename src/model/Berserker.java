@@ -8,9 +8,10 @@ public class Berserker extends Character {
     Berserker() { // might want the name to be sent in
         this.name             = "berserker";
         this.startingLocation = Utility.TileName.CURSTVALLEY;
-        this.startingWeapons  = new Weapon[1];
+        this.startingWeapons  = new Weapon[0];
+        this.startingArmour   = new Armour[0];
         startingWeapons[0]    = new Weapon("great axe") ;
-        startingWeapons[1]    = new Weapon("helmet") ;
+        startingArmour[0]     = new Armour("helmet") ;
     }
 
 }

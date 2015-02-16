@@ -8,9 +8,10 @@ public class Dwarf extends Character {
     Dwarf() { // might want the name to be sent in
         this.name             = "dwarf";
         this.startingLocation = Utility.TileName.CURSTVALLEY;
-        this.startingWeapons  = new Weapon[1];
+        this.startingWeapons  = new Weapon[0];
+        this.startingArmour   = new Armour[0];
         startingWeapons[0]    = new Weapon("great axe") ;
-        startingWeapons[1]    = new Weapon("helmet") ;
+        startingArmour[0]     = new Armour("helmet") ;
     }
 
     // starting location can be either inn or guard house

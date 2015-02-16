@@ -8,9 +8,10 @@ public class WhiteKnight extends Character {
     WhiteKnight() { // might want the name to be sent in
         this.name             = "whiteknight";
         this.startingLocation = Utility.TileName.CURSTVALLEY;
-        this.startingWeapons  = new Weapon[1];
+        this.startingWeapons  = new Weapon[0];
+        this.startingArmour   = new Armour[0];
         startingWeapons[0]    = new Weapon("great sword") ;
-        startingWeapons[1]    = new Weapon("suit of armour") ;
+        startingArmour[0]     = new Armour("suit of armour") ;
     }
 
 }

@@ -6,6 +6,7 @@ public class Character {
     String name;
     TileName startingLocation;
     Weapon[] startingWeapons;
+    Armour[] startingArmour;
 
     public String getName() {
         return name;
@@ -25,5 +26,9 @@ public class Character {
 
     public Weapon[] getStartingWeapons() {
         return startingWeapons;
+    }
+    
+    public Armour[] getStartingArmour() {
+    	return startingArmour;
     }
 }
