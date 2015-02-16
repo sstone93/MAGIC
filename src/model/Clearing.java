@@ -5,34 +5,17 @@ import java.util.Arrays;
 public class Clearing {
 	
     public String type;
-    public String dwelling; 			// not sure what type this should actually be
+    public Garrison dwelling = null; 			// not sure what type this should actually be
     public int location;		 		// indicating which clearing on the tile this is CHANGED BACK TO AN INT
     public Clearing[] connections;
     public int nextConnection =0;
+    public Tile parent;
     
-    Clearing(int location) {
+    Clearing(int location, Tile parent) {
         this.type     = "";
-        this.dwelling = "";
         this.location = location;
+        this.parent = parent;
         connections = new Clearing[4];		//4 is the most connections had by any 
-    }
-    
-    Clearing(String type, String dwelling, int location) {
-        this.type     = type;
-        this.dwelling = dwelling;
-        this.location = location;
-        connections = new Clearing[4];		//4 is the most connections had by any 
-    }
-    
-    Clearing(String type, String dwelling, int location, Clearing connectedTo) {
-        this.type     = type;
-        this.dwelling = dwelling;
-        this.location = location;
-        connections = new Clearing[4];
-        
-        this.addConnection(connectedTo);	//link the clearings to eachother
-        connectedTo.addConnection(this);
-        
     }
 
     /**
@@ -52,11 +35,11 @@ public class Clearing {
         this.type = type;
     }
 
-    public String getDwelling() {
+    public Garrison getDwelling() {
         return dwelling;
     }
 
-    public void setDwelling(String dwelling) {
+    public void setDwelling(Garrison dwelling) {
         this.dwelling = dwelling;
     }
 
@@ -72,5 +55,20 @@ public class Clearing {
             return false;
         }
     }
+    
+    @Override
+	public String toString(){
+    	System.out.println("	Clearing #"+location);
+    	if(this.dwelling != null){
+    		System.out.println("		-has garrison: "+dwelling.getName());
+    		System.out.println("		"+dwelling);
+    	}
+		for(int i=0;i<connections.length;i++){
+			if(connections[i] != null){
+				System.out.println("		-connected to "+connections[i].parent.getName()+" clearing #"+connections[i].location);
+			}
+		}
+		return "";
+	}
 
 }

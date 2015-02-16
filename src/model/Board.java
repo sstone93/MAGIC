@@ -1,5 +1,6 @@
 package model;
 
+import utils.Utility.GarrisonName;
 import utils.Utility.TileName;
 
 /**
@@ -10,14 +11,18 @@ import utils.Utility.TileName;
 public class Board {
 	
 	public Tile[] tiles;
-	
+	public Garrison[] garrisons;
+	//public Treasure
 	/**
 	 * 
 	 */
 	public Board(){
 		tiles = new Tile[20];
 		setupBoard();
-		System.out.println("Built Board with no Crashes");
+		setupGarrisons();
+		placeGarrisons();
+		//System.out.println("Built Board with no Crashes");
+		//instanciateTreasures();
 	}
 	
 	/**
@@ -102,12 +107,94 @@ public class Board {
 		t2.getClearing(c2).addConnection(t1.getClearing(c1));
 	}
 	
+	public void setupGarrisons(){
+		this.garrisons = new Garrison[4];
+		this.garrisons[0] = new Garrison(GarrisonName.CHAPEL);
+		this.garrisons[1] = new Garrison(GarrisonName.GUARD);
+		this.garrisons[2] = new Garrison(GarrisonName.HOUSE);
+		this.garrisons[3] = new Garrison(GarrisonName.INN);
+	}
+	
+	public void placeGarrisons(){
+		this.garrisons[0].setLocation(tiles[17].getClearing(5));
+		this.garrisons[1].setLocation(tiles[4].getClearing(5));
+		this.garrisons[2].setLocation(tiles[9].getClearing(5));
+		this.garrisons[3].setLocation(tiles[11].getClearing(5));
+	}
+	
+	public void treasureSetup(){
+		
+		//setup treasure within treasures
+		
+		//1. choose 5 random LARGE treasures and put them "in" the twts'
+		//chest = 2 large, thief = 1, toad = 1, crypt = 1
+		//2. now we merge tne twts and large treasures together
+		
+		//hoard = 5 large, 4 small (below large treasures)
+		//lair = 3 large, 4 small (below large treasures)
+		//altar = 4 large
+		//shrine = 2 large, 2 small (below large treasures)
+		//pool = 3 large, 6 small (below large treasures)
+		//vault = 5 large
+		//cairns = 1 large, 6 small (below large treasures)
+		//statue = 1 large, 2 small (below large treasures)
+		
+		//dwellings (company, woodfolk, patrol, lancers, bashkars)
+		//all 5 take 2 small treasures
+		
+		//visitors
+		//scholar = 3 small
+		
+		//garrisons (chapel, house, inn, guard(house)
+		//all 4 take 2 small treasures each
+		
+		
+		//thats all large treasures 24/24, and 
+		
+	}
+	
+	public void setUpMapChits(){
+		//encounter chits
+		//4 groups of 5?
+		//cave/valley/woods/mountain
+		//assigned to a TILE not a clearing
+		//
+		
+		//mix the sound and treasure site chits
+		//5 given to the lost city
+		//5 given to the lost castle
+		//8 left, 2 groups of 4
+		//add lost city to 1 of the groups of 4 (now 5)
+		//1 placed in each caves tile
+		//add lost castle to the other group
+		//put one into each mountain tile
+		
+		//reveal all of the VALLEY map chits (after character selection stuff done)
+		//this is done already!
+	}
+	
+	
+	public void equipmentCountersSetup(){
+		
+		//this would be moved to the instanciation of the objects?
+		//do the same w. the treasures?
+		
+	}
+	
 	//TODO REMOVE THIS
 	//TODO WRITE PRINT METHODS FOR CLEARING, TILE AND BOARD (WITH NICE INDENTS)
 	//TODO ADD A TYPE PARAMETER TO A CONNECTION (FOR SECRET PASSAGEGES, MAKE A CONNECTION OBJECT MAYBE??)
 	public static void main(String[] args) {
 		Board test = new Board();
 		System.out.println(test);
+	}
+	
+	@Override
+	public String toString(){
+		for(int i=0;i<tiles.length;i++){
+			System.out.println(tiles[i]);
+		}
+		return "";
 	}
 	
 }

@@ -1,5 +1,6 @@
 package model;
 import utils.Utility.ItemWeight;
+import utils.Utility.WeaponName;
 
 public class Weapon {
     String  type;   // it's name
@@ -14,6 +15,10 @@ public class Weapon {
 
     Weapon(String type) {
         this.type = type;
+    }
+    
+    Weapon(WeaponName n) {
+       this.type = n.toString();
     }
 
     public void setRanged(boolean ranged) {
@@ -63,5 +68,8 @@ public class Weapon {
     }
     public void setDamage(ItemWeight damage) {
         this.damage = damage;
+    }
+    public String toString(){
+    	return this.type;
     }
 }

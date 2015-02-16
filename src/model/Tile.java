@@ -212,7 +212,7 @@ public class Tile {
 	 */
 	public void addNewClearing(int position){
 		
-		this.clearings[nextClearing] = new Clearing(position);
+		this.clearings[nextClearing] = new Clearing(position, this);
 		nextClearing +=1;
 	}
 	
@@ -255,5 +255,19 @@ public class Tile {
 			}
 		}
 		return null;
+	}
+	
+	@Override
+	public String toString(){
+		
+		System.out.println(this.name.toString());	//name of tile
+		
+		for(int i=0;i<clearings.length;i++){			//iterates over clearings on tile
+			System.out.println("	"+clearings[i]);
+		}
+		
+		//iterate map chits
+		
+		return "";
 	}
 }
