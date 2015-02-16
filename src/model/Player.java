@@ -24,6 +24,14 @@ public class Player {
         this.character = character;
     }
 
+    public void setCharacter(Character character) {
+        this.character = character;
+    }
+
+    public Character getCharacter() {
+        return character;
+    }
+
     public int getGold() {
         return gold;
     }

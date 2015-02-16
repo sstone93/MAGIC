@@ -1,9 +1,11 @@
 package model;
 
+import utils.Utility.TileName;
+
 public class Character {
     String name;
-    Clearing startingLocation;
-    Weapon   startingWeapon;
+    TileName startingLocation;
+    Weapon[] startingWeapons;
 
     public String getName() {
         return name;
@@ -13,19 +15,15 @@ public class Character {
         this.name = name;
     }
 
-    public void setStartingLocation(Clearing location) {
+    public void setStartingLocation(TileName location) {
         startingLocation = location;
     }
 
-    public Clearing getStartingLocation() {
+    public TileName getStartingLocation() {
         return startingLocation;
     }
 
-    public Weapon getStartingWeapon() {
-        return startingWeapon;
-    }
-
-    public void setStartingWeapon(Weapon weapon) {
-        startingWeapon = weapon;
+    public Weapon[] getStartingWeapons() {
+        return startingWeapons;
     }
 }
