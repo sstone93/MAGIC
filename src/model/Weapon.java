@@ -16,7 +16,7 @@ public class Weapon {
     Weapon(String type) {
         this.type = type;
     }
-    
+
     Weapon(WeaponName n) {
        this.type = n.toString();
     }

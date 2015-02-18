@@ -36,8 +36,7 @@ public class Game {
         return canChange;
     }
 
-    public boolean hide(Player player) {
-        // todo: check if they can hide
+    public boolean hide(Player player) { // assume it always works
         player.setHidden(true);
         return true;
     }
@@ -77,53 +76,53 @@ public class Game {
 
     public void startDay() {
         currentDay++;
-        
+
         //TODO choose moves
-        
+
         // Silly way to order players from 1 to playerCount+1
         for (int i = 0; i <= playerCount; i++) {
-        	players[i].order = roll(100);
+            players[i].order = roll(100);
         }
         int[] ordering = new int[playerCount];
         for (int i = 0; i <= playerCount; i++) {
-        	ordering[i] = players[i].order;
+            ordering[i] = players[i].order;
         }
         Arrays.sort(ordering);
         for (int i = 0); i <= playerCount; i++) {
-        	for (int j = 0); j <= playerCount; j++) {
-        		if (ordering[i] == players[j].order) {
-        			players[j].order = i;
-        			break;
-        		}
-        	}
+            for (int j = 0); j <= playerCount; j++) {
+                if (ordering[i] == players[j].order) {
+                    players[j].order = i;
+                    break;
+                }
+            }
         }
-        
+
         // Do moves in order
         int nextMover = 0;
         while (nextMover <= playerCount) {
-        	for (int i = 0; i <= playerCount; i++) {
-        		if (players[i].order == nextMover) {
-        			//TODO player does their moves in order
-        			nextMover++;
-        			break;
-        		}
-        	}
+            for (int i = 0; i <= playerCount; i++) {
+                if (players[i].order == nextMover) {
+                    //TODO player does their moves in order
+                    nextMover++;
+                    break;
+                }
+            }
         }
-        
+
         // Choose attacks
         nextMover = 0;
         while (nextMover <= playerCount) {
-        	for (int i = 0; i <= playerCount; i++) {
-        		if (players[i].order == nextMover) {
-        			// TODO choose attackers and save somewhere
-        			nextMover++;
-        			break;
-        		}
-        	}
+            for (int i = 0; i <= playerCount; i++) {
+                if (players[i].order == nextMover) {
+                    // TODO choose attackers and save somewhere
+                    nextMover++;
+                    break;
+                }
+            }
         }
-        
+
         // TODO combat loop
-        
+
         resetDay(); // not sure if we want to change resetDay so it will call startDay again if all is well
     }
 

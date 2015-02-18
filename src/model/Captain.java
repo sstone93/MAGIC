@@ -1,19 +1,21 @@
 package model;
 
 import utils.Utility;
+import utils.Utility.ArmorName;
 import utils.Utility.TileName;
+import utils.Utility.WeaponName;
 
 // inherits name, startingLocation, startingWeapon
 public class Captain extends Character {
     Captain() { // might want the name to be sent in
         this.name = "captain";
         this.startingLocation = Utility.TileName.CURSTVALLEY; // just put in the default inn for now
-        this.startingWeapons  = new Weapon[0];
-        this.startingArmour   = new Armour[2];
-        startingWeapons[0]    = new Weapon("short sword");
-        startingArmour[0]     = new Armour("helmet");
-        startingArmour[1]     = new Armour("breatplate");
-        startingArmour[2]     = new Armour("shield");
+        this.startingWeapons  = new Weapon[1];
+        this.startingArmour   = new Armour[3];
+        startingWeapons[0]    = new Weapon(WeaponName.SHORT_SWORD);
+        startingArmour[0]     = new Armour(ArmorName.HELMET);
+        startingArmour[1]     = new Armour(ArmorName.BREASTPLATE);
+        startingArmour[2]     = new Armour(ArmorName.SHIELD);
 
     }
 
