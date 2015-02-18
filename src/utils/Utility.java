@@ -14,6 +14,7 @@ public class Utility {
     	OAKWOODS, PINEWOODS, RUINS
     }
     
+<<<<<<< HEAD
     public enum GarrisonName {CHAPEL, HOUSE, INN, GUARD}
     
     public enum WeaponName {MEDIUM_BOW, LIGHT_BOW, CROSSBOW, SPEAR, STAFF, GREAT_SWORD, BANE_SWORD, BROADSWORD,
@@ -61,5 +62,6 @@ public class Utility {
     //May need to become part of treasure, we shall see.
     //public enum GloveName {DEFT_GLOVES, GLOVES_OF_STRENGTH, HANDY_GLOVES, POWER_GAUNTLETS}
     //public enum BootName {ELVEN_SLIPPERS, POWER_BOOTS, QUICK_BOOTS, LEAGUE_BOOTS, SHOES_OF_STEALTH}
-
+    
+    public enum Actions {MOVE, HIDE, ALERT, REST, SEARCH, TRADE, FOLLOW}
 }
