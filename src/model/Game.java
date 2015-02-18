@@ -1,6 +1,9 @@
 package model;
 
-import utils.Config;
+import java.util.Arrays;
+
+
+import utils.*;
 
 
 // include move, alert, rest, search, hide, resetDay, resetWeek, startDay, gameOver
@@ -36,8 +39,7 @@ public class Game {
         return canChange;
     }
 
-    public boolean hide(Player player) {
-        // todo: check if they can hide
+    public boolean hide(Player player) { // assume they can always hide for now
         player.setHidden(true);
         return true;
     }
@@ -77,27 +79,27 @@ public class Game {
 
     public void startDay() {
         currentDay++;
-        
+
         //TODO choose moves
-        
+
         // Silly way to order players from 1 to playerCount+1
         for (int i = 0; i <= playerCount; i++) {
-        	players[i].order = roll(100);
+        	players[i].order = Utility.roll(100);
         }
         int[] ordering = new int[playerCount];
         for (int i = 0; i <= playerCount; i++) {
         	ordering[i] = players[i].order;
         }
         Arrays.sort(ordering);
-        for (int i = 0); i <= playerCount; i++) {
-        	for (int j = 0); j <= playerCount; j++) {
+        for (int i = 0; i <= playerCount; i++) {
+        	for (int j = 0; j <= playerCount; j++) {
         		if (ordering[i] == players[j].order) {
         			players[j].order = i;
         			break;
         		}
         	}
         }
-        
+
         // Do moves in order
         int nextMover = 0;
         while (nextMover <= playerCount) {
@@ -109,7 +111,7 @@ public class Game {
         		}
         	}
         }
-        
+
         // Choose attacks
         nextMover = 0;
         while (nextMover <= playerCount) {
@@ -121,9 +123,9 @@ public class Game {
         		}
         	}
         }
-        
+
         // TODO combat loop
-        
+
         resetDay(); // not sure if we want to change resetDay so it will call startDay again if all is well
     }
 
