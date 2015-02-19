@@ -11,9 +11,9 @@ public class Captain extends Character {
         this.startingWeapons  = new Weapon[0];
         this.startingArmour   = new Armour[2];
         startingWeapons[0]    = new Weapon("short sword");
-        startingArmour[0]     = new Armour("helmet");
-        startingArmour[1]     = new Armour("breatplate");
-        startingArmour[2]     = new Armour("shield");
+        startingArmour[0]     = new Armour(Utility.ArmourName.HELMET);
+        startingArmour[1]     = new Armour(Utility.ArmourName.BREASTPLATE);
+        startingArmour[2]     = new Armour(Utility.ArmourName.SHIELD);
 
     }
 

@@ -2,7 +2,7 @@ package utils;
 import java.util.Random;
 
 public class Utility {
-    public int roll(int max) {
+    public static int roll(int max) {
         Random r = new Random();
         return r.nextInt(max) + 1;
     }
@@ -14,14 +14,13 @@ public class Utility {
     	OAKWOODS, PINEWOODS, RUINS
     }
     
-<<<<<<< HEAD
     public enum GarrisonName {CHAPEL, HOUSE, INN, GUARD}
     
     public enum WeaponName {MEDIUM_BOW, LIGHT_BOW, CROSSBOW, SPEAR, STAFF, GREAT_SWORD, BANE_SWORD, BROADSWORD,
     	DEVIL_SWORD, TRUESTEEL_SWORD, MORNING_STAR, GREAT_AXE, THRUSTING_SWORD, LIVING_SWORD, SHORT_SWORD,
     	AXE, MACE, DAGGER, TOOTH_AND_CLAW}
     
-    public enum ArmorName {SUIT_OF_ARMOR, BREASTPLATE, HELMET, SHIELF, TREMENDOUS_ARMOR, SILVER_BREASTPLATE,
+    public enum ArmourName {SUIT_OF_ARMOR, BREASTPLATE, HELMET, SHIELD, TREMENDOUS_ARMOR, SILVER_BREASTPLATE,
     	GOLD_HELMET, JADE_SHIELD}
     
     public enum CharacterName {AMAZON, BERSERKER, BLACK_KNIGHT, CAPTAIN, DRUID, DWARF, ELF, MAGICIAN, PILGRIM, SORCEROR,

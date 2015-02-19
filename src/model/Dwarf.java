@@ -11,7 +11,7 @@ public class Dwarf extends Character {
         this.startingWeapons  = new Weapon[0];
         this.startingArmour   = new Armour[0];
         startingWeapons[0]    = new Weapon("great axe") ;
-        startingArmour[0]     = new Armour("helmet") ;
+        startingArmour[0]     = new Armour(Utility.ArmourName.HELMET) ;
     }
 
     // starting location can be either inn or guard house
