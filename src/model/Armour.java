@@ -1,12 +1,17 @@
 package model;
 
+import utils.Utility.ArmourName;
+
 public class Armour {
     String  weight;
     String  health;
-    String  type;
+    ArmourName type;
     boolean damaged;
     boolean active;
 
+    Armour(ArmourName type) {
+    	type = type;
+    }
     public String getWeight() {
         return weight;
     }
@@ -22,10 +27,10 @@ public class Armour {
         this.health = health;
     }
 
-    public String getType() {
+    public ArmourName getType() {
         return type;
     }
-    public void setType(String type) {
+    public void setType(ArmourName type) {
         this.type = type;
     }
 

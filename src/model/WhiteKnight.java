@@ -11,7 +11,7 @@ public class WhiteKnight extends Character {
         this.startingWeapons  = new Weapon[0];
         this.startingArmour   = new Armour[0];
         startingWeapons[0]    = new Weapon("great sword") ;
-        startingArmour[0]     = new Armour("suit of armour") ;
+        startingArmour[0]     = new Armour(Utility.ArmourName.SUIT_OF_ARMOR) ;
     }
 
 }

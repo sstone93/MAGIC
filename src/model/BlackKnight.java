@@ -10,8 +10,8 @@ public class BlackKnight extends Character {
         this.startingWeapons  = new Weapon[0];
         this.startingArmour   = new Armour[1];
         startingWeapons[0]    = new Weapon("mace") ;
-        startingArmour[0]     = new Armour("suit of armour") ;
-        startingArmour[1]     = new Armour("shield") ;
+        startingArmour[0]     = new Armour(Utility.ArmourName.SUIT_OF_ARMOR) ;
+        startingArmour[1]     = new Armour(Utility.ArmourName.SHIELD) ;
     }
 
 }

@@ -1,6 +1,9 @@
 package model;
 
+import java.util.Arrays;
+
 import utils.Config;
+import utils.Utility;
 
 
 // include move, alert, rest, search, hide, resetDay, resetWeek, startDay, gameOver
@@ -82,15 +85,15 @@ public class Game {
         
         // Silly way to order players from 1 to playerCount+1
         for (int i = 0; i <= playerCount; i++) {
-        	players[i].order = roll(100);
+        	players[i].order = Utility.roll(100);
         }
         int[] ordering = new int[playerCount];
         for (int i = 0; i <= playerCount; i++) {
         	ordering[i] = players[i].order;
         }
         Arrays.sort(ordering);
-        for (int i = 0); i <= playerCount; i++) {
-        	for (int j = 0); j <= playerCount; j++) {
+        for (int i = 0; i <= playerCount; i++) {
+        	for (int j = 0; j <= playerCount; j++) {
         		if (ordering[i] == players[j].order) {
         			players[j].order = i;
         			break;
