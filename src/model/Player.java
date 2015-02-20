@@ -7,7 +7,7 @@ import utils.Utility.ItemWeight;
 public class Player {
     int victoryPoints = 0;
     int gold          = 10; // can't be negative
-    int health        = 10;
+    int health        = 0;
     int fatigue       = 0;
     int fame          = 0;
     int notoriety     = 0;
@@ -17,6 +17,7 @@ public class Player {
     int numberOfWeapons = 0;
     int numberOfArmour  = 0;
     boolean hidden    = false;
+    boolean dead      = false;
 
     Character character;
 
@@ -84,6 +85,14 @@ public class Player {
         hidden = hide;
     }
 
+    public boolean isDead() {
+    	return dead;
+    }
+    
+    public void kill() {
+    	dead = true;
+    }
+    
     public int getFatigue() {
         return fatigue;
     }
