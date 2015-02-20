@@ -15,6 +15,8 @@ public class Weapon {
 
     Weapon(WeaponName n) {
        this.type = n;
+       this.weight = ItemWeight.NEGLIGIBLE;
+       this.active = true;
     }
 
     public void setRanged(boolean ranged) {

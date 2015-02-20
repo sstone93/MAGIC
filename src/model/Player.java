@@ -32,6 +32,17 @@ public class Player {
         this.chits     = new Chit[100];
         this.weapons   = new Weapon[Config.WEAPON_AND_ARMOUR_COUNT];
         this.armour    = new Armour[Config.WEAPON_AND_ARMOUR_COUNT];
+
+        for (int i = 0; i < character.startingWeapons.length; i++) {
+        	weapons[numberOfWeapons] = character.startingWeapons[numberOfWeapons];
+        	numberOfWeapons++;
+        }
+        if (character.startingArmour != null) {
+	        for (int i = 0; i < character.getStartingArmour().length; i++) {
+	        	armour[numberOfArmour] = character.startingArmour[numberOfArmour];
+	        	numberOfArmour++;
+	        }
+    	}
     }
 
     public void setCharacter(Character character) {
@@ -145,7 +156,7 @@ public class Player {
             }
         }
     }
-    
+
     public void removeWeapon(Weapon weapon) {
     	for (int i = 0; i < numberOfWeapons; i++ ) {
     		if (weapons[i] == weapon) {
@@ -157,7 +168,7 @@ public class Player {
     		}
     	}
     }
-    
+
     public void removeArmourWithLesserWeight(ItemWeight weight) {
     	for (int i = 0; i < numberOfArmour; i++) {
             if (armour[i].getWeight() == ItemWeight.NEGLIGIBLE)
@@ -175,7 +186,7 @@ public class Player {
             }
         }
     }
-    
+
 
     public void setFinalScore(int score) {
         finalScore = score;
