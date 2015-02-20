@@ -59,4 +59,10 @@ public class Utility {
     public enum TreasureLocations{ HOARD, LAIR, ALTAR, SHRINE, POOL, VAULT, CAIRNS, STATUE}
 
     public enum Actions {MOVE, HIDE, ALERT, REST, SEARCH, TRADE, FOLLOW}
+    
+    public enum Attacks {THRUST, SWING, SMASH}
+    
+    public enum Maneuvers {CHARGE, DODGE, DUCK}
+    
+    public enum Defenses {AHEAD, SIDE, ABOVE}
 }
