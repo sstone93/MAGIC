@@ -210,6 +210,303 @@ public class Game {
 
         return winner;
     }
+    
+    // Combat code. 
+    //TODO Needs to print out to console, plus all of the other TODO's in the code
+    
+    //TODO Weapons active, networking
+    public void Encounter(Player player, Boolean isAttacker) {
+		// Check if weapon is active
+		/*if (player.weapons[0].isActive() == false) {
+			player.weapons[0].setActive(true);
+			return;
+		}*/
+		
+		// Player chooses target, attack, maneuver, defense, and fatigue levels for each
+		boolean properFatigue = false;
+		CombatMoves moves;
+		while (properFatigue == false) {
+			moves = getMoves();
+		
+			int totalFatigue = (moves.getAttackFatigue() + moves.getManeuverFatigue());
+			if (totalFatigue <= 2 && player.getFatigue <= 8) { // Choosing 10 as the arbitrary value of total fatigue
+				properFatigue = true;
+				player.setFatigue(player.getFatigue() + totalFatigue);
+			}
+			//TODO Print "improper amounts of fatigue" to console or some other error message
+		}
+		
+		//TODO Send moves to server
+		
+		//TODO Receive opponent's moves from server
+		CombatMoves opponentMoves;
+		
+		if (isAttacker == true) {
+			doFight(moves, opponentMoves);
+		}
+		else {
+			doFight(opponentMoves, moves);
+		}
+	}
+	
+	//TODO Will change based on how the panels are implemented, needs to grab input from dropdown boxes for all
+	// Each value will be filled depending on what the user chooses from the panel
+	private CombatMoves getMoves() {
+		Player target = null;
+		Attacks attack = null;
+		int attackFatigue = 0;
+		Maneuvers maneuver = null;
+		int maneuverFatigue = 0;
+		Defenses defense = null;
+		
+		return CombatMoves(target, attack, attackFatigue, maneuver, maneuverFatigue, defense);
+	}
+	
+	//TODO Finding active weapon rather than assuming the active weapon is at position 0
+	public void doFight(CombatMoves attackerMoves, CombatMoves defenderMoves) {
+		if (attackerMoves.getTarget().getWeapons()[0].getSpeed() < defenderMoves.getTarget().getWeapons()[0].getSpeed()) {
+			if ((attackerMoves.getTarget().getWeapons()[0].getSpeed() - attackerMoves.attackFatigue) <= (defenderMoves.getTarget().getCharacter.getSpeed() - defenderMoves.maneuverFatigue)) {
+				hit(attackerMoves, defenderMoves);
+			}
+			elif (attackerMoves.getAttack() == Attacks.THRUST && defenderMoves.getManeuver() == Maneuvers.CHARGE) {
+				hit(attackerMoves, defenderMoves);
+			}
+			elif (attackerMoves.getAttack() == Attacks.SWING && defenderMoves.getManeuver() == Maneuvers.DODGE) {
+				hit(attackerMoves, defenderMoves);
+			}
+			elif (attackerMoves.getAttack() == Attacks.SMASH && defenderMoves.getManeuver() == Maneuvers.DUCK) {
+				hit(attackerMoves, defenderMoves);
+			}
+			
+			if (attackerMoves.getTarget().isDead() == false) {
+				if ((defenderMoves.getTarget().getWeapons()[0].getSpeed() - defenderMoves.attackFatigue) <= (attackerMoves.getTarget().getCharacter.getSpeed() - attackerMoves.maneuverFatigue)) {
+					hit(defenderMoves, attackerMoves);
+				}
+				elif (defenderMoves.getAttack() == Attacks.THRUST && attackerMoves.getManeuver() == Maneuvers.CHARGE) {
+					hit(defenderMoves, attackerMoves);
+				}
+				elif (defenderMoves.getAttack() == Attacks.SWING && attackerMoves.getManeuver() == Maneuvers.DODGE) {
+					hit(defenderMoves, attackerMoves);
+				}
+				elif (defenderMoves.getAttack() == Attacks.SMASH && attackerMoves.getManeuver() == Maneuvers.DUCK) {
+					hit(defenderMoves, attackerMoves);
+				}
+			}
+		}
+		elif (attackerMoves.getTarget().getWeapons()[0].getSpeed() > defenderMoves.getTarget().getWeapons()[0].getSpeed()) {
+			if ((defenderMoves.getTarget().getWeapons()[0].getSpeed() - defenderMoves.attackFatigue) <= (attackerMoves.getTarget().getCharacter.getSpeed() - attackerMoves.maneuverFatigue)) {
+				hit(defenderMoves, attackerMoves);
+			}
+			elif (defenderMoves.getAttack() == Attacks.THRUST && attackerMoves.getManeuver() == Maneuvers.CHARGE) {
+				hit(defenderMoves, attackerMoves);
+			}
+			elif (defenderMoves.getAttack() == Attacks.SWING && attackerMoves.getManeuver() == Maneuvers.DODGE) {
+				hit(defenderMoves, attackerMoves);
+			}
+			elif (defenderMoves.getAttack() == Attacks.SMASH && attackerMoves.getManeuver() == Maneuvers.DUCK) {
+				hit(defenderMoves, attackerMoves);
+			}
+			
+			if (attackerMoves.getTarget().isDead() == false) {
+				if ((attackerMoves.getTarget().getWeapons()[0].getSpeed() - attackerMoves.attackFatigue) <= (defenderMoves.getTarget().getCharacter.getSpeed() - defenderMoves.maneuverFatigue)) {
+					hit(attackerMoves, defenderMoves);
+				}
+				elif (attackerMoves.getAttack() == Attacks.THRUST && defenderMoves.getManeuver() == Maneuvers.CHARGE) {
+					hit(attackerMoves, defenderMoves);
+				}
+				elif (attackerMoves.getAttack() == Attacks.SWING && defenderMoves.getManeuver() == Maneuvers.DODGE) {
+					hit(attackerMoves, defenderMoves);
+				}
+				elif (attackerMoves.getAttack() == Attacks.SMASH && defenderMoves.getManeuver() == Maneuvers.DUCK) {
+					hit(attackerMoves, defenderMoves);
+				}
+			}
+		}
+		
+		else {
+			if (attackerMoves.getTarget().getWeapons()[0].getLength() < defenderMoves.getTarget().getWeapons()[0].getLength()) {
+				if ((attackerMoves.getTarget().getWeapons()[0].getSpeed() - attackerMoves.attackFatigue) <= (defenderMoves.getTarget().getCharacter.getSpeed() - defenderMoves.maneuverFatigue)) {
+					hit(attackerMoves, defenderMoves);
+				}
+				elif (attackerMoves.getAttack() == Attacks.THRUST && defenderMoves.getManeuver() == Maneuvers.CHARGE) {
+					hit(attackerMoves, defenderMoves);
+				}
+				elif (attackerMoves.getAttack() == Attacks.SWING && defenderMoves.getManeuver() == Maneuvers.DODGE) {
+					hit(attackerMoves, defenderMoves);
+				}
+				elif (attackerMoves.getAttack() == Attacks.SMASH && defenderMoves.getManeuver() == Maneuvers.DUCK) {
+					hit(attackerMoves, defenderMoves);
+				}
+				
+				if (attackerMoves.getTarget().isDead() == false) {
+					if ((defenderMoves.getTarget().getWeapons()[0].getSpeed() - defenderMoves.attackFatigue) <= (attackerMoves.getTarget().getCharacter.getSpeed() - attackerMoves.maneuverFatigue)) {
+						hit(defenderMoves, attackerMoves);
+					}
+					elif (defenderMoves.getAttack() == Attacks.THRUST && attackerMoves.getManeuver() == Maneuvers.CHARGE) {
+						hit(defenderMoves, attackerMoves);
+					}
+					elif (defenderMoves.getAttack() == Attacks.SWING && attackerMoves.getManeuver() == Maneuvers.DODGE) {
+						hit(defenderMoves, attackerMoves);
+					}
+					elif (defenderMoves.getAttack() == Attacks.SMASH && attackerMoves.getManeuver() == Maneuvers.DUCK) {
+						hit(defenderMoves, attackerMoves);
+					}
+				}
+			}
+			elif (attackerMoves.getTarget().getWeapons()[0].getLength() > defenderMoves.getTarget().getWeapons()[0].getLength()) {
+				if ((defenderMoves.getTarget().getWeapons()[0].getSpeed() - defenderMoves.attackFatigue) <= (attackerMoves.getTarget().getCharacter.getSpeed() - attackerMoves.maneuverFatigue)) {
+					hit(defenderMoves, attackerMoves);
+				}
+				elif (defenderMoves.getAttack() == Attacks.THRUST && attackerMoves.getManeuver() == Maneuvers.CHARGE) {
+					hit(defenderMoves, attackerMoves);
+				}
+				elif (defenderMoves.getAttack() == Attacks.SWING && attackerMoves.getManeuver() == Maneuvers.DODGE) {
+					hit(defenderMoves, attackerMoves);
+				}
+				elif (defenderMoves.getAttack() == Attacks.SMASH && attackerMoves.getManeuver() == Maneuvers.DUCK) {
+					hit(defenderMoves, attackerMoves);
+				}
+				
+				if (attackerMoves.getTarget().isDead() == false) {
+					if ((attackerMoves.getTarget().getWeapons()[0].getSpeed() - attackerMoves.attackFatigue) <= (defenderMoves.getTarget().getCharacter.getSpeed() - defenderMoves.maneuverFatigue)) {
+						hit(attackerMoves, defenderMoves);
+					}
+					elif (attackerMoves.getAttack() == Attacks.THRUST && defenderMoves.getManeuver() == Maneuvers.CHARGE) {
+						hit(attackerMoves, defenderMoves);
+					}
+					elif (attackerMoves.getAttack() == Attacks.SWING && defenderMoves.getManeuver() == Maneuvers.DODGE) {
+						hit(attackerMoves, defenderMoves);
+					}
+					elif (attackerMoves.getAttack() == Attacks.SMASH && defenderMoves.getManeuver() == Maneuvers.DUCK) {
+						hit(attackerMoves, defenderMoves);
+					}
+				}
+			}
+			else {
+				if ((attackerMoves.getTarget().getWeapons()[0].getSpeed() - attackerMoves.attackFatigue) <= (defenderMoves.getTarget().getCharacter.getSpeed() - defenderMoves.maneuverFatigue)) {
+					hit(attackerMoves, defenderMoves);
+				}
+				elif (attackerMoves.getAttack() == Attacks.THRUST && defenderMoves.getManeuver() == Maneuvers.CHARGE) {
+					hit(attackerMoves, defenderMoves);
+				}
+				elif (attackerMoves.getAttack() == Attacks.SWING && defenderMoves.getManeuver() == Maneuvers.DODGE) {
+					hit(attackerMoves, defenderMoves);
+				}
+				elif (attackerMoves.getAttack() == Attacks.SMASH && defenderMoves.getManeuver() == Maneuvers.DUCK) {
+					hit(attackerMoves, defenderMoves);
+				}
+				
+				if (attackerMoves.getTarget().isDead() == false) {
+					if ((defenderMoves.getTarget().getWeapons()[0].getSpeed() - defenderMoves.attackFatigue) <= (attackerMoves.getTarget().getCharacter.getSpeed() - attackerMoves.maneuverFatigue)) {
+						hit(defenderMoves, attackerMoves);
+					}
+					elif (defenderMoves.getAttack() == Attacks.THRUST && attackerMoves.getManeuver() == Maneuvers.CHARGE) {
+						hit(defenderMoves, attackerMoves);
+					}
+					elif (defenderMoves.getAttack() == Attacks.SWING && attackerMoves.getManeuver() == Maneuvers.DODGE) {
+						hit(defenderMoves, attackerMoves);
+					}
+					elif (defenderMoves.getAttack() == Attacks.SMASH && attackerMoves.getManeuver() == Maneuvers.DUCK) {
+						hit(defenderMoves, attackerMoves);
+					}
+				}
+			}
+		}
+	}
+	
+	public void hit(CombatMoves attackerMoves, CombatMoves defenderMoves) {
+		ItemWeight level = attackerMoves.getTarget().getWeapons()[0].getWeight();
+		
+		if (attackerMoves.getAttackFatigue() == 1) {
+			switch(level){
+            	case "NEGLIGIBLE": level = ItemWeight.LIGHT;
+            	case "LIGHT": level = ItemWeight.MEDIUM;
+            	case "MEDIUM": level = ItemWeight.HEAVY;
+            	case "HEAVY": level = ItemWeight.TREMENDOUS;
+            	default: level = level;
+			}
+		}
+		elif (attackerMoves.getAttackFatigue() == 2) {
+			switch(level){
+        		case "NEGLIGIBLE": level = ItemWeight.MEDIUM;
+        		case "LIGHT": level = ItemWeight.HEAVY;
+        		case "MEDIUM": level = ItemWeight.TREMENDOUS;
+        		case "HEAVY": level = ItemWeight.TREMENDOUS;
+        		default: level = level;
+			}
+		}
+		//TODO armor destruction
+		if (attackerMoves.getAttack() == Attacks.THRUST && defenderMoves.getManeuver() == Defense.AHEAD) {
+			switch(level){
+        		case "NEGLIGIBLE": level = ItemWeight.NEGLIGIBLE;
+        		case "LIGHT": level = ItemWeight.NEGLIGIBLE;
+        		case "MEDIUM": level = ItemWeight.LIGHT;
+        		case "HEAVY": level = ItemWeight.MEDIUM;
+        		case "TREMENDOUS": level = ItemWeight.HEAVY;
+        		default: level = level;
+			}
+		}
+		elif (attackerMoves.getAttack() == Attacks.SWING && defenderMoves.getManeuver() == Defense.SIDE) {
+			switch(level){
+    			case "NEGLIGIBLE": level = ItemWeight.NEGLIGIBLE;
+    			case "LIGHT": level = ItemWeight.NEGLIGIBLE;
+    			case "MEDIUM": level = ItemWeight.LIGHT;
+    			case "HEAVY": level = ItemWeight.MEDIUM;
+    			case "TREMENDOUS": level = ItemWeight.HEAVY;
+    			default: level = level;
+			}
+		}
+		elif (attackerMoves.getAttack() == Attacks.SMASH && defenderMoves.getManeuver() == Defense.ABOVE) {
+			switch(level){
+    			case "NEGLIGIBLE": level = ItemWeight.NEGLIGIBLE;
+    			case "LIGHT": level = ItemWeight.NEGLIGIBLE;
+    			case "MEDIUM": level = ItemWeight.LIGHT;
+    			case "HEAVY": level = ItemWeight.MEDIUM;
+    			case "TREMENDOUS": level = ItemWeight.HEAVY;
+    			default: level = level;
+			}
+		}
+		
+		if (level == ItemWeight.TREMENDOUS) {
+			deadPlayer(attackerMoves, defenderMoves);
+		}
+		elif (level == ItemWeight.HEAVY) {
+			deadPlayer(attackerMoves, defenderMoves);
+		}
+		elif (level == attackerMoves.getTarget().getCharacter().getWeight()) {
+			deadPlayer(attackerMoves, defenderMoves);
+		}
+		elif (level == ItemWeight.MEDIUM && attackerMoves.getTarget().getCharacter().getWeight() == ItemWeight.LIGHT) {
+			deadPlayer(attackerMoves, defenderMoves);
+		}
+		elif (level == ItemWeight.MEDIUM && attackerMoves.getTarget().getCharacter().getWeight() == ItemWeight.HEAVY) {
+			attackerMoves.getTarget().setHealth(attackerMoves.getTarget().getHealth() + 1);
+			if (attackerMoves.getTarget().getHealth() == 3) {
+				deadPlayer(attackerMoves, defenderMoves);
+			}
+		}
+		elif (level == ItemWeight.LIGHT && attackerMoves.getTarget().getCharacter().getWeight() == ItemWeight.HEAVY) {
+			attackerMoves.getTarget().setHealth(attackerMoves.getTarget().getHealth() + 1);
+			if (attackerMoves.getTarget().getHealth() == 3) {
+				deadPlayer(attackerMoves, defenderMoves);
+			}
+		}
+		elif (level == ItemWeight.LIGHT && attackerMoves.getTarget().getCharacter().getWeight() == ItemWeight.MEDIUM) {
+			attackerMoves.getTarget().setHealth(attackerMoves.getTarget().getHealth() + 1);
+			if (attackerMoves.getTarget().getHealth() == 2) {
+				deadPlayer(attackerMoves, defenderMoves);
+			}
+		}
+	}
+	
+	public void deadPlayer(CombatMoves attackerMoves, CombatMoves defenderMoves) {
+		defenderMoves.getTarget().addFame(10); // Arbitrary value
+		defenderMoves.getTarget().addGold(attackerMoves.getTarget().getGold());
+		attackerMoves.getTarget().removeGold(attackerMoves.getTarget().getGold());
+		defenderMoves.getTarget().addNotoriety(attackerMoves.getTarget().getNotoriety());
+		attackerMoves.getTarget().removeNotoriety(attackerMoves.getTarget().getNotoriety());
+		attackerMoves.getTarget().kill();
+	}
 
 //    TODO REMOVE THIS
 //  public static void main(String[] args) {
