@@ -8,7 +8,7 @@ import utils.Utility.WeaponName;
 // include move, alert, rest, search, hide, resetDay, resetWeek, startDay, gameOver
 // blocking (including by monsters)
 public class Game {
-	
+
     Player[] players = new Player[Config.MAX_CLIENTS] ;
     //Board board = new Board(players);
     int playerCount  = 0;
@@ -99,6 +99,15 @@ public class Game {
     		}
     	}
     	return sameClearingPlayers;
+    }
+
+    // can block other players in the clearing
+    public void block(Player player) {
+    	
+    }
+    // blocks all unhidden players in the clearing
+    public void block(Monster monster) {
+    	
     }
 
     // returns true if day was reset
@@ -563,24 +572,24 @@ public class Game {
 //
 //      System.out.println(player1.weapons[0].weight);
 //      System.out.println(player1.weapons[1].weight);
-//      
+//
 //      System.out.println("setting weapon weight to medium:");
 //      player1.weapons[1].setWeight(ItemWeight.MEDIUM);
 //      System.out.println(player1.weapons[1].weight);
 //      System.out.println("removing weapons that are greater weight then medium (should not change");
-//      player1.removeWeaponsWithHigherWeight(ItemWeight.MEDIUM);    
+//      player1.removeWeaponsWithHigherWeight(ItemWeight.MEDIUM);
 //      for (int i = 0; i < player1.numberOfWeapons; i++) {
 //        	System.out.println("player1 weapons:" + player1.weapons[i]);
 //      }
 //      System.out.println("removing weapons that are greater weight then light (should remove 1 weapon)");
-//      player1.removeWeaponsWithHigherWeight(ItemWeight.LIGHT);    
+//      player1.removeWeaponsWithHigherWeight(ItemWeight.LIGHT);
 //      for (int i = 0; i < player1.numberOfWeapons; i++) {
 //        	System.out.println("player1 weapons:" + player1.weapons[i]);
 //      }
 //
-//      
+//
 //      game.resetDay();
-//      
+//
 //      Player winner = game.endGame();
 //      System.out.println("winner: " + winner.character.name);
 //  }
