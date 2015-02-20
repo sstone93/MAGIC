@@ -16,6 +16,16 @@ public class Board {
 	/**
 	 * 
 	 */
+	public Board(Character[] chars){
+		tiles = new Tile[20];
+		setupBoard();
+		setupGarrisons();
+		placeGarrisons();
+		placeCharacters(chars);
+		//System.out.println("Built Board with no Crashes");
+		//instanciateTreasures();
+	}
+	
 	public Board(){
 		tiles = new Tile[20];
 		setupBoard();
@@ -181,8 +191,15 @@ public class Board {
 		
 	}
 	
+	public void placeCharacters(Character[] c){
+		
+		//cycle through lsit of characters
+		//set their current location as the INN
+		//update the INN with all the new occupants
+		
+	}
+	
 	//TODO REMOVE THIS
-	//TODO WRITE PRINT METHODS FOR CLEARING, TILE AND BOARD (WITH NICE INDENTS)
 	//TODO ADD A TYPE PARAMETER TO A CONNECTION (FOR SECRET PASSAGEGES, MAKE A CONNECTION OBJECT MAYBE??)
 	public static void main(String[] args) {
 		Board test = new Board();

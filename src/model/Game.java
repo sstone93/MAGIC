@@ -7,8 +7,9 @@ import utils.Utility.ItemWeight;
 // include move, alert, rest, search, hide, resetDay, resetWeek, startDay, gameOver
 // blocking (including by monsters)
 public class Game {
-
+	
     Player[] players = new Player[Config.MAX_CLIENTS] ;
+    //Board board = new Board(players);
     int playerCount  = 0;
     int currentDay   = 1;
 
