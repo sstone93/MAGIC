@@ -1,23 +1,24 @@
 package model;
 
 import utils.Utility.ArmourName;
+import utils.Utility.ItemWeight;
 
 public class Armour {
-    String  weight;
-    String  health;
-    ArmourName type;
-    boolean damaged;
-    boolean active;
+    ItemWeight  weight;
+    String      health;
+    ArmourName  type;
+    boolean     damaged;
+    boolean     active;
 
     Armour(ArmourName type) {
     	this.type = type;
     }
 
-    public String getWeight() {
+    public ItemWeight getWeight() {
         return weight;
     }
 
-    public void setWeight(String weight) {
+    public void setWeight(ItemWeight weight) {
         this.weight = weight;
     }
 

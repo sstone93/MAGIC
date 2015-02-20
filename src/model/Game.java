@@ -41,9 +41,9 @@ public class Game {
         // find the highest weight of the active move chits of the player
         for (int i = 0; i < chits.length; i++) {
             if (chits[i].isVisible()) {
-                if (chits[i].getType() == Utility.ChitType.MOVE) {
-                    ItemWeight currentWeight = getItemWeight(chits[i].getName());
-                    boolean check = isWeightHigher(currentWeight, highestMove);
+                if (chits[i].getType() == Utility.Actions.MOVE) {
+                    ItemWeight currentWeight = Utility.getItemWeight(chits[i].getName());
+                    boolean check = Utility.isWeightHeavier(currentWeight, highestMove);
                     if (check) {
                         highestMove = currentWeight;
                     }
@@ -51,44 +51,16 @@ public class Game {
             }
         }
 
-        // todo: discard any other
+        Weapon[] playerWeapons = player.weapons;
+        Armour[] playerArmour  = player.armour;
+
+
+
+        // todo: discard anything that player can't carry
 
         if (canChange)
             player.setLocation(newClearing);
         return canChange;
-    }
-
-    public ItemWeight getItemWeight(String weight) {
-        switch(weight){
-            case "NEGLIGIBLE": return Utility.ItemWeight.NEGLIGIBLE;
-            case "LIGHT": return Utility.ItemWeight.LIGHT;
-            case "MEDIUM": return Utility.ItemWeight.MEDIUM;
-            case "HEAVY": return Utility.ItemWeight.HEAVY;
-            default: return Utility.ItemWeight.NEGLIGIBLE;
-        }
-    }
-
-    // checking: the one you're checking to see if it's higher
-    public boolean isWeightHigher(ItemWeight checking, ItemWeight against) {
-        if (checking == Utility.ItemWeight.NEGLIGIBLE)
-            return false;
-
-        if (checking == Utility.ItemWeight.HEAVY)
-            return true;
-
-        if (checking == Utility.ItemWeight.LIGHT) {
-            if (against == Utility.ItemWeight.NEGLIGIBLE)
-                return true;
-            else
-                return false;
-        }
-        if (checking == Utility.ItemWeight.MEDIUM) {
-            if (against == Utility.ItemWeight.HEAVY)
-                return false;
-            else
-                return true;
-        }
-        return false;
     }
 
     public boolean hide(Player player) { // assume it always works
