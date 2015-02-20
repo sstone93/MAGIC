@@ -75,6 +75,28 @@ public class Game {
         player.setFatigue(0); // I'm assuming it resets the fatigue, which I'm pretty sure is wrong
     }
 
+    // player is the player that's searching for others in the clearing
+    // for iteration 1, I'm just going to have them discover other players, maybe treasure
+    // returns the player(s) found, otherwise returns an empty array
+    public Player[] search(Player player) {
+    	Tile tile = player.getLocation().parent;
+    	Player[] sameClearingPlayers = new Player[playerCount];
+    	int foundPlayers = 0;
+    	for (int i = 0; i < playerCount; i++) {
+    		// I'm assuming that we won't have players with the same character
+    		if (players[i].getCharacter().getName() != player.getCharacter().getName()) {
+	    		if (players[i].getLocation().parent == tile ) {
+	    			if (players[i].getLocation() == player.getLocation()) {
+	    				players[i].setHidden(false);
+	    				sameClearingPlayers[foundPlayers] = players[i];
+	    				foundPlayers++;
+	    			}
+	    		}
+    		}
+    	}
+    	return sameClearingPlayers;
+    }
+
     // returns true if day was reset
     // returns false if it's the 28th day
     public boolean resetDay() {
