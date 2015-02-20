@@ -419,50 +419,50 @@ public class Game {
 		
 		if (attackerMoves.getAttackFatigue() == 1) {
 			switch(level){
-            	case "NEGLIGIBLE": level = ItemWeight.LIGHT;
-            	case "LIGHT": level = ItemWeight.MEDIUM;
-            	case "MEDIUM": level = ItemWeight.HEAVY;
-            	case "HEAVY": level = ItemWeight.TREMENDOUS;
+            	case ItemWeight.NEGLIGIBLE: level = ItemWeight.LIGHT;
+            	case ItemWeight.LIGHT: level = ItemWeight.MEDIUM;
+            	case ItemWeight.MEDIUM: level = ItemWeight.HEAVY;
+            	case ItemWeight.HEAVY: level = ItemWeight.TREMENDOUS;
             	default: level = level;
 			}
 		}
 		elif (attackerMoves.getAttackFatigue() == 2) {
 			switch(level){
-        		case "NEGLIGIBLE": level = ItemWeight.MEDIUM;
-        		case "LIGHT": level = ItemWeight.HEAVY;
-        		case "MEDIUM": level = ItemWeight.TREMENDOUS;
-        		case "HEAVY": level = ItemWeight.TREMENDOUS;
+        		case ItemWeight.NEGLIGIBLE: level = ItemWeight.MEDIUM;
+        		case ItemWeight.LIGHT: level = ItemWeight.HEAVY;
+        		case ItemWeight.MEDIUM: level = ItemWeight.TREMENDOUS;
+        		case ItemWeight.HEAVY: level = ItemWeight.TREMENDOUS;
         		default: level = level;
 			}
 		}
 		//TODO armor destruction
 		if (attackerMoves.getAttack() == Attacks.THRUST && defenderMoves.getManeuver() == Defense.AHEAD) {
 			switch(level){
-        		case "NEGLIGIBLE": level = ItemWeight.NEGLIGIBLE;
-        		case "LIGHT": level = ItemWeight.NEGLIGIBLE;
-        		case "MEDIUM": level = ItemWeight.LIGHT;
-        		case "HEAVY": level = ItemWeight.MEDIUM;
-        		case "TREMENDOUS": level = ItemWeight.HEAVY;
+        		case ItemWeight.NEGLIGIBLE: level = ItemWeight.NEGLIGIBLE;
+        		case ItemWeight.LIGHT: level = ItemWeight.NEGLIGIBLE;
+        		case ItemWeight.MEDIUM: level = ItemWeight.LIGHT;
+        		case ItemWeight.HEAVY: level = ItemWeight.MEDIUM;
+        		case ItemWeight.TREMENDOUS: level = ItemWeight.HEAVY;
         		default: level = level;
 			}
 		}
 		elif (attackerMoves.getAttack() == Attacks.SWING && defenderMoves.getManeuver() == Defense.SIDE) {
 			switch(level){
-    			case "NEGLIGIBLE": level = ItemWeight.NEGLIGIBLE;
-    			case "LIGHT": level = ItemWeight.NEGLIGIBLE;
-    			case "MEDIUM": level = ItemWeight.LIGHT;
-    			case "HEAVY": level = ItemWeight.MEDIUM;
-    			case "TREMENDOUS": level = ItemWeight.HEAVY;
+    			case ItemWeight.NEGLIGIBLE: level = ItemWeight.NEGLIGIBLE;
+    			case ItemWeight.LIGHT: level = ItemWeight.NEGLIGIBLE;
+    			case ItemWeight.MEDIUM: level = ItemWeight.LIGHT;
+    			case ItemWeight.HEAVY: level = ItemWeight.MEDIUM;
+    			case ItemWeight.TREMENDOUS: level = ItemWeight.HEAVY;
     			default: level = level;
 			}
 		}
 		elif (attackerMoves.getAttack() == Attacks.SMASH && defenderMoves.getManeuver() == Defense.ABOVE) {
 			switch(level){
-    			case "NEGLIGIBLE": level = ItemWeight.NEGLIGIBLE;
-    			case "LIGHT": level = ItemWeight.NEGLIGIBLE;
-    			case "MEDIUM": level = ItemWeight.LIGHT;
-    			case "HEAVY": level = ItemWeight.MEDIUM;
-    			case "TREMENDOUS": level = ItemWeight.HEAVY;
+    			case ItemWeight.NEGLIGIBLE: level = ItemWeight.NEGLIGIBLE;
+    			case ItemWeight.LIGHT: level = ItemWeight.NEGLIGIBLE;
+    			case ItemWeight.MEDIUM: level = ItemWeight.LIGHT;
+    			case ItemWeight.HEAVY: level = ItemWeight.MEDIUM;
+    			case ItemWeight.TREMENDOUS: level = ItemWeight.HEAVY;
     			default: level = level;
 			}
 		}
