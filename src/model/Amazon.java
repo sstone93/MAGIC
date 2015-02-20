@@ -7,6 +7,8 @@ public class Amazon extends Character {
     Amazon() { // might want the name to be sent in
         this.name = CharacterName.AMAZON;
         this.startingLocation = TileName.CURSTVALLEY; 
+        this.weight = ItemWeight.MEDIUM;
+        this.speed = 4;
         this.startingWeapons = new Weapon[1];
         this.startingArmour  = new Armour[2];
         startingWeapons[0]   = new Weapon(WeaponName.SHORT_SWORD);

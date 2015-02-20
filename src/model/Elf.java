@@ -7,6 +7,8 @@ public class Elf extends Character {
     Elf() { // might want the name to be sent in
         this.name = CharacterName.ELF;
         this.startingLocation = TileName.CURSTVALLEY;
+        this.weight = ItemWeight.LIGHT;
+        this.speed = 3;
         this.startingWeapons = new Weapon[1];
         startingWeapons[0] = new Weapon(WeaponName.LIGHT_BOW) ;
     }

@@ -7,6 +7,8 @@ public class Dwarf extends Character {
     Dwarf() { // might want the name to be sent in
         this.name             = CharacterName.DWARF;
         this.startingLocation = TileName.CURSTVALLEY;
+        this.weight = ItemWeight.HEAVY;
+        this.speed = 3;
         this.startingWeapons  = new Weapon[1];
         this.startingArmour   = new Armour[1];
         startingWeapons[0]    = new Weapon(WeaponName.GREAT_AXE) ;
