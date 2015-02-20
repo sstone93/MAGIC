@@ -16,6 +16,8 @@ public class Game {
 
     // only adds a player if there's enough room for a new one
     // does nothing if the game is already full
+    // return true: the player has been added
+    // return false: the player was unable to be added
     public boolean addPlayer(Player player) {
         boolean canAdd = false;
         if (playerCount < players.length) {
@@ -31,7 +33,7 @@ public class Game {
     }
 
     // returns true if the player is allowed to move to the clearing
-    // retuns false if unable to move, and the player forfeits this phase
+    // returns false if unable to move, and the player forfeits this phase
     public boolean move(Player player, Clearing newClearing) {
         player.setHidden(false);
         boolean canChange =  (player.getLocation().canChangeClearing(newClearing));
@@ -54,8 +56,8 @@ public class Game {
 
         if (canChange) {
         	// discard anything that player can't carry
-            player.removeWeaponsWithLesserWeight(highestWeight);
-            player.removeArmourWithLesserWeight(highestWeight);
+            player.removeWeaponsWithHigherWeight(highestWeight);
+            player.removeArmourWithHigherWeight(highestWeight);
 
             player.setLocation(newClearing);
 
@@ -263,6 +265,22 @@ public class Game {
 //      System.out.println("checking weapon alert " + player1.weapons[0].isActive());
 //
 //      System.out.println(player1.weapons[0].weight);
+//      System.out.println(player1.weapons[1].weight);
+//      
+//      System.out.println("setting weapon weight to medium:");
+//      player1.weapons[1].setWeight(ItemWeight.MEDIUM);
+//      System.out.println(player1.weapons[1].weight);
+//      System.out.println("removing weapons that are greater weight then medium (should not change");
+//      player1.removeWeaponsWithHigherWeight(ItemWeight.MEDIUM);    
+//      for (int i = 0; i < player1.numberOfWeapons; i++) {
+//        	System.out.println("player1 weapons:" + player1.weapons[i]);
+//      }
+//      System.out.println("removing weapons that are greater weight then light (should remove 1 weapon)");
+//      player1.removeWeaponsWithHigherWeight(ItemWeight.LIGHT);    
+//      for (int i = 0; i < player1.numberOfWeapons; i++) {
+//        	System.out.println("player1 weapons:" + player1.weapons[i]);
+//      }
+//
 //      
 //      game.resetDay();
 //      

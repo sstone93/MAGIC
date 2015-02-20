@@ -34,15 +34,15 @@ public class Player {
         this.armour    = new Armour[Config.WEAPON_AND_ARMOUR_COUNT];
 
         for (int i = 0; i < character.startingWeapons.length; i++) {
-        	weapons[numberOfWeapons] = character.startingWeapons[numberOfWeapons];
-        	numberOfWeapons++;
+            weapons[numberOfWeapons] = character.startingWeapons[numberOfWeapons];
+            numberOfWeapons++;
         }
         if (character.startingArmour != null) {
-	        for (int i = 0; i < character.getStartingArmour().length; i++) {
-	        	armour[numberOfArmour] = character.startingArmour[numberOfArmour];
-	        	numberOfArmour++;
-	        }
-    	}
+            for (int i = 0; i < character.getStartingArmour().length; i++) {
+                armour[numberOfArmour] = character.startingArmour[numberOfArmour];
+                numberOfArmour++;
+            }
+        }
     }
 
     public void setCharacter(Character character) {
@@ -69,11 +69,11 @@ public class Player {
     }
 
     public void setOrder(int order) {
-    	this.order = order;
+        this.order = order;
     }
 
     public int getOrder() {
-    	return order;
+        return order;
     }
 
     public boolean isHidden() {
@@ -130,16 +130,16 @@ public class Player {
     }
 
     public Weapon[] getWeapons() {
-    	return weapons;
+        return weapons;
     }
 
     public void addWeapon(Weapon weapon) {
-    	weapons[numberOfWeapons] = weapon;
+        weapons[numberOfWeapons] = weapon;
         numberOfWeapons++;
     }
-    // removes weapons from the array with a lesser weight then the one sent in
+    // removes weapons from the array with a higher weight then the one sent in
     // ignores weapons with negligible weight
-    public void removeWeaponsWithLesserWeight(ItemWeight weight) {
+    public void removeWeaponsWithHigherWeight(ItemWeight weight) {
         for (int i = 0; i < numberOfWeapons; i++) {
             if (weapons[i].getWeight() == ItemWeight.NEGLIGIBLE)
                 continue;
@@ -149,28 +149,30 @@ public class Player {
 
             if (Utility.isWeightHeavier(weapons[i].getWeight(), weight)) {
                 // remove weapon in the array
-            	for (int j = i; j < numberOfWeapons - 1; j++) {
-            		weapons[j] = weapons[j+1];
-            	}
+                for (int j = i; j < numberOfWeapons - 1; j++) {
+                    weapons[j] = weapons[j+1];
+                }
                 numberOfWeapons--;
             }
         }
     }
 
     public void removeWeapon(Weapon weapon) {
-    	for (int i = 0; i < numberOfWeapons; i++ ) {
-    		if (weapons[i] == weapon) {
-    			for (int j = i; j < numberOfWeapons - 1; j++) {
-            		weapons[j] = weapons[j+1];
-            	}
+        for (int i = 0; i < numberOfWeapons; i++ ) {
+            if (weapons[i] == weapon) {
+                for (int j = i; j < numberOfWeapons - 1; j++) {
+                    weapons[j] = weapons[j+1];
+                }
                 numberOfWeapons--;
                 break;
-    		}
-    	}
+            }
+        }
     }
 
-    public void removeArmourWithLesserWeight(ItemWeight weight) {
-    	for (int i = 0; i < numberOfArmour; i++) {
+    // removes armour from the array with a higher weight then the one sent in
+    // ignores armour with negligible weight
+    public void removeArmourWithHigherWeight(ItemWeight weight) {
+        for (int i = 0; i < numberOfArmour; i++) {
             if (armour[i].getWeight() == ItemWeight.NEGLIGIBLE)
                 continue;
             if (armour[i].getWeight() == weight) {
@@ -178,11 +180,11 @@ public class Player {
             }
 
             if (Utility.isWeightHeavier(armour[i].getWeight(), weight)) {
-                // remove weapon in the array
-            	for (int j = i; j < numberOfArmour - 1; j++) {
-            		armour[j] = armour[j+1];
-            	}
-            	numberOfArmour--;
+                // remove armour in the array
+                for (int j = i; j < numberOfArmour - 1; j++) {
+                    armour[j] = armour[j+1];
+                }
+                numberOfArmour--;
             }
         }
     }
