@@ -1,18 +1,18 @@
 package model;
 
-import utils.Utility.TileName;
+import utils.Utility.*;
 
 public class Character {
-    String name;
+	CharacterName name;
     TileName startingLocation;
     Weapon[] startingWeapons;
     Armour[] startingArmour;
 
-    public String getName() {
+    public CharacterName getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(CharacterName name) {
         this.name = name;
     }
 

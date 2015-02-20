@@ -1,9 +1,9 @@
 package model;
-import utils.Utility.ItemWeight;
-import utils.Utility.WeaponName;
+
+import utils.Utility.*;
 
 public class Weapon {
-    String  type;   // it's name
+    WeaponName  type;   // it's name
     boolean ranged;
     boolean active;
     String  attack; // the method of attack
@@ -13,12 +13,8 @@ public class Weapon {
     ItemWeight weight;
     ItemWeight damage;
 
-    Weapon(String type) {
-        this.type = type;
-    }
-    
     Weapon(WeaponName n) {
-       this.type = n.toString();
+       this.type = n;
     }
 
     public void setRanged(boolean ranged) {
@@ -70,6 +66,6 @@ public class Weapon {
         this.damage = damage;
     }
     public String toString(){
-    	return this.type;
+    	return this.type.toString();
     }
 }

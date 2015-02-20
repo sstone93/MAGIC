@@ -36,7 +36,7 @@ public class Game {
         return canChange;
     }
 
-    public boolean hide(Player player) { // assume they can always hide for now
+    public boolean hide(Player player) { // assume it always works
         player.setHidden(true);
         return true;
     }
@@ -83,9 +83,10 @@ public class Game {
         for (int i = 0; i <= playerCount; i++) {
         	players[i].order = Utility.roll(100);
         }
+        
         int[] ordering = new int[playerCount];
         for (int i = 0; i <= playerCount; i++) {
-        	ordering[i] = players[i].order;
+            ordering[i] = players[i].order;
         }
         Arrays.sort(ordering);
         for (int i = 0; i <= playerCount; i++) {
@@ -96,29 +97,28 @@ public class Game {
         		}
         	}
         }
-
         // Do moves in order
         int nextMover = 0;
         while (nextMover <= playerCount) {
-        	for (int i = 0; i <= playerCount; i++) {
-        		if (players[i].order == nextMover) {
-        			//TODO player does their moves in order
-        			nextMover++;
-        			break;
-        		}
-        	}
+            for (int i = 0; i <= playerCount; i++) {
+                if (players[i].order == nextMover) {
+                    //TODO player does their moves in order
+                    nextMover++;
+                    break;
+                }
+            }
         }
 
         // Choose attacks
         nextMover = 0;
         while (nextMover <= playerCount) {
-        	for (int i = 0; i <= playerCount; i++) {
-        		if (players[i].order == nextMover) {
-        			// TODO choose attackers and save somewhere
-        			nextMover++;
-        			break;
-        		}
-        	}
+            for (int i = 0; i <= playerCount; i++) {
+                if (players[i].order == nextMover) {
+                    // TODO choose attackers and save somewhere
+                    nextMover++;
+                    break;
+                }
+            }
         }
 
         // TODO combat loop

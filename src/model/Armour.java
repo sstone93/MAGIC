@@ -10,8 +10,9 @@ public class Armour {
     boolean active;
 
     Armour(ArmourName type) {
-    	type = type;
+    	this.type = type;
     }
+
     public String getWeight() {
         return weight;
     }
