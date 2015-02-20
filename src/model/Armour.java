@@ -12,6 +12,9 @@ public class Armour {
 
     Armour(ArmourName type) {
     	this.type = type;
+    	this.weight = ItemWeight.NEGLIGIBLE;
+    	this.active = true;
+    	this.damaged = false;
     }
 
     public ItemWeight getWeight() {
