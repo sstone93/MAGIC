@@ -30,7 +30,6 @@ public class Player {
     Player(Character character) {
         this.character = character;
         this.chits     = new Chit[100];
-//        this.location  = new Clearing(5, character.getStartingLocation());
         this.weapons   = new Weapon[Config.WEAPON_AND_ARMOUR_COUNT];
         this.armour    = new Armour[Config.WEAPON_AND_ARMOUR_COUNT];
 
