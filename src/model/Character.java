@@ -4,11 +4,11 @@ import utils.Utility.*;
 
 public class Character {
 	CharacterName name;
-    TileName startingLocation;
-    ItemWeight weight;
-    int speed;
-    Weapon[] startingWeapons;
-    Armour[] startingArmour;
+    ItemWeight    weight;
+    int           speed;
+    GarrisonName  startingLocation;
+    Weapon[]      startingWeapons;
+    Armour[]      startingArmour;
 
     public CharacterName getName() {
         return name;
@@ -18,26 +18,26 @@ public class Character {
         this.name = name;
     }
 
-    public void setStartingLocation(TileName location) {
-        startingLocation = location;
+    public void setStartingLocation(GarrisonName name) {
+        startingLocation = name;
     }
 
-    public TileName getStartingLocation() {
+    public GarrisonName getStartingLocation() {
         return startingLocation;
     }
 
     public ItemWeight getWeight() {
     	return weight;
     }
-    
+
     public int getSpeed() {
     	return speed;
     }
-    
+
     public Weapon[] getStartingWeapons() {
         return startingWeapons;
     }
-    
+
     public Armour[] getStartingArmour() {
     	return startingArmour;
     }
