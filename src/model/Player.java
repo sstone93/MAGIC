@@ -30,8 +30,20 @@ public class Player {
     Player(Character character) {
         this.character = character;
         this.chits     = new Chit[100];
+//        this.location  = character.startingLocation;
         this.weapons   = new Weapon[Config.WEAPON_AND_ARMOUR_COUNT];
         this.armour    = new Armour[Config.WEAPON_AND_ARMOUR_COUNT];
+        
+        for (int i = 0; i < character.startingWeapons.length; i++) {
+        	weapons[numberOfWeapons] = character.startingWeapons[numberOfWeapons];
+        	numberOfWeapons++;
+        }
+        if (character.startingArmour != null) {
+	        for (int i = 0; i < character.getStartingArmour().length; i++) {
+	        	armour[numberOfArmour] = character.startingArmour[numberOfArmour];
+	        	numberOfArmour++;
+	        }
+    	}
     }
 
     public void setCharacter(Character character) {
