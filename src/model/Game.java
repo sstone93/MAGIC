@@ -188,7 +188,7 @@ public class Game {
         // todo: player has to discard any items an active move chit can't carry
         // todo: treasures
 
-        for (int i = 0; i <= playerCount; i++ ) {
+        for (int i = 0; i < playerCount; i++ ) {
             player = players[i];
             if (winner == null)
                 winner = players[i];
@@ -210,58 +210,63 @@ public class Game {
     }
 
 //    TODO REMOVE THIS
-//   public static void main(String[] args) {
-//       Game game = new Game();
-//       Character swordsman = new Swordsman();
-//       Character elf = new Elf();
-//       Player player1 = new Player(swordsman);
-//       Player player2 = new Player(elf);
-//       game.addPlayer(player1);
-//       game.addPlayer(player2);
+//  public static void main(String[] args) {
+//      Game game = new Game();
+//      Character swordsman = new Swordsman();
+//      Character elf = new Elf();
+//      Player player1 = new Player(swordsman);
+//      Player player2 = new Player(elf);
+//      game.addPlayer(player1);
+//      game.addPlayer(player2);
 //
-//       System.out.println("starting game:");
-//       game.startDay();
-//       System.out.println("current day" + game.currentDay);
+//      System.out.println("starting game:");
+//      game.startDay();
+//      System.out.println("current day" + game.currentDay);
 //
-//       System.out.println("player order for the day:");
-//       System.out.println("player1 : " + player1.order);
-//       System.out.println("player2 : " + player2.order);
+//      System.out.println("player order for the day:");
+//      System.out.println("player1 : " + player1.order);
+//      System.out.println("player2 : " + player2.order);
 //
-//       // initial starting weapons/armour
-//       for (int i = 0; i < player1.numberOfWeapons; i++) {
-//       	System.out.println("player1 weapons:" + player1.weapons[i]);
-//       }
-//       for (int i = 0; i < player1.numberOfArmour; i++) {
-//       	System.out.println("player1 armour:" + player1.armour[i]);
-//       }
-//       for (int i = 0; i < player2.numberOfWeapons; i++) {
-//       	System.out.println("player2 weapons:" + player2.weapons[i]);
-//       }
-//       for (int i = 0; i < player2.numberOfArmour; i++) {
-//       	System.out.println("player2 armour:" + player2.armour[i]);
-//       }
+//      // initial starting weapons/armour
+//      for (int i = 0; i < player1.numberOfWeapons; i++) {
+//      	System.out.println("player1 weapons:" + player1.weapons[i]);
+//      }
+//      for (int i = 0; i < player1.numberOfArmour; i++) {
+//      	System.out.println("player1 armour:" + player1.armour[i]);
+//      }
+//      for (int i = 0; i < player2.numberOfWeapons; i++) {
+//      	System.out.println("player2 weapons:" + player2.weapons[i]);
+//      }
+//      for (int i = 0; i < player2.numberOfArmour; i++) {
+//      	System.out.println("player2 armour:" + player2.armour[i]);
+//      }
 //
-//       Weapon weapon1 = new Weapon(WeaponName.GREAT_SWORD);
-//       player1.addWeapon(weapon1);
-//       System.out.println("added great sword to player1");
-//       for (int i = 0; i < player1.numberOfWeapons; i++) {
-//       	System.out.println("player1 weapons:" + player1.weapons[i]);
-//       }
+//      Weapon weapon1 = new Weapon(WeaponName.GREAT_SWORD);
+//      player1.addWeapon(weapon1);
+//      System.out.println("added great sword to player1");
+//      for (int i = 0; i < player1.numberOfWeapons; i++) {
+//      	System.out.println("player1 weapons:" + player1.weapons[i]);
+//      }
 //
-//       System.out.println("player1 hidden?" + player1.isHidden());
-//       game.hide(player1);
-//       System.out.println("player1 hidden?" + player1.isHidden());
+//      System.out.println("player1 hidden?" + player1.isHidden());
+//      game.hide(player1);
+//      System.out.println("player1 hidden?" + player1.isHidden());
 //
-//       // todo: need to set player location
-//       System.out.println("player 1 location: " + player1.getLocation());
-//       System.out.println("player 2 location: " + player2.getLocation());
+//      // todo: need to set player location
+//      System.out.println("player 1 location: " + player1.getLocation());
+//      System.out.println("player 2 location: " + player2.getLocation());
 //
-//       System.out.println("checking weapon alert " + player1.weapons[0].isActive());
-//       game.alert(player1.weapons[0], false);
-//       System.out.println("checking weapon alert " + player1.weapons[0].isActive());
-//       game.alert(player1.weapons[0], true);
-//       System.out.println("checking weapon alert " + player1.weapons[0].isActive());
-//       
-//       System.out.println(player1.weapons[0].weight);
-//   }
+//      System.out.println("checking weapon alert " + player1.weapons[0].isActive());
+//      game.alert(player1.weapons[0], false);
+//      System.out.println("checking weapon alert " + player1.weapons[0].isActive());
+//      game.alert(player1.weapons[0], true);
+//      System.out.println("checking weapon alert " + player1.weapons[0].isActive());
+//
+//      System.out.println(player1.weapons[0].weight);
+//      
+//      game.resetDay();
+//      
+//      Player winner = game.endGame();
+//      System.out.println("winner: " + winner.character.name);
+//  }
 }
