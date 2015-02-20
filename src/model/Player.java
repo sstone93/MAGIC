@@ -1,7 +1,5 @@
 package model;
 
-import java.lang.reflect.Array;
-
 import utils.Config;
 import utils.Utility;
 import utils.Utility.ItemWeight;
@@ -125,12 +123,12 @@ public class Player {
     }
 
     public void addWeapon(Weapon weapon) {
+    	weapons[numberOfWeapons] = weapon;
         numberOfWeapons++;
-    	// add it to the array of weapons
     }
     // removes weapons from the array with a lesser weight then the one sent in
     // ignores weapons with negligible weight
-    public void removeWeaponsWithWeightLesser(ItemWeight weight) {
+    public void removeWeaponsWithLesserWeight(ItemWeight weight) {
         for (int i = 0; i < numberOfWeapons; i++) {
             if (weapons[i].getWeight() == ItemWeight.NEGLIGIBLE)
                 continue;
@@ -139,12 +137,45 @@ public class Player {
             }
 
             if (Utility.isWeightHeavier(weapons[i].getWeight(), weight)) {
-                // switcharoo in the array
+                // remove weapon in the array
+            	for (int j = i; j < numberOfWeapons - 1; j++) {
+            		weapons[j] = weapons[j+1];
+            	}
                 numberOfWeapons--;
             }
         }
-
     }
+    
+    public void removeWeapon(Weapon weapon) {
+    	for (int i = 0; i < numberOfWeapons; i++ ) {
+    		if (weapons[i] == weapon) {
+    			for (int j = i; j < numberOfWeapons - 1; j++) {
+            		weapons[j] = weapons[j+1];
+            	}
+                numberOfWeapons--;
+                break;
+    		}
+    	}
+    }
+    
+    public void removeArmourWithLesserWeight(ItemWeight weight) {
+    	for (int i = 0; i < numberOfArmour; i++) {
+            if (armour[i].getWeight() == ItemWeight.NEGLIGIBLE)
+                continue;
+            if (armour[i].getWeight() == weight) {
+                continue;
+            }
+
+            if (Utility.isWeightHeavier(armour[i].getWeight(), weight)) {
+                // remove weapon in the array
+            	for (int j = i; j < numberOfArmour - 1; j++) {
+            		armour[j] = armour[j+1];
+            	}
+            	numberOfArmour--;
+            }
+        }
+    }
+    
 
     public void setFinalScore(int score) {
         finalScore = score;

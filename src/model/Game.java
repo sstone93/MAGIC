@@ -34,32 +34,30 @@ public class Game {
         player.setHidden(false);
         boolean canChange =  (player.getLocation().canChangeClearing(newClearing));
         // todo: check if player knows secret locations
-        // todo: abandon any items that are too heavy, defined by active move chits
-        Chit[] chits = player.getChits();
-        ItemWeight highestMove = Utility.ItemWeight.NEGLIGIBLE;
+        Chit[] chits             = player.getChits();
+        ItemWeight highestWeight = Utility.ItemWeight.NEGLIGIBLE;
 
         // find the highest weight of the active move chits of the player
         for (int i = 0; i < chits.length; i++) {
             if (chits[i].isVisible()) {
                 if (chits[i].getType() == Utility.Actions.MOVE) {
                     ItemWeight currentWeight = Utility.getItemWeight(chits[i].getName());
-                    boolean check = Utility.isWeightHeavier(currentWeight, highestMove);
+                    boolean check = Utility.isWeightHeavier(currentWeight, highestWeight);
                     if (check) {
-                        highestMove = currentWeight;
+                        highestWeight = currentWeight;
                     }
                 }
             }
         }
 
-        Weapon[] playerWeapons = player.weapons;
-        Armour[] playerArmour  = player.armour;
-
-
-
-        // todo: discard anything that player can't carry
-
-        if (canChange)
+        if (canChange) {
+        	// discard anything that player can't carry
+            player.removeWeaponsWithLesserWeight(highestWeight);
+            player.removeArmourWithLesserWeight(highestWeight);
+            
             player.setLocation(newClearing);
+            
+        }
         return canChange;
     }
 
