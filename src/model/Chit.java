@@ -1,6 +1,9 @@
 package model;
 
+import utils.Utility.Actions;
+
 public class Chit {
+    Actions type;
     String   name;
     Clearing location;
     boolean  visible;
@@ -20,6 +23,14 @@ public class Chit {
 
     public void setVisible(boolean visible) {
         this.visible = visible;
+    }
+
+    public Actions getType() {
+        return type;
+    }
+
+    public void setType(Actions type) {
+        this.type = type;
     }
 
 }

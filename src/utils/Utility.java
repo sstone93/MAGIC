@@ -7,7 +7,40 @@ public class Utility {
         return r.nextInt(max) + 1;
     }
 
-    public enum ItemWeight {LIGHT, MEDIUM, HEAVY}
+    public static ItemWeight getItemWeight(String weight) {
+        switch(weight){
+            case "NEGLIGIBLE": return Utility.ItemWeight.NEGLIGIBLE;
+            case "LIGHT": return Utility.ItemWeight.LIGHT;
+            case "MEDIUM": return Utility.ItemWeight.MEDIUM;
+            case "HEAVY": return Utility.ItemWeight.HEAVY;
+            default: return Utility.ItemWeight.NEGLIGIBLE;
+        }
+    }
+
+    // checking: the one you're checking to see if it has a heavier weight
+    public static boolean isWeightHeavier(ItemWeight checking, ItemWeight against) {
+        if (checking == Utility.ItemWeight.NEGLIGIBLE)
+            return false;
+
+        if (checking == Utility.ItemWeight.HEAVY)
+            return true;
+
+        if (checking == Utility.ItemWeight.LIGHT) {
+            if (against == Utility.ItemWeight.NEGLIGIBLE)
+                return true;
+            else
+                return false;
+        }
+        if (checking == Utility.ItemWeight.MEDIUM) {
+            if (against == Utility.ItemWeight.HEAVY)
+                return false;
+            else
+                return true;
+        }
+        return false;
+    }
+
+    public enum ItemWeight {NEGLIGIBLE, LIGHT, MEDIUM, HEAVY}
 
     public enum TileName {AWFULVALLEY, BADVALLEY, BORDERLAND, CAVERN, CAVES, CLIFF, CRAG, CURSTVALLEY,
     	DARKVALLEY, DEEPWOODS, EVILVALLEY, HIGHPASS, LEDGES, LINDENWOODS, MAPLEWOODS, MOUNTAIN, NUTWOODS,
@@ -19,7 +52,7 @@ public class Utility {
     public enum WeaponName {MEDIUM_BOW, LIGHT_BOW, CROSSBOW, SPEAR, STAFF, GREAT_SWORD, BANE_SWORD, BROADSWORD,
     	DEVIL_SWORD, TRUESTEEL_SWORD, MORNING_STAR, GREAT_AXE, THRUSTING_SWORD, LIVING_SWORD, SHORT_SWORD,
     	AXE, MACE, DAGGER, TOOTH_AND_CLAW}
-    
+
     public enum ArmourName {SUIT_OF_ARMOR, BREASTPLATE, HELMET, SHIELD, TREMENDOUS_ARMOR, SILVER_BREASTPLATE,
     	GOLD_HELMET, JADE_SHIELD}
 

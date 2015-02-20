@@ -2,6 +2,7 @@ package model;
 
 import java.util.Arrays;
 import utils.*;
+import utils.Utility.ItemWeight;
 
 // include move, alert, rest, search, hide, resetDay, resetWeek, startDay, gameOver
 // blocking (including by monsters)
@@ -28,11 +29,35 @@ public class Game {
     }
 
     // returns true if the player is allowed to move to the clearing
+    // retuns false if unable to move, and the player forfeits this phase
     public boolean move(Player player, Clearing newClearing) {
         player.setHidden(false);
         boolean canChange =  (player.getLocation().canChangeClearing(newClearing));
-        if (canChange)
+        // todo: check if player knows secret locations
+        Chit[] chits             = player.getChits();
+        ItemWeight highestWeight = Utility.ItemWeight.NEGLIGIBLE;
+
+        // find the highest weight of the active move chits of the player
+        for (int i = 0; i < chits.length; i++) {
+            if (chits[i].isVisible()) {
+                if (chits[i].getType() == Utility.Actions.MOVE) {
+                    ItemWeight currentWeight = Utility.getItemWeight(chits[i].getName());
+                    boolean check = Utility.isWeightHeavier(currentWeight, highestWeight);
+                    if (check) {
+                        highestWeight = currentWeight;
+                    }
+                }
+            }
+        }
+
+        if (canChange) {
+        	// discard anything that player can't carry
+            player.removeWeaponsWithLesserWeight(highestWeight);
+            player.removeArmourWithLesserWeight(highestWeight);
+            
             player.setLocation(newClearing);
+            
+        }
         return canChange;
     }
 
@@ -81,21 +106,21 @@ public class Game {
 
         // Silly way to order players from 1 to playerCount+1
         for (int i = 0; i <= playerCount; i++) {
-        	players[i].order = Utility.roll(100);
+            players[i].order = Utility.roll(100);
         }
-        
+
         int[] ordering = new int[playerCount];
         for (int i = 0; i <= playerCount; i++) {
             ordering[i] = players[i].order;
         }
         Arrays.sort(ordering);
         for (int i = 0; i <= playerCount; i++) {
-        	for (int j = 0; j <= playerCount; j++) {
-        		if (ordering[i] == players[j].order) {
-        			players[j].order = i;
-        			break;
-        		}
-        	}
+            for (int j = 0; j <= playerCount; j++) {
+                if (ordering[i] == players[j].order) {
+                    players[j].order = i;
+                    break;
+                }
+            }
         }
         // Do moves in order
         int nextMover = 0;
