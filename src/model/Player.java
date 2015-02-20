@@ -11,6 +11,7 @@ public class Player {
     int notoriety     = 0;
     int finalScore    = 0;
     int order; // in which order does the player play
+    int numberOfChits = 0;
     boolean hidden    = false;
 
     Character character;
@@ -18,10 +19,13 @@ public class Player {
     Clearing location;
     Armour[] armour;
     Weapon[] weapons;
-    Array[]  treasures;
+    Chit[]   chits;
+    // Array[]  treasures;
+    Clearing[]  secretLocations;
 
     Player(Character character) {
         this.character = character;
+        this.chits     = new Chit[100];
     }
 
     public void setCharacter(Character character) {
@@ -122,5 +126,14 @@ public class Player {
 
     public int getFinalScore() {
         return finalScore;
+    }
+
+    public Chit[] getChits() {
+        return chits;
+    }
+
+    public void addChits(Chit chit) {
+        this.chits[numberOfChits] = chit;
+        numberOfChits++;
     }
 }

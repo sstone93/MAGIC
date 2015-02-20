@@ -2,6 +2,7 @@ package model;
 
 import java.util.Arrays;
 import utils.*;
+import utils.Utility.ItemWeight;
 
 // include move, alert, rest, search, hide, resetDay, resetWeek, startDay, gameOver
 // blocking (including by monsters)
@@ -28,12 +29,66 @@ public class Game {
     }
 
     // returns true if the player is allowed to move to the clearing
+    // retuns false if unable to move, and the player forfeits this phase
     public boolean move(Player player, Clearing newClearing) {
         player.setHidden(false);
         boolean canChange =  (player.getLocation().canChangeClearing(newClearing));
+        // todo: check if player knows secret locations
+        // todo: abandon any items that are too heavy, defined by active move chits
+        Chit[] chits = player.getChits();
+        ItemWeight highestMove = Utility.ItemWeight.NEGLIGIBLE;
+
+        // find the highest weight of the active move chits of the player
+        for (int i = 0; i < chits.length; i++) {
+            if (chits[i].isVisible()) {
+                if (chits[i].getType() == Utility.ChitType.MOVE) {
+                    ItemWeight currentWeight = getItemWeight(chits[i].getName());
+                    boolean check = isWeightHigher(currentWeight, highestMove);
+                    if (check) {
+                        highestMove = currentWeight;
+                    }
+                }
+            }
+        }
+
+        // todo: discard any other
+
         if (canChange)
             player.setLocation(newClearing);
         return canChange;
+    }
+
+    public ItemWeight getItemWeight(String weight) {
+        switch(weight){
+            case "NEGLIGIBLE": return Utility.ItemWeight.NEGLIGIBLE;
+            case "LIGHT": return Utility.ItemWeight.LIGHT;
+            case "MEDIUM": return Utility.ItemWeight.MEDIUM;
+            case "HEAVY": return Utility.ItemWeight.HEAVY;
+            default: return Utility.ItemWeight.NEGLIGIBLE;
+        }
+    }
+
+    // checking: the one you're checking to see if it's higher
+    public boolean isWeightHigher(ItemWeight checking, ItemWeight against) {
+        if (checking == Utility.ItemWeight.NEGLIGIBLE)
+            return false;
+
+        if (checking == Utility.ItemWeight.HEAVY)
+            return true;
+
+        if (checking == Utility.ItemWeight.LIGHT) {
+            if (against == Utility.ItemWeight.NEGLIGIBLE)
+                return true;
+            else
+                return false;
+        }
+        if (checking == Utility.ItemWeight.MEDIUM) {
+            if (against == Utility.ItemWeight.HEAVY)
+                return false;
+            else
+                return true;
+        }
+        return false;
     }
 
     public boolean hide(Player player) { // assume it always works
@@ -81,21 +136,21 @@ public class Game {
 
         // Silly way to order players from 1 to playerCount+1
         for (int i = 0; i <= playerCount; i++) {
-        	players[i].order = Utility.roll(100);
+            players[i].order = Utility.roll(100);
         }
-        
+
         int[] ordering = new int[playerCount];
         for (int i = 0; i <= playerCount; i++) {
             ordering[i] = players[i].order;
         }
         Arrays.sort(ordering);
         for (int i = 0; i <= playerCount; i++) {
-        	for (int j = 0; j <= playerCount; j++) {
-        		if (ordering[i] == players[j].order) {
-        			players[j].order = i;
-        			break;
-        		}
-        	}
+            for (int j = 0; j <= playerCount; j++) {
+                if (ordering[i] == players[j].order) {
+                    players[j].order = i;
+                    break;
+                }
+            }
         }
         // Do moves in order
         int nextMover = 0;

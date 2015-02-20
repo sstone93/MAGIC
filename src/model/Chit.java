@@ -1,6 +1,9 @@
 package model;
 
+import utils.Utility.ChitType;
+
 public class Chit {
+    ChitType type;
     String   name;
     Clearing location;
     boolean  visible;
@@ -20,6 +23,14 @@ public class Chit {
 
     public void setVisible(boolean visible) {
         this.visible = visible;
+    }
+
+    public ChitType getType() {
+        return type;
+    }
+
+    public void setType(ChitType type) {
+        this.type = type;
     }
 
 }
