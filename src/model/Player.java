@@ -83,6 +83,7 @@ public class Player {
 
     public boolean removeGold(int gold) {
         if (this.gold - gold <= 0) {
+        	gold = 0;
             return false;
         }
         this.gold -= gold;
