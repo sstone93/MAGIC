@@ -9,27 +9,39 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import controller.ClientController;
+
 import java.awt.Dimension;
+
 import javax.swing.border.LineBorder;
+
 import java.awt.Color;
+
 import javax.swing.JLabel;
+
 import java.awt.Font;
+
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+
 import utils.Utility.Actions;
+
 import javax.swing.JButton;
+
+import model.Board;
 
 
 @SuppressWarnings("serial")
 public class View extends JFrame {
 	
+	private ClientController control;
 	private JPanel contentPane;
+	private JScrollPane boardPanel;
 	private JTextField characterText;
 	private JTextField scoreText;
 	private JTextField healthText;
 	
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -40,12 +52,13 @@ public class View extends JFrame {
 				}
 			}
 		});
-	}
+	}*/
 	
 	/**
 	 * Create the frame.
 	 */
 	public View(ClientController control) {
+		control = control;
 		setResizable(false);
 		setSize(new Dimension(1280, 720));
 		getContentPane().setLayout(null);
@@ -54,9 +67,9 @@ public class View extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JScrollPane BoardPanel = new JScrollPane();
-		BoardPanel.setBounds(0, 0, 1000, 500);
-		contentPane.add(BoardPanel);
+		boardPanel = new JScrollPane();
+		boardPanel.setBounds(0, 0, 1000, 500);
+		contentPane.add(boardPanel);
 		
 		JPanel CharacterInfoPanel = new JPanel();
 		CharacterInfoPanel.setBorder(new LineBorder(Color.GRAY));
@@ -152,5 +165,13 @@ public class View extends JFrame {
 		TextDisplay.setBounds(0, 500, 750, 192);
 		contentPane.add(TextDisplay);
 		TextDisplay.setEditable(false);
+	}
+	
+	public void update(){
+		Board b = control.model.getBoard();
+		boardPanel.removeAll();
+		for (int i = 0; i < b.tiles.length; i++){
+			
+		}
 	}
 }
