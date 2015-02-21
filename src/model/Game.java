@@ -236,59 +236,51 @@ public class Game {
     //TODO Needs to print out to console, plus all of the other TODO's in the code
     
     //TODO Weapons active, networking
-    public void Encounter(Player player, Boolean isAttacker) {
+    public void Encounter(Player attacker, Player defender) {
 		// Check if weapon is active
 		/*if (player.weapons[0].isActive() == false) {
 			player.weapons[0].setActive(true);
 			return;
 		}*/
+    	
+    	//TODO getMoves should query the clients, which will then choose their moves and send them back to the server. I just left it as is for now
+		CombatMoves attackerMoves = getMoves(attacker);
+		CombatMoves defenderMoves = getMoves(defender);
 		
-		// Player chooses target, attack, maneuver, defense, and fatigue levels for each
-		boolean properFatigue = false;
-		CombatMoves moves = null;
-		while (properFatigue == false) {
-			moves = getMoves();
-		
-			int totalFatigue = (moves.getAttackFatigue() + moves.getManeuverFatigue());
-			if (totalFatigue <= 2 && player.getFatigue() <= 8) { // Choosing 10 as the arbitrary value of total fatigue
-				properFatigue = true;
-				player.setFatigue(player.getFatigue() + totalFatigue);
-			}
-			//TODO Print "improper amounts of fatigue" to console or some other error message
-		}
-		
-		//TODO Send moves to server
-		
-		//TODO Receive opponent's moves from server
-		CombatMoves opponentMoves = null;
-		
-		if (isAttacker == true) {
-			doFight(moves, opponentMoves);
-		}
-		else {
-			doFight(opponentMoves, moves);
-		}
+		doFight(attackerMoves, defenderMoves);
 	}
 	
-	//TODO Will change based on how the panels are implemented, needs to grab input from dropdown boxes for all
-	// Each value will be filled depending on what the user chooses from the panel
-	private CombatMoves getMoves() {
-		Player target = null;
+    // Will be run on the client side
+    public CombatMoves getMoves(Player player) {
+    	// Player chooses target, attack, maneuver, defense, and fatigue levels for each
+    	boolean properFatigue = false;
+    	CombatMoves moves = null;
+    	Player target = null;
 		Attacks attack = null;
 		int attackFatigue = 0;
 		Maneuvers maneuver = null;
 		int maneuverFatigue = 0;
 		Defenses defense = null;
-		
-		CombatMoves moves = null;
-		moves.target = target;
-		moves.attack = attack;
-		moves.attackFatigue = attackFatigue;
-		moves.maneuver = maneuver;
-		moves.maneuverFatigue = maneuverFatigue;
-		moves.defense = defense;
-		return moves;
-	}
+    	
+    	while (properFatigue == false) {
+    		//TODO Will change based on how the panels are implemented, needs to grab input from dropdown boxes for all
+    		// Each value will be filled depending on what the user chooses from the panel
+    		moves.target = target;
+    		moves.attack = attack;
+    		moves.attackFatigue = attackFatigue;
+    		moves.maneuver = maneuver;
+    		moves.maneuverFatigue = maneuverFatigue;
+    		moves.defense = defense;
+    		
+    		int totalFatigue = (moves.getAttackFatigue() + moves.getManeuverFatigue());
+    		if (totalFatigue <= 2 && player.getFatigue() <= 8) { // Choosing 10 as the arbitrary value of total fatigue
+    			properFatigue = true;
+    			player.setFatigue(player.getFatigue() + totalFatigue);
+    		}
+    		//TODO Print "improper amounts of fatigue" to console or some other error message
+    	}
+    	return moves; //TODO send this to the server
+    }
 	
 	//TODO Finding active weapon rather than assuming the active weapon is at position 0
 	public void doFight(CombatMoves attackerMoves, CombatMoves defenderMoves) {
@@ -445,6 +437,8 @@ public class Game {
 	public void hit(CombatMoves attackerMoves, CombatMoves defenderMoves) {
 		ItemWeight level = attackerMoves.getTarget().getWeapons()[0].getWeight();
 		
+		//TODO Print out "hit" to console
+		
 		if (attackerMoves.getAttackFatigue() == 1) {
 			switch(level){
             	case NEGLIGIBLE: level = ItemWeight.LIGHT;
@@ -507,6 +501,7 @@ public class Game {
 		else if (level == ItemWeight.MEDIUM && attackerMoves.getTarget().getCharacter().getWeight() == ItemWeight.LIGHT) {
 			deadPlayer(attackerMoves, defenderMoves);
 		}
+		//TODO Change player health on client and server side
 		else if (level == ItemWeight.MEDIUM && attackerMoves.getTarget().getCharacter().getWeight() == ItemWeight.HEAVY) {
 			attackerMoves.getTarget().setHealth(attackerMoves.getTarget().getHealth() + 1);
 			if (attackerMoves.getTarget().getHealth() == 3) {
@@ -526,7 +521,7 @@ public class Game {
 			}
 		}
 	}
-	
+	//TODO Change values on client and server side
 	public void deadPlayer(CombatMoves attackerMoves, CombatMoves defenderMoves) {
 		defenderMoves.getTarget().addFame(10); // Arbitrary value
 		defenderMoves.getTarget().addGold(attackerMoves.getTarget().getGold());
@@ -534,6 +529,7 @@ public class Game {
 		defenderMoves.getTarget().addNotoriety(attackerMoves.getTarget().getNotoriety());
 		attackerMoves.getTarget().removeNotoriety(attackerMoves.getTarget().getNotoriety());
 		attackerMoves.getTarget().kill();
+		//TODO Print death message to console
 	}
 
 
