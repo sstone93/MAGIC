@@ -54,6 +54,14 @@ public class Player {
         return character;
     }
 
+    public void setHealth(int health) {
+    	this.health = health;
+    }
+    
+    public int getHealth() {
+    	return health;
+    }
+    
     public int getGold() {
         return gold;
     }

@@ -232,9 +232,9 @@ public class Game {
         return winner;
     }
 
-    // Combat code.
+	// Combat code. 
     //TODO Needs to print out to console, plus all of the other TODO's in the code
-
+    
     //TODO Weapons active, networking
     public void Encounter(Player player, Boolean isAttacker) {
 		// Check if weapon is active
@@ -242,13 +242,13 @@ public class Game {
 			player.weapons[0].setActive(true);
 			return;
 		}*/
-
+		
 		// Player chooses target, attack, maneuver, defense, and fatigue levels for each
 		boolean properFatigue = false;
-		CombatMoves moves;
+		CombatMoves moves = null;
 		while (properFatigue == false) {
 			moves = getMoves();
-
+		
 			int totalFatigue = (moves.getAttackFatigue() + moves.getManeuverFatigue());
 			if (totalFatigue <= 2 && player.getFatigue() <= 8) { // Choosing 10 as the arbitrary value of total fatigue
 				properFatigue = true;
@@ -256,12 +256,12 @@ public class Game {
 			}
 			//TODO Print "improper amounts of fatigue" to console or some other error message
 		}
-
+		
 		//TODO Send moves to server
-
+		
 		//TODO Receive opponent's moves from server
-		CombatMoves opponentMoves;
-
+		CombatMoves opponentMoves = null;
+		
 		if (isAttacker == true) {
 			doFight(moves, opponentMoves);
 		}
@@ -269,7 +269,7 @@ public class Game {
 			doFight(opponentMoves, moves);
 		}
 	}
-
+	
 	//TODO Will change based on how the panels are implemented, needs to grab input from dropdown boxes for all
 	// Each value will be filled depending on what the user chooses from the panel
 	private CombatMoves getMoves() {
@@ -279,10 +279,17 @@ public class Game {
 		Maneuvers maneuver = null;
 		int maneuverFatigue = 0;
 		Defenses defense = null;
-
-		return CombatMoves(target, attack, attackFatigue, maneuver, maneuverFatigue, defense);
+		
+		CombatMoves moves = null;
+		moves.target = target;
+		moves.attack = attack;
+		moves.attackFatigue = attackFatigue;
+		moves.maneuver = maneuver;
+		moves.maneuverFatigue = maneuverFatigue;
+		moves.defense = defense;
+		return moves;
 	}
-
+	
 	//TODO Finding active weapon rather than assuming the active weapon is at position 0
 	public void doFight(CombatMoves attackerMoves, CombatMoves defenderMoves) {
 		if (attackerMoves.getTarget().getWeapons()[0].getSpeed() < defenderMoves.getTarget().getWeapons()[0].getSpeed()) {
@@ -298,7 +305,7 @@ public class Game {
 			else if (attackerMoves.getAttack() == Attacks.SMASH && defenderMoves.getManeuver() == Maneuvers.DUCK) {
 				hit(attackerMoves, defenderMoves);
 			}
-
+			
 			if (attackerMoves.getTarget().isDead() == false) {
 				if ((defenderMoves.getTarget().getWeapons()[0].getSpeed() - defenderMoves.attackFatigue) <= (attackerMoves.getTarget().getCharacter().getSpeed() - attackerMoves.maneuverFatigue)) {
 					hit(defenderMoves, attackerMoves);
@@ -327,7 +334,7 @@ public class Game {
 			else if (defenderMoves.getAttack() == Attacks.SMASH && attackerMoves.getManeuver() == Maneuvers.DUCK) {
 				hit(defenderMoves, attackerMoves);
 			}
-
+			
 			if (attackerMoves.getTarget().isDead() == false) {
 				if ((attackerMoves.getTarget().getWeapons()[0].getSpeed() - attackerMoves.attackFatigue) <= (defenderMoves.getTarget().getCharacter().getSpeed() - defenderMoves.maneuverFatigue)) {
 					hit(attackerMoves, defenderMoves);
@@ -343,7 +350,7 @@ public class Game {
 				}
 			}
 		}
-
+		
 		else {
 			if (attackerMoves.getTarget().getWeapons()[0].getLength() < defenderMoves.getTarget().getWeapons()[0].getLength()) {
 				if ((attackerMoves.getTarget().getWeapons()[0].getSpeed() - attackerMoves.attackFatigue) <= (defenderMoves.getTarget().getCharacter().getSpeed() - defenderMoves.maneuverFatigue)) {
@@ -358,7 +365,7 @@ public class Game {
 				else if (attackerMoves.getAttack() == Attacks.SMASH && defenderMoves.getManeuver() == Maneuvers.DUCK) {
 					hit(attackerMoves, defenderMoves);
 				}
-
+				
 				if (attackerMoves.getTarget().isDead() == false) {
 					if ((defenderMoves.getTarget().getWeapons()[0].getSpeed() - defenderMoves.attackFatigue) <= (attackerMoves.getTarget().getCharacter().getSpeed() - attackerMoves.maneuverFatigue)) {
 						hit(defenderMoves, attackerMoves);
@@ -387,7 +394,7 @@ public class Game {
 				else if (defenderMoves.getAttack() == Attacks.SMASH && attackerMoves.getManeuver() == Maneuvers.DUCK) {
 					hit(defenderMoves, attackerMoves);
 				}
-
+				
 				if (attackerMoves.getTarget().isDead() == false) {
 					if ((attackerMoves.getTarget().getWeapons()[0].getSpeed() - attackerMoves.attackFatigue) <= (defenderMoves.getTarget().getCharacter().getSpeed() - defenderMoves.maneuverFatigue)) {
 						hit(attackerMoves, defenderMoves);
@@ -416,7 +423,7 @@ public class Game {
 				else if (attackerMoves.getAttack() == Attacks.SMASH && defenderMoves.getManeuver() == Maneuvers.DUCK) {
 					hit(attackerMoves, defenderMoves);
 				}
-
+				
 				if (attackerMoves.getTarget().isDead() == false) {
 					if ((defenderMoves.getTarget().getWeapons()[0].getSpeed() - defenderMoves.attackFatigue) <= (attackerMoves.getTarget().getCharacter().getSpeed() - attackerMoves.maneuverFatigue)) {
 						hit(defenderMoves, attackerMoves);
@@ -434,61 +441,60 @@ public class Game {
 			}
 		}
 	}
-
+	
 	public void hit(CombatMoves attackerMoves, CombatMoves defenderMoves) {
 		ItemWeight level = attackerMoves.getTarget().getWeapons()[0].getWeight();
-
+		
 		if (attackerMoves.getAttackFatigue() == 1) {
-			// todo: michael this doesn't work
 			switch(level){
-            	case ItemWeight.NEGLIGIBLE: level = ItemWeight.LIGHT; break;
-            	case ItemWeight.LIGHT: level = ItemWeight.MEDIUM; break;
-            	case ItemWeight.MEDIUM: level = ItemWeight.HEAVY; break;
-            	case ItemWeight.HEAVY: level = ItemWeight.TREMENDOUS; break;
+            	case NEGLIGIBLE: level = ItemWeight.LIGHT;
+            	case LIGHT: level = ItemWeight.MEDIUM;
+            	case MEDIUM: level = ItemWeight.HEAVY;
+            	case HEAVY: level = ItemWeight.TREMENDOUS;
             	default: level = level;
 			}
 		}
 		else if (attackerMoves.getAttackFatigue() == 2) {
 			switch(level){
-        		case ItemWeight.NEGLIGIBLE: level = ItemWeight.MEDIUM; break;
-        		case ItemWeight.LIGHT: level = ItemWeight.HEAVY; break;
-        		case ItemWeight.MEDIUM: level = ItemWeight.TREMENDOUS; break;
-        		case ItemWeight.HEAVY: level = ItemWeight.TREMENDOUS; break;
+        		case NEGLIGIBLE: level = ItemWeight.MEDIUM;
+        		case LIGHT: level = ItemWeight.HEAVY;
+        		case MEDIUM: level = ItemWeight.TREMENDOUS;
+        		case HEAVY: level = ItemWeight.TREMENDOUS;
         		default: level = level;
 			}
 		}
 		//TODO armor destruction
 		if (attackerMoves.getAttack() == Attacks.THRUST && defenderMoves.getDefense() == Defenses.AHEAD) {
 			switch(level){
-        		case ItemWeight.NEGLIGIBLE: level = ItemWeight.NEGLIGIBLE; break;
-        		case ItemWeight.LIGHT: level = ItemWeight.NEGLIGIBLE; break;
-        		case ItemWeight.MEDIUM: level = ItemWeight.LIGHT; break; 
-        		case ItemWeight.HEAVY: level = ItemWeight.MEDIUM; break; 
-        		case ItemWeight.TREMENDOUS: level = ItemWeight.HEAVY; break;
+        		case NEGLIGIBLE: level = ItemWeight.NEGLIGIBLE;
+        		case LIGHT: level = ItemWeight.NEGLIGIBLE;
+        		case MEDIUM: level = ItemWeight.LIGHT;
+        		case HEAVY: level = ItemWeight.MEDIUM;
+        		case TREMENDOUS: level = ItemWeight.HEAVY;
         		default: level = level;
 			}
 		}
 		else if (attackerMoves.getAttack() == Attacks.SWING && defenderMoves.getDefense() == Defenses.SIDE) {
 			switch(level){
-    			case ItemWeight.NEGLIGIBLE: level = ItemWeight.NEGLIGIBLE;
-    			case ItemWeight.LIGHT: level = ItemWeight.NEGLIGIBLE;
-    			case ItemWeight.MEDIUM: level = ItemWeight.LIGHT;
-    			case ItemWeight.HEAVY: level = ItemWeight.MEDIUM;
-    			case ItemWeight.TREMENDOUS: level = ItemWeight.HEAVY;
+    			case NEGLIGIBLE: level = ItemWeight.NEGLIGIBLE;
+    			case LIGHT: level = ItemWeight.NEGLIGIBLE;
+    			case MEDIUM: level = ItemWeight.LIGHT;
+    			case HEAVY: level = ItemWeight.MEDIUM;
+    			case TREMENDOUS: level = ItemWeight.HEAVY;
     			default: level = level;
 			}
 		}
-		elif (attackerMoves.getAttack() == Attacks.SMASH && defenderMoves.getManeuver() == Defense.ABOVE) {
+		else if (attackerMoves.getAttack() == Attacks.SMASH && defenderMoves.getDefense() == Defenses.ABOVE) {
 			switch(level){
-    			case ItemWeight.NEGLIGIBLE: level = ItemWeight.NEGLIGIBLE;
-    			case ItemWeight.LIGHT: level = ItemWeight.NEGLIGIBLE;
-    			case ItemWeight.MEDIUM: level = ItemWeight.LIGHT;
-    			case ItemWeight.HEAVY: level = ItemWeight.MEDIUM;
-    			case ItemWeight.TREMENDOUS: level = ItemWeight.HEAVY;
+    			case NEGLIGIBLE: level = ItemWeight.NEGLIGIBLE;
+    			case LIGHT: level = ItemWeight.NEGLIGIBLE;
+    			case MEDIUM: level = ItemWeight.LIGHT;
+    			case HEAVY: level = ItemWeight.MEDIUM;
+    			case TREMENDOUS: level = ItemWeight.HEAVY;
     			default: level = level;
 			}
 		}
-
+		
 		if (level == ItemWeight.TREMENDOUS) {
 			deadPlayer(attackerMoves, defenderMoves);
 		}
@@ -520,7 +526,7 @@ public class Game {
 			}
 		}
 	}
-
+	
 	public void deadPlayer(CombatMoves attackerMoves, CombatMoves defenderMoves) {
 		defenderMoves.getTarget().addFame(10); // Arbitrary value
 		defenderMoves.getTarget().addGold(attackerMoves.getTarget().getGold());
@@ -529,6 +535,7 @@ public class Game {
 		attackerMoves.getTarget().removeNotoriety(attackerMoves.getTarget().getNotoriety());
 		attackerMoves.getTarget().kill();
 	}
+
 
 //    TODO REMOVE THIS
 // public static void main(String[] args) {
