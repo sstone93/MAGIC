@@ -18,6 +18,7 @@ public class Game {
     int currentDay     = 0;
     boolean hasStarted = false;
 
+    // function that is called to start a game
     public boolean startGame() {
         if (playerCount > 0) {
             board = new Board(players);
@@ -116,10 +117,28 @@ public class Game {
     // can block other players in the clearing
     public void block(Player player) {
 
+
     }
     // blocks all unhidden players in the clearing
-    public void block(Monster monster) {
-
+    public Player[] block(Monster monster) {
+    	Tile tile = monster.location.parent;
+    	int blocked = 0;
+    	Player[] blockedPlayers = new Player[playerCount];
+    	// finds the unhidden players in the same clearing as them
+    	for (int i = 0; i < playerCount; i++) {
+    		if (players[i].getLocation().parent == tile) {
+    			if (players[i].getLocation() == monster.location) {
+    				if (!players[i].isHidden()) {
+    					players[i].setBlocked(true);
+    					blockedPlayers[blocked] = players[i];
+    					blocked++;
+    							
+    				}
+    			}
+    		}
+    			
+    	}
+    	return blockedPlayers;
     }
 
     // returns true if day was reset
