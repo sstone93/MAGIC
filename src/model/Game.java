@@ -248,8 +248,8 @@ public class Game {
         Player winner = null;
         Player player = null;
 
-        // todo: player has to discard any items an active move chit can't carry
-        // todo: treasures
+        // TODO: player has to discard any items an active move chit can't carry
+        // TODO: treasures
 
         for (int i = 0; i < playerCount; i++ ) {
             player = players[i];
