@@ -2,17 +2,29 @@ package model;
 
 import java.util.Arrays;
 import utils.*;
+import utils.Utility.Attacks;
+import utils.Utility.Defenses;
 import utils.Utility.ItemWeight;
+import utils.Utility.Maneuvers;
 import utils.Utility.WeaponName;
 
 // include move, alert, rest, search, hide, resetDay, resetWeek, startDay, gameOver
 // blocking (including by monsters)
 public class Game {
-	
+
     Player[] players = new Player[Config.MAX_CLIENTS] ;
-    //Board board = new Board(players);
-    int playerCount  = 0;
-    int currentDay   = 0;
+    Board board ; // initialized in startGame
+    int playerCount    = 0;
+    int currentDay     = 0;
+    boolean hasStarted = false;
+
+    public boolean startGame() {
+        if (playerCount > 0) {
+            board = new Board(players);
+            hasStarted = true;
+        }
+        return hasStarted
+    }
 
     // only adds a player if there's enough room for a new one
     // does nothing if the game is already full
@@ -99,6 +111,15 @@ public class Game {
     		}
     	}
     	return sameClearingPlayers;
+    }
+
+    // can block other players in the clearing
+    public void block(Player player) {
+
+    }
+    // blocks all unhidden players in the clearing
+    public void block(Monster monster) {
+
     }
 
     // returns true if day was reset
@@ -210,10 +231,10 @@ public class Game {
 
         return winner;
     }
-    
-    // Combat code. 
+
+    // Combat code.
     //TODO Needs to print out to console, plus all of the other TODO's in the code
-    
+
     //TODO Weapons active, networking
     public void Encounter(Player player, Boolean isAttacker) {
 		// Check if weapon is active
@@ -221,26 +242,26 @@ public class Game {
 			player.weapons[0].setActive(true);
 			return;
 		}*/
-		
+
 		// Player chooses target, attack, maneuver, defense, and fatigue levels for each
 		boolean properFatigue = false;
 		CombatMoves moves;
 		while (properFatigue == false) {
 			moves = getMoves();
-		
+
 			int totalFatigue = (moves.getAttackFatigue() + moves.getManeuverFatigue());
-			if (totalFatigue <= 2 && player.getFatigue <= 8) { // Choosing 10 as the arbitrary value of total fatigue
+			if (totalFatigue <= 2 && player.getFatigue() <= 8) { // Choosing 10 as the arbitrary value of total fatigue
 				properFatigue = true;
 				player.setFatigue(player.getFatigue() + totalFatigue);
 			}
 			//TODO Print "improper amounts of fatigue" to console or some other error message
 		}
-		
+
 		//TODO Send moves to server
-		
+
 		//TODO Receive opponent's moves from server
 		CombatMoves opponentMoves;
-		
+
 		if (isAttacker == true) {
 			doFight(moves, opponentMoves);
 		}
@@ -248,7 +269,7 @@ public class Game {
 			doFight(opponentMoves, moves);
 		}
 	}
-	
+
 	//TODO Will change based on how the panels are implemented, needs to grab input from dropdown boxes for all
 	// Each value will be filled depending on what the user chooses from the panel
 	private CombatMoves getMoves() {
@@ -258,86 +279,86 @@ public class Game {
 		Maneuvers maneuver = null;
 		int maneuverFatigue = 0;
 		Defenses defense = null;
-		
+
 		return CombatMoves(target, attack, attackFatigue, maneuver, maneuverFatigue, defense);
 	}
-	
+
 	//TODO Finding active weapon rather than assuming the active weapon is at position 0
 	public void doFight(CombatMoves attackerMoves, CombatMoves defenderMoves) {
 		if (attackerMoves.getTarget().getWeapons()[0].getSpeed() < defenderMoves.getTarget().getWeapons()[0].getSpeed()) {
 			if ((attackerMoves.getTarget().getWeapons()[0].getSpeed() - attackerMoves.attackFatigue) <= (defenderMoves.getTarget().getCharacter.getSpeed() - defenderMoves.maneuverFatigue)) {
 				hit(attackerMoves, defenderMoves);
 			}
-			elif (attackerMoves.getAttack() == Attacks.THRUST && defenderMoves.getManeuver() == Maneuvers.CHARGE) {
+			else if (attackerMoves.getAttack() == Attacks.THRUST && defenderMoves.getManeuver() == Maneuvers.CHARGE) {
 				hit(attackerMoves, defenderMoves);
 			}
-			elif (attackerMoves.getAttack() == Attacks.SWING && defenderMoves.getManeuver() == Maneuvers.DODGE) {
+			else if (attackerMoves.getAttack() == Attacks.SWING && defenderMoves.getManeuver() == Maneuvers.DODGE) {
 				hit(attackerMoves, defenderMoves);
 			}
-			elif (attackerMoves.getAttack() == Attacks.SMASH && defenderMoves.getManeuver() == Maneuvers.DUCK) {
+			else if (attackerMoves.getAttack() == Attacks.SMASH && defenderMoves.getManeuver() == Maneuvers.DUCK) {
 				hit(attackerMoves, defenderMoves);
 			}
-			
+
 			if (attackerMoves.getTarget().isDead() == false) {
 				if ((defenderMoves.getTarget().getWeapons()[0].getSpeed() - defenderMoves.attackFatigue) <= (attackerMoves.getTarget().getCharacter.getSpeed() - attackerMoves.maneuverFatigue)) {
 					hit(defenderMoves, attackerMoves);
 				}
-				elif (defenderMoves.getAttack() == Attacks.THRUST && attackerMoves.getManeuver() == Maneuvers.CHARGE) {
+				else if (defenderMoves.getAttack() == Attacks.THRUST && attackerMoves.getManeuver() == Maneuvers.CHARGE) {
 					hit(defenderMoves, attackerMoves);
 				}
-				elif (defenderMoves.getAttack() == Attacks.SWING && attackerMoves.getManeuver() == Maneuvers.DODGE) {
+				else if (defenderMoves.getAttack() == Attacks.SWING && attackerMoves.getManeuver() == Maneuvers.DODGE) {
 					hit(defenderMoves, attackerMoves);
 				}
-				elif (defenderMoves.getAttack() == Attacks.SMASH && attackerMoves.getManeuver() == Maneuvers.DUCK) {
+				else if (defenderMoves.getAttack() == Attacks.SMASH && attackerMoves.getManeuver() == Maneuvers.DUCK) {
 					hit(defenderMoves, attackerMoves);
 				}
 			}
 		}
-		elif (attackerMoves.getTarget().getWeapons()[0].getSpeed() > defenderMoves.getTarget().getWeapons()[0].getSpeed()) {
+		else if (attackerMoves.getTarget().getWeapons()[0].getSpeed() > defenderMoves.getTarget().getWeapons()[0].getSpeed()) {
 			if ((defenderMoves.getTarget().getWeapons()[0].getSpeed() - defenderMoves.attackFatigue) <= (attackerMoves.getTarget().getCharacter.getSpeed() - attackerMoves.maneuverFatigue)) {
 				hit(defenderMoves, attackerMoves);
 			}
-			elif (defenderMoves.getAttack() == Attacks.THRUST && attackerMoves.getManeuver() == Maneuvers.CHARGE) {
+			else if (defenderMoves.getAttack() == Attacks.THRUST && attackerMoves.getManeuver() == Maneuvers.CHARGE) {
 				hit(defenderMoves, attackerMoves);
 			}
-			elif (defenderMoves.getAttack() == Attacks.SWING && attackerMoves.getManeuver() == Maneuvers.DODGE) {
+			else if (defenderMoves.getAttack() == Attacks.SWING && attackerMoves.getManeuver() == Maneuvers.DODGE) {
 				hit(defenderMoves, attackerMoves);
 			}
-			elif (defenderMoves.getAttack() == Attacks.SMASH && attackerMoves.getManeuver() == Maneuvers.DUCK) {
+			else if (defenderMoves.getAttack() == Attacks.SMASH && attackerMoves.getManeuver() == Maneuvers.DUCK) {
 				hit(defenderMoves, attackerMoves);
 			}
-			
+
 			if (attackerMoves.getTarget().isDead() == false) {
 				if ((attackerMoves.getTarget().getWeapons()[0].getSpeed() - attackerMoves.attackFatigue) <= (defenderMoves.getTarget().getCharacter.getSpeed() - defenderMoves.maneuverFatigue)) {
 					hit(attackerMoves, defenderMoves);
 				}
-				elif (attackerMoves.getAttack() == Attacks.THRUST && defenderMoves.getManeuver() == Maneuvers.CHARGE) {
+				else if (attackerMoves.getAttack() == Attacks.THRUST && defenderMoves.getManeuver() == Maneuvers.CHARGE) {
 					hit(attackerMoves, defenderMoves);
 				}
-				elif (attackerMoves.getAttack() == Attacks.SWING && defenderMoves.getManeuver() == Maneuvers.DODGE) {
+				else if (attackerMoves.getAttack() == Attacks.SWING && defenderMoves.getManeuver() == Maneuvers.DODGE) {
 					hit(attackerMoves, defenderMoves);
 				}
-				elif (attackerMoves.getAttack() == Attacks.SMASH && defenderMoves.getManeuver() == Maneuvers.DUCK) {
+				else if (attackerMoves.getAttack() == Attacks.SMASH && defenderMoves.getManeuver() == Maneuvers.DUCK) {
 					hit(attackerMoves, defenderMoves);
 				}
 			}
 		}
-		
+
 		else {
 			if (attackerMoves.getTarget().getWeapons()[0].getLength() < defenderMoves.getTarget().getWeapons()[0].getLength()) {
 				if ((attackerMoves.getTarget().getWeapons()[0].getSpeed() - attackerMoves.attackFatigue) <= (defenderMoves.getTarget().getCharacter.getSpeed() - defenderMoves.maneuverFatigue)) {
 					hit(attackerMoves, defenderMoves);
 				}
-				elif (attackerMoves.getAttack() == Attacks.THRUST && defenderMoves.getManeuver() == Maneuvers.CHARGE) {
+				else if (attackerMoves.getAttack() == Attacks.THRUST && defenderMoves.getManeuver() == Maneuvers.CHARGE) {
 					hit(attackerMoves, defenderMoves);
 				}
-				elif (attackerMoves.getAttack() == Attacks.SWING && defenderMoves.getManeuver() == Maneuvers.DODGE) {
+				else if (attackerMoves.getAttack() == Attacks.SWING && defenderMoves.getManeuver() == Maneuvers.DODGE) {
 					hit(attackerMoves, defenderMoves);
 				}
-				elif (attackerMoves.getAttack() == Attacks.SMASH && defenderMoves.getManeuver() == Maneuvers.DUCK) {
+				else if (attackerMoves.getAttack() == Attacks.SMASH && defenderMoves.getManeuver() == Maneuvers.DUCK) {
 					hit(attackerMoves, defenderMoves);
 				}
-				
+
 				if (attackerMoves.getTarget().isDead() == false) {
 					if ((defenderMoves.getTarget().getWeapons()[0].getSpeed() - defenderMoves.attackFatigue) <= (attackerMoves.getTarget().getCharacter.getSpeed() - attackerMoves.maneuverFatigue)) {
 						hit(defenderMoves, attackerMoves);
@@ -353,20 +374,20 @@ public class Game {
 					}
 				}
 			}
-			elif (attackerMoves.getTarget().getWeapons()[0].getLength() > defenderMoves.getTarget().getWeapons()[0].getLength()) {
+			else if (attackerMoves.getTarget().getWeapons()[0].getLength() > defenderMoves.getTarget().getWeapons()[0].getLength()) {
 				if ((defenderMoves.getTarget().getWeapons()[0].getSpeed() - defenderMoves.attackFatigue) <= (attackerMoves.getTarget().getCharacter.getSpeed() - attackerMoves.maneuverFatigue)) {
 					hit(defenderMoves, attackerMoves);
 				}
-				elif (defenderMoves.getAttack() == Attacks.THRUST && attackerMoves.getManeuver() == Maneuvers.CHARGE) {
+				else if (defenderMoves.getAttack() == Attacks.THRUST && attackerMoves.getManeuver() == Maneuvers.CHARGE) {
 					hit(defenderMoves, attackerMoves);
 				}
-				elif (defenderMoves.getAttack() == Attacks.SWING && attackerMoves.getManeuver() == Maneuvers.DODGE) {
+				else if (defenderMoves.getAttack() == Attacks.SWING && attackerMoves.getManeuver() == Maneuvers.DODGE) {
 					hit(defenderMoves, attackerMoves);
 				}
-				elif (defenderMoves.getAttack() == Attacks.SMASH && attackerMoves.getManeuver() == Maneuvers.DUCK) {
+				else if (defenderMoves.getAttack() == Attacks.SMASH && attackerMoves.getManeuver() == Maneuvers.DUCK) {
 					hit(defenderMoves, attackerMoves);
 				}
-				
+
 				if (attackerMoves.getTarget().isDead() == false) {
 					if ((attackerMoves.getTarget().getWeapons()[0].getSpeed() - attackerMoves.attackFatigue) <= (defenderMoves.getTarget().getCharacter.getSpeed() - defenderMoves.maneuverFatigue)) {
 						hit(attackerMoves, defenderMoves);
@@ -386,67 +407,68 @@ public class Game {
 				if ((attackerMoves.getTarget().getWeapons()[0].getSpeed() - attackerMoves.attackFatigue) <= (defenderMoves.getTarget().getCharacter.getSpeed() - defenderMoves.maneuverFatigue)) {
 					hit(attackerMoves, defenderMoves);
 				}
-				elif (attackerMoves.getAttack() == Attacks.THRUST && defenderMoves.getManeuver() == Maneuvers.CHARGE) {
+				else if (attackerMoves.getAttack() == Attacks.THRUST && defenderMoves.getManeuver() == Maneuvers.CHARGE) {
 					hit(attackerMoves, defenderMoves);
 				}
-				elif (attackerMoves.getAttack() == Attacks.SWING && defenderMoves.getManeuver() == Maneuvers.DODGE) {
+				else if (attackerMoves.getAttack() == Attacks.SWING && defenderMoves.getManeuver() == Maneuvers.DODGE) {
 					hit(attackerMoves, defenderMoves);
 				}
-				elif (attackerMoves.getAttack() == Attacks.SMASH && defenderMoves.getManeuver() == Maneuvers.DUCK) {
+				else if (attackerMoves.getAttack() == Attacks.SMASH && defenderMoves.getManeuver() == Maneuvers.DUCK) {
 					hit(attackerMoves, defenderMoves);
 				}
-				
+
 				if (attackerMoves.getTarget().isDead() == false) {
-					if ((defenderMoves.getTarget().getWeapons()[0].getSpeed() - defenderMoves.attackFatigue) <= (attackerMoves.getTarget().getCharacter.getSpeed() - attackerMoves.maneuverFatigue)) {
+					if ((defenderMoves.getTarget().getWeapons()[0].getSpeed() - defenderMoves.attackFatigue) <= (attackerMoves.getTarget().getCharacter().getSpeed() - attackerMoves.maneuverFatigue)) {
 						hit(defenderMoves, attackerMoves);
 					}
-					elif (defenderMoves.getAttack() == Attacks.THRUST && attackerMoves.getManeuver() == Maneuvers.CHARGE) {
+					else if (defenderMoves.getAttack() == Attacks.THRUST && attackerMoves.getManeuver() == Maneuvers.CHARGE) {
 						hit(defenderMoves, attackerMoves);
 					}
-					elif (defenderMoves.getAttack() == Attacks.SWING && attackerMoves.getManeuver() == Maneuvers.DODGE) {
+					else if (defenderMoves.getAttack() == Attacks.SWING && attackerMoves.getManeuver() == Maneuvers.DODGE) {
 						hit(defenderMoves, attackerMoves);
 					}
-					elif (defenderMoves.getAttack() == Attacks.SMASH && attackerMoves.getManeuver() == Maneuvers.DUCK) {
+					else if (defenderMoves.getAttack() == Attacks.SMASH && attackerMoves.getManeuver() == Maneuvers.DUCK) {
 						hit(defenderMoves, attackerMoves);
 					}
 				}
 			}
 		}
 	}
-	
+
 	public void hit(CombatMoves attackerMoves, CombatMoves defenderMoves) {
 		ItemWeight level = attackerMoves.getTarget().getWeapons()[0].getWeight();
-		
+
 		if (attackerMoves.getAttackFatigue() == 1) {
+			// todo: michael this doesn't work
 			switch(level){
-            	case ItemWeight.NEGLIGIBLE: level = ItemWeight.LIGHT;
-            	case ItemWeight.LIGHT: level = ItemWeight.MEDIUM;
-            	case ItemWeight.MEDIUM: level = ItemWeight.HEAVY;
-            	case ItemWeight.HEAVY: level = ItemWeight.TREMENDOUS;
+            	case ItemWeight.NEGLIGIBLE: level = ItemWeight.LIGHT; break;
+            	case ItemWeight.LIGHT: level = ItemWeight.MEDIUM; break;
+            	case ItemWeight.MEDIUM: level = ItemWeight.HEAVY; break;
+            	case ItemWeight.HEAVY: level = ItemWeight.TREMENDOUS; break;
             	default: level = level;
 			}
 		}
-		elif (attackerMoves.getAttackFatigue() == 2) {
+		else if (attackerMoves.getAttackFatigue() == 2) {
 			switch(level){
-        		case ItemWeight.NEGLIGIBLE: level = ItemWeight.MEDIUM;
-        		case ItemWeight.LIGHT: level = ItemWeight.HEAVY;
-        		case ItemWeight.MEDIUM: level = ItemWeight.TREMENDOUS;
-        		case ItemWeight.HEAVY: level = ItemWeight.TREMENDOUS;
+        		case ItemWeight.NEGLIGIBLE: level = ItemWeight.MEDIUM; break;
+        		case ItemWeight.LIGHT: level = ItemWeight.HEAVY; break;
+        		case ItemWeight.MEDIUM: level = ItemWeight.TREMENDOUS; break;
+        		case ItemWeight.HEAVY: level = ItemWeight.TREMENDOUS; break;
         		default: level = level;
 			}
 		}
 		//TODO armor destruction
-		if (attackerMoves.getAttack() == Attacks.THRUST && defenderMoves.getManeuver() == Defense.AHEAD) {
+		if (attackerMoves.getAttack() == Attacks.THRUST && defenderMoves.getDefense() == Defenses.AHEAD) {
 			switch(level){
-        		case ItemWeight.NEGLIGIBLE: level = ItemWeight.NEGLIGIBLE;
-        		case ItemWeight.LIGHT: level = ItemWeight.NEGLIGIBLE;
-        		case ItemWeight.MEDIUM: level = ItemWeight.LIGHT;
-        		case ItemWeight.HEAVY: level = ItemWeight.MEDIUM;
-        		case ItemWeight.TREMENDOUS: level = ItemWeight.HEAVY;
+        		case ItemWeight.NEGLIGIBLE: level = ItemWeight.NEGLIGIBLE; break;
+        		case ItemWeight.LIGHT: level = ItemWeight.NEGLIGIBLE; break;
+        		case ItemWeight.MEDIUM: level = ItemWeight.LIGHT; break; 
+        		case ItemWeight.HEAVY: level = ItemWeight.MEDIUM; break; 
+        		case ItemWeight.TREMENDOUS: level = ItemWeight.HEAVY; break;
         		default: level = level;
 			}
 		}
-		elif (attackerMoves.getAttack() == Attacks.SWING && defenderMoves.getManeuver() == Defense.SIDE) {
+		else if (attackerMoves.getAttack() == Attacks.SWING && defenderMoves.getDefense() == Defenses.SIDE) {
 			switch(level){
     			case ItemWeight.NEGLIGIBLE: level = ItemWeight.NEGLIGIBLE;
     			case ItemWeight.LIGHT: level = ItemWeight.NEGLIGIBLE;
@@ -466,39 +488,39 @@ public class Game {
     			default: level = level;
 			}
 		}
-		
+
 		if (level == ItemWeight.TREMENDOUS) {
 			deadPlayer(attackerMoves, defenderMoves);
 		}
-		elif (level == ItemWeight.HEAVY) {
+		else if (level == ItemWeight.HEAVY) {
 			deadPlayer(attackerMoves, defenderMoves);
 		}
-		elif (level == attackerMoves.getTarget().getCharacter().getWeight()) {
+		else if (level == attackerMoves.getTarget().getCharacter().getWeight()) {
 			deadPlayer(attackerMoves, defenderMoves);
 		}
-		elif (level == ItemWeight.MEDIUM && attackerMoves.getTarget().getCharacter().getWeight() == ItemWeight.LIGHT) {
+		else if (level == ItemWeight.MEDIUM && attackerMoves.getTarget().getCharacter().getWeight() == ItemWeight.LIGHT) {
 			deadPlayer(attackerMoves, defenderMoves);
 		}
-		elif (level == ItemWeight.MEDIUM && attackerMoves.getTarget().getCharacter().getWeight() == ItemWeight.HEAVY) {
+		else if (level == ItemWeight.MEDIUM && attackerMoves.getTarget().getCharacter().getWeight() == ItemWeight.HEAVY) {
 			attackerMoves.getTarget().setHealth(attackerMoves.getTarget().getHealth() + 1);
 			if (attackerMoves.getTarget().getHealth() == 3) {
 				deadPlayer(attackerMoves, defenderMoves);
 			}
 		}
-		elif (level == ItemWeight.LIGHT && attackerMoves.getTarget().getCharacter().getWeight() == ItemWeight.HEAVY) {
+		else if (level == ItemWeight.LIGHT && attackerMoves.getTarget().getCharacter().getWeight() == ItemWeight.HEAVY) {
 			attackerMoves.getTarget().setHealth(attackerMoves.getTarget().getHealth() + 1);
 			if (attackerMoves.getTarget().getHealth() == 3) {
 				deadPlayer(attackerMoves, defenderMoves);
 			}
 		}
-		elif (level == ItemWeight.LIGHT && attackerMoves.getTarget().getCharacter().getWeight() == ItemWeight.MEDIUM) {
+		else if (level == ItemWeight.LIGHT && attackerMoves.getTarget().getCharacter().getWeight() == ItemWeight.MEDIUM) {
 			attackerMoves.getTarget().setHealth(attackerMoves.getTarget().getHealth() + 1);
 			if (attackerMoves.getTarget().getHealth() == 2) {
 				deadPlayer(attackerMoves, defenderMoves);
 			}
 		}
 	}
-	
+
 	public void deadPlayer(CombatMoves attackerMoves, CombatMoves defenderMoves) {
 		defenderMoves.getTarget().addFame(10); // Arbitrary value
 		defenderMoves.getTarget().addGold(attackerMoves.getTarget().getGold());
@@ -509,79 +531,80 @@ public class Game {
 	}
 
 //    TODO REMOVE THIS
-//  public static void main(String[] args) {
-//      Game game = new Game();
-//      Character swordsman = new Swordsman();
-//      Character elf = new Elf();
-//      Player player1 = new Player(swordsman);
-//      Player player2 = new Player(elf);
-//      game.addPlayer(player1);
-//      game.addPlayer(player2);
+// public static void main(String[] args) {
+//     Game game = new Game();
+//     Character swordsman = new Swordsman();
+//     Character elf = new Elf();
+//     Player player1 = new Player(swordsman);
+//     Player player2 = new Player(elf);
+//     game.addPlayer(player1);
+//     game.addPlayer(player2);
 //
-//      System.out.println("starting game:");
-//      game.startDay();
-//      System.out.println("current day" + game.currentDay);
+//     System.out.println("starting game:");
+//     game.startGame();
+//     game.startDay();
+//     System.out.println("current day" + game.currentDay);
 //
-//      System.out.println("player order for the day:");
-//      System.out.println("player1 : " + player1.order);
-//      System.out.println("player2 : " + player2.order);
+//     System.out.println("player order for the day:");
+//     System.out.println("player1 : " + player1.order);
+//     System.out.println("player2 : " + player2.order);
 //
-//      // initial starting weapons/armour
-//      for (int i = 0; i < player1.numberOfWeapons; i++) {
-//      	System.out.println("player1 weapons:" + player1.weapons[i]);
-//      }
-//      for (int i = 0; i < player1.numberOfArmour; i++) {
-//      	System.out.println("player1 armour:" + player1.armour[i]);
-//      }
-//      for (int i = 0; i < player2.numberOfWeapons; i++) {
-//      	System.out.println("player2 weapons:" + player2.weapons[i]);
-//      }
-//      for (int i = 0; i < player2.numberOfArmour; i++) {
-//      	System.out.println("player2 armour:" + player2.armour[i]);
-//      }
+//     // initial starting weapons/armour
+//     for (int i = 0; i < player1.numberOfWeapons; i++) {
+//     	System.out.println("player1 weapons:" + player1.weapons[i]);
+//     }
+//     for (int i = 0; i < player1.numberOfArmour; i++) {
+//     	System.out.println("player1 armour:" + player1.armour[i]);
+//     }
+//     for (int i = 0; i < player2.numberOfWeapons; i++) {
+//     	System.out.println("player2 weapons:" + player2.weapons[i]);
+//     }
+//     for (int i = 0; i < player2.numberOfArmour; i++) {
+//     	System.out.println("player2 armour:" + player2.armour[i]);
+//     }
 //
-//      Weapon weapon1 = new Weapon(WeaponName.GREAT_SWORD);
-//      player1.addWeapon(weapon1);
-//      System.out.println("added great sword to player1");
-//      for (int i = 0; i < player1.numberOfWeapons; i++) {
-//      	System.out.println("player1 weapons:" + player1.weapons[i]);
-//      }
+//     Weapon weapon1 = new Weapon(WeaponName.GREAT_SWORD);
+//     player1.addWeapon(weapon1);
+//     System.out.println("added great sword to player1");
+//     for (int i = 0; i < player1.numberOfWeapons; i++) {
+//     	System.out.println("player1 weapons:" + player1.weapons[i]);
+//     }
 //
-//      System.out.println("player1 hidden?" + player1.isHidden());
-//      game.hide(player1);
-//      System.out.println("player1 hidden?" + player1.isHidden());
+//     System.out.println("player1 hidden?" + player1.isHidden());
+//     game.hide(player1);
+//     System.out.println("player1 hidden?" + player1.isHidden());
 //
-//      // todo: need to set player location
-//      System.out.println("player 1 location: " + player1.getLocation());
-//      System.out.println("player 2 location: " + player2.getLocation());
+//     // todo: need to set player location
+//     System.out.println("player 1 location: " + player1.getLocation());
+//     System.out.println("player 2 location: " + player2.getLocation());
 //
-//      System.out.println("checking weapon alert " + player1.weapons[0].isActive());
-//      game.alert(player1.weapons[0], false);
-//      System.out.println("checking weapon alert " + player1.weapons[0].isActive());
-//      game.alert(player1.weapons[0], true);
-//      System.out.println("checking weapon alert " + player1.weapons[0].isActive());
+//     System.out.println("checking weapon alert " + player1.weapons[0].isActive());
+//     game.alert(player1.weapons[0], false);
+//     System.out.println("checking weapon alert " + player1.weapons[0].isActive());
+//     game.alert(player1.weapons[0], true);
+//     System.out.println("checking weapon alert " + player1.weapons[0].isActive());
 //
-//      System.out.println(player1.weapons[0].weight);
-//      System.out.println(player1.weapons[1].weight);
-//      
-//      System.out.println("setting weapon weight to medium:");
-//      player1.weapons[1].setWeight(ItemWeight.MEDIUM);
-//      System.out.println(player1.weapons[1].weight);
-//      System.out.println("removing weapons that are greater weight then medium (should not change");
-//      player1.removeWeaponsWithHigherWeight(ItemWeight.MEDIUM);    
-//      for (int i = 0; i < player1.numberOfWeapons; i++) {
-//        	System.out.println("player1 weapons:" + player1.weapons[i]);
-//      }
-//      System.out.println("removing weapons that are greater weight then light (should remove 1 weapon)");
-//      player1.removeWeaponsWithHigherWeight(ItemWeight.LIGHT);    
-//      for (int i = 0; i < player1.numberOfWeapons; i++) {
-//        	System.out.println("player1 weapons:" + player1.weapons[i]);
-//      }
+//     System.out.println(player1.weapons[0].weight);
+//     System.out.println(player1.weapons[1].weight);
 //
-//      
-//      game.resetDay();
-//      
-//      Player winner = game.endGame();
-//      System.out.println("winner: " + winner.character.name);
-//  }
+//     System.out.println("setting weapon weight to medium:");
+//     player1.weapons[1].setWeight(ItemWeight.MEDIUM);
+//     System.out.println(player1.weapons[1].weight);
+//     System.out.println("removing weapons that are greater weight then medium (should not change");
+//     player1.removeWeaponsWithHigherWeight(ItemWeight.MEDIUM);
+//     for (int i = 0; i < player1.numberOfWeapons; i++) {
+//       	System.out.println("player1 weapons:" + player1.weapons[i]);
+//     }
+//     System.out.println("removing weapons that are greater weight then light (should remove 1 weapon)");
+//     player1.removeWeaponsWithHigherWeight(ItemWeight.LIGHT);
+//     for (int i = 0; i < player1.numberOfWeapons; i++) {
+//       	System.out.println("player1 weapons:" + player1.weapons[i]);
+//     }
+//
+//
+//     game.resetDay();
+//
+//     Player winner = game.endGame();
+//     System.out.println("winner: " + winner.character.name);
+// }
 }
