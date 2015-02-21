@@ -2,6 +2,7 @@ package model;
 
 import utils.Config;
 import utils.Utility;
+import utils.Utility.Actions;
 import utils.Utility.ItemWeight;
 
 public class Player {
@@ -21,13 +22,15 @@ public class Player {
     boolean blocked   = false;
 
     Character character;
-
+    
     Clearing location;
     Armour[] armour;
     Weapon[] weapons;
     Chit[]   chits;
-    // Array[]  treasures;
+    Actions[] activities; // the players moves for the day
+    // Treasure[]  treasures;
     Clearing[]  secretLocations;
+
 
     Player(Character character) {
         this.character = character;
@@ -58,11 +61,11 @@ public class Player {
     public void setHealth(int health) {
     	this.health = health;
     }
-    
+
     public int getHealth() {
     	return health;
     }
-    
+
     public void setBlocked(boolean block) {
         blocked = block;
     }

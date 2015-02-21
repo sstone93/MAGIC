@@ -2,6 +2,7 @@ package model;
 
 import java.util.Arrays;
 import utils.*;
+import utils.Utility.Actions;
 import utils.Utility.Attacks;
 import utils.Utility.Defenses;
 import utils.Utility.ItemWeight;
@@ -196,7 +197,8 @@ public class Game {
         while (nextMover < playerCount) {
             for (int i = 0; i < playerCount; i++) {
                 if (players[i].order == nextMover) {
-                    //TODO player does their moves in order
+                    // players do their moves
+                	doTodaysActivities(players[i]);
                     nextMover++;
                     break;
                 }
@@ -218,6 +220,25 @@ public class Game {
         // TODO combat loop
 
         resetDay(); // not sure if we want to change resetDay so it will call startDay again if all is well
+    }
+    
+    // TODO: need to figure out how to save the clearing the player wants to move to
+    // and the weapons/armour (??) they want to alert/unalert
+    public void doTodaysActivities(Player player) {
+    	for (int i = 0; i < player.activities.length; i++) {
+    		// TODO: check if they can block another player
+    		if (!player.isBlocked()) {
+	    		switch(player.activities[i]) {
+	//    		case MOVE: move(player, clearing); break; 
+	    		case HIDE: hide(player); break;
+	//    		case ALERT: alert(weapon, alert); break;
+	    		case REST: rest(player); break;
+	    		case SEARCH: search(player); break;
+	    		case TRADE: break;
+	    		case FOLLOW: break;
+	    		}
+    		}
+    	}
     }
 
     // todo: in next iteration calculate the score properly
