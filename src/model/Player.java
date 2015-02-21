@@ -18,6 +18,7 @@ public class Player {
     int numberOfArmour  = 0;
     boolean hidden    = false;
     boolean dead      = false;
+    boolean blocked   = false;
 
     Character character;
 
@@ -62,6 +63,14 @@ public class Player {
     	return health;
     }
     
+    public void setBlocked(boolean block) {
+        blocked = block;
+    }
+
+    public boolean isBlocked() {
+        return blocked;
+    }
+
     public int getGold() {
         return gold;
     }
@@ -96,11 +105,11 @@ public class Player {
     public boolean isDead() {
     	return dead;
     }
-    
+
     public void kill() {
     	dead = true;
     }
-    
+
     public int getFatigue() {
         return fatigue;
     }
