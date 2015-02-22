@@ -16,12 +16,12 @@ public class Board {
 	/**
 	 * 
 	 */
-	public Board(Character[] chars){
+	public Board(Player[] players){
 		tiles = new Tile[20];
 		setupBoard();
 		setupGarrisons();
 		placeGarrisons();
-		placeCharacters(chars);
+		placePlayers(players);
 		//System.out.println("Built Board with no Crashes");
 		//instanciateTreasures();
 	}
@@ -191,10 +191,12 @@ public class Board {
 		
 	}
 	
-	public void placeCharacters(Character[] c){
+	public void placePlayers(Player[] p){
 		
 		//cycle through lsit of characters
 		//set their current location as the INN
+		// note: you can grab the players characters startingLocation by doing player.getCharacter().getStartingLocation();
+		// which right now is a garrison name
 		//update the INN with all the new occupants
 		
 	}

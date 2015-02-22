@@ -54,9 +54,9 @@ public class Game {
 
     // returns true if the player is allowed to move to the clearing
     // returns false if unable to move, and the player forfeits this phase
-    public boolean move(Player player, Clearing newClearing) {
+    public boolean move(Player player, Object newClearing) {
         player.setHidden(false);
-        boolean canChange =  (player.getLocation().canChangeClearing(newClearing));
+        boolean canChange =  (player.getLocation().canChangeClearing((Clearing)newClearing));
         // todo: check if player knows secret locations
         Chit[] chits             = player.getChits();
         ItemWeight highestWeight = Utility.ItemWeight.NEGLIGIBLE;
@@ -79,7 +79,7 @@ public class Game {
             player.removeWeaponsWithHigherWeight(highestWeight);
             player.removeArmourWithHigherWeight(highestWeight);
 
-            player.setLocation(newClearing);
+            player.setLocation((Clearing)newClearing);
 
         }
         return canChange;
@@ -91,8 +91,9 @@ public class Game {
     }
 
     // player can can alert or unalert a weapon
-    public void alert(Weapon weapon, boolean alert) {
-        weapon.setActive(alert);
+    public void alert(Object weapon, Object alert) {
+    	Weapon weapon2 = (Weapon) weapon;
+        weapon2.setActive(((Boolean) alert).booleanValue());
     }
 
     public void rest(Player player) {
@@ -255,17 +256,23 @@ public class Game {
     			if (players[j] != null) {
     				// TODO: the player has the option to block them. Should I just do that automatically for now??
     				// TODO: otherwise, that'll be networking
+    				// TODO: send message to players that have been blocked
     			}
     		}
     		if (!player.isBlocked()) {
-	    		switch(player.activities[i]) {
-	//    		case MOVE: move(player, clearing); break;
-	    		case HIDE: hide(player); break;
-	//    		case ALERT: alert(weapon, alert); break;
-	    		case REST: rest(player); break;
-	    		case SEARCH: search(player); break;
-	    		case TRADE: break;
-	    		case FOLLOW: break;
+//    			String[] activity = player.activities[i].trim().split(";");
+    			// format: [MOVE, clearing]
+    			// format: [ALERT, weapon, trueOrFalse]
+    			int moves = 0;
+	    		switch((Actions) player.activities[0]) {
+	    		
+	    		case MOVE: move(player, player.activities[moves + 1]); moves = moves + 2; break;
+	    		case HIDE: hide(player); moves++; break;
+	    		case ALERT: alert(player.activities[moves + 1], player.activities[moves + 2]); moves = moves + 3; break;
+	    		case REST: rest(player); moves++; break;
+	    		case SEARCH: search(player); moves++; break;
+	    		case TRADE: moves++; break;
+	    		case FOLLOW: moves++; break;
 	    		}
     		}
     	}

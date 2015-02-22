@@ -28,9 +28,11 @@ public class Player {
     Armour[] armour;
     Weapon[] weapons;
     Chit[]   chits;
-    Actions[] activities; // the players moves for the day
+    Object[] activities; // the players moves for the day
     // Treasure[]  treasures;
     Clearing[]  secretLocations;
+    
+
 
 
     Player(Character character) {
@@ -38,7 +40,7 @@ public class Player {
         this.chits     = new Chit[100];
         this.weapons   = new Weapon[Config.WEAPON_AND_ARMOUR_COUNT];
         this.armour    = new Armour[Config.WEAPON_AND_ARMOUR_COUNT];
-        this.activities = new Actions[5]; // TODO: read rules for max action count
+        this.activities = new Object[12]; // TODO: read rules for max action count
 
         for (int i = 0; i < character.startingWeapons.length; i++) {
             weapons[numberOfWeapons] = character.startingWeapons[numberOfWeapons];
@@ -52,19 +54,19 @@ public class Player {
         }
     }
     // adds one activity at a time
-    public void addActivity(Actions newActivity) {
+    public void addActivity(Object newActivity) {
     	if (activityCount < activities.length) {
     		activities[activityCount] = newActivity;
     		activityCount++;
     	}
     }
     // replaces all the previous activities
-    public void addActivities(Actions[] newActivities) {
+    public void addActivities(Object[] newActivities) {
     	activities = null;
     	activities = newActivities;
     }
     
-    public Actions[] getActivitises() {
+    public Object[] getActivitises() {
     	return activities;
     }
 
