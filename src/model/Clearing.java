@@ -7,6 +7,7 @@ public class Clearing {
     public String type;
     public Garrison dwelling = null; 			// not sure what type this should actually be
     public int location;		 		// indicating which clearing on the tile this is CHANGED BACK TO AN INT
+    public int numberOfTreasures = 0;
     public Clearing[] connections;
     public int nextConnection =0;
     public Tile parent;
@@ -59,6 +60,29 @@ public class Clearing {
             return false;
         }
     }
+
+    public void addTreasures(Treasure[] treasure) {
+        treasures = treasure;
+        numberOfTreasures = treasure.length;
+    }
+
+    // removes treasure from the clearing
+    // used when a player finds the treasure
+    public void removeTreasure(Treasure treasure) {
+        for (int j = 0; j < numberOfTreasures - 1; j++) {
+            treasures[j] = treasures[j+1];
+        }
+        numberOfTreasures--;
+    }
+
+    public Treasure[] getTreasures() {
+        return treasures;
+    }
+
+    public int getNumberOfTreasures() {
+        return numberOfTreasures;
+    }
+
 
     @Override
 	public String toString(){
