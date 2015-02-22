@@ -12,13 +12,18 @@ public class Tile {
 	private Clearing[] clearings;
 	private TileName name;
 	private int nextClearing =0;
+	//these represent the center of the tile
+	private int x;
+	private int y;
 	
 	/**
 	 * 
 	 * @param name
 	 */
-	public Tile(TileName name){
+	public Tile(TileName name, int x, int y){
 		this.name = name;
+		this.x = x;
+		this.y = y;
 		this.clearings = new Clearing[determineClearings(name)];
 		setUpTile();			//this will set up the clearings on this tile.
 	}
@@ -233,6 +238,14 @@ public class Tile {
 	 */
 	public TileName getName(){
 		return this.name;
+	}
+	
+	public int getX(){
+		return this.x;
+	}
+	
+	public int getY(){
+		return this.y;
 	}
 	
 	/**

@@ -9,9 +9,21 @@ public class ClientModel {
 		//- A decently up to date copy of the board
 		//- Up to date information about my character
 	
+	private Board board;
+	private Player player;
+	
 	public ClientModel(){
-		
+		Character[] c = new Character[1];
+		board = new Board(c);
+		//player = new Player(new Character());//TODO just testing, shouldn't really be null
 	}
 	
+	public Board getBoard(){
+		return board;
+	}
+	
+	public Player getPlayer(){
+		return player;
+	}
 
 }
