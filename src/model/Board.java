@@ -206,30 +206,8 @@ public class Board {
 	 // TODO: this is the function for monsters changing clearings
     public boolean move(Monster monster, Clearing newClearing) {
     	boolean canChange =  (monster.getLocation().canChangeClearing(newClearing));
-    	blockable(monster); // see if it can block any players
+    	//block(monster); // see if it can block any players
     	return canChange;
-    }
-    
-    //blocks all unhidden players in the clearing
-    public Player[] blockable(Monster monster) {
-    	Tile tile = monster.location.parent;
-    	int blocked = 0;
-    	Player[] blockedPlayers = new Player[playerCount];
-    	// finds the unhidden players in the same clearing as them
-    	for (int i = 0; i < playerCount; i++) {
-    		if (players[i].getLocation().parent == tile) {
-    			if (players[i].getLocation() == monster.location) {
-    				if (!players[i].isHidden()) {
-    					players[i].setBlocked(true);
-    					blockedPlayers[blocked] = players[i];
-    					blocked++;
-
-    				}
-    			}
-    		}
-
-    	}
-    	return blockedPlayers;
     }
     
     /**

@@ -5,6 +5,7 @@ import networking.NetworkServer;
 import model.Board;
 import model.Clearing;
 import model.CombatMoves;
+import model.Monster;
 import model.Player;
 import model.ServerModel;
 import model.Swordsman;
@@ -114,6 +115,19 @@ public class ServerController extends Handler{
     		}
     	}
     	return blockedPlayers;
+    }
+    
+    /**
+     * Blocks all unhidden players in the same clearing as the monster
+     * @param monster the monster blocking people
+     */
+    public void block(Monster monster) {
+    	Player[] blockablePlayers = monster.getLocation().getOccupants();
+    	for (int i = 0; i < blockablePlayers.length; i++) {
+    		if (!blockablePlayers[i].isHidden()) {
+    			players[i].setBlocked(true);
+    		}
+    	}
     }
 	
 	/**
@@ -631,19 +645,11 @@ public class ServerController extends Handler{
 	}
 	
 	/**
-	 * (If actually needed, this will actually start up the client, bring it to life.
-	 */
-	public void run(){
-		//start the network up
-		//populate the model as needed
-	}
-	
-	/**
 	 * calld via a "START GAME" message in order to setup the board and start the game.
 	 */
 	public void startGame(){
 		
-		//run selectCharacters() function so that players can choose their characters
+		//selectCharacters();	//broadcast to clients to submit character choices and wait until all conflicts are resolved.
 		
 		//create array of players, feed it to the board constructor
 		int[] IDs = network.getIDs();
@@ -665,9 +671,9 @@ public class ServerController extends Handler{
 	 * Running this method will trigger the process of creating a MagicRealm server.
 	 * @param args Command line arguments, likely to remain unused
 	 */
+	@SuppressWarnings("unused")
 	public static void main(String args[]){
 		ServerController control = new ServerController();		//instanciate the controller
-		control.run();											//start the controller
 	}	
 
 }
