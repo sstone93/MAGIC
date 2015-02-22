@@ -2,6 +2,7 @@ package controller;
 
 import networking.NetworkClient;
 import model.ClientModel;
+import utils.Utility.Actions;
 import view.View;
 
 /**
@@ -55,6 +56,20 @@ public class ClientController extends Handler{
 				System.out.println("Your NetworkClient has CLOSED.");
 			}
 		}
+	}
+	
+	/**
+	 * Should send the selected plays to the server.
+	 * @param p1 the player's first play
+	 * @param p2 the player's second play
+	 * @param p3 the player's third play
+	 * @param p4 the player's fourth play
+	 */
+	public void handlePlaysRecorded(Actions p1, Actions p2, Actions p3, Actions p4){
+		System.out.println(p1);
+		System.out.println(p2);
+		System.out.println(p3);
+		System.out.println(p4);
 	}
 	
 	/**
