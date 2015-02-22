@@ -2,6 +2,7 @@ package model;
 
 import utils.Config;
 import utils.Utility;
+import utils.Utility.Actions;
 import utils.Utility.ItemWeight;
 
 public class Player {
@@ -13,27 +14,33 @@ public class Player {
     int notoriety     = 0;
     int finalScore    = 0;
     int order; // in which order does the player play
-    int numberOfChits = 0;
+    int numberOfChits   = 0;
     int numberOfWeapons = 0;
     int numberOfArmour  = 0;
+    int activityCount   = 0;
     boolean hidden    = false;
     boolean dead      = false;
     boolean blocked   = false;
 
     Character character;
-
+    
     Clearing location;
     Armour[] armour;
     Weapon[] weapons;
     Chit[]   chits;
-    // Array[]  treasures;
+    Object[] activities; // the players moves for the day
+    // Treasure[]  treasures;
     Clearing[]  secretLocations;
+    
+
+
 
     Player(Character character) {
         this.character = character;
         this.chits     = new Chit[100];
         this.weapons   = new Weapon[Config.WEAPON_AND_ARMOUR_COUNT];
         this.armour    = new Armour[Config.WEAPON_AND_ARMOUR_COUNT];
+        this.activities = new Object[12]; // TODO: read rules for max action count
 
         for (int i = 0; i < character.startingWeapons.length; i++) {
             weapons[numberOfWeapons] = character.startingWeapons[numberOfWeapons];
@@ -45,6 +52,22 @@ public class Player {
                 numberOfArmour++;
             }
         }
+    }
+    // adds one activity at a time
+    public void addActivity(Object newActivity) {
+    	if (activityCount < activities.length) {
+    		activities[activityCount] = newActivity;
+    		activityCount++;
+    	}
+    }
+    // replaces all the previous activities
+    public void addActivities(Object[] newActivities) {
+    	activities = null;
+    	activities = newActivities;
+    }
+    
+    public Object[] getActivitises() {
+    	return activities;
     }
 
     public void setCharacter(Character character) {
@@ -58,11 +81,11 @@ public class Player {
     public void setHealth(int health) {
     	this.health = health;
     }
-    
+
     public int getHealth() {
     	return health;
     }
-    
+
     public void setBlocked(boolean block) {
         blocked = block;
     }
@@ -80,6 +103,7 @@ public class Player {
 
     public boolean removeGold(int gold) {
         if (this.gold - gold <= 0) {
+        	gold = 0;
             return false;
         }
         this.gold -= gold;

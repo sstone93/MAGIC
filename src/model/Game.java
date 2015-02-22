@@ -2,6 +2,7 @@ package model;
 
 import java.util.Arrays;
 import utils.*;
+import utils.Utility.Actions;
 import utils.Utility.Attacks;
 import utils.Utility.Defenses;
 import utils.Utility.ItemWeight;
@@ -44,12 +45,18 @@ public class Game {
     public int getPlayerCount() {
         return playerCount;
     }
+    // TODO: this is the function for monsters changing clearings
+    public boolean move(Monster monster, Clearing newClearing) {
+    	boolean canChange =  (monster.getLocation().canChangeClearing(newClearing));
+    	block(monster); // see if it can block any players
+    	return canChange;
+    }
 
     // returns true if the player is allowed to move to the clearing
     // returns false if unable to move, and the player forfeits this phase
-    public boolean move(Player player, Clearing newClearing) {
+    public boolean move(Player player, Object newClearing) {
         player.setHidden(false);
-        boolean canChange =  (player.getLocation().canChangeClearing(newClearing));
+        boolean canChange =  (player.getLocation().canChangeClearing((Clearing)newClearing));
         // todo: check if player knows secret locations
         Chit[] chits             = player.getChits();
         ItemWeight highestWeight = Utility.ItemWeight.NEGLIGIBLE;
@@ -72,7 +79,7 @@ public class Game {
             player.removeWeaponsWithHigherWeight(highestWeight);
             player.removeArmourWithHigherWeight(highestWeight);
 
-            player.setLocation(newClearing);
+            player.setLocation((Clearing)newClearing);
 
         }
         return canChange;
@@ -84,8 +91,9 @@ public class Game {
     }
 
     // player can can alert or unalert a weapon
-    public void alert(Weapon weapon, boolean alert) {
-        weapon.setActive(alert);
+    public void alert(Object weapon, Object alert) {
+    	Weapon weapon2 = (Weapon) weapon;
+        weapon2.setActive(((Boolean) alert).booleanValue());
     }
 
     public void rest(Player player) {
@@ -115,8 +123,25 @@ public class Game {
     }
 
     // can block other players in the clearing
-    public void block(Player player) {
+    public Player[] block(Player player) {
+    	Player[] blockedPlayers = new Player[playerCount];
+    	
+    	Tile tile = player.location.parent;
+    	int blocked = 0;
+    	// finds the unhidden players in the same clearing as them
+    	for (int i = 0; i < playerCount; i++) {
+    		if (players[i].getLocation().parent == tile) {
+    			if (players[i].getLocation() == player.location) {
+    				if (!players[i].isHidden()) {
+    					blockedPlayers[blocked] = players[i];
+    					blocked++;
 
+    				}
+    			}
+    		}
+
+    	}
+    	return blockedPlayers;
 
     }
     // blocks all unhidden players in the clearing
@@ -132,11 +157,11 @@ public class Game {
     					players[i].setBlocked(true);
     					blockedPlayers[blocked] = players[i];
     					blocked++;
-    							
+
     				}
     			}
     		}
-    			
+
     	}
     	return blockedPlayers;
     }
@@ -196,7 +221,8 @@ public class Game {
         while (nextMover < playerCount) {
             for (int i = 0; i < playerCount; i++) {
                 if (players[i].order == nextMover) {
-                    //TODO player does their moves in order
+                    // players do their moves
+                	doTodaysActivities(players[i]);
                     nextMover++;
                     break;
                 }
@@ -220,6 +246,40 @@ public class Game {
         resetDay(); // not sure if we want to change resetDay so it will call startDay again if all is well
     }
 
+    // TODO: need to figure out how to save the clearing the player wants to move to
+    // and the weapons/armour (??) they want to alert/unalert
+    public void doTodaysActivities(Player player) {
+    	for (int i = 0; i < player.activities.length; i++) {
+    		// check if they can block another player
+    		Player[] players = block(player);
+    		for (int j = 0; j < players.length; j++) {
+    			if (players[j] != null) {
+    				// TODO: the player has the option to block them. Should I just do that automatically for now??
+    				// TODO: otherwise, that'll be networking
+    				// TODO: send message to players that have been blocked
+    			}
+    		}
+    		if (!player.isBlocked()) {
+//    			String[] activity = player.activities[i].trim().split(";");
+    			// format: [MOVE, clearing]
+    			// format: [ALERT, weapon, trueOrFalse]
+    			int moves = 0;
+    			if (player.activities[moves] != null) {
+		    		switch((Actions) player.activities[0]) {
+		    		
+		    		case MOVE: move(player, player.activities[moves + 1]); moves = moves + 2; break;
+		    		case HIDE: hide(player); moves++; break;
+		    		case ALERT: alert(player.activities[moves + 1], player.activities[moves + 2]); moves = moves + 3; break;
+		    		case REST: rest(player); moves++; break;
+		    		case SEARCH: search(player); moves++; break;
+		    		case TRADE: moves++; break;
+		    		case FOLLOW: moves++; break;
+		    		}
+    			}
+    		}
+    	}
+    }
+
     // todo: in next iteration calculate the score properly
     // 1 point per great treasure
     // 1 point for each 10 points of fame, 1 point for each 20 points of notoriety, and 1 point for each 30 gold
@@ -227,8 +287,8 @@ public class Game {
         Player winner = null;
         Player player = null;
 
-        // todo: player has to discard any items an active move chit can't carry
-        // todo: treasures
+        // TODO: player has to discard any items an active move chit can't carry
+        // TODO: treasures
 
         for (int i = 0; i < playerCount; i++ ) {
             player = players[i];
@@ -251,9 +311,9 @@ public class Game {
         return winner;
     }
 
-	// Combat code. 
+	// Combat code.
     //TODO Needs to print out to console, plus all of the other TODO's in the code
-    
+
     //TODO Weapons active, networking
     public void Encounter(Player attacker, Player defender) {
 		// Check if weapon is active
@@ -261,14 +321,14 @@ public class Game {
 			player.weapons[0].setActive(true);
 			return;
 		}*/
-    	
+
     	//TODO getMoves should query the clients, which will then choose their moves and send them back to the server. I just left it as is for now
 		CombatMoves attackerMoves = getMoves(attacker);
 		CombatMoves defenderMoves = getMoves(defender);
-		
+
 		doFight(attackerMoves, defenderMoves);
 	}
-	
+
     // Will be run on the client side
     public CombatMoves getMoves(Player player) {
     	// Player chooses target, attack, maneuver, defense, and fatigue levels for each
@@ -280,7 +340,7 @@ public class Game {
 		Maneuvers maneuver = null;
 		int maneuverFatigue = 0;
 		Defenses defense = null;
-    	
+
     	while (properFatigue == false) {
     		//TODO Will change based on how the panels are implemented, needs to grab input from dropdown boxes for all
     		// Each value will be filled depending on what the user chooses from the panel
@@ -290,7 +350,7 @@ public class Game {
     		moves.maneuver = maneuver;
     		moves.maneuverFatigue = maneuverFatigue;
     		moves.defense = defense;
-    		
+
     		int totalFatigue = (moves.getAttackFatigue() + moves.getManeuverFatigue());
     		if (totalFatigue <= 2 && player.getFatigue() <= 8) { // Choosing 10 as the arbitrary value of total fatigue
     			properFatigue = true;
@@ -300,7 +360,7 @@ public class Game {
     	}
     	return moves; //TODO send this to the server
     }
-	
+
 	//TODO Finding active weapon rather than assuming the active weapon is at position 0
 	public void doFight(CombatMoves attackerMoves, CombatMoves defenderMoves) {
 		if (attackerMoves.getTarget().getWeapons()[0].getSpeed() < defenderMoves.getTarget().getWeapons()[0].getSpeed()) {
@@ -316,7 +376,7 @@ public class Game {
 			else if (attackerMoves.getAttack() == Attacks.SMASH && defenderMoves.getManeuver() == Maneuvers.DUCK) {
 				hit(attackerMoves, defenderMoves);
 			}
-			
+
 			if (attackerMoves.getTarget().isDead() == false) {
 				if ((defenderMoves.getTarget().getWeapons()[0].getSpeed() - defenderMoves.attackFatigue) <= (attackerMoves.getTarget().getCharacter().getSpeed() - attackerMoves.maneuverFatigue)) {
 					hit(defenderMoves, attackerMoves);
@@ -345,7 +405,7 @@ public class Game {
 			else if (defenderMoves.getAttack() == Attacks.SMASH && attackerMoves.getManeuver() == Maneuvers.DUCK) {
 				hit(defenderMoves, attackerMoves);
 			}
-			
+
 			if (attackerMoves.getTarget().isDead() == false) {
 				if ((attackerMoves.getTarget().getWeapons()[0].getSpeed() - attackerMoves.attackFatigue) <= (defenderMoves.getTarget().getCharacter().getSpeed() - defenderMoves.maneuverFatigue)) {
 					hit(attackerMoves, defenderMoves);
@@ -361,7 +421,7 @@ public class Game {
 				}
 			}
 		}
-		
+
 		else {
 			if (attackerMoves.getTarget().getWeapons()[0].getLength() < defenderMoves.getTarget().getWeapons()[0].getLength()) {
 				if ((attackerMoves.getTarget().getWeapons()[0].getSpeed() - attackerMoves.attackFatigue) <= (defenderMoves.getTarget().getCharacter().getSpeed() - defenderMoves.maneuverFatigue)) {
@@ -376,7 +436,7 @@ public class Game {
 				else if (attackerMoves.getAttack() == Attacks.SMASH && defenderMoves.getManeuver() == Maneuvers.DUCK) {
 					hit(attackerMoves, defenderMoves);
 				}
-				
+
 				if (attackerMoves.getTarget().isDead() == false) {
 					if ((defenderMoves.getTarget().getWeapons()[0].getSpeed() - defenderMoves.attackFatigue) <= (attackerMoves.getTarget().getCharacter().getSpeed() - attackerMoves.maneuverFatigue)) {
 						hit(defenderMoves, attackerMoves);
@@ -405,7 +465,7 @@ public class Game {
 				else if (defenderMoves.getAttack() == Attacks.SMASH && attackerMoves.getManeuver() == Maneuvers.DUCK) {
 					hit(defenderMoves, attackerMoves);
 				}
-				
+
 				if (attackerMoves.getTarget().isDead() == false) {
 					if ((attackerMoves.getTarget().getWeapons()[0].getSpeed() - attackerMoves.attackFatigue) <= (defenderMoves.getTarget().getCharacter().getSpeed() - defenderMoves.maneuverFatigue)) {
 						hit(attackerMoves, defenderMoves);
@@ -434,7 +494,7 @@ public class Game {
 				else if (attackerMoves.getAttack() == Attacks.SMASH && defenderMoves.getManeuver() == Maneuvers.DUCK) {
 					hit(attackerMoves, defenderMoves);
 				}
-				
+
 				if (attackerMoves.getTarget().isDead() == false) {
 					if ((defenderMoves.getTarget().getWeapons()[0].getSpeed() - defenderMoves.attackFatigue) <= (attackerMoves.getTarget().getCharacter().getSpeed() - attackerMoves.maneuverFatigue)) {
 						hit(defenderMoves, attackerMoves);
@@ -452,12 +512,12 @@ public class Game {
 			}
 		}
 	}
-	
+
 	public void hit(CombatMoves attackerMoves, CombatMoves defenderMoves) {
 		ItemWeight level = attackerMoves.getTarget().getWeapons()[0].getWeight();
-		
+
 		//TODO Print out "hit" to console
-		
+
 		if (attackerMoves.getAttackFatigue() == 1) {
 			switch(level){
             	case NEGLIGIBLE: level = ItemWeight.LIGHT;
@@ -507,7 +567,7 @@ public class Game {
     			default: level = level;
 			}
 		}
-		
+
 		if (level == ItemWeight.TREMENDOUS) {
 			deadPlayer(attackerMoves, defenderMoves);
 		}
