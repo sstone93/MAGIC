@@ -1,13 +1,14 @@
 package model;
 
 import java.util.Arrays;
-import utils.*;
+
+import utils.Config;
+import utils.Utility;
 import utils.Utility.Actions;
 import utils.Utility.Attacks;
 import utils.Utility.Defenses;
 import utils.Utility.ItemWeight;
 import utils.Utility.Maneuvers;
-import utils.Utility.WeaponName;
 
 // include move, alert, rest, search, hide, resetDay, resetWeek, startDay, gameOver
 // blocking (including by monsters)

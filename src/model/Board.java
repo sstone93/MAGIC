@@ -1,6 +1,8 @@
 package model;
 
+import utils.Utility;
 import utils.Utility.GarrisonName;
+import utils.Utility.ItemWeight;
 import utils.Utility.TileName;
 
 /**
@@ -200,6 +202,68 @@ public class Board {
 		//update the INN with all the new occupants
 		
 	}
+	
+	 // TODO: this is the function for monsters changing clearings
+    public boolean move(Monster monster, Clearing newClearing) {
+    	boolean canChange =  (monster.getLocation().canChangeClearing(newClearing));
+    	block(monster); // see if it can block any players
+    	return canChange;
+    }
+    
+  //blocks all unhidden players in the clearing
+    public Player[] block(Monster monster) {
+    	Tile tile = monster.location.parent;
+    	int blocked = 0;
+    	Player[] blockedPlayers = new Player[playerCount];
+    	// finds the unhidden players in the same clearing as them
+    	for (int i = 0; i < playerCount; i++) {
+    		if (players[i].getLocation().parent == tile) {
+    			if (players[i].getLocation() == monster.location) {
+    				if (!players[i].isHidden()) {
+    					players[i].setBlocked(true);
+    					blockedPlayers[blocked] = players[i];
+    					blocked++;
+
+    				}
+    			}
+    		}
+
+    	}
+    	return blockedPlayers;
+    }
+    
+    // returns true if the player is allowed to move to the clearing
+    // returns false if unable to move, and the player forfeits this phase
+    public boolean move(Player player, Clearing newClearing) {
+        player.setHidden(false);
+        boolean canChange =  (player.getLocation().canChangeClearing((Clearing)newClearing));
+        // todo: check if player knows secret locations
+        Chit[] chits             = player.getChits();
+        ItemWeight highestWeight = Utility.ItemWeight.NEGLIGIBLE;
+
+        // find the highest weight of the active move chits of the player
+        for (int i = 0; i < chits.length; i++) {
+            if (chits[i].isVisible()) {
+                if (chits[i].getType() == Utility.Actions.MOVE) {
+                    ItemWeight currentWeight = Utility.getItemWeight(chits[i].getName());
+                    boolean check = Utility.isWeightHeavier(currentWeight, highestWeight);
+                    if (check) {
+                        highestWeight = currentWeight;
+                    }
+                }
+            }
+        }
+
+        if (canChange) {
+        	// discard anything that player can't carry
+            player.removeWeaponsWithHigherWeight(highestWeight);
+            player.removeArmourWithHigherWeight(highestWeight);
+
+            player.setLocation((Clearing)newClearing);
+
+        }
+        return canChange;
+    }
 	
 	//TODO REMOVE THIS
 	//TODO ADD A TYPE PARAMETER TO A CONNECTION (FOR SECRET PASSAGEGES, MAKE A CONNECTION OBJECT MAYBE??)

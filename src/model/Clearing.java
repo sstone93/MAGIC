@@ -2,6 +2,8 @@ package model;
 
 import java.util.Arrays;
 
+import utils.Config;
+
 public class Clearing {
 	
     public String type;
@@ -10,6 +12,8 @@ public class Clearing {
     public Clearing[] connections;
     public int nextConnection =0;
     public Tile parent;
+    public Player[] occupants = new Player[Config.MAX_CLIENTS];
+    public int nextOccupant = 0;
     
     Clearing(int location, Tile parent) {
         this.type     = "";
@@ -18,6 +22,38 @@ public class Clearing {
         connections = new Clearing[4];		//4 is the most connections had by any 
     }
 
+    /**
+     * Returns all the players currently in the clearing
+     * @return List of Players in the clearing
+     */
+    public Player[] getOccupants(){
+    	return occupants;
+    }
+    
+    /**
+     * Move the player p into this clearing
+     * @param Player moving into the clearing
+     */
+    public void moveIn(Player p){
+    	p.getLocation().moveOut(p);
+    	p.setLocation(this);
+    	this.occupants[nextOccupant] = p;
+    	this.nextOccupant += 1;	//TODO THIS IS A PROBLEM, TOO MANY MOVES IN AND OUT DESTROY THE ARRAY, NEED AN ARAY LIST!!!!!!!!!!11
+    }
+    
+    /**
+     * Moves player p out of the cleaing
+     * @param p Player to be moved out
+     */
+    public void moveOut(Player p){
+    	for(int i=0; i< occupants.length;i++){
+    		if(occupants[i] == p){
+    			occupants[i] = null;
+    			nextOccupant = i; //TODO THIS IS A PROBLEM. REALLY WANT AN ARRAY LIST
+    		}
+    	}
+    }
+    
     /**
      * This method adds a new connection to this clearing
      * @param toAdd The clearing being added to this one as a connection

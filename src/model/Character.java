@@ -9,7 +9,13 @@ public class Character {
     GarrisonName  startingLocation;
     Weapon[]      startingWeapons;
     Armour[]      startingArmour;
-
+    
+    // player can can alert or unalert a weapon
+    public void alert(Weapon weapon, Object alert) {
+    	Weapon weapon2 = (Weapon) weapon;
+        weapon2.setActive(((Boolean) alert).booleanValue());
+    }
+    
     public CharacterName getName() {
         return name;
     }

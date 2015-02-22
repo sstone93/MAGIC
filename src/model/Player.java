@@ -6,6 +6,8 @@ import utils.Utility.Actions;
 import utils.Utility.ItemWeight;
 
 public class Player {
+	
+	int ID;
     int victoryPoints = 0;
     int gold          = 10; // can't be negative
     int health        = 0;
@@ -31,17 +33,15 @@ public class Player {
     Object[] activities; // the players moves for the day
     // Treasure[]  treasures;
     Clearing[]  secretLocations;
-    
 
-
-
-    Player(Character character) {
+    public Player(Character character, int ID) {
         this.character = character;
         this.chits     = new Chit[100];
         this.weapons   = new Weapon[Config.WEAPON_AND_ARMOUR_COUNT];
         this.armour    = new Armour[Config.WEAPON_AND_ARMOUR_COUNT];
         this.activities = new Object[12]; // TODO: read rules for max action count
-
+        this.ID = ID;
+        
         for (int i = 0; i < character.startingWeapons.length; i++) {
             weapons[numberOfWeapons] = character.startingWeapons[numberOfWeapons];
             numberOfWeapons++;
@@ -66,7 +66,15 @@ public class Player {
     	activities = newActivities;
     }
     
-    public Object[] getActivitises() {
+    public void unAlertWeapons(){
+		for (int j = 0; j < weapons.length; j++ ) {
+			if (weapons[j] != null) {
+				weapons[j].setActive(false);
+			}
+		}
+    }
+    
+    public Object[] getActivities() {
     	return activities;
     }
 
