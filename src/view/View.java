@@ -21,6 +21,8 @@ public class View extends JFrame {
 	
 	private ClientController control;
 	private JPanel contentPane;
+	private JPanel playsPanel;
+	private JPanel combatPanel;
 	private JLayeredPane boardPanel;
 	private JTextField characterText;
 	private JTextField vpText;
@@ -30,10 +32,18 @@ public class View extends JFrame {
 	private JTextField fameText;
 	private JTextField notorietyText;
 	private JTextField hiddenText;
+	private JTextArea armourText;
+	private JTextArea treasuresText;
+	private JTextArea weaponsText;
+	private JTextArea chitsText;
+	private JTextArea textDisplay;
 	private JComboBox play1;
 	private JComboBox play2;
 	private JComboBox play3;
 	private JComboBox play4;
+	private JComboBox attack;
+	private JComboBox defense;
+	private JComboBox maneuvers;
 	
 	/**
 	 * Create the frame.
@@ -76,7 +86,7 @@ public class View extends JFrame {
 		lblScore.setBounds(10, 69, 71, 14);
 		CharacterInfoPanel.add(lblScore);
 		
-		JTextArea armourText = new JTextArea();
+		armourText = new JTextArea();
 		armourText.setLineWrap(true);
 		armourText.setBounds(10, 164, 161, 142);
 		CharacterInfoPanel.add(armourText);
@@ -100,7 +110,7 @@ public class View extends JFrame {
 		lblTreasures.setBounds(10, 336, 65, 14);
 		CharacterInfoPanel.add(lblTreasures);
 		
-		JTextArea treasuresText = new JTextArea();
+		treasuresText = new JTextArea();
 		treasuresText.setLineWrap(true);
 		treasuresText.setBounds(10, 361, 161, 128);
 		CharacterInfoPanel.add(treasuresText);
@@ -154,7 +164,7 @@ public class View extends JFrame {
 		lblWeapons.setBounds(224, 148, 46, 14);
 		CharacterInfoPanel.add(lblWeapons);
 		
-		JTextArea weaponsText = new JTextArea();
+		weaponsText = new JTextArea();
 		weaponsText.setLineWrap(true);
 		weaponsText.setBounds(224, 167, 161, 142);
 		CharacterInfoPanel.add(weaponsText);
@@ -163,41 +173,41 @@ public class View extends JFrame {
 		lblChits.setBounds(224, 339, 65, 14);
 		CharacterInfoPanel.add(lblChits);
 		
-		JTextArea chitsText = new JTextArea();
+		chitsText = new JTextArea();
 		chitsText.setLineWrap(true);
 		chitsText.setBounds(224, 364, 161, 128);
 		CharacterInfoPanel.add(chitsText);
 		
-		JPanel ButtonPanel1 = new JPanel();
-		ButtonPanel1.setBounds(750, 500, 524, 192);
-		ButtonPanel1.setBorder(new LineBorder(Color.GRAY));
-		contentPane.add(ButtonPanel1);
-		ButtonPanel1.setLayout(null);
+		playsPanel = new JPanel();
+		playsPanel.setBounds(750, 500, 524, 192);
+		playsPanel.setBorder(new LineBorder(Color.GRAY));
+		contentPane.add(playsPanel);
+		playsPanel.setLayout(null);
 		
 		JLabel lblNewLabel_1 = new JLabel("Actions");
 		lblNewLabel_1.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
 		lblNewLabel_1.setBounds(10, 11, 72, 14);
-		ButtonPanel1.add(lblNewLabel_1);
+		playsPanel.add(lblNewLabel_1);
 		
 		play1 = new JComboBox();
 		play1.setModel(new DefaultComboBoxModel(Actions.values()));
 		play1.setBounds(10, 41, 93, 20);
-		ButtonPanel1.add(play1);
+		playsPanel.add(play1);
 		
 		play2 = new JComboBox();
 		play2.setModel(new DefaultComboBoxModel(Actions.values()));
 		play2.setBounds(113, 41, 93, 20);
-		ButtonPanel1.add(play2);
+		playsPanel.add(play2);
 		
 		play3 = new JComboBox();
 		play3.setModel(new DefaultComboBoxModel(Actions.values()));
 		play3.setBounds(216, 41, 93, 20);
-		ButtonPanel1.add(play3);
+		playsPanel.add(play3);
 		
 		play4 = new JComboBox();
 		play4.setModel(new DefaultComboBoxModel(Actions.values()));
 		play4.setBounds(319, 41, 93, 20);
-		ButtonPanel1.add(play4);
+		playsPanel.add(play4);
 		
 		JButton btnRecord = new JButton("Record");
 		btnRecord.addActionListener(new ActionListener() {
@@ -206,13 +216,13 @@ public class View extends JFrame {
 			}
 		});
 		btnRecord.setBounds(422, 40, 89, 23);
-		ButtonPanel1.add(btnRecord);
+		playsPanel.add(btnRecord);
 		
-		JTextArea TextDisplay = new JTextArea();
-		TextDisplay.setBounds(0, 500, 750, 192);
-		TextDisplay.setLineWrap(true);
-		contentPane.add(TextDisplay);
-		TextDisplay.setEditable(false);
+		textDisplay = new JTextArea();
+		textDisplay.setBounds(0, 500, 750, 192);
+		textDisplay.setLineWrap(true);
+		contentPane.add(textDisplay);
+		textDisplay.setEditable(false);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -224,6 +234,41 @@ public class View extends JFrame {
 		boardPanel.setPreferredSize(new Dimension(800, 1018));
 		scrollPane.setViewportView(boardPanel);
 		boardPanel.setLayout(null);
+		
+		combatPanel = new JPanel();
+		combatPanel.setBounds(750, 500, 524, 192);
+		contentPane.add(combatPanel);
+		combatPanel.setLayout(null);
+		combatPanel.setBorder(new LineBorder(Color.GRAY));
+		
+		JLabel lblSelectCombatActions = new JLabel("Select Combat Actions");
+		lblSelectCombatActions.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
+		lblSelectCombatActions.setBounds(10, 11, 154, 14);
+		combatPanel.add(lblSelectCombatActions);
+		
+		attack = new JComboBox();
+		attack.setModel(new DefaultComboBoxModel(Attacks.values()));
+		attack.setBounds(10, 41, 93, 20);
+		combatPanel.add(attack);
+		
+		maneuvers = new JComboBox();
+		maneuvers.setModel(new DefaultComboBoxModel(Maneuvers.values()));
+		maneuvers.setBounds(113, 41, 93, 20);
+		combatPanel.add(maneuvers);
+		
+		defense = new JComboBox();
+		defense.setModel(new DefaultComboBoxModel(Defenses.values()));
+		defense.setBounds(216, 41, 93, 20);
+		combatPanel.add(defense);
+		
+		JButton btnSelect = new JButton("Select");
+		btnSelect.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				control.handleCombatMoves((Attacks)attack.getSelectedItem(), (Defenses)defense.getSelectedItem(), (Maneuvers)maneuvers.getSelectedItem());
+			}
+		});
+		btnSelect.setBounds(422, 40, 89, 23);
+		combatPanel.add(btnSelect);
 	}
 	
 	public void update(){
@@ -253,6 +298,26 @@ public class View extends JFrame {
 				
 			}
 		}
+		
+		switch(control.state){
+			case CHOOSE_CHARACTER:
+				break;
+			case CHOOSE_PLAYS:
+				combatPanel.setVisible(false);
+				playsPanel.setVisible(true);
+				break;
+			case MOVE:
+				break;
+			case ALERT:
+				break;
+			case REST:
+				break;
+			case CHOOSE_COMBAT:
+				combatPanel.setVisible(true);
+				playsPanel.setVisible(false);
+				break;
+		}
+		
 		this.repaint();
 	}
 }
