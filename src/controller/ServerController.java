@@ -1,12 +1,19 @@
 package controller;
 
+import networking.Message;
 import networking.NetworkServer;
 import model.Board;
+import model.Clearing;
+import model.CombatMoves;
 import model.Player;
 import model.ServerModel;
 import model.Swordsman;
 import model.Tile;
+import model.Weapon;
+
 import java.util.Arrays;
+import java.util.Collections;
+
 import utils.Config;
 import utils.Utility;
 import utils.Utility.*;
@@ -20,10 +27,10 @@ public class ServerController extends Handler{
 	public Board board;		//THIS IS THE MODEL
 	public NetworkServer network;
 	Player[] players = new Player[Config.MAX_CLIENTS] ;
-    int playerCount    = 0;
+    int playerCount    = Config.MAX_CLIENTS;
     int currentDay     = 0;
-    boolean hasStarted = false;
-	
+    int recievedMoves = 0;
+	boolean acceptingMoves = false;
 	/**
 	 * Constructor for a ServerController
 	 */
@@ -50,6 +57,31 @@ public class ServerController extends Handler{
 				startGame();
 			}
 		}
+		if(message instanceof Message){
+			Message m = (Message) message;
+			if( m.getType() == MessageType.ACTIVITIES){
+				if(acceptingMoves){
+					recievedMoves += 1;
+					findPlayer(ID).setActivities(m.getData());
+				}else{
+					network.send(ID, "NOT ACCEPTING MOVES ATM");
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Turns a player ID into a player
+	 * @param ID of the player you are looking for
+	 * @return the player you are looknig for
+	 */
+	public Player findPlayer(int ID){
+		for(int i=0;i<playerCount;i++){
+			if(players[i].getID() == ID){
+				return players[i];
+			}
+		}
+		return null;
 	}
 	
 	/**
@@ -98,6 +130,16 @@ public class ServerController extends Handler{
     }
     
     /**
+     * Sets a player's weapon to a specific state s
+     * @param p The player
+     * @param pos The position of the weapon in the weapon array
+     * @param state the new state of the weapon
+     */
+    public void alert(Player p, int pos, Boolean state) {
+       p.getWeapons()[pos].setActive(state);
+    }
+    
+    /**
      * resets the day and determines if the game is over
      * @return returns true if day was reset, false if it's the 28th day
      */
@@ -132,23 +174,19 @@ public class ServerController extends Handler{
  // TODO: need to figure out how to save the clearing the player wants to move to
     // and the weapons/armour (??) they want to alert/unalert
     public void doTodaysActivities(Player player) {
-    	
     	for (int i = 0; i < player.getActivities().length; i++) {
-    		
-    		// check if they can block another player
-    		Player[] players = block(player);
-    		
-    		for (int j = 0; j < players.length; j++) {
-    			if (players[j] != null) {
+    		Player[] canBlock = blockable(player);					// check if they can block another player
+    		for (int j = 0; j < canBlock.length; j++) {
+    			if (canBlock[j] != null) {
     				// TODO: the player has the option to block them. Should I just do that automatically for now??
     				// TODO: otherwise, that'll be networking
     				// TODO: send message to players that have been blocked
     			}
     		}
     		
-    		if (!player.isBlocked()) {
+    		if (!player.isBlocked()) {				//assuming the player is not being blocked by another
     			// format: [MOVE, clearing]
-    			// format: [ALERT, weapon, trueOrFalse]
+    			// format: [ALERT, weaponposition, trueOrFalse]
     			
     			Object[] activities = player.getActivities();
     			int moves = 0;
@@ -156,9 +194,9 @@ public class ServerController extends Handler{
     			if (activities[moves] != null) {
 		    		switch((Actions) activities[0]) {
 		    		
-		    		case MOVE: board.move(player, activities[moves + 1]); moves = moves + 2; break;
+		    		case MOVE: board.move(player, (Clearing)activities[moves + 1]); moves = moves + 2; break;
 		    		case HIDE: hide(player); moves++; break;
-		    		case ALERT: alert(activities[moves + 1], activities[moves + 2]); moves = moves + 3; break;
+		    		case ALERT: alert(player, (int)activities[moves + 1], (boolean)activities[moves + 2]); moves = moves + 3; break;
 		    		case REST: rest(player); moves++; break;
 		    		case SEARCH: search(player); moves++; break;
 		    		case TRADE: moves++; break;
@@ -171,7 +209,7 @@ public class ServerController extends Handler{
 
     /**
      * Ends the game, basicly determines platyers scores and determines the winner
-     * @return
+     * @return The winning player
      */
     public Player endGame() {
     	
@@ -202,37 +240,32 @@ public class ServerController extends Handler{
         return winner;
     }
 
+    /**
+     * Waits untill all activities have been submitted (and tells the clients to send them)
+     */
+    public void collectActivities(){
+    	acceptingMoves = true;
+    	network.broadCast("SEND MOVES");
+    	recievedMoves = 0;
+    	while(recievedMoves < playerCount){}	//TODO HANDLE PLAYERS DROPPING OUT DURING THIS STEP
+    	acceptingMoves = false;
+    }
     
+    /**
+     * Starts a new day
+     */
     public void startDay() {
         currentDay++;
+        
+        collectActivities(); //asks player's for their activities and waits until it gets them all
+        
+        orderPlayers();	//randomly orders the players
 
-        //TODO choose moves
-
-        // Silly way to order players from 1 to playerCount+1
-        for (int i = 0; i < playerCount; i++) {
-        	System.out.println(i);
-            players[i].order = Utility.roll(100);
-        }
-
-        int[] ordering = new int[playerCount];
-        for (int i = 0; i < playerCount; i++) {
-            ordering[i] = players[i].order;
-        }
-        Arrays.sort(ordering);
-        for (int i = 0; i < playerCount; i++) {
-            for (int j = 0; j < playerCount; j++) {
-                if (ordering[i] == players[j].order) {
-                    players[j].order = i;
-                    break;
-                }
-            }
-        }
-        // Do moves in order
+        //Does the activities of all players
         int nextMover = 0;
         while (nextMover < playerCount) {
             for (int i = 0; i < playerCount; i++) {
                 if (players[i].order == nextMover) {
-                    // players do their moves
                 	doTodaysActivities(players[i]);
                     nextMover++;
                     break;
@@ -240,7 +273,10 @@ public class ServerController extends Handler{
             }
         }
 
-        // Choose attacks
+        
+        
+        
+        //All players choose attackers
         nextMover = 0;
         while (nextMover < playerCount) {
             for (int i = 0; i < playerCount; i++) {
@@ -254,11 +290,51 @@ public class ServerController extends Handler{
 
         // TODO combat loop
 
-        resetDay(); // not sure if we want to change resetDay so it will call startDay again if all is well
+        //Porgresses to the next day or ends the game
+        if(!resetDay()){ //if it is not the 28th day....
+        	startDay();
+        } else {
+        	endGame();
+        }
+        
+        
     }
     
-    //TODO Weapons active, networking
+    /**
+     * Randomly orders the players //TODO AFTER ARRAYLIST CONVERSION, JUST .SHUFFLE
+     */
+    public void orderPlayers(){
+    	// Silly way to order players from 1 to playerCount+1
+        for (int i = 0; i < playerCount; i++) {
+        	System.out.println(i);
+            players[i].order = Utility.roll(100);
+        }
+
+        int[] ordering = new int[playerCount];
+        
+        for (int i = 0; i < playerCount; i++) {
+            ordering[i] = players[i].order;
+        }
+        
+        Arrays.sort(ordering);
+        
+        for (int i = 0; i < playerCount; i++) {
+            for (int j = 0; j < playerCount; j++) {
+                if (ordering[i] == players[j].order) {
+                    players[j].order = i;
+                    break;
+                }
+            }
+        }
+    }
+    
+    /**
+     * 
+     * @param attacker
+     * @param defender
+     */
     public void Encounter(Player attacker, Player defender) {
+    	//TODO Weapons active, networking
 		// Check if weapon is active
 		/*if (player.weapons[0].isActive() == false) {
 			player.weapons[0].setActive(true);
@@ -579,8 +655,9 @@ public class ServerController extends Handler{
 		//instanciate the model
 		this.board = new Board(players);
 		System.out.println("Server Models Created.");
-	
-		hasStarted = true;
+		
+		//starts the game!
+		startDay();
 		
 	}
 	

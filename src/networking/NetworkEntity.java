@@ -38,6 +38,16 @@ public abstract class NetworkEntity {
 	}
 	
 	/**
+	 * Sends a message to a client using their ID
+	 * @param id
+	 * @param o
+	 */
+	public void send(int id, Object o){
+		clients[findClient(id)].send(o);
+	}
+	
+	
+	/**
 	 * This function finds the position of a thread in the threads array based on it's ID
 	 * @param ID ID# of the thread you are looking for
 	 * @return Position of the thread in the array

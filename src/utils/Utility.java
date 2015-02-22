@@ -75,6 +75,8 @@ public class Utility {
 	    	default: return null;
     	}
     }
+    
+    public enum MessageType {COMBAT, ACTIVITIES}
 
     public enum ItemWeight {NEGLIGIBLE, LIGHT, MEDIUM, HEAVY, TREMENDOUS}
 

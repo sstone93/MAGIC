@@ -15,7 +15,7 @@ public class Player {
     int fame          = 0;
     int notoriety     = 0;
     int finalScore    = 0;
-    int order; // in which order does the player play
+    public int order; // in which order does the player play
     int numberOfChits   = 0;
     int numberOfWeapons = 0;
     int numberOfArmour  = 0;
@@ -91,6 +91,10 @@ public class Player {
     
     public Object[] getActivities() {
     	return activities;
+    }
+    
+    public void setActivities(Object[] o){
+    	activities = o;
     }
 
     public void setCharacter(Character character) {

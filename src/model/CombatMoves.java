@@ -5,7 +5,7 @@ import utils.Utility.*;
 public class CombatMoves {
 	Player target;
 	Attacks attack;
-	int attackFatigue;
+	public int attackFatigue;
 	Maneuvers maneuver;
 	int maneuverFatigue;
 	Defenses defense;
