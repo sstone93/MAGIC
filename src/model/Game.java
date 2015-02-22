@@ -260,7 +260,6 @@ public class Game {
     			}
     		}
     		if (!player.isBlocked()) {
-//    			String[] activity = player.activities[i].trim().split(";");
     			// format: [MOVE, clearing]
     			// format: [ALERT, weapon, trueOrFalse]
     			int moves = 0;
