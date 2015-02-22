@@ -4,14 +4,13 @@ public class Monster {
     Clearing location;
     int      length = 0; // represents length of the tooth/claw
     // todo: put weight, in enum
-
-    public void move(Clearing location) {
-
+    
+    public Clearing getLocation() {
+    	return location;
     }
-
-    // also includes blocking a player
-    public void appear() {
-
+    
+    public void setLocation(Clearing location) {
+    	this.location = location;
     }
 
     public int getLength() {

@@ -45,6 +45,12 @@ public class Game {
     public int getPlayerCount() {
         return playerCount;
     }
+    // TODO: this is the function for monsters changing clearings
+    public boolean move(Monster monster, Clearing newClearing) {
+    	boolean canChange =  (monster.getLocation().canChangeClearing(newClearing));
+    	block(monster); // see if it can block any players
+    	return canChange;
+    }
 
     // returns true if the player is allowed to move to the clearing
     // returns false if unable to move, and the player forfeits this phase
@@ -116,8 +122,25 @@ public class Game {
     }
 
     // can block other players in the clearing
-    public void block(Player player) {
+    public Player[] block(Player player) {
+    	Player[] blockedPlayers = new Player[playerCount];
+    	
+    	Tile tile = player.location.parent;
+    	int blocked = 0;
+    	// finds the unhidden players in the same clearing as them
+    	for (int i = 0; i < playerCount; i++) {
+    		if (players[i].getLocation().parent == tile) {
+    			if (players[i].getLocation() == player.location) {
+    				if (!players[i].isHidden()) {
+    					blockedPlayers[blocked] = players[i];
+    					blocked++;
 
+    				}
+    			}
+    		}
+
+    	}
+    	return blockedPlayers;
 
     }
     // blocks all unhidden players in the clearing
@@ -133,11 +156,11 @@ public class Game {
     					players[i].setBlocked(true);
     					blockedPlayers[blocked] = players[i];
     					blocked++;
-    							
+
     				}
     			}
     		}
-    			
+
     	}
     	return blockedPlayers;
     }
@@ -221,15 +244,22 @@ public class Game {
 
         resetDay(); // not sure if we want to change resetDay so it will call startDay again if all is well
     }
-    
+
     // TODO: need to figure out how to save the clearing the player wants to move to
     // and the weapons/armour (??) they want to alert/unalert
     public void doTodaysActivities(Player player) {
     	for (int i = 0; i < player.activities.length; i++) {
-    		// TODO: check if they can block another player
+    		// check if they can block another player
+    		Player[] players = block(player);
+    		for (int j = 0; j < players.length; j++) {
+    			if (players[j] != null) {
+    				// TODO: the player has the option to block them. Should I just do that automatically for now??
+    				// TODO: otherwise, that'll be networking
+    			}
+    		}
     		if (!player.isBlocked()) {
 	    		switch(player.activities[i]) {
-	//    		case MOVE: move(player, clearing); break; 
+	//    		case MOVE: move(player, clearing); break;
 	    		case HIDE: hide(player); break;
 	//    		case ALERT: alert(weapon, alert); break;
 	    		case REST: rest(player); break;
@@ -272,9 +302,9 @@ public class Game {
         return winner;
     }
 
-	// Combat code. 
+	// Combat code.
     //TODO Needs to print out to console, plus all of the other TODO's in the code
-    
+
     //TODO Weapons active, networking
     public void Encounter(Player attacker, Player defender) {
 		// Check if weapon is active
@@ -282,14 +312,14 @@ public class Game {
 			player.weapons[0].setActive(true);
 			return;
 		}*/
-    	
+
     	//TODO getMoves should query the clients, which will then choose their moves and send them back to the server. I just left it as is for now
 		CombatMoves attackerMoves = getMoves(attacker);
 		CombatMoves defenderMoves = getMoves(defender);
-		
+
 		doFight(attackerMoves, defenderMoves);
 	}
-	
+
     // Will be run on the client side
     public CombatMoves getMoves(Player player) {
     	// Player chooses target, attack, maneuver, defense, and fatigue levels for each
@@ -301,7 +331,7 @@ public class Game {
 		Maneuvers maneuver = null;
 		int maneuverFatigue = 0;
 		Defenses defense = null;
-    	
+
     	while (properFatigue == false) {
     		//TODO Will change based on how the panels are implemented, needs to grab input from dropdown boxes for all
     		// Each value will be filled depending on what the user chooses from the panel
@@ -311,7 +341,7 @@ public class Game {
     		moves.maneuver = maneuver;
     		moves.maneuverFatigue = maneuverFatigue;
     		moves.defense = defense;
-    		
+
     		int totalFatigue = (moves.getAttackFatigue() + moves.getManeuverFatigue());
     		if (totalFatigue <= 2 && player.getFatigue() <= 8) { // Choosing 10 as the arbitrary value of total fatigue
     			properFatigue = true;
@@ -321,7 +351,7 @@ public class Game {
     	}
     	return moves; //TODO send this to the server
     }
-	
+
 	//TODO Finding active weapon rather than assuming the active weapon is at position 0
 	public void doFight(CombatMoves attackerMoves, CombatMoves defenderMoves) {
 		if (attackerMoves.getTarget().getWeapons()[0].getSpeed() < defenderMoves.getTarget().getWeapons()[0].getSpeed()) {
@@ -337,7 +367,7 @@ public class Game {
 			else if (attackerMoves.getAttack() == Attacks.SMASH && defenderMoves.getManeuver() == Maneuvers.DUCK) {
 				hit(attackerMoves, defenderMoves);
 			}
-			
+
 			if (attackerMoves.getTarget().isDead() == false) {
 				if ((defenderMoves.getTarget().getWeapons()[0].getSpeed() - defenderMoves.attackFatigue) <= (attackerMoves.getTarget().getCharacter().getSpeed() - attackerMoves.maneuverFatigue)) {
 					hit(defenderMoves, attackerMoves);
@@ -366,7 +396,7 @@ public class Game {
 			else if (defenderMoves.getAttack() == Attacks.SMASH && attackerMoves.getManeuver() == Maneuvers.DUCK) {
 				hit(defenderMoves, attackerMoves);
 			}
-			
+
 			if (attackerMoves.getTarget().isDead() == false) {
 				if ((attackerMoves.getTarget().getWeapons()[0].getSpeed() - attackerMoves.attackFatigue) <= (defenderMoves.getTarget().getCharacter().getSpeed() - defenderMoves.maneuverFatigue)) {
 					hit(attackerMoves, defenderMoves);
@@ -382,7 +412,7 @@ public class Game {
 				}
 			}
 		}
-		
+
 		else {
 			if (attackerMoves.getTarget().getWeapons()[0].getLength() < defenderMoves.getTarget().getWeapons()[0].getLength()) {
 				if ((attackerMoves.getTarget().getWeapons()[0].getSpeed() - attackerMoves.attackFatigue) <= (defenderMoves.getTarget().getCharacter().getSpeed() - defenderMoves.maneuverFatigue)) {
@@ -397,7 +427,7 @@ public class Game {
 				else if (attackerMoves.getAttack() == Attacks.SMASH && defenderMoves.getManeuver() == Maneuvers.DUCK) {
 					hit(attackerMoves, defenderMoves);
 				}
-				
+
 				if (attackerMoves.getTarget().isDead() == false) {
 					if ((defenderMoves.getTarget().getWeapons()[0].getSpeed() - defenderMoves.attackFatigue) <= (attackerMoves.getTarget().getCharacter().getSpeed() - attackerMoves.maneuverFatigue)) {
 						hit(defenderMoves, attackerMoves);
@@ -426,7 +456,7 @@ public class Game {
 				else if (defenderMoves.getAttack() == Attacks.SMASH && attackerMoves.getManeuver() == Maneuvers.DUCK) {
 					hit(defenderMoves, attackerMoves);
 				}
-				
+
 				if (attackerMoves.getTarget().isDead() == false) {
 					if ((attackerMoves.getTarget().getWeapons()[0].getSpeed() - attackerMoves.attackFatigue) <= (defenderMoves.getTarget().getCharacter().getSpeed() - defenderMoves.maneuverFatigue)) {
 						hit(attackerMoves, defenderMoves);
@@ -455,7 +485,7 @@ public class Game {
 				else if (attackerMoves.getAttack() == Attacks.SMASH && defenderMoves.getManeuver() == Maneuvers.DUCK) {
 					hit(attackerMoves, defenderMoves);
 				}
-				
+
 				if (attackerMoves.getTarget().isDead() == false) {
 					if ((defenderMoves.getTarget().getWeapons()[0].getSpeed() - defenderMoves.attackFatigue) <= (attackerMoves.getTarget().getCharacter().getSpeed() - attackerMoves.maneuverFatigue)) {
 						hit(defenderMoves, attackerMoves);
@@ -473,12 +503,12 @@ public class Game {
 			}
 		}
 	}
-	
+
 	public void hit(CombatMoves attackerMoves, CombatMoves defenderMoves) {
 		ItemWeight level = attackerMoves.getTarget().getWeapons()[0].getWeight();
-		
+
 		//TODO Print out "hit" to console
-		
+
 		if (attackerMoves.getAttackFatigue() == 1) {
 			switch(level){
             	case NEGLIGIBLE: level = ItemWeight.LIGHT;
@@ -528,7 +558,7 @@ public class Game {
     			default: level = level;
 			}
 		}
-		
+
 		if (level == ItemWeight.TREMENDOUS) {
 			deadPlayer(attackerMoves, defenderMoves);
 		}
