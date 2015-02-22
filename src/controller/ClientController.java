@@ -32,6 +32,7 @@ public class ClientController extends Handler{
 		this.view = new View(this);
 		view.setVisible(true);									//Activates the GUI
 		System.out.println("View Successfully Created.");
+		view.update();
 		
 	}
 	

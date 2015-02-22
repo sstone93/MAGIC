@@ -39,6 +39,32 @@ public class Utility {
         }
         return false;
     }
+    
+    public static String getTileImage(TileName name) {
+    	switch(name){
+	    	case AWFULVALLEY: return "awfulvalley1.gif"; 
+	    	case BADVALLEY: return "badvalley1.gif";
+	    	case BORDERLAND: return "borderland1.gif";
+	    	case CAVERN: return "cavern1.gif";
+	    	case CAVES: return "caves1.gif";
+	    	case CLIFF: return "cliff1.gif";
+	    	case CRAG: return "crag1.gif";
+	    	case CURSTVALLEY: return "curstvalley1.gif";
+	    	case DARKVALLEY: return "darkvalley1.gif";
+	    	case DEEPWOODS: return "deepwoods1.gif";
+	    	case EVILVALLEY: return "evilvalley1.gif";
+	    	case HIGHPASS: return "highpass1.gif";
+	    	case LEDGES: return "ledges1.gif";
+	    	case LINDENWOODS: return "lindenwoods1.gif";
+	    	case MAPLEWOODS: return "maplewoods1.gif";
+	    	case MOUNTAIN: return "mountain1.gif";
+	    	case NUTWOODS: return "nutwoods1.gif";
+	    	case OAKWOODS: return "oakwoods1.gif";
+	    	case PINEWOODS: return "pinewoods1.gif";
+	    	case RUINS: return "ruins1.gif";
+	    	default: return null;
+    	}
+    }
 
     public enum ItemWeight {NEGLIGIBLE, LIGHT, MEDIUM, HEAVY, TREMENDOUS}
 

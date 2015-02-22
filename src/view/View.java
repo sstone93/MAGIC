@@ -2,6 +2,7 @@ package view;
 
 import java.awt.EventQueue;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -19,16 +20,23 @@ import java.awt.Color;
 import javax.swing.JLabel;
 
 import java.awt.Font;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
+import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
+import utils.Utility;
 import utils.Utility.Actions;
+import utils.Utility.TileName;
 
 import javax.swing.JButton;
 
 import model.Board;
+import javax.swing.ScrollPaneConstants;
+import java.awt.Rectangle;
 
 
 @SuppressWarnings("serial")
@@ -36,7 +44,7 @@ public class View extends JFrame {
 	
 	private ClientController control;
 	private JPanel contentPane;
-	private JScrollPane boardPanel;
+	private JPanel boardPanel;
 	private JTextField characterText;
 	private JTextField scoreText;
 	private JTextField healthText;
@@ -58,7 +66,7 @@ public class View extends JFrame {
 	 * Create the frame.
 	 */
 	public View(ClientController control) {
-		control = control;
+		this.control = control;
 		setResizable(false);
 		setSize(new Dimension(1280, 720));
 		getContentPane().setLayout(null);
@@ -67,13 +75,9 @@ public class View extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		boardPanel = new JScrollPane();
-		boardPanel.setBounds(0, 0, 1000, 500);
-		contentPane.add(boardPanel);
-		
 		JPanel CharacterInfoPanel = new JPanel();
+		CharacterInfoPanel.setBounds(819, 0, 455, 500);
 		CharacterInfoPanel.setBorder(new LineBorder(Color.GRAY));
-		CharacterInfoPanel.setBounds(1000, 0, 274, 500);
 		contentPane.add(CharacterInfoPanel);
 		CharacterInfoPanel.setLayout(null);
 		
@@ -126,8 +130,8 @@ public class View extends JFrame {
 		CharacterInfoPanel.add(treasuresText);
 		
 		JPanel ButtonPanel1 = new JPanel();
-		ButtonPanel1.setBorder(new LineBorder(Color.GRAY));
 		ButtonPanel1.setBounds(750, 500, 524, 192);
+		ButtonPanel1.setBorder(new LineBorder(Color.GRAY));
 		contentPane.add(ButtonPanel1);
 		ButtonPanel1.setLayout(null);
 		
@@ -161,17 +165,38 @@ public class View extends JFrame {
 		ButtonPanel1.add(btnRecord);
 		
 		JTextArea TextDisplay = new JTextArea();
-		TextDisplay.setLineWrap(true);
 		TextDisplay.setBounds(0, 500, 750, 192);
+		TextDisplay.setLineWrap(true);
 		contentPane.add(TextDisplay);
 		TextDisplay.setEditable(false);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setBounds(0, 0, 819, 500);
+		contentPane.add(scrollPane);
+		
+		boardPanel = new JPanel();
+		boardPanel.setPreferredSize(new Dimension(800, 1018));
+		scrollPane.setViewportView(boardPanel);
+		boardPanel.setLayout(null);
 	}
 	
 	public void update(){
 		Board b = control.model.getBoard();
 		boardPanel.removeAll();
+		BufferedImage pic;
 		for (int i = 0; i < b.tiles.length; i++){
-			
+			try {
+				TileName name = b.tiles[i].getName();
+				pic = ImageIO.read(this.getClass().getResource(Utility.getTileImage(name)));
+				JLabel tile = new JLabel(new ImageIcon(pic));
+				tile.setBounds(b.tiles[i].getX() - 100, b.tiles[i].getY() - 86, 200, 173);
+				boardPanel.add(tile);
+			} catch (IOException e){
+				
+			}
 		}
+		this.repaint();
 	}
 }
