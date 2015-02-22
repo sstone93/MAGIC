@@ -134,4 +134,6 @@ public class Utility {
     public enum Maneuvers {CHARGE, DODGE, DUCK}
     
     public enum Defenses {AHEAD, SIDE, ABOVE}
+    
+    public enum GameState {CHOOSE_CHARACTER, CHOOSE_PLAYS, MOVE, ALERT, REST}
 }
