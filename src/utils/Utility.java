@@ -135,5 +135,5 @@ public class Utility {
     
     public enum Defenses {AHEAD, SIDE, ABOVE}
     
-    public enum GameState {CHOOSE_CHARACTER, CHOOSE_PLAYS, MOVE, ALERT, REST}
+    public enum GameState {CHOOSE_CHARACTER, CHOOSE_PLAYS, MOVE, ALERT, REST, CHOOSE_COMBAT}
 }

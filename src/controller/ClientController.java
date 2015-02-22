@@ -29,6 +29,7 @@ public class ClientController extends Handler{
 		this.model = new ClientModel();
 		System.out.println("Client Model Successfully Created.");
 		
+		state = GameState.CHOOSE_PLAYS;
 		//instantiate the view
 		this.view = new View(this);
 		view.setVisible(true);									//Activates the GUI
@@ -70,6 +71,14 @@ public class ClientController extends Handler{
 		System.out.println(p2);
 		System.out.println(p3);
 		System.out.println(p4);
+		this.view.update();
+	}
+	
+	public void handleCombatMoves(Attacks a, Defenses d, Maneuvers m){
+		System.out.println(a);
+		System.out.println(d);
+		System.out.println(m);
+		this.view.update();
 	}
 	
 	/**
