@@ -1,8 +1,12 @@
 package model;
 
+import java.io.Serializable;
+
 import utils.Utility.*;
 
-public class Character {
+public class Character implements Serializable{
+
+	private static final long serialVersionUID = -766962108034752244L;
 	CharacterName name;
     ItemWeight    weight;
     int           speed;

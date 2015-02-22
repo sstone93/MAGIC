@@ -1,9 +1,13 @@
 package model;
 
+import java.io.Serializable;
+
 import utils.Utility.Actions;
 
-public class Chit {
-    Actions type;
+public class Chit implements Serializable{
+
+	private static final long serialVersionUID = -6319486244125208606L;
+	Actions type;
     String   name;
     Clearing location;
     boolean  visible;

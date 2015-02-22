@@ -1,5 +1,7 @@
 package model;
 
+import java.io.Serializable;
+
 import utils.Utility;
 import utils.Utility.GarrisonName;
 import utils.Utility.ItemWeight;
@@ -10,8 +12,9 @@ import utils.Utility.TileName;
  * @author Nick
  *
  */
-public class Board {
+public class Board implements Serializable{
 	
+	private static final long serialVersionUID = -4906643706682852990L;
 	public Tile[] tiles;
 	public Garrison[] garrisons;
 	//public Treasure

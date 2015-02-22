@@ -4,7 +4,12 @@ import utils.Utility.*;
 
 // inherits name, startingLocation, startingWeapon
 public class WhiteKnight extends Character {
-    WhiteKnight() { // might want the name to be sent in
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -222522844248917902L;
+
+	WhiteKnight() { // might want the name to be sent in
         this.name             = CharacterName.WHITE_KNIGHT;
         this.weight           = ItemWeight.HEAVY;
         this.speed            = 5;

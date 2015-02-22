@@ -1,12 +1,14 @@
 package model;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 import utils.Config;
 
-public class Clearing {
+public class Clearing implements Serializable{
 	
-    public String type;
+	private static final long serialVersionUID = -688806816964894689L;
+	public String type;
     public Garrison dwelling = null; 			// not sure what type this should actually be
     public int location;		 		// indicating which clearing on the tile this is CHANGED BACK TO AN INT
     public Clearing[] connections;

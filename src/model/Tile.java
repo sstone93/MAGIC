@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import utils.Utility.TileName;
 
 /**
@@ -7,12 +8,12 @@ import utils.Utility.TileName;
  * @author Nick
  *
  */
-public class Tile {
+public class Tile implements Serializable{
 	
+	private static final long serialVersionUID = -85070866055297558L;
 	private Clearing[] clearings;
 	private TileName name;
 	private int nextClearing =0;
-	//these represent the center of the tile
 	private int x;
 	private int y;
 	

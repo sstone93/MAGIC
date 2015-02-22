@@ -14,6 +14,9 @@ TARGET GAMEFLOW: CORRECT ME IF I AM WRONG
 	-asks clients for combat actions, waits until they are all recieved
 	-handles combat
 	-transmits results back to client, as far as they are concerned atleast
+4. Client begins game loop:
+	-
+	-
 5. Game ends
 6. Shutdown of all processes
 ///////

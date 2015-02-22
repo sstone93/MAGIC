@@ -4,7 +4,10 @@ import utils.Utility.*;
 
 // inherits name, startingLocation, startingWeapon
 public class Elf extends Character {
-    Elf() {
+
+	private static final long serialVersionUID = -2632362486714584059L;
+
+	Elf() {
         this.name             = CharacterName.ELF;
         this.weight           = ItemWeight.LIGHT;
         this.speed            = 3;

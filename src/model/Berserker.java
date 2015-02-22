@@ -4,7 +4,10 @@ import utils.Utility.*;
 
 // inherits name, startingLocation, startingWeapon
 public class Berserker extends Character {
-    Berserker() { // might want the name to be sent in
+
+	private static final long serialVersionUID = -5104001601596506012L;
+
+	Berserker() { // might want the name to be sent in
         this.name             = CharacterName.BERSERKER;
         this.weight           = ItemWeight.HEAVY;
         this.speed            = 6;

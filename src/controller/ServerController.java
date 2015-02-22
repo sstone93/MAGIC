@@ -7,14 +7,8 @@ import model.Clearing;
 import model.CombatMoves;
 import model.Monster;
 import model.Player;
-import model.ServerModel;
 import model.Swordsman;
-import model.Tile;
-import model.Weapon;
-
 import java.util.Arrays;
-import java.util.Collections;
-
 import utils.Config;
 import utils.Utility;
 import utils.Utility.*;
@@ -553,51 +547,51 @@ public class ServerController extends Handler{
 
 		if (attackerMoves.getAttackFatigue() == 1) {
 			switch(level){
-            	case NEGLIGIBLE: level = ItemWeight.LIGHT;
-            	case LIGHT: level = ItemWeight.MEDIUM;
-            	case MEDIUM: level = ItemWeight.HEAVY;
-            	case HEAVY: level = ItemWeight.TREMENDOUS;
-            	default: level = level;
+            	case NEGLIGIBLE: level = ItemWeight.LIGHT; break;
+            	case LIGHT: level = ItemWeight.MEDIUM;break;
+            	case MEDIUM: level = ItemWeight.HEAVY;break;
+            	case HEAVY: level = ItemWeight.TREMENDOUS;break;
+            	default: break;
 			}
 		}
 		else if (attackerMoves.getAttackFatigue() == 2) {
 			switch(level){
-        		case NEGLIGIBLE: level = ItemWeight.MEDIUM;
-        		case LIGHT: level = ItemWeight.HEAVY;
-        		case MEDIUM: level = ItemWeight.TREMENDOUS;
-        		case HEAVY: level = ItemWeight.TREMENDOUS;
-        		default: level = level;
+        		case NEGLIGIBLE: level = ItemWeight.MEDIUM;break;
+        		case LIGHT: level = ItemWeight.HEAVY;break;
+        		case MEDIUM: level = ItemWeight.TREMENDOUS;break;
+        		case HEAVY: level = ItemWeight.TREMENDOUS;break;
+        		default: break;
 			}
 		}
 		//TODO armor destruction
 		if (attackerMoves.getAttack() == Attacks.THRUST && defenderMoves.getDefense() == Defenses.AHEAD) {
 			switch(level){
-        		case NEGLIGIBLE: level = ItemWeight.NEGLIGIBLE;
-        		case LIGHT: level = ItemWeight.NEGLIGIBLE;
-        		case MEDIUM: level = ItemWeight.LIGHT;
-        		case HEAVY: level = ItemWeight.MEDIUM;
-        		case TREMENDOUS: level = ItemWeight.HEAVY;
-        		default: level = level;
+        		case NEGLIGIBLE: level = ItemWeight.NEGLIGIBLE;break;
+        		case LIGHT: level = ItemWeight.NEGLIGIBLE;break;
+        		case MEDIUM: level = ItemWeight.LIGHT;break;
+        		case HEAVY: level = ItemWeight.MEDIUM;break;
+        		case TREMENDOUS: level = ItemWeight.HEAVY;break;
+        		default: break;
 			}
 		}
 		else if (attackerMoves.getAttack() == Attacks.SWING && defenderMoves.getDefense() == Defenses.SIDE) {
 			switch(level){
-    			case NEGLIGIBLE: level = ItemWeight.NEGLIGIBLE;
-    			case LIGHT: level = ItemWeight.NEGLIGIBLE;
-    			case MEDIUM: level = ItemWeight.LIGHT;
-    			case HEAVY: level = ItemWeight.MEDIUM;
-    			case TREMENDOUS: level = ItemWeight.HEAVY;
-    			default: level = level;
+    			case NEGLIGIBLE: level = ItemWeight.NEGLIGIBLE;break;
+    			case LIGHT: level = ItemWeight.NEGLIGIBLE;break;
+    			case MEDIUM: level = ItemWeight.LIGHT;break;
+    			case HEAVY: level = ItemWeight.MEDIUM;break;
+    			case TREMENDOUS: level = ItemWeight.HEAVY;break;
+    			default: break;
 			}
 		}
 		else if (attackerMoves.getAttack() == Attacks.SMASH && defenderMoves.getDefense() == Defenses.ABOVE) {
 			switch(level){
-    			case NEGLIGIBLE: level = ItemWeight.NEGLIGIBLE;
-    			case LIGHT: level = ItemWeight.NEGLIGIBLE;
-    			case MEDIUM: level = ItemWeight.LIGHT;
-    			case HEAVY: level = ItemWeight.MEDIUM;
-    			case TREMENDOUS: level = ItemWeight.HEAVY;
-    			default: level = level;
+    			case NEGLIGIBLE: level = ItemWeight.NEGLIGIBLE;break;
+    			case LIGHT: level = ItemWeight.NEGLIGIBLE;break;
+    			case MEDIUM: level = ItemWeight.LIGHT;break;
+    			case HEAVY: level = ItemWeight.MEDIUM;break;
+    			case TREMENDOUS: level = ItemWeight.HEAVY;break;
+    			default: break;
 			}
 		}
 
@@ -661,6 +655,8 @@ public class ServerController extends Handler{
 		//instanciate the model
 		this.board = new Board(players);
 		System.out.println("Server Models Created.");
+		
+		network.broadCast(board);  				//sends the board to all clients
 		
 		//starts the game!
 		startDay();

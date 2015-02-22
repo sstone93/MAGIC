@@ -1,12 +1,14 @@
 package model;
 
+import java.io.Serializable;
+
 import utils.Config;
 import utils.Utility;
-import utils.Utility.Actions;
 import utils.Utility.ItemWeight;
 
-public class Player {
+public class Player implements Serializable{
 	
+	private static final long serialVersionUID = 4084261472014880590L;
 	int ID;
     int victoryPoints = 0;
     int gold          = 10; // can't be negative

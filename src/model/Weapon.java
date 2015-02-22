@@ -1,9 +1,13 @@
 package model;
 
+import java.io.Serializable;
+
 import utils.Utility.*;
 
-public class Weapon {
-    WeaponName  type;   // it's name
+public class Weapon implements Serializable{
+
+	private static final long serialVersionUID = -4763458950603820718L;
+	WeaponName  type;   // it's name
     boolean ranged;
     boolean active;
     String  attack; // the method of attack
