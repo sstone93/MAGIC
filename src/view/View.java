@@ -1,66 +1,32 @@
 package view;
 
-import java.awt.EventQueue;
-
-import javax.imageio.ImageIO;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-
-import controller.ClientController;
-
 import java.awt.Dimension;
-
-import javax.swing.border.LineBorder;
-
-import java.awt.Color;
-
-import javax.swing.JLabel;
-
-import java.awt.Font;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-
-import javax.swing.ImageIcon;
-import javax.swing.JTextField;
-import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import javax.swing.border.*;
 
 import utils.Utility;
-import utils.Utility.Actions;
-import utils.Utility.TileName;
-
-import javax.swing.JButton;
-
+import utils.Utility.*;
+import controller.ClientController;
 import model.Board;
-import javax.swing.ScrollPaneConstants;
-import java.awt.Rectangle;
-
 
 @SuppressWarnings("serial")
 public class View extends JFrame {
 	
 	private ClientController control;
 	private JPanel contentPane;
-	private JPanel boardPanel;
+	private JLayeredPane boardPanel;
 	private JTextField characterText;
-	private JTextField scoreText;
+	private JTextField vpText;
 	private JTextField healthText;
-	
-	/*public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					View frame = new View(null);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}*/
+	private JTextField goldText;
+	private JTextField fatigueText;
+	private JTextField fameText;
+	private JTextField notorietyText;
+	private JTextField hiddenText;
 	
 	/**
 	 * Create the frame.
@@ -82,52 +48,117 @@ public class View extends JFrame {
 		CharacterInfoPanel.setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("Character");
-		lblNewLabel.setBounds(10, 61, 65, 14);
+		lblNewLabel.setBounds(10, 44, 65, 14);
 		CharacterInfoPanel.add(lblNewLabel);
 		
 		JLabel lblCharacterInfo = new JLabel("Character Info");
-		lblCharacterInfo.setBounds(70, 11, 122, 21);
+		lblCharacterInfo.setBounds(142, 11, 122, 21);
 		lblCharacterInfo.setFont(new Font("Trebuchet MS", Font.BOLD, 18));
 		CharacterInfoPanel.add(lblCharacterInfo);
 		
 		JLabel lblHealth = new JLabel("Health");
-		lblHealth.setBounds(10, 112, 46, 14);
+		lblHealth.setBounds(10, 120, 46, 14);
 		CharacterInfoPanel.add(lblHealth);
 		
 		JLabel lblArmour = new JLabel("Armour");
-		lblArmour.setBounds(10, 137, 46, 14);
+		lblArmour.setBounds(10, 145, 46, 14);
 		CharacterInfoPanel.add(lblArmour);
 		
-		JLabel lblScore = new JLabel("Score");
-		lblScore.setBounds(10, 86, 46, 14);
+		JLabel lblScore = new JLabel("Victory Points");
+		lblScore.setBounds(10, 69, 71, 14);
 		CharacterInfoPanel.add(lblScore);
 		
 		JTextArea armourText = new JTextArea();
-		armourText.setBounds(10, 169, 254, 93);
+		armourText.setLineWrap(true);
+		armourText.setBounds(10, 164, 161, 142);
 		CharacterInfoPanel.add(armourText);
 		
 		characterText = new JTextField();
-		characterText.setBounds(75, 58, 86, 20);
+		characterText.setBounds(85, 41, 86, 20);
 		CharacterInfoPanel.add(characterText);
 		characterText.setColumns(10);
 		
-		scoreText = new JTextField();
-		scoreText.setBounds(75, 83, 86, 20);
-		CharacterInfoPanel.add(scoreText);
-		scoreText.setColumns(10);
+		vpText = new JTextField();
+		vpText.setBounds(85, 66, 86, 20);
+		CharacterInfoPanel.add(vpText);
+		vpText.setColumns(10);
 		
 		healthText = new JTextField();
-		healthText.setBounds(75, 109, 86, 20);
+		healthText.setBounds(85, 120, 86, 20);
 		CharacterInfoPanel.add(healthText);
 		healthText.setColumns(10);
 		
 		JLabel lblTreasures = new JLabel("Treasures");
-		lblTreasures.setBounds(10, 284, 65, 14);
+		lblTreasures.setBounds(10, 336, 65, 14);
 		CharacterInfoPanel.add(lblTreasures);
 		
 		JTextArea treasuresText = new JTextArea();
-		treasuresText.setBounds(10, 309, 254, 93);
+		treasuresText.setLineWrap(true);
+		treasuresText.setBounds(10, 361, 161, 128);
 		CharacterInfoPanel.add(treasuresText);
+		
+		JLabel lblGold = new JLabel("Gold");
+		lblGold.setBounds(10, 94, 46, 14);
+		CharacterInfoPanel.add(lblGold);
+		
+		goldText = new JTextField();
+		goldText.setBounds(85, 91, 86, 20);
+		CharacterInfoPanel.add(goldText);
+		goldText.setColumns(10);
+		
+		JLabel lblFatigue = new JLabel("Fatigue");
+		lblFatigue.setBounds(224, 47, 65, 14);
+		CharacterInfoPanel.add(lblFatigue);
+		
+		fatigueText = new JTextField();
+		fatigueText.setColumns(10);
+		fatigueText.setBounds(299, 44, 86, 20);
+		CharacterInfoPanel.add(fatigueText);
+		
+		JLabel lblFame = new JLabel("Fame");
+		lblFame.setBounds(224, 72, 71, 14);
+		CharacterInfoPanel.add(lblFame);
+		
+		fameText = new JTextField();
+		fameText.setColumns(10);
+		fameText.setBounds(299, 69, 86, 20);
+		CharacterInfoPanel.add(fameText);
+		
+		JLabel lblNotoriety = new JLabel("Notoriety");
+		lblNotoriety.setBounds(224, 97, 46, 14);
+		CharacterInfoPanel.add(lblNotoriety);
+		
+		notorietyText = new JTextField();
+		notorietyText.setColumns(10);
+		notorietyText.setBounds(299, 94, 86, 20);
+		CharacterInfoPanel.add(notorietyText);
+		
+		hiddenText = new JTextField();
+		hiddenText.setColumns(10);
+		hiddenText.setBounds(299, 123, 86, 20);
+		CharacterInfoPanel.add(hiddenText);
+		
+		JLabel lblHidden = new JLabel("Hidden");
+		lblHidden.setBounds(224, 123, 46, 14);
+		CharacterInfoPanel.add(lblHidden);
+		
+		JLabel lblWeapons = new JLabel("Weapons");
+		lblWeapons.setBounds(224, 148, 46, 14);
+		CharacterInfoPanel.add(lblWeapons);
+		
+		JTextArea weaponsText = new JTextArea();
+		weaponsText.setLineWrap(true);
+		weaponsText.setBounds(224, 167, 161, 142);
+		CharacterInfoPanel.add(weaponsText);
+		
+		JLabel lblChits = new JLabel("Chits");
+		lblChits.setBounds(224, 339, 65, 14);
+		CharacterInfoPanel.add(lblChits);
+		
+		JTextArea chitsText = new JTextArea();
+		chitsText.setLineWrap(true);
+		chitsText.setBounds(224, 364, 161, 128);
+		CharacterInfoPanel.add(chitsText);
 		
 		JPanel ButtonPanel1 = new JPanel();
 		ButtonPanel1.setBounds(750, 500, 524, 192);
@@ -176,7 +207,7 @@ public class View extends JFrame {
 		scrollPane.setBounds(0, 0, 819, 500);
 		contentPane.add(scrollPane);
 		
-		boardPanel = new JPanel();
+		boardPanel = new JLayeredPane();
 		boardPanel.setPreferredSize(new Dimension(800, 1018));
 		scrollPane.setViewportView(boardPanel);
 		boardPanel.setLayout(null);
@@ -193,6 +224,18 @@ public class View extends JFrame {
 				JLabel tile = new JLabel(new ImageIcon(pic));
 				tile.setBounds(b.tiles[i].getX() - 100, b.tiles[i].getY() - 86, 200, 173);
 				boardPanel.add(tile);
+			} catch (IOException e){
+				
+			}
+		}
+		for (int i = 0; i < b.garrisons.length; i++){
+			try {
+				GarrisonName name = b.garrisons[i].getName();
+				pic = ImageIO.read(this.getClass().getResource(Utility.getGarrisonImage(name)));
+				JLabel garrison = new JLabel(new ImageIcon(pic));
+				garrison.setBounds(b.garrisons[i].getLocation().parent.getX() - 25, b.garrisons[i].getLocation().parent.getY() - 21, 50, 43);
+				boardPanel.add(garrison, new Integer(5), 0);
+				garrison.repaint();
 			} catch (IOException e){
 				
 			}

@@ -65,6 +65,16 @@ public class Utility {
 	    	default: return null;
     	}
     }
+    
+    public static String getGarrisonImage(GarrisonName name) {
+    	switch(name){
+	    	case CHAPEL: return "chapel.gif"; 
+	    	case HOUSE: return "house.gif";
+	    	case INN: return "inn.gif";
+	    	case GUARD: return "guard.gif";
+	    	default: return null;
+    	}
+    }
 
     public enum ItemWeight {NEGLIGIBLE, LIGHT, MEDIUM, HEAVY, TREMENDOUS}
 
