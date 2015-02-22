@@ -1,9 +1,9 @@
 package view;
 
-import java.awt.Dimension;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -12,6 +12,9 @@ import utils.Utility;
 import utils.Utility.*;
 import controller.ClientController;
 import model.Board;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 @SuppressWarnings("serial")
 public class View extends JFrame {
@@ -27,11 +30,16 @@ public class View extends JFrame {
 	private JTextField fameText;
 	private JTextField notorietyText;
 	private JTextField hiddenText;
+	private JComboBox play1;
+	private JComboBox play2;
+	private JComboBox play3;
+	private JComboBox play4;
 	
 	/**
 	 * Create the frame.
 	 */
-	public View(ClientController control) {
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public View(final ClientController control) {
 		this.control = control;
 		setResizable(false);
 		setSize(new Dimension(1280, 720));
@@ -171,27 +179,32 @@ public class View extends JFrame {
 		lblNewLabel_1.setBounds(10, 11, 72, 14);
 		ButtonPanel1.add(lblNewLabel_1);
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(Actions.values()));
-		comboBox.setBounds(10, 41, 93, 20);
-		ButtonPanel1.add(comboBox);
+		play1 = new JComboBox();
+		play1.setModel(new DefaultComboBoxModel(Actions.values()));
+		play1.setBounds(10, 41, 93, 20);
+		ButtonPanel1.add(play1);
 		
-		JComboBox comboBox_1 = new JComboBox();
-		comboBox_1.setModel(new DefaultComboBoxModel(Actions.values()));
-		comboBox_1.setBounds(113, 41, 93, 20);
-		ButtonPanel1.add(comboBox_1);
+		play2 = new JComboBox();
+		play2.setModel(new DefaultComboBoxModel(Actions.values()));
+		play2.setBounds(113, 41, 93, 20);
+		ButtonPanel1.add(play2);
 		
-		JComboBox comboBox_2 = new JComboBox();
-		comboBox_2.setModel(new DefaultComboBoxModel(Actions.values()));
-		comboBox_2.setBounds(216, 41, 93, 20);
-		ButtonPanel1.add(comboBox_2);
+		play3 = new JComboBox();
+		play3.setModel(new DefaultComboBoxModel(Actions.values()));
+		play3.setBounds(216, 41, 93, 20);
+		ButtonPanel1.add(play3);
 		
-		JComboBox comboBox_3 = new JComboBox();
-		comboBox_3.setModel(new DefaultComboBoxModel(Actions.values()));
-		comboBox_3.setBounds(319, 41, 93, 20);
-		ButtonPanel1.add(comboBox_3);
+		play4 = new JComboBox();
+		play4.setModel(new DefaultComboBoxModel(Actions.values()));
+		play4.setBounds(319, 41, 93, 20);
+		ButtonPanel1.add(play4);
 		
 		JButton btnRecord = new JButton("Record");
+		btnRecord.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				control.handlePlaysRecorded((Actions)play1.getSelectedItem(), (Actions)play2.getSelectedItem(), (Actions)play3.getSelectedItem(), (Actions)play1.getSelectedItem());
+			}
+		});
 		btnRecord.setBounds(422, 40, 89, 23);
 		ButtonPanel1.add(btnRecord);
 		
