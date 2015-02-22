@@ -2,7 +2,7 @@ package controller;
 
 import networking.NetworkClient;
 import model.ClientModel;
-import utils.Utility.Actions;
+import utils.Utility.*;
 import view.View;
 
 /**
@@ -15,7 +15,7 @@ public class ClientController extends Handler{
 	public View view;
 	public ClientModel model;
 	public NetworkClient network;
-	
+	public GameState state;
 	/**
 	 * Constructor for a ClientController
 	 */
