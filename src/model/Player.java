@@ -53,6 +53,17 @@ public class Player {
             }
         }
     }
+    
+   // @Override
+	//public String toString(){
+    	//System.out.println();
+    	//return "";
+    //}
+    
+    public int getID(){
+		return ID;
+    }
+    
     // adds one activity at a time
     public void addActivity(Object newActivity) {
     	if (activityCount < activities.length) {
@@ -72,6 +83,10 @@ public class Player {
 				weapons[j].setActive(false);
 			}
 		}
+    }
+    
+    public void moveTo(Clearing c){
+    	c.moveIn(this);
     }
     
     public Object[] getActivities() {

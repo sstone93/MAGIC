@@ -206,12 +206,12 @@ public class Board {
 	 // TODO: this is the function for monsters changing clearings
     public boolean move(Monster monster, Clearing newClearing) {
     	boolean canChange =  (monster.getLocation().canChangeClearing(newClearing));
-    	block(monster); // see if it can block any players
+    	blockable(monster); // see if it can block any players
     	return canChange;
     }
     
-  //blocks all unhidden players in the clearing
-    public Player[] block(Monster monster) {
+    //blocks all unhidden players in the clearing
+    public Player[] blockable(Monster monster) {
     	Tile tile = monster.location.parent;
     	int blocked = 0;
     	Player[] blockedPlayers = new Player[playerCount];
@@ -232,12 +232,18 @@ public class Board {
     	return blockedPlayers;
     }
     
-    // returns true if the player is allowed to move to the clearing
-    // returns false if unable to move, and the player forfeits this phase
+    /**
+     * Moves the player to the new clearing if possible, if not, they forfeit the phase
+     * @param player being moved
+     * @param newClearing clearing being moved to
+     * @return boolean based on if the action was valid or not
+     */
     public boolean move(Player player, Clearing newClearing) {
+    	
         player.setHidden(false);
         boolean canChange =  (player.getLocation().canChangeClearing((Clearing)newClearing));
-        // todo: check if player knows secret locations
+        
+        //TODO check if player knows secret locations
         Chit[] chits             = player.getChits();
         ItemWeight highestWeight = Utility.ItemWeight.NEGLIGIBLE;
 
@@ -259,18 +265,11 @@ public class Board {
             player.removeWeaponsWithHigherWeight(highestWeight);
             player.removeArmourWithHigherWeight(highestWeight);
 
-            player.setLocation((Clearing)newClearing);
+            player.moveTo(newClearing);
 
         }
         return canChange;
     }
-	
-	//TODO REMOVE THIS
-	//TODO ADD A TYPE PARAMETER TO A CONNECTION (FOR SECRET PASSAGEGES, MAKE A CONNECTION OBJECT MAYBE??)
-	public static void main(String[] args) {
-		Board test = new Board();
-		System.out.println(test);
-	}
 	
 	@Override
 	public String toString(){

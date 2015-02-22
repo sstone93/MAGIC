@@ -6,9 +6,7 @@ import model.Player;
 import model.ServerModel;
 import model.Swordsman;
 import model.Tile;
-
 import java.util.Arrays;
-
 import utils.Config;
 import utils.Utility;
 import utils.Utility.*;
@@ -54,12 +52,20 @@ public class ServerController extends Handler{
 		}
 	}
 	
-	public boolean hide(Player player) { // assume it always works
+	/**
+	 * Sets a player's state as hidden
+	 * @param player being hidden
+	 */
+	public void hide(Player player) { // assume it always works
         player.setHidden(true);
-        return true;
     }
 	
+	/**
+	 * Causes a player to rest
+	 * @param player who is resting
+	 */
 	public void rest(Player player) {
+		//TODO IS THIS EVEN WHAT REST DOES?
         player.setFatigue(0); // I'm assuming it resets the fatigue, which I'm pretty sure is wrong
     }
 	
@@ -68,9 +74,8 @@ public class ServerController extends Handler{
 	 * @param player The player who's options are being determined
 	 * @return The players that the (param) player is able to block
 	 */
-    public Player[] block(Player player) {
+    public Player[] blockable(Player player) {
     	Player[] blockedPlayers = player.getLocation().getOccupants();
-    	// finds the unhidden players in the same clearing as them
     	for (int i = 0; i < blockedPlayers.length; i++) {
     		if (blockedPlayers[i].isHidden()) {
     			blockedPlayers[i] = null;
@@ -92,10 +97,11 @@ public class ServerController extends Handler{
     	return sameClearingPlayers;
     }
     
-    // returns true if day was reset
-    // returns false if it's the 28th day
+    /**
+     * resets the day and determines if the game is over
+     * @return returns true if day was reset, false if it's the 28th day
+     */
     public boolean resetDay() {
-
         if (currentDay == 28) {
             return false;
         }
@@ -105,6 +111,9 @@ public class ServerController extends Handler{
         return true;
     }
     
+    /**
+     * Cycles through players, unalterts their weapons
+     */
     public void unAlertWeapons(){
     	for (int i = 0; i < players.length; i++) {
     		players[i].unAlertWeapons();
@@ -160,16 +169,18 @@ public class ServerController extends Handler{
     	}
     }
 
-    // todo: in next iteration calculate the score properly
-    // 1 point per great treasure
-    // 1 point for each 10 points of fame, 1 point for each 20 points of notoriety, and 1 point for each 30 gold
+    /**
+     * Ends the game, basicly determines platyers scores and determines the winner
+     * @return
+     */
     public Player endGame() {
+    	
         Player winner = null;
         Player player = null;
 
         // TODO: player has to discard any items an active move chit can't carry
         // TODO: treasures
-
+        // TODO: Actually determine score based on individual victory points? or is it different for a day 28 time out?
         for (int i = 0; i < playerCount; i++ ) {
             player = players[i];
             if (winner == null)

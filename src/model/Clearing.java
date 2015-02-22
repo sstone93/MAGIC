@@ -99,6 +99,11 @@ public class Clearing {
     		System.out.println("		-has garrison: "+dwelling.getName());
     		System.out.println("		"+dwelling);
     	}
+    	for(int i=0;i<occupants.length;i++){
+			if(connections[i] != null){
+				System.out.println("		-contains Player "+occupants[i].getID());
+			}
+		}
 		for(int i=0;i<connections.length;i++){
 			if(connections[i] != null){
 				System.out.println("		-connected to "+connections[i].parent.getName()+" clearing #"+connections[i].location);
