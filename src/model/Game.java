@@ -264,16 +264,18 @@ public class Game {
     			// format: [MOVE, clearing]
     			// format: [ALERT, weapon, trueOrFalse]
     			int moves = 0;
-	    		switch((Actions) player.activities[0]) {
-	    		
-	    		case MOVE: move(player, player.activities[moves + 1]); moves = moves + 2; break;
-	    		case HIDE: hide(player); moves++; break;
-	    		case ALERT: alert(player.activities[moves + 1], player.activities[moves + 2]); moves = moves + 3; break;
-	    		case REST: rest(player); moves++; break;
-	    		case SEARCH: search(player); moves++; break;
-	    		case TRADE: moves++; break;
-	    		case FOLLOW: moves++; break;
-	    		}
+    			if (player.activities[moves] != null) {
+		    		switch((Actions) player.activities[0]) {
+		    		
+		    		case MOVE: move(player, player.activities[moves + 1]); moves = moves + 2; break;
+		    		case HIDE: hide(player); moves++; break;
+		    		case ALERT: alert(player.activities[moves + 1], player.activities[moves + 2]); moves = moves + 3; break;
+		    		case REST: rest(player); moves++; break;
+		    		case SEARCH: search(player); moves++; break;
+		    		case TRADE: moves++; break;
+		    		case FOLLOW: moves++; break;
+		    		}
+    			}
     		}
     	}
     }
