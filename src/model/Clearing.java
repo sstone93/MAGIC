@@ -3,19 +3,23 @@ package model;
 import java.util.Arrays;
 
 public class Clearing {
-	
+
     public String type;
     public Garrison dwelling = null; 			// not sure what type this should actually be
     public int location;		 		// indicating which clearing on the tile this is CHANGED BACK TO AN INT
     public Clearing[] connections;
     public int nextConnection =0;
     public Tile parent;
-    
+    public Treasure[] treasures;
+
+
     Clearing(int location, Tile parent) {
         this.type     = "";
         this.location = location;
-        this.parent = parent;
-        connections = new Clearing[4];		//4 is the most connections had by any 
+        this.parent   = parent;
+        connections   = new Clearing[4];		//4 is the most connections had by any
+        treasures     = new Treasure[10]; // arbitrary number
+        // TODO: how should the treasures be added to the tile?
     }
 
     /**
@@ -26,7 +30,7 @@ public class Clearing {
     	connections[nextConnection] = toAdd;
     	nextConnection += 1;
     }
-    
+
     public String getType() {
         return type;
     }
@@ -46,7 +50,7 @@ public class Clearing {
     public int getClearingNumber(){
     	return this.location;
     }
-    
+
     public boolean canChangeClearing(Clearing clearing) {
         // if they're connected
         if (Arrays.asList(connections).contains(clearing)) {
@@ -55,7 +59,7 @@ public class Clearing {
             return false;
         }
     }
-    
+
     @Override
 	public String toString(){
     	System.out.println("	Clearing #"+location);
