@@ -7,7 +7,7 @@ import utils.Utility;
 import utils.Utility.ItemWeight;
 
 public class Player implements Serializable{
-	
+
 	private static final long serialVersionUID = 4084261472014880590L;
 	int ID;
     int victoryPoints = 0;
@@ -36,7 +36,7 @@ public class Player implements Serializable{
     Object[] activities; // the players moves for the day
     Treasure[]  treasures;
     Clearing[]  secretLocations;
-    
+
    // note: for activities, the format is as follows for the moves:
    // [MOVE, clearing, ALERT, weapon, trueOrFalse, REST, SEARCH, HIDE]
    // so, move needs to be followed by a clearing, and alert by a weapon and true or false (in that order)
@@ -47,9 +47,9 @@ public class Player implements Serializable{
         this.treasures = new Treasure[100]; // arbitrary number
         this.weapons   = new Weapon[Config.WEAPON_AND_ARMOUR_COUNT];
         this.armour    = new Armour[Config.WEAPON_AND_ARMOUR_COUNT];
-        this.activities = new Object[12]; // TODO: read rules for max action count
+        this.activities = new Object[13];
         this.ID = ID;
-        
+
         for (int i = 0; i < character.startingWeapons.length; i++) {
             weapons[numberOfWeapons] = character.startingWeapons[numberOfWeapons];
             numberOfWeapons++;
@@ -61,17 +61,17 @@ public class Player implements Serializable{
             }
         }
     }
-    
+
    // @Override
 	//public String toString(){
     	//System.out.println();
     	//return "";
     //}
-    
+
     public int getID(){
 		return ID;
     }
-    
+
     // adds one activity at a time
     public void addActivity(Object newActivity) {
     	if (activityCount < activities.length) {
@@ -92,15 +92,15 @@ public class Player implements Serializable{
 			}
 		}
     }
-    
+
     public void moveTo(Clearing c){
     	c.moveIn(this);
     }
-    
+
     public Object[] getActivities() {
     	return activities;
     }
-    
+
     public void setActivities(Object[] o){
     	activities = o;
     }
@@ -300,11 +300,11 @@ public class Player implements Serializable{
     public int getTreasureCount() {
         return treasureCount;
     }
-    
+
     public Treasure[] getTreasures(){
     	return treasures;
     }
-    
+
     public Armour[] getArmour() {
     	return armour;
     }
