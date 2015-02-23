@@ -172,6 +172,11 @@ public class ServerController extends Handler{
 
         unAlertWeapons();		//moved this functionality to the player class, where it belongs
         						//TODO face up map chits (except lost city and lost castle) are turned face down
+        
+        for (int i = 0; i < playerCount; i++) {
+        	players[i].setFatigue(0);
+        }
+
         return true;
     }
 
