@@ -24,10 +24,22 @@ public class ClientModel {
 		return board;
 	}
 	
+	public void setBoard(Board b){
+		this.board = b;
+	}
+	
+	public void setPlayer(Player p){
+		this.player = p;
+	}
+	
 	public Player getPlayer(){
 		return player;
 	}
 	
+	/**
+	 * CURRENT MESSAGES
+	 * @return
+	 */
 	public String getMessages(){
 		return messages;
 	}
