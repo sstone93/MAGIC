@@ -3,6 +3,7 @@ package view;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Enumeration;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -12,6 +13,7 @@ import utils.Utility;
 import utils.Utility.*;
 import controller.ClientController;
 import model.Board;
+import model.Clearing;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -44,6 +46,12 @@ public class View extends JFrame {
 	private JComboBox attack;
 	private JComboBox defense;
 	private JComboBox maneuvers;
+	private JPanel movesPanel;
+	private JLabel lblSelectMoveLocation;
+	private JButton btnSelectMoves;
+	private JRadioButton rdbtnNewRadioButton;
+	private JRadioButton rdbtnNewRadioButton_1;
+	private ButtonGroup movesGroup;
 	
 	/**
 	 * Create the frame.
@@ -235,6 +243,26 @@ public class View extends JFrame {
 		scrollPane.setViewportView(boardPanel);
 		boardPanel.setLayout(null);
 		
+		movesPanel = new JPanel();
+		movesPanel.setBorder(new LineBorder(Color.GRAY));
+		movesPanel.setBounds(750, 500, 524, 192);
+		contentPane.add(movesPanel);
+		movesPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
+		lblSelectMoveLocation = new JLabel("Select Move Location");
+		lblSelectMoveLocation.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
+		movesPanel.add(lblSelectMoveLocation);
+		
+		movesGroup = new ButtonGroup();
+		
+		btnSelectMoves = new JButton("Select");
+		btnSelectMoves.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//TODO: add event handler
+			}
+		});
+		movesPanel.add(btnSelectMoves);
+		
 		combatPanel = new JPanel();
 		combatPanel.setBounds(750, 500, 524, 192);
 		contentPane.add(combatPanel);
@@ -304,9 +332,25 @@ public class View extends JFrame {
 				break;
 			case CHOOSE_PLAYS:
 				combatPanel.setVisible(false);
+				movesPanel.setVisible(false);
 				playsPanel.setVisible(true);
 				break;
 			case MOVE:
+				for(Enumeration<AbstractButton> buttons = movesGroup.getElements(); buttons.hasMoreElements();){
+					AbstractButton button = buttons.nextElement();
+					movesGroup.remove(button);
+					movesPanel.remove(button);
+				}
+				Clearing[] connections = this.control.model.getPlayer().getLocation().connections;
+				for(int i = 0; i < connections.length; i++){
+					String label = connections[i].parent.getName().toString() + " clearing " + connections[i].getClearingNumber();
+					JRadioButton button = new JRadioButton(label);
+					movesGroup.add(button);
+					movesPanel.add(button, movesPanel.getComponents().length - 2);
+				}
+				combatPanel.setVisible(false);
+				movesPanel.setVisible(true);
+				playsPanel.setVisible(false);
 				break;
 			case ALERT:
 				break;
@@ -314,6 +358,7 @@ public class View extends JFrame {
 				break;
 			case CHOOSE_COMBAT:
 				combatPanel.setVisible(true);
+				movesPanel.setVisible(false);
 				playsPanel.setVisible(false);
 				break;
 		}
