@@ -212,12 +212,11 @@ public class ServerController extends Handler{
 	    		}
     		}
 
+    		Object[] activities = player.getActivities();
+    		int moves = 0;
     		if (!player.isBlocked()) {				//assuming the player is not being blocked by another
     			// format: [MOVE, clearing]
     			// format: [ALERT, weaponposition, trueOrFalse]
-
-    			Object[] activities = player.getActivities();
-    			int moves = 0;
 
     			if (activities[moves] != null) {
 		    		switch((Actions) activities[0]) {
@@ -231,6 +230,11 @@ public class ServerController extends Handler{
 		    		case FOLLOW: moves++; break;
 		    		}
     			}
+    		}
+    		else if (activities[0] == Utility.Actions.HIDE) {
+    			player.setBlocked(false);
+    			hide(player);
+    			moves++;
     		}
     	}
     }
