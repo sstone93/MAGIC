@@ -119,6 +119,14 @@ public class Game {
 	    		}
     		}
     	}
+    	Treasure[] clearingTreasures = player.getLocation().getTreasures();
+    	for (int i = 0; i < clearingTreasures.length; i++) {
+    		if (clearingTreasures[i] != null) {
+    			player.addTreasure(clearingTreasures[i]);
+    			// TODO: let player know they found treasures
+    			player.getLocation().removeTreasure(clearingTreasures[i]);
+    		}
+    	}
     	return sameClearingPlayers;
     }
 

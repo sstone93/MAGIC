@@ -13,9 +13,10 @@ public class ClientModel {
 	private Player player;
 	
 	public ClientModel(){
-		Character[] c = new Character[1];
-		board = new Board(c);
-		//player = new Player(new Character());//TODO just testing, shouldn't really be null
+		Player[] players = new Player[1];
+		player = new Player(new Swordsman());
+		players[0] = player;
+		board = new Board(players);
 	}
 	
 	public Board getBoard(){

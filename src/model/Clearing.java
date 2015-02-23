@@ -3,19 +3,24 @@ package model;
 import java.util.Arrays;
 
 public class Clearing {
-	
+
     public String type;
     public Garrison dwelling = null; 			// not sure what type this should actually be
     public int location;		 		// indicating which clearing on the tile this is CHANGED BACK TO AN INT
+    public int numberOfTreasures = 0;
     public Clearing[] connections;
     public int nextConnection =0;
     public Tile parent;
-    
+    public Treasure[] treasures;
+
+
     Clearing(int location, Tile parent) {
         this.type     = "";
         this.location = location;
-        this.parent = parent;
-        connections = new Clearing[4];		//4 is the most connections had by any 
+        this.parent   = parent;
+        connections   = new Clearing[4];		//4 is the most connections had by any
+        treasures     = new Treasure[10]; // arbitrary number
+        // TODO: how should the treasures be added to the tile?
     }
 
     /**
@@ -26,7 +31,7 @@ public class Clearing {
     	connections[nextConnection] = toAdd;
     	nextConnection += 1;
     }
-    
+
     public String getType() {
         return type;
     }
@@ -46,7 +51,7 @@ public class Clearing {
     public int getClearingNumber(){
     	return this.location;
     }
-    
+
     public boolean canChangeClearing(Clearing clearing) {
         // if they're connected
         if (Arrays.asList(connections).contains(clearing)) {
@@ -55,7 +60,30 @@ public class Clearing {
             return false;
         }
     }
-    
+
+    public void addTreasures(Treasure[] treasure) {
+        treasures = treasure;
+        numberOfTreasures = treasure.length;
+    }
+
+    // removes treasure from the clearing
+    // used when a player finds the treasure
+    public void removeTreasure(Treasure treasure) {
+        for (int j = 0; j < numberOfTreasures - 1; j++) {
+            treasures[j] = treasures[j+1];
+        }
+        numberOfTreasures--;
+    }
+
+    public Treasure[] getTreasures() {
+        return treasures;
+    }
+
+    public int getNumberOfTreasures() {
+        return numberOfTreasures;
+    }
+
+
     @Override
 	public String toString(){
     	System.out.println("	Clearing #"+location);

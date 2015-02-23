@@ -18,29 +18,34 @@ public class Player {
     int numberOfWeapons = 0;
     int numberOfArmour  = 0;
     int activityCount   = 0;
+    int treasureCount   = 0;
     boolean hidden    = false;
     boolean dead      = false;
     boolean blocked   = false;
 
     Character character;
-    
+
     Clearing location;
     Armour[] armour;
     Weapon[] weapons;
     Chit[]   chits;
     Object[] activities; // the players moves for the day
-    // Treasure[]  treasures;
+    Treasure[]  treasures;
     Clearing[]  secretLocations;
-    
 
+
+   // note: for activities, the format is as follows for the moves:
+   // [MOVE, clearing, ALERT, weapon, trueOrFalse, REST, SEARCH, HIDE]
+   // so, move needs to be followed by a clearing, and alert by a weapon and true or false (in that order)
 
 
     Player(Character character) {
         this.character = character;
-        this.chits     = new Chit[100];
+        this.chits     = new Chit[100];     // arbitrary number
+        this.treasures = new Treasure[100]; // arbitrary number
         this.weapons   = new Weapon[Config.WEAPON_AND_ARMOUR_COUNT];
         this.armour    = new Armour[Config.WEAPON_AND_ARMOUR_COUNT];
-        this.activities = new Object[12]; // TODO: read rules for max action count
+        this.activities = new Object[12];
 
         for (int i = 0; i < character.startingWeapons.length; i++) {
             weapons[numberOfWeapons] = character.startingWeapons[numberOfWeapons];
@@ -65,7 +70,7 @@ public class Player {
     	activities = null;
     	activities = newActivities;
     }
-    
+
     public Object[] getActivitises() {
     	return activities;
     }
@@ -255,5 +260,14 @@ public class Player {
     public void addChits(Chit chit) {
         this.chits[numberOfChits] = chit;
         numberOfChits++;
+    }
+
+    public void addTreasure(Treasure treasure) {
+        this.treasures[treasureCount] = treasure;
+        treasureCount++;
+    }
+
+    public int getTreasureCount() {
+        return treasureCount;
     }
 }
