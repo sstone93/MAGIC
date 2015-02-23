@@ -36,6 +36,10 @@ public class ClientModel {
 		return player;
 	}
 	
+	public void addMessage(String m){
+		this.messages += m;
+	}
+	
 	/**
 	 * CURRENT MESSAGES
 	 * @return

@@ -270,12 +270,18 @@ public class ServerController extends Handler{
     	acceptingCombat = false;
     }
     
+    public void updateClients(){
+    	network.broadCast(board);
+    	distributeCharacters();
+    }
+    
     /**
      * Starts a new day
      */
     public void startDay() {
+    	
         currentDay++;
-        
+        updateClients();
         collectActivities(); //asks player's for their activities and waits until it gets them all
         
         orderPlayers();	//randomly orders the players
@@ -292,6 +298,7 @@ public class ServerController extends Handler{
             }
         }
 
+        updateClients();
         collectCombat(); //2 players, 1 attacker 1 deffender
         
         //TODO MICHAEL RESOLVE COMBAT
@@ -650,12 +657,22 @@ public class ServerController extends Handler{
 		//TODO Print death message to console
 	}
 	
+	public void distributeCharacters(){
+		
+		//sends each player object to the right client
+		for(int i=0;i<playerCount;i++){
+			network.send(players[i].getID(), players[i]);
+		}
+		
+	}
+	
 	/**
 	 * calld via a "START GAME" message in order to setup the board and start the game.
 	 */
 	public void startGame(){
 		
 		//selectCharacters();	//broadcast to clients to submit character choices and wait until all conflicts are resolved.
+		
 		
 		//create array of players, feed it to the board constructor
 		int[] IDs = network.getIDs();
@@ -669,6 +686,9 @@ public class ServerController extends Handler{
 		System.out.println("Server Models Created.");
 		
 		network.broadCast(board);  				//sends the board to all clients
+		
+		//broadcast each player to the proper client
+		distributeCharacters();
 		
 		//starts the game!
 		startDay();
