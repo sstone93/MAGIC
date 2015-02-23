@@ -64,7 +64,23 @@ public class ServerController extends Handler{
 					recievedMoves += 1;
 					findPlayer(ID).setActivities(m.getData());
 				}else{
-					network.send(ID, "NOT ACCEPTING MOVES ATM");
+					network.send(ID, "NOT ACCEPTING ACTIVITIES ATM");
+				}
+			}
+			if( m.getType() == MessageType.COMBAT_TARGET){
+				if(acceptingMoves){
+					recievedMoves += 1;
+					findPlayer(ID).setTarget((Player) m.getData()[0]);
+				}else{
+					network.send(ID, "NOT ACCEPTING COMBAT TARGETS ATM");
+				}
+			}
+			if( m.getType() == MessageType.COMBAT_MOVES){
+				if(acceptingMoves){
+					recievedMoves += 1;
+					findPlayer(ID).setMoves((CombatMoves) m.getData()[0]);
+				}else{
+					network.send(ID, "NOT ACCEPTING COMBAT MOVES ATM");
 				}
 			}
 		}
@@ -329,7 +345,7 @@ public class ServerController extends Handler{
             for (int i = 0; i < playerCount; i++) {
                 if (players[i].order == nextMover) {
                     // TODO choose attackers and save somewhere
-                	//
+                	encounter(players[i], players[i].getTarget());
                 	//TODO MICHAEL DO COMBAT HERE
 
                     nextMover++;
@@ -381,7 +397,7 @@ public class ServerController extends Handler{
      * @param attacker
      * @param defender
      */
-    public void Encounter(Player attacker, Player defender) {
+    public void encounter(Player attacker, Player defender) {
     	//TODO Weapons active, networking
 		// Check if weapon is active
 		/*if (player.weapons[0].isActive() == false) {
@@ -389,9 +405,17 @@ public class ServerController extends Handler{
 			return;
 		}*/
 
+    	//ask clients to send moves!
+    	acceptingCombat = true;
+    	recievedCombat = 0;
+    	network.send(attacker.getID(), "SEND COMBATMOVES");
+    	network.send(defender.getID(), "SEND COMBATMOVES");
+    	while(recievedCombat < 2){}
+    	acceptingCombat = false;
+    	
     	//TODO getMoves should query the clients, which will then choose their moves and send them back to the server. I just left it as is for now
-		CombatMoves attackerMoves = getMoves(attacker);
-		CombatMoves defenderMoves = getMoves(defender);
+		CombatMoves attackerMoves = attacker.getMoves();
+		CombatMoves defenderMoves = defender.getMoves();
 
 		doFight(attackerMoves, defenderMoves);
 	}

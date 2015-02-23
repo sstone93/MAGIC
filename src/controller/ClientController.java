@@ -69,6 +69,12 @@ public class ClientController extends Handler{
 			}
 			if(text.equalsIgnoreCase("SEND COMBAT")){
 				state = GameState.CHOOSE_COMBAT;
+				model.addMessage("Please Select Combat TARGET");
+				view.update();
+				//System.out.println("Your NetworkClient has CLOSED.");
+			}
+			if(text.equalsIgnoreCase("SEND COMBATMOVES")){
+				state = GameState.CHOOSE_COMBATMOVES;
 				model.addMessage("Please Select Combat Actions");
 				view.update();
 				//System.out.println("Your NetworkClient has CLOSED.");
@@ -78,6 +84,9 @@ public class ClientController extends Handler{
 				model.addMessage("START CHARACTER SELECT");
 				view.update();
 				//System.out.println("Your NetworkClient has CLOSED.");
+			}else{
+				model.addMessage((String) message);
+				view.update();
 			}
 		}
 		if(message instanceof Board){
@@ -112,6 +121,7 @@ public class ClientController extends Handler{
 	 * @param d the player's defense
 	 * @param m the player's maneuver
 	 */
+	//TODO CREATES COMBAT MOVE OBJECT, SENDS IT IN THE MESSAGE
 	public void handleCombatMoves(Attacks a, Defenses d, Maneuvers m){
 		Object[] mes = {a,d,m};
 		network.send(new Message(MessageType.ACTIVITIES, mes));

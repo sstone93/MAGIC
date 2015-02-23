@@ -28,7 +28,8 @@ public class Player implements Serializable{
     boolean blocked   = false;
 
     Character character;
-
+    CombatMoves moves;
+    Player target;
     Clearing location;
     Armour[] armour;
     Weapon[] weapons;
@@ -68,6 +69,22 @@ public class Player implements Serializable{
     	//return "";
     //}
 
+    public Player getTarget(){
+    	return this.target;
+    }
+
+    public CombatMoves getMoves(){
+    	return this.moves;
+    }
+    
+    public void setMoves(CombatMoves m){
+    	this.moves = m;
+    }
+    
+    public void setTarget(Player p){
+    	this.target = p;
+    }
+    
     public int getID(){
 		return ID;
     }

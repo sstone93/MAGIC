@@ -1,8 +1,14 @@
 package model;
 
+import java.io.Serializable;
+
 import utils.Utility.*;
 
-public class CombatMoves {
+public class CombatMoves implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -442459525150433813L;
 	public Player target;
 	public Attacks attack;
 	public int attackFatigue;
