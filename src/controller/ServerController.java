@@ -18,7 +18,7 @@ import utils.Utility.*;
  * @author Nick
  */
 public class ServerController extends Handler{
-	
+
 	public Board board;		//THIS IS THE MODEL
 	public NetworkServer network;
 	Player[] players = new Player[Config.MAX_CLIENTS] ;
@@ -38,7 +38,7 @@ public class ServerController extends Handler{
 		//waits until player objects are done being made
 		System.out.println("Now waiting for clients to connect.");
 	}
-	
+
 	/**
 	 * This is the method that handles incomming messages from the networking components
 	 * @param ID The ID of the client sending the message
@@ -64,7 +64,7 @@ public class ServerController extends Handler{
 			}
 		}
 	}
-	
+
 	/**
 	 * Turns a player ID into a player
 	 * @param ID of the player you are looking for
@@ -78,7 +78,7 @@ public class ServerController extends Handler{
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Sets a player's state as hidden
 	 * @param player being hidden
@@ -86,7 +86,7 @@ public class ServerController extends Handler{
 	public void hide(Player player) { // assume it always works
         player.setHidden(true);
     }
-	
+
 	/**
 	 * Causes a player to rest
 	 * @param player who is resting
@@ -95,7 +95,7 @@ public class ServerController extends Handler{
 		//TODO IS THIS EVEN WHAT REST DOES?
         player.setFatigue(0); // I'm assuming it resets the fatigue, which I'm pretty sure is wrong
     }
-	
+
 	/**
 	 * Determines which players a certain player is currently able to block
 	 * @param player The player who's options are being determined
@@ -110,7 +110,7 @@ public class ServerController extends Handler{
     	}
     	return blockedPlayers;
     }
-    
+
     /**
      * Blocks all unhidden players in the same clearing as the monster
      * @param monster the monster blocking people
@@ -119,11 +119,12 @@ public class ServerController extends Handler{
     	Player[] blockablePlayers = monster.getLocation().getOccupants();
     	for (int i = 0; i < blockablePlayers.length; i++) {
     		if (!blockablePlayers[i].isHidden()) {
+                // TODO: send message to player blocked
     			players[i].setBlocked(true);
     		}
     	}
     }
-	
+
 	/**
 	 * Unhides all players in the same clearing as player and returns a list of them
 	 * @param The player doing the searching
@@ -132,11 +133,12 @@ public class ServerController extends Handler{
     public Player[] search(Player player) {
     	Player[] sameClearingPlayers = player.getLocation().getOccupants();
     	for (int i = 0; i < sameClearingPlayers.length; i++) {
+            // TODO: send message to unhidden players
     		sameClearingPlayers[i].setHidden(false);
     	}
     	return sameClearingPlayers;
     }
-    
+
     /**
      * Sets a player's weapon to a specific state s
      * @param p The player
@@ -146,7 +148,7 @@ public class ServerController extends Handler{
     public void alert(Player p, int pos, Boolean state) {
        p.getWeapons()[pos].setActive(state);
     }
-    
+
     /**
      * resets the day and determines if the game is over
      * @return returns true if day was reset, false if it's the 28th day
@@ -155,12 +157,12 @@ public class ServerController extends Handler{
         if (currentDay == 28) {
             return false;
         }
-        
+
         unAlertWeapons();		//moved this functionality to the player class, where it belongs
         						//TODO face up map chits (except lost city and lost castle) are turned face down
         return true;
     }
-    
+
     /**
      * Cycles through players, unalterts their weapons
      */
@@ -191,17 +193,17 @@ public class ServerController extends Handler{
     				// TODO: send message to players that have been blocked
     			}
     		}
-    		
+
     		if (!player.isBlocked()) {				//assuming the player is not being blocked by another
     			// format: [MOVE, clearing]
     			// format: [ALERT, weaponposition, trueOrFalse]
-    			
+
     			Object[] activities = player.getActivities();
     			int moves = 0;
-    			
+
     			if (activities[moves] != null) {
 		    		switch((Actions) activities[0]) {
-		    		
+
 		    		case MOVE: board.move(player, (Clearing)activities[moves + 1]); moves = moves + 2; break;
 		    		case HIDE: hide(player); moves++; break;
 		    		case ALERT: alert(player, (int)activities[moves + 1], (boolean)activities[moves + 2]); moves = moves + 3; break;
@@ -220,7 +222,7 @@ public class ServerController extends Handler{
      * @return The winning player
      */
     public Player endGame() {
-    	
+
         Player winner = null;
         Player player = null;
 
@@ -258,15 +260,15 @@ public class ServerController extends Handler{
     	while(recievedMoves < playerCount){}	//TODO HANDLE PLAYERS DROPPING OUT DURING THIS STEP
     	acceptingMoves = false;
     }
-    
+
     /**
      * Starts a new day
      */
     public void startDay() {
         currentDay++;
-        
+
         collectActivities(); //asks player's for their activities and waits until it gets them all
-        
+
         orderPlayers();	//randomly orders the players
 
         //Does the activities of all players
@@ -281,9 +283,9 @@ public class ServerController extends Handler{
             }
         }
 
-        
-        
-        
+
+
+
         //All players choose attackers
         nextMover = 0;
         while (nextMover < playerCount) {
@@ -304,10 +306,10 @@ public class ServerController extends Handler{
         } else {
         	endGame();
         }
-        
-        
+
+
     }
-    
+
     /**
      * Randomly orders the players //TODO AFTER ARRAYLIST CONVERSION, JUST .SHUFFLE
      */
@@ -319,13 +321,13 @@ public class ServerController extends Handler{
         }
 
         int[] ordering = new int[playerCount];
-        
+
         for (int i = 0; i < playerCount; i++) {
             ordering[i] = players[i].order;
         }
-        
+
         Arrays.sort(ordering);
-        
+
         for (int i = 0; i < playerCount; i++) {
             for (int j = 0; j < playerCount; j++) {
                 if (ordering[i] == players[j].order) {
@@ -335,9 +337,9 @@ public class ServerController extends Handler{
             }
         }
     }
-    
+
     /**
-     * 
+     *
      * @param attacker
      * @param defender
      */
@@ -637,32 +639,32 @@ public class ServerController extends Handler{
 		attackerMoves.getTarget().kill();
 		//TODO Print death message to console
 	}
-	
+
 	/**
 	 * calld via a "START GAME" message in order to setup the board and start the game.
 	 */
 	public void startGame(){
-		
+
 		//selectCharacters();	//broadcast to clients to submit character choices and wait until all conflicts are resolved.
-		
+
 		//create array of players, feed it to the board constructor
 		int[] IDs = network.getIDs();
-		
+
 		for(int i=0; i<Config.MAX_CLIENTS; i++){
 			players[i] = new Player(new Swordsman(), IDs[i]);
 		}
-		
+
 		//instanciate the model
 		this.board = new Board(players);
 		System.out.println("Server Models Created.");
-		
+
 		network.broadCast(board);  				//sends the board to all clients
-		
+
 		//starts the game!
 		startDay();
-		
+
 	}
-	
+
 	/**
 	 * Running this method will trigger the process of creating a MagicRealm server.
 	 * @param args Command line arguments, likely to remain unused
@@ -670,6 +672,6 @@ public class ServerController extends Handler{
 	@SuppressWarnings("unused")
 	public static void main(String args[]){
 		ServerController control = new ServerController();		//instanciate the controller
-	}	
+	}
 
 }
