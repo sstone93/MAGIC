@@ -68,16 +68,16 @@ public class ServerController extends Handler{
 				}
 			}
 			if( m.getType() == MessageType.COMBAT_TARGET){
-				if(acceptingMoves){
-					recievedMoves += 1;
+				if(acceptingCombat){
+					recievedCombat += 1;
 					findPlayer(ID).setTarget((Player) m.getData()[0]);
 				}else{
 					network.send(ID, "NOT ACCEPTING COMBAT TARGETS ATM");
 				}
 			}
 			if( m.getType() == MessageType.COMBAT_MOVES){
-				if(acceptingMoves){
-					recievedMoves += 1;
+				if(acceptingCombat){
+					recievedCombat += 1;
 					findPlayer(ID).setMoves((CombatMoves) m.getData()[0]);
 				}else{
 					network.send(ID, "NOT ACCEPTING COMBAT MOVES ATM");
