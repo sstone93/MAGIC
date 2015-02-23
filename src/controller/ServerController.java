@@ -292,15 +292,17 @@ public class ServerController extends Handler{
             for (int i = 0; i < playerCount; i++) {
                 if (players[i].order == nextMover) {
                     // TODO choose attackers and save somewhere
+                	//target = getTarget();
+                	//if (target != null) {
+                	//	encounter(players[i], target);
+                	//}
                     nextMover++;
                     break;
                 }
             }
         }
 
-        // TODO combat loop
-
-        //Porgresses to the next day or ends the game
+        //Progresses to the next day or ends the game
         if(!resetDay()){ //if it is not the 28th day....
         	startDay();
         } else {
@@ -343,7 +345,7 @@ public class ServerController extends Handler{
      * @param attacker
      * @param defender
      */
-    public void Encounter(Player attacker, Player defender) {
+    public void encounter(Player attacker, Player defender) {
     	//TODO Weapons active, networking
 		// Check if weapon is active
 		/*if (player.weapons[0].isActive() == false) {

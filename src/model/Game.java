@@ -244,6 +244,10 @@ public class Game {
             for (int i = 0; i < playerCount; i++) {
                 if (players[i].order == nextMover) {
                     // TODO choose attackers and save somewhere
+                	//target = getTarget();
+                	//if (target != null) {
+                	//	encounter(players[i], target);
+                	//}
                     nextMover++;
                     break;
                 }
@@ -323,7 +327,7 @@ public class Game {
     //TODO Needs to print out to console, plus all of the other TODO's in the code
 
     //TODO Weapons active, networking
-    public void Encounter(Player attacker, Player defender) {
+    public void encounter(Player attacker, Player defender) {
 		// Check if weapon is active
 		/*if (player.weapons[0].isActive() == false) {
 			player.weapons[0].setActive(true);
@@ -331,18 +335,17 @@ public class Game {
 		}*/
 
     	//TODO getMoves should query the clients, which will then choose their moves and send them back to the server. I just left it as is for now
-		CombatMoves attackerMoves = getMoves(attacker);
-		CombatMoves defenderMoves = getMoves(defender);
+		CombatMoves attackerMoves = getMoves(attacker, defender);
+		CombatMoves defenderMoves = getMoves(defender, attacker);
 
 		doFight(attackerMoves, defenderMoves);
 	}
 
     // Will be run on the client side
-    public CombatMoves getMoves(Player player) {
+    public CombatMoves getMoves(Player player, Player target) {
     	// Player chooses target, attack, maneuver, defense, and fatigue levels for each
     	boolean properFatigue = false;
     	CombatMoves moves = null;
-    	Player target = null;
 		Attacks attack = null;
 		int attackFatigue = 0;
 		Maneuvers maneuver = null;
