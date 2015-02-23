@@ -10,16 +10,54 @@ public class Weapon implements Serializable{
 	WeaponName  type;   // it's name
     boolean ranged;
     boolean active;
-    String  attack; // the method of attack
     int     length; // on a scale of 0 - 18
     int     speed;
-    int     sharpness; // higher = more harm inflicted
     ItemWeight weight;
-    ItemWeight damage;
 
     Weapon(WeaponName n) {
        this.type = n;
-       this.weight = ItemWeight.NEGLIGIBLE;
+       if (type == WeaponName.SHORT_SWORD) {
+    	   this.ranged = false;
+    	   this.length = 3;
+    	   this.speed = 2;
+    	   this.weight = ItemWeight.LIGHT;
+   		}
+       else if (type == WeaponName.GREAT_AXE) {
+    	   this.ranged = false;
+    	   this.length = 5;
+    	   this.speed = 4;
+    	   this.weight = ItemWeight.HEAVY;
+       }
+       else if (type == WeaponName.MACE) {
+    	   this.ranged = false;
+    	   this.length = 1;
+    	   this.speed = 3;
+    	   this.weight = ItemWeight.MEDIUM;
+       }
+       else if (type == WeaponName.LIGHT_BOW) {
+    	   this.ranged = true;
+    	   this.length = 14;
+    	   this.speed = 1;
+    	   this.weight = ItemWeight.LIGHT;
+       }
+       else if (type == WeaponName.THRUSTING_SWORD) {
+    	   this.ranged = false;
+    	   this.length = 4;
+    	   this.speed = 2;
+    	   this.weight = ItemWeight.LIGHT;
+       }
+       else if (type == WeaponName.GREAT_SWORD) {
+    	   this.ranged = false;
+    	   this.length = 8;
+    	   this.speed = 6;
+    	   this.weight = ItemWeight.HEAVY;
+       }
+       else {
+    	   this.ranged = false;
+    	   this.length = 1;
+    	   this.speed = 7;
+    	   this.weight = ItemWeight.NEGLIGIBLE;
+       }
        this.active = true;
     }
     
@@ -35,12 +73,6 @@ public class Weapon implements Serializable{
     public boolean isActive() {
         return active;
     }
-    public void setAttack(String attack) {
-        this.attack = attack;
-    }
-    public String getAttack() {
-        return attack;
-    }
     public int getLength() {
         return length;
     }
@@ -53,23 +85,11 @@ public class Weapon implements Serializable{
     public void setSpeed(int speed) {
         this.speed = speed;
     }
-    public void setSharpness(int sharp) {
-        sharpness = sharp;
-    }
-    public int getSharpness() {
-        return sharpness;
-    }
     public ItemWeight getWeight() {
         return weight;
     }
     public void setWeight(ItemWeight weight) {
         this.weight = weight;
-    }
-    public ItemWeight getDamage() {
-        return damage;
-    }
-    public void setDamage(ItemWeight damage) {
-        this.damage = damage;
     }
     public WeaponName getType() {
     	return type;
