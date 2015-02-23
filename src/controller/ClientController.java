@@ -1,5 +1,6 @@
 package controller;
 
+import networking.Message;
 import networking.NetworkClient;
 import model.ClientModel;
 import utils.Utility.*;
@@ -67,10 +68,9 @@ public class ClientController extends Handler{
 	 * @param p4 the player's fourth play
 	 */
 	public void handlePlaysRecorded(Actions p1, Actions p2, Actions p3, Actions p4){
-		System.out.println(p1);
-		System.out.println(p2);
-		System.out.println(p3);
-		System.out.println(p4);
+		Object[] mes = {p1, p2, p3, p4};
+		network.send(new Message(MessageType.ACTIVITIES, mes));
+		System.out.println("Sent "+p1+p2+p3+p4);
 		this.view.update();
 	}
 	
@@ -81,9 +81,9 @@ public class ClientController extends Handler{
 	 * @param m the player's maneuver
 	 */
 	public void handleCombatMoves(Attacks a, Defenses d, Maneuvers m){
-		System.out.println(a);
-		System.out.println(d);
-		System.out.println(m);
+		Object[] mes = {a,d,m};
+		network.send(new Message(MessageType.ACTIVITIES, mes));
+		System.out.println("Sent "+a+d+m);
 		this.view.update();
 	}
 	
@@ -91,8 +91,13 @@ public class ClientController extends Handler{
 	 * Should parse the move and send it to the server
 	 * @param location where the player wants to move, in the form "<TileName> clearing <clearingNumber>"
 	 */
+	
+	//TODO NEEDS TO BE CHANGED TO A BETTER FORMAT?
+	
 	public void handleMoveSelection(String location){
-		System.out.println(location);
+		Object[] mes = {location};
+		network.send(new Message(MessageType.ACTIVITIES, mes));
+		System.out.println("Sent "+location);
 		this.view.update();
 	}
 	
@@ -101,6 +106,8 @@ public class ClientController extends Handler{
 	 * @param weapon the weapon to alert, in the form "<WeaponName> <active>"
 	 */
 	public void handleAlertSelection(String weapon){
+		Object[] mes = {weapon};
+		network.send(new Message(MessageType.ACTIVITIES, mes));
 		System.out.println(weapon);
 		this.view.update();
 	}

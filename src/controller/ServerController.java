@@ -24,8 +24,11 @@ public class ServerController extends Handler{
 	Player[] players = new Player[Config.MAX_CLIENTS] ;
     int playerCount    = Config.MAX_CLIENTS;
     int currentDay     = 0;
-    int recievedMoves = 0;
+    int recievedCombat = 0;
+	boolean acceptingCombat = false;
+	int recievedMoves = 0;
 	boolean acceptingMoves = false;
+	
 	/**
 	 * Constructor for a ServerController
 	 */
@@ -259,6 +262,14 @@ public class ServerController extends Handler{
     	acceptingMoves = false;
     }
     
+    public void collectCombat(){
+    	acceptingCombat = true;
+    	recievedCombat = 0;
+    	network.broadCast("SEND COMBAT");
+    	while(recievedCombat < playerCount){}	//TODO HANDLE PLAYERS DROPPING OUT DURING THIS STEP
+    	acceptingCombat = false;
+    }
+    
     /**
      * Starts a new day
      */
@@ -281,15 +292,18 @@ public class ServerController extends Handler{
             }
         }
 
+        collectCombat(); //2 players, 1 attacker 1 deffender
         
-        
-        
+        //TODO MICHAEL RESOLVE COMBAT
         //All players choose attackers
         nextMover = 0;
         while (nextMover < playerCount) {
             for (int i = 0; i < playerCount; i++) {
                 if (players[i].order == nextMover) {
                     // TODO choose attackers and save somewhere
+                	//
+                	//TODO MICHAEL DO COMBAT HERE
+          
                     nextMover++;
                     break;
                 }
@@ -304,8 +318,6 @@ public class ServerController extends Handler{
         } else {
         	endGame();
         }
-        
-        
     }
     
     /**
