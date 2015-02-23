@@ -60,6 +60,15 @@ public class NetworkServer extends NetworkEntity implements Runnable{
 	}
 	
 	/**
+	 * Send a message to all client threads
+	 */
+	public void broadCast(Object message){
+		for(int i=0; i<clientCount; i++){
+			clients[i].send(message);
+		}
+	}
+	
+	/**
 	 * Running this causes the server to accept incomming requests. and handle them via. the addThread method
 	 */
 	public void run() {

@@ -4,7 +4,12 @@ import utils.Utility.*;
 
 // inherits name, startingLocation, startingWeapon
 public class Captain extends Character {
-    Captain() { // might want the name to be sent in
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -1293193372571286411L;
+
+	Captain() { // might want the name to be sent in
         this.name             = CharacterName.CAPTAIN;
         this.weight           = ItemWeight.MEDIUM;
         this.speed            = 4;

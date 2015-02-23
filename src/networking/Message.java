@@ -1,19 +1,20 @@
 package networking;
 
 import java.io.Serializable;
+import utils.Utility.MessageType;
 
 public class Message implements Serializable{
 
 	private static final long serialVersionUID = -2288820887835157202L;
-	private String type;
+	private MessageType type;
 	private Object[] data;
 	
-	public Message(String type, Object[] data){
+	public Message(MessageType type, Object[] data){
 		this.type = type;
 		this.data = data;
 	}
 	
-	public String getType(){
+	public MessageType getType(){
 		return this.type;
 	}
 	

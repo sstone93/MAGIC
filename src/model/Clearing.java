@@ -1,10 +1,13 @@
 package model;
 
+import java.io.Serializable;
 import java.util.Arrays;
+import utils.Config;
 
-public class Clearing {
-
-    public String type;
+public class Clearing implements Serializable{
+	
+	private static final long serialVersionUID = -688806816964894689L;
+	public String type;
     public Garrison dwelling = null; 			// not sure what type this should actually be
     public int location;		 		// indicating which clearing on the tile this is CHANGED BACK TO AN INT
     public int numberOfTreasures = 0;
@@ -12,7 +15,8 @@ public class Clearing {
     public int nextConnection =0;
     public Tile parent;
     public Treasure[] treasures;
-
+    public Player[] occupants = new Player[Config.MAX_CLIENTS];
+    public int nextOccupant = 0;
 
     Clearing(int location, Tile parent) {
         this.type     = "";
@@ -23,6 +27,38 @@ public class Clearing {
         // TODO: how should the treasures be added to the tile?
     }
 
+    /**
+     * Returns all the players currently in the clearing
+     * @return List of Players in the clearing
+     */
+    public Player[] getOccupants(){
+    	return occupants;
+    }
+    
+    /**
+     * Move the player p into this clearing
+     * @param Player moving into the clearing
+     */
+    public void moveIn(Player p){
+    	p.getLocation().moveOut(p);
+    	p.setLocation(this);
+    	this.occupants[nextOccupant] = p;
+    	this.nextOccupant += 1;	//TODO THIS IS A PROBLEM, TOO MANY MOVES IN AND OUT DESTROY THE ARRAY, NEED AN ARAY LIST!!!!!!!!!!11
+    }
+    
+    /**
+     * Moves player p out of the cleaing
+     * @param p Player to be moved out
+     */
+    public void moveOut(Player p){
+    	for(int i=0; i< occupants.length;i++){
+    		if(occupants[i] == p){
+    			occupants[i] = null;
+    			nextOccupant = i; //TODO THIS IS A PROBLEM. REALLY WANT AN ARRAY LIST
+    		}
+    	}
+    }
+    
     /**
      * This method adds a new connection to this clearing
      * @param toAdd The clearing being added to this one as a connection
@@ -91,6 +127,11 @@ public class Clearing {
     		System.out.println("		-has garrison: "+dwelling.getName());
     		System.out.println("		"+dwelling);
     	}
+    	for(int i=0;i<occupants.length;i++){
+			if(connections[i] != null){
+				System.out.println("		-contains Player "+occupants[i].getID());
+			}
+		}
 		for(int i=0;i<connections.length;i++){
 			if(connections[i] != null){
 				System.out.println("		-connected to "+connections[i].parent.getName()+" clearing #"+connections[i].location);

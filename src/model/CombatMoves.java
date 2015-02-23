@@ -3,12 +3,12 @@ package model;
 import utils.Utility.*;
 
 public class CombatMoves {
-	Player target;
-	Attacks attack;
-	int attackFatigue;
-	Maneuvers maneuver;
-	int maneuverFatigue;
-	Defenses defense;
+	public Player target;
+	public Attacks attack;
+	public int attackFatigue;
+	public Maneuvers maneuver;
+	public int maneuverFatigue;
+	public Defenses defense;
 	
 	public CombatMoves (Player target, Attacks attack, int attackFatigue, Maneuvers maneuver, int maneuverFatigue, Defenses defense) {
 		this.target = target;

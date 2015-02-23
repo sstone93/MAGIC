@@ -1,10 +1,14 @@
 package model;
 
+import java.io.Serializable;
+
 import utils.Utility.ArmourName;
 import utils.Utility.ItemWeight;
 
-public class Armour {
-    ItemWeight  weight;
+public class Armour implements Serializable {
+
+	private static final long serialVersionUID = 5965156814348780830L;
+	ItemWeight  weight;
     String      health;
     ArmourName  type;
     boolean     damaged;

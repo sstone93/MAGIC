@@ -14,10 +14,10 @@ public class ClientModel {
 	private String messages;
 	
 	public ClientModel(){
-		Player[] players = new Player[1];
-		player = new Player(new Swordsman());
-		players[0] = player;
-		board = new Board(players);
+		//Player[] players = new Player[1];
+		//player = new Player(new Swordsman());
+		//players[0] = player;
+		//board = new Board(players);
 	}
 	
 	public Board getBoard(){

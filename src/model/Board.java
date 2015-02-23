@@ -1,6 +1,10 @@
 package model;
 
+import java.io.Serializable;
+
+import utils.Utility;
 import utils.Utility.GarrisonName;
+import utils.Utility.ItemWeight;
 import utils.Utility.TileName;
 
 /**
@@ -8,8 +12,9 @@ import utils.Utility.TileName;
  * @author Nick
  *
  */
-public class Board {
+public class Board implements Serializable{
 	
+	private static final long serialVersionUID = -4906643706682852990L;
 	public Tile[] tiles;
 	public Garrison[] garrisons;
 	//public Treasure
@@ -201,12 +206,51 @@ public class Board {
 		
 	}
 	
-	//TODO REMOVE THIS
-	//TODO ADD A TYPE PARAMETER TO A CONNECTION (FOR SECRET PASSAGEGES, MAKE A CONNECTION OBJECT MAYBE??)
-	public static void main(String[] args) {
-		Board test = new Board();
-		System.out.println(test);
-	}
+	 // TODO: this is the function for monsters changing clearings
+    public boolean move(Monster monster, Clearing newClearing) {
+    	boolean canChange =  (monster.getLocation().canChangeClearing(newClearing));
+    	//block(monster); // see if it can block any players
+    	return canChange;
+    }
+    
+    /**
+     * Moves the player to the new clearing if possible, if not, they forfeit the phase
+     * @param player being moved
+     * @param newClearing clearing being moved to
+     * @return boolean based on if the action was valid or not
+     */
+    public boolean move(Player player, Clearing newClearing) {
+    	
+        player.setHidden(false);
+        boolean canChange =  (player.getLocation().canChangeClearing((Clearing)newClearing));
+        
+        //TODO check if player knows secret locations
+        Chit[] chits             = player.getChits();
+        ItemWeight highestWeight = Utility.ItemWeight.NEGLIGIBLE;
+
+        // find the highest weight of the active move chits of the player
+        for (int i = 0; i < chits.length; i++) {
+            if (chits[i].isVisible()) {
+                if (chits[i].getType() == Utility.Actions.MOVE) {
+                    ItemWeight currentWeight = Utility.getItemWeight(chits[i].getName());
+                    boolean check = Utility.isWeightHeavier(currentWeight, highestWeight);
+                    if (check) {
+                        highestWeight = currentWeight;
+                    }
+                }
+            }
+        }
+
+        if (canChange) {
+        	// discard anything that player can't carry
+            player.removeWeaponsWithHigherWeight(highestWeight);
+            player.removeArmourWithHigherWeight(highestWeight);
+
+            player.moveTo(newClearing);
+
+        }
+        return canChange;
+    }
 	
 	@Override
 	public String toString(){

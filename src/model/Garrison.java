@@ -1,10 +1,14 @@
 package model;
 
+import java.io.Serializable;
+
 import utils.Utility.GarrisonName;
 import utils.Utility.WeaponName;
 
-public class Garrison {
+public class Garrison implements Serializable{
 
+
+	private static final long serialVersionUID = 7914470711829476000L;
 	private GarrisonName name;
 	private Clearing location;
 	//private Native[] natives;

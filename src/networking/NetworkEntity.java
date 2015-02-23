@@ -26,6 +26,28 @@ public abstract class NetworkEntity {
 	}
 	
 	/**
+	 * Porvides the controller with the ID (port number) of clients to distinguish them
+	 * @return the ID of every client in the game
+	 */
+	public int[] getIDs(){
+		int[] id = new int[Config.MAX_CLIENTS];
+		for(int i=0; i< Config.MAX_CLIENTS;i++){
+			id[i] = clients[i].getID();
+		}
+		return id;
+	}
+	
+	/**
+	 * Sends a message to a client using their ID
+	 * @param id
+	 * @param o
+	 */
+	public void send(int id, Object o){
+		clients[findClient(id)].send(o);
+	}
+	
+	
+	/**
 	 * This function finds the position of a thread in the threads array based on it's ID
 	 * @param ID ID# of the thread you are looking for
 	 * @return Position of the thread in the array

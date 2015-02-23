@@ -1,6 +1,26 @@
 # MAGIC
 For group 8 of 3004 Winter 2015. Group members: Chantal Forget, Shannon Stone, Michael Catt, Nick Laws
 
+//////
+TARGET GAMEFLOW: CORRECT ME IF I AM WRONG
+
+1. ServerController is run (sets up server side)
+2. ClientControllers are run (likely sticking with 2 for the demo)
+3. Server will propmt clients to choose a class (low priority, we can just set 2 manually if the GUI cannot support this)
+4. Server begins game loop:
+	-asks clients for activities, waits until they are all recieved
+	-handles activities
+	-transmits results back to client (as far as they are concerned atleast)
+	-asks clients for combat actions, waits until they are all recieved
+	-handles combat
+	-transmits results back to client, as far as they are concerned atleast
+4. Client begins game loop:
+	-
+	-
+5. Game ends
+6. Shutdown of all processes
+///////
+
 ///////
 Nick's Notes on Understanding the networking threading wierdness (mainly for personal use):
 Note: Same for client and server
