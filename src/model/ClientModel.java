@@ -11,6 +11,7 @@ public class ClientModel {
 	
 	private Board board;
 	private Player player;
+	private String messages;
 	
 	public ClientModel(){
 		Player[] players = new Player[1];
@@ -25,6 +26,10 @@ public class ClientModel {
 	
 	public Player getPlayer(){
 		return player;
+	}
+	
+	public String getMessages(){
+		return messages;
 	}
 
 }

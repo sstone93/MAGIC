@@ -270,4 +270,12 @@ public class Player {
     public int getTreasureCount() {
         return treasureCount;
     }
+    
+    public Treasure[] getTreasures(){
+    	return treasures;
+    }
+    
+    public Armour[] getArmour() {
+    	return armour;
+    }
 }
