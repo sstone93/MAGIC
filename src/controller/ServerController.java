@@ -203,11 +203,13 @@ public class ServerController extends Handler{
     public void doTodaysActivities(Player player) {
     	for (int i = 0; i < player.getActivities().length; i++) {
     		Player[] canBlock = blockable(player);					// check if they can block another player
-    		for (int j = 0; j < canBlock.length; j++) {
-    			if (canBlock[j] != null) {
-    				canBlock[j].setBlocked(true);
-    				// TODO: send message to players that have been blocked
-    			}
+    		if (currentDay != 1) {
+	    		for (int j = 0; j < canBlock.length; j++) {
+	    			if (canBlock[j] != null) {
+	    				canBlock[j].setBlocked(true);
+	    				// TODO: send message to players that have been blocked
+	    			}
+	    		}
     		}
 
     		if (!player.isBlocked()) {				//assuming the player is not being blocked by another
