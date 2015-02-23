@@ -189,8 +189,7 @@ public class ServerController extends Handler{
     		Player[] canBlock = blockable(player);					// check if they can block another player
     		for (int j = 0; j < canBlock.length; j++) {
     			if (canBlock[j] != null) {
-    				// TODO: the player has the option to block them. Should I just do that automatically for now??
-    				// TODO: otherwise, that'll be networking
+    				canBlock[j].setBlocked(true);
     				// TODO: send message to players that have been blocked
     			}
     		}
