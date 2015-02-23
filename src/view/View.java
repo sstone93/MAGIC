@@ -12,8 +12,13 @@ import javax.swing.border.*;
 import utils.Utility;
 import utils.Utility.*;
 import controller.ClientController;
+import model.Armour;
 import model.Board;
+import model.Chit;
 import model.Clearing;
+import model.Player;
+import model.Treasure;
+import model.Weapon;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -25,6 +30,8 @@ public class View extends JFrame {
 	private JPanel contentPane;
 	private JPanel playsPanel;
 	private JPanel combatPanel;
+	private JPanel movesPanel;
+	private JPanel alertPanel;
 	private JLayeredPane boardPanel;
 	private JTextField characterText;
 	private JTextField vpText;
@@ -46,12 +53,8 @@ public class View extends JFrame {
 	private JComboBox attack;
 	private JComboBox defense;
 	private JComboBox maneuvers;
-	private JPanel movesPanel;
-	private JLabel lblSelectMoveLocation;
-	private JButton btnSelectMoves;
-	private JRadioButton rdbtnNewRadioButton;
-	private JRadioButton rdbtnNewRadioButton_1;
 	private ButtonGroup movesGroup;
+	private ButtonGroup alertGroup;
 	
 	/**
 	 * Create the frame.
@@ -91,36 +94,36 @@ public class View extends JFrame {
 		CharacterInfoPanel.add(lblArmour);
 		
 		JLabel lblScore = new JLabel("Victory Points");
-		lblScore.setBounds(10, 69, 71, 14);
+		lblScore.setBounds(10, 69, 81, 14);
 		CharacterInfoPanel.add(lblScore);
 		
 		armourText = new JTextArea();
 		armourText.setLineWrap(true);
-		armourText.setBounds(10, 164, 161, 142);
+		armourText.setBounds(10, 164, 177, 142);
 		CharacterInfoPanel.add(armourText);
 		
 		characterText = new JTextField();
-		characterText.setBounds(85, 41, 86, 20);
+		characterText.setBounds(101, 41, 86, 20);
 		CharacterInfoPanel.add(characterText);
 		characterText.setColumns(10);
 		
 		vpText = new JTextField();
-		vpText.setBounds(85, 66, 86, 20);
+		vpText.setBounds(101, 66, 86, 20);
 		CharacterInfoPanel.add(vpText);
 		vpText.setColumns(10);
 		
 		healthText = new JTextField();
-		healthText.setBounds(85, 120, 86, 20);
+		healthText.setBounds(101, 117, 86, 20);
 		CharacterInfoPanel.add(healthText);
 		healthText.setColumns(10);
 		
 		JLabel lblTreasures = new JLabel("Treasures");
-		lblTreasures.setBounds(10, 336, 65, 14);
+		lblTreasures.setBounds(10, 317, 65, 14);
 		CharacterInfoPanel.add(lblTreasures);
 		
 		treasuresText = new JTextArea();
 		treasuresText.setLineWrap(true);
-		treasuresText.setBounds(10, 361, 161, 128);
+		treasuresText.setBounds(10, 342, 177, 142);
 		CharacterInfoPanel.add(treasuresText);
 		
 		JLabel lblGold = new JLabel("Gold");
@@ -128,7 +131,7 @@ public class View extends JFrame {
 		CharacterInfoPanel.add(lblGold);
 		
 		goldText = new JTextField();
-		goldText.setBounds(85, 91, 86, 20);
+		goldText.setBounds(101, 91, 86, 20);
 		CharacterInfoPanel.add(goldText);
 		goldText.setColumns(10);
 		
@@ -138,7 +141,7 @@ public class View extends JFrame {
 		
 		fatigueText = new JTextField();
 		fatigueText.setColumns(10);
-		fatigueText.setBounds(299, 44, 86, 20);
+		fatigueText.setBounds(315, 41, 86, 20);
 		CharacterInfoPanel.add(fatigueText);
 		
 		JLabel lblFame = new JLabel("Fame");
@@ -147,21 +150,21 @@ public class View extends JFrame {
 		
 		fameText = new JTextField();
 		fameText.setColumns(10);
-		fameText.setBounds(299, 69, 86, 20);
+		fameText.setBounds(315, 66, 86, 20);
 		CharacterInfoPanel.add(fameText);
 		
 		JLabel lblNotoriety = new JLabel("Notoriety");
-		lblNotoriety.setBounds(224, 97, 46, 14);
+		lblNotoriety.setBounds(224, 97, 65, 14);
 		CharacterInfoPanel.add(lblNotoriety);
 		
 		notorietyText = new JTextField();
 		notorietyText.setColumns(10);
-		notorietyText.setBounds(299, 94, 86, 20);
+		notorietyText.setBounds(315, 91, 86, 20);
 		CharacterInfoPanel.add(notorietyText);
 		
 		hiddenText = new JTextField();
 		hiddenText.setColumns(10);
-		hiddenText.setBounds(299, 123, 86, 20);
+		hiddenText.setBounds(315, 117, 86, 20);
 		CharacterInfoPanel.add(hiddenText);
 		
 		JLabel lblHidden = new JLabel("Hidden");
@@ -169,21 +172,21 @@ public class View extends JFrame {
 		CharacterInfoPanel.add(lblHidden);
 		
 		JLabel lblWeapons = new JLabel("Weapons");
-		lblWeapons.setBounds(224, 148, 46, 14);
+		lblWeapons.setBounds(224, 148, 65, 14);
 		CharacterInfoPanel.add(lblWeapons);
 		
 		weaponsText = new JTextArea();
 		weaponsText.setLineWrap(true);
-		weaponsText.setBounds(224, 167, 161, 142);
+		weaponsText.setBounds(224, 167, 177, 142);
 		CharacterInfoPanel.add(weaponsText);
 		
 		JLabel lblChits = new JLabel("Chits");
-		lblChits.setBounds(224, 339, 65, 14);
+		lblChits.setBounds(224, 317, 65, 14);
 		CharacterInfoPanel.add(lblChits);
 		
 		chitsText = new JTextArea();
 		chitsText.setLineWrap(true);
-		chitsText.setBounds(224, 364, 161, 128);
+		chitsText.setBounds(224, 342, 177, 142);
 		CharacterInfoPanel.add(chitsText);
 		
 		playsPanel = new JPanel();
@@ -249,19 +252,49 @@ public class View extends JFrame {
 		contentPane.add(movesPanel);
 		movesPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		lblSelectMoveLocation = new JLabel("Select Move Location");
+		JLabel lblSelectMoveLocation = new JLabel("Select Move Location");
 		lblSelectMoveLocation.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
 		movesPanel.add(lblSelectMoveLocation);
 		
 		movesGroup = new ButtonGroup();
 		
-		btnSelectMoves = new JButton("Select");
+		JButton btnSelectMoves = new JButton("Select");
 		btnSelectMoves.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//TODO: add event handler
+				for(Enumeration<AbstractButton> buttons = movesGroup.getElements(); buttons.hasMoreElements();){
+					AbstractButton button = buttons.nextElement();
+					if (button.isSelected()) {
+						control.handleMoveSelection(button.getText());
+					}
+				}
 			}
 		});
 		movesPanel.add(btnSelectMoves);
+		
+		alertPanel = new JPanel();
+		alertPanel.setBorder(new LineBorder(Color.GRAY));
+		alertPanel.setBounds(750, 500, 524, 192);
+		contentPane.add(alertPanel);
+		alertPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
+		JLabel lblAlert= new JLabel("Select Weapon to Alert");
+		lblAlert.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
+		movesPanel.add(lblAlert);
+		
+		alertGroup = new ButtonGroup();
+		
+		JButton btnSelectAlert = new JButton("Select");
+		btnSelectAlert.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				for(Enumeration<AbstractButton> buttons = movesGroup.getElements(); buttons.hasMoreElements();){
+					AbstractButton button = buttons.nextElement();
+					if (button.isSelected()) {
+						control.handleAlertSelection(button.getText());
+					}
+				}
+			}
+		});
+		movesPanel.add(btnSelectAlert);
 		
 		combatPanel = new JPanel();
 		combatPanel.setBounds(750, 500, 524, 192);
@@ -327,10 +360,76 @@ public class View extends JFrame {
 			}
 		}
 		
+		Player p = control.model.getPlayer();
+		if (p != null){
+			characterText.setText(p.getCharacter().getName().toString());
+			vpText.setText(Integer.toString(p.getVictoryPoints()));
+			healthText.setText(Integer.toString(p.getHealth()));
+			goldText.setText(Integer.toString(p.getGold()));
+			fatigueText.setText(Integer.toString(p.getFatigue()));
+			fameText.setText(Integer.toString(p.getFame()));
+			notorietyText.setText(Integer.toString(p.getNotoriety()));
+			hiddenText.setText(String.valueOf(p.isHidden()));
+			
+			Armour[] armour = p.getArmour();
+			String armourS = "";
+			if (armour != null) {
+				for(int i = 0; i < armour.length; i++){
+					if(armour[i] != null) {
+						armourS += armour[i].getType().toString() + " weight - " + armour[i].getWeight().toString() + 
+								" health - " + armour[i].getHealth() + " damaged - " + String.valueOf(armour[i].isDamaged()) + 
+								" active - " + String.valueOf(armour[i].isActive()) + "\n";
+					}
+				}
+			}
+			armourText.setText(armourS);
+			
+			Treasure[] treasures = p.getTreasures();
+			String treasuresS = "";
+			if (treasures != null) {
+				for(int i = 0; i < treasures.length; i++){
+					if ( treasures[i] != null) {
+						treasuresS += treasures[i].getType() + " gold - " + Integer.toString(treasures[i].getGold()) + "\n";
+					}
+				}
+			}
+			treasuresText.setText(treasuresS);
+			
+			Weapon[] weapons = p.getWeapons();
+			String weaponsS = "";
+			if (weapons != null) {
+				for(int i = 0; i < weapons.length; i++){
+					if (weapons[i] != null) {
+						weaponsS += weapons[i].getType().toString() + " weight - " + weapons[i].getWeight().toString()+ 
+								" damage - " + weapons[i].getDamage() + " attack - " + weapons[i].getAttack() + 
+								" length - " + Integer.toString(weapons[i].getLength()) + 
+								" speed - " + Integer.toString(weapons[i].getSpeed()) + 
+								" sharpness - " + Integer.toString(weapons[i].getSharpness()) + 
+								" ranged - " + String.valueOf(weapons[i].isRanged()) + 
+								" active - " + String.valueOf(weapons[i].isActive()) + "\n";
+					}
+				}
+			}
+			weaponsText.setText(weaponsS);
+			
+			Chit[] chits = p.getChits();
+			String chitsS = "";
+			if (chits != null) {
+				for(int i = 0; i < chits.length; i++){
+					if (chits[i] != null) {
+						chitsS += chits[i].getType() + " name - " + chits[i].getName() + "\n";
+					}
+				}
+			}
+			chitsText.setText(chitsS);
+			textDisplay.setText(control.model.getMessages());
+		}
+		
 		switch(control.state){
 			case CHOOSE_CHARACTER:
 				break;
 			case CHOOSE_PLAYS:
+				alertPanel.setVisible(false);
 				combatPanel.setVisible(false);
 				movesPanel.setVisible(false);
 				playsPanel.setVisible(true);
@@ -348,15 +447,33 @@ public class View extends JFrame {
 					movesGroup.add(button);
 					movesPanel.add(button, movesPanel.getComponents().length - 2);
 				}
+				alertPanel.setVisible(false);
 				combatPanel.setVisible(false);
 				movesPanel.setVisible(true);
 				playsPanel.setVisible(false);
 				break;
 			case ALERT:
+				for(Enumeration<AbstractButton> buttons = alertGroup.getElements(); buttons.hasMoreElements();){
+					AbstractButton button = buttons.nextElement();
+					alertGroup.remove(button);
+					alertPanel.remove(button);
+				}
+				Weapon[] weapons = this.control.model.getPlayer().getWeapons();
+				for(int i = 0; i < weapons.length; i++){
+					String label = weapons[i].getType().toString() + " " + weapons[i].isActive();
+					JRadioButton button = new JRadioButton(label);
+					alertGroup.add(button);
+					alertPanel.add(button, alertPanel.getComponents().length - 2);
+				}
+				alertPanel.setVisible(false);
+				combatPanel.setVisible(false);
+				movesPanel.setVisible(true);
+				playsPanel.setVisible(false);
 				break;
 			case REST:
 				break;
 			case CHOOSE_COMBAT:
+				alertPanel.setVisible(false);
 				combatPanel.setVisible(true);
 				movesPanel.setVisible(false);
 				playsPanel.setVisible(false);

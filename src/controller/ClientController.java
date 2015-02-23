@@ -74,10 +74,34 @@ public class ClientController extends Handler{
 		this.view.update();
 	}
 	
+	/**
+	 * Should send the selected combat moves to the server
+	 * @param a the player's attack
+	 * @param d the player's defense
+	 * @param m the player's maneuver
+	 */
 	public void handleCombatMoves(Attacks a, Defenses d, Maneuvers m){
 		System.out.println(a);
 		System.out.println(d);
 		System.out.println(m);
+		this.view.update();
+	}
+	
+	/**
+	 * Should parse the move and send it to the server
+	 * @param location where the player wants to move, in the form "<TileName> clearing <clearingNumber>"
+	 */
+	public void handleMoveSelection(String location){
+		System.out.println(location);
+		this.view.update();
+	}
+	
+	/**
+	 * Should parse the weapon and send it to the server
+	 * @param weapon the weapon to alert, in the form "<WeaponName> <active>"
+	 */
+	public void handleAlertSelection(String weapon){
+		System.out.println(weapon);
 		this.view.update();
 	}
 	

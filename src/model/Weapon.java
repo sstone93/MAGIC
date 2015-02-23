@@ -67,6 +67,9 @@ public class Weapon {
     public void setDamage(ItemWeight damage) {
         this.damage = damage;
     }
+    public WeaponName getType() {
+    	return type;
+    }
     public String toString(){
     	return this.type.toString();
     }
