@@ -44,6 +44,10 @@ public class NetworkClient extends NetworkEntity  implements Runnable{
 	public void run(){
 	}
 	
+	public void send(Object o){
+		clients[0].send(o);
+	}
+	
 	/**
 	 * This method is called to start up the client.
 	 */
