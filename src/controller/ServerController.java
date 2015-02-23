@@ -188,8 +188,7 @@ public class ServerController extends Handler{
     		Player[] canBlock = blockable(player);					// check if they can block another player
     		for (int j = 0; j < canBlock.length; j++) {
     			if (canBlock[j] != null) {
-    				// TODO: the player has the option to block them. Should I just do that automatically for now??
-    				// TODO: otherwise, that'll be networking
+    				canBlock[j].setBlocked(true);
     				// TODO: send message to players that have been blocked
     			}
     		}
@@ -227,12 +226,16 @@ public class ServerController extends Handler{
         Player player = null;
 
         // TODO: player has to discard any items an active move chit can't carry
+        
         // TODO: treasures
         // TODO: Actually determine score based on individual victory points? or is it different for a day 28 time out?
         for (int i = 0; i < playerCount; i++ ) {
             player = players[i];
             if (winner == null)
                 winner = players[i];
+            
+//            player.removeArmourWithHigherWeight();
+//            player.removeWeaponsWithHigherWeight();
 
             int basicScore     = 0;
             int fameScore      = players[i].getFame() / 10;
