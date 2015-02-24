@@ -3,13 +3,19 @@ package controller;
 import networking.Message;
 import networking.NetworkServer;
 import model.Amazon;
+import model.Berserker;
+import model.BlackKnight;
 import model.Board;
+import model.Captain;
 import model.Clearing;
 import model.CombatMoves;
+import model.Dwarf;
+import model.Elf;
 import model.Monster;
 import model.Player;
 import model.Swordsman;
 import model.Treasure;
+import model.WhiteKnight;
 
 import java.util.Arrays;
 
@@ -87,40 +93,34 @@ public class ServerController extends Handler{
 			}
 			if( m.getType() == MessageType.CHARACTER_SELECT){
 				if(state == GameState.CHOOSE_CHARACTER){
-					players[addedPlayers] = new Player((CharacterName) m.getData(), ID);
+					switch((CharacterName) m.getData()[0]){
+					
+					case AMAZON: players[addedPlayers] = new Player(new Amazon(), ID); break;
+					case BERSERKER:players[addedPlayers] = new Player(new Berserker() , ID);
+					break;
+					case BLACK_KNIGHT:players[addedPlayers] = new Player(new BlackKnight(), ID);
+					break;
+					case CAPTAIN:players[addedPlayers] = new Player(new Captain(), ID);
+					break;
+					case DWARF:players[addedPlayers] = new Player(new Dwarf(), ID);
+					break;
+					case ELF:players[addedPlayers] = new Player(new Elf(), ID);
+					break;
+					case SWORDSMAN:players[addedPlayers] = new Player(new Swordsman(), ID);
+					break;
+					case WHITE_KNIGHT:players[addedPlayers] = new Player(new WhiteKnight(), ID);
+					break;
+					default:;
+					break;
+					
+					}
 					addedPlayers += 1;
 				}else{
-					network.send(ID, "NOT ACCEPTING COMBAT MOVES ATM");
+					network.send(ID, "NOT ACCEPTING CHARACTER SELECT ATM");
 				}
 			}
 		}
 	}
-	
-	public Character createCharacter(CharacterName n){
-		switch(n){
-		case AMAZON: return new Amazon(); break;
-		case BERSERKER:
-			
-			break;
-		case BLACK_KNIGHT:
-			break;
-		case CAPTAIN:
-			break;
-		case DWARF:
-			break;
-		case ELF:
-			break;
-		case SWORDSMAN:
-			break;
-		case WHITE_KNIGHT:
-			break;
-		default:
-			break;
-	}
-		
-		
-	}
-	
 
 	/**
 	 * Turns a player ID into a player
@@ -756,27 +756,16 @@ public class ServerController extends Handler{
 		state = GameState.CHOOSE_CHARACTER;
     	addedPlayers = 0;
     	network.broadCast("CHARACTER SELECT");
-    	while(addedPlayers < Config.MAX_CLIENTS){}				//cant get past here until the list of players is done
+    	while(addedPlayers < Config.MAX_CLIENTS){}		//cant get past here until the list of players is done
     	state = GameState.NULL;
-		
-		//create array of players, feed it to the board constructor
-		//int[] IDs = network.getIDs();
-
-		//for(int i=0; i<Config.MAX_CLIENTS; i++){
-			//players[i] = new Player(new Swordsman(), IDs[i]);
-	//	}
 
 		//instanciate the model
 		this.board = new Board(players);
 		System.out.println("Server Models Created.");
 
 		network.broadCast(board);  				//sends the board to all clients
-
-		//broadcast each player to the proper client
-		distributeCharacters();
-
-		//starts the game!
-		startDay();
+		distributeCharacters();					//broadcast each player to the proper client
+		startDay();								//starts the game!
 
 	}
 
