@@ -243,6 +243,14 @@ public class Board implements Serializable{
 		// which right now is a garrison name
 		//update the INN with all the new occupants
 		
+		for(int i=0; i < p.length; i++){
+			p[i].setLocation(tiles[11].getClearing(5));
+			tiles[11].getClearing(5).addOccupant(p[i]);
+		}
+		
+		
+		
+		
 	}
 	
 	 // TODO: this is the function for monsters changing clearings

@@ -183,7 +183,7 @@ public class ServerController extends Handler{
     public Player[] blockable(Player player) {
     	Player[] blockedPlayers = player.getLocation().getOccupants();
     	for (int i = 0; i < blockedPlayers.length; i++) {
-    		if (blockedPlayers[i].isHidden()) {
+    		if (blockedPlayers[i] != null && blockedPlayers[i].isHidden()) {
     			blockedPlayers[i] = null;
     		}
     	}
@@ -212,7 +212,7 @@ public class ServerController extends Handler{
     	Player[] sameClearingPlayers = player.getLocation().getOccupants();
     	for (int i = 0; i < sameClearingPlayers.length; i++) {
     		// do not unhide yourself
-    		if (sameClearingPlayers[i].getID() != player.getID()) 
+    		if (sameClearingPlayers[i] != null && sameClearingPlayers[i].getID() != player.getID()) 
     		    sameClearingPlayers[i].setHidden(false);
     	}
 
@@ -286,6 +286,7 @@ public class ServerController extends Handler{
     		System.out.println("moves: " + moves + " activities: " + player.getActivities().length);
     		
     		Player[] canBlock = blockable(player);					// check if they can block another player
+    		
     		if (currentDay != 1) {
 	    		for (int j = 0; j < canBlock.length; j++) {
 	    			if (canBlock[j] != null) {
@@ -374,6 +375,7 @@ public class ServerController extends Handler{
 			}
     	}	//TODO HANDLE PLAYERS DROPPING OUT DURING THIS STEP
     	state = GameState.NULL;
+    	System.out.println("FINISH COLLECTING activities");
     }
 
     public void collectCombat(){
@@ -389,6 +391,7 @@ public class ServerController extends Handler{
 			}
     	}	//TODO HANDLE PLAYERS DROPPING OUT DURING THIS STEP
     	state = GameState.NULL;
+    	System.out.println("FINISH COLLECTING COMBATTARGET");
     }
 
     public void updateClients(){
@@ -504,8 +507,19 @@ public class ServerController extends Handler{
     	recievedCombat = 0;
     	network.send(attacker.getID(), "SEND COMBATMOVES");
     	network.send(defender.getID(), "SEND COMBATMOVES");
-    	while(recievedCombat < 2){}
+    	
+    	while(recievedCombat < 2){
+    		try {
+				Thread.sleep(20);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+    	
+    	System.out.println("got combat moves");
     	state = GameState.NULL;
+    	
     	if (attacker.isDead() == true) {
     		network.send(attacker.getID(), "You are dead.");
     		return;

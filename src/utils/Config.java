@@ -2,7 +2,7 @@ package utils;
 
 public class Config {
 	
-	public static final int    MAX_CLIENTS  = 1;
+	public static final int    MAX_CLIENTS  = 2;
 	public static final int    DEFAULT_PORT = 4444;
 	public static final String DEFAULT_HOST = "127.0.0.1";
 	public static final int    WEAPON_AND_ARMOUR_COUNT = 100;

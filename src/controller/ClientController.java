@@ -132,8 +132,8 @@ public class ClientController extends Handler{
 	 */
 	//TODO CREATES COMBAT MOVE OBJECT, SENDS IT IN THE MESSAGE
 	public void handleCombatMoves(Attacks a, Defenses d, Maneuvers m, int aF, int mF){
-		Object[] mes = new Object[0];
-		mes[0] = new CombatMoves(a, aF, m, mF, d);
+		CombatMoves temp = new CombatMoves(a, aF, m, mF, d);
+		Object[] mes = {temp};
 		network.send(new Message(MessageType.COMBAT_MOVES, mes));
 		System.out.println("Sent COMBATMOVES");
 		this.view.update();
@@ -180,8 +180,7 @@ public class ClientController extends Handler{
 	 * @param name the CharacterName of the player to target
 	 */
 	public void handleTargetSelection(CharacterName name){
-		Object[] mes = new Character[0];
-		mes[0] = name;
+		Object[] mes = {name};
 		network.send(new Message(MessageType.COMBAT_TARGET, mes));
 		System.out.println("Sent target selection");
 		this.view.update();

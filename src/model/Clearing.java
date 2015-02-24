@@ -15,7 +15,7 @@ public class Clearing implements Serializable{
     public int nextConnection =0;
     public Tile parent;
     public Treasure[] treasures;
-    public Player[] occupants = new Player[Config.MAX_CLIENTS];
+    public Player[] occupants;
     public int nextOccupant = 0;
 
     Clearing(int location, Tile parent) {
@@ -24,15 +24,22 @@ public class Clearing implements Serializable{
         this.parent   = parent;
         connections   = new Clearing[4];		//4 is the most connections had by any
         treasures     = new Treasure[10]; // arbitrary number
+        this.occupants = new Player[Config.MAX_CLIENTS];
+       // occupants = 
         // TODO: how should the treasures be added to the tile?
     }
 
+    public void addOccupant(Player p){
+    	occupants[nextOccupant] = p;
+    	nextOccupant += 1;
+    }
+    
     /**
      * Returns all the players currently in the clearing
      * @return List of Players in the clearing
      */
     public Player[] getOccupants(){
-    	return occupants;
+    	return this.occupants;
     }
     
     /**
