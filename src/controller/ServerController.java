@@ -831,6 +831,7 @@ public class ServerController extends Handler{
 		System.out.println("Server Models Created.");
 
 		network.broadCast(board);  				//sends the board to all clients
+		System.out.println(board);
 		distributeCharacters();					//broadcast each player to the proper client
 		startDay();								//starts the game!
 

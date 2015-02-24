@@ -26,7 +26,7 @@ public class Board implements Serializable{
 	public Tile[] tiles;
 	public Garrison[] garrisons;
 	ArrayList<SmallTreasure> small = new ArrayList<SmallTreasure>();
-	ArrayList<LargeTreasure> large = new ArrayList<LargeTreasure>();
+	ArrayList<Treasure> large = new ArrayList<Treasure>();
 	ArrayList<TreasureWithinTreasure> twit = new ArrayList<TreasureWithinTreasure>();
 
 	/**
@@ -155,14 +155,30 @@ public class Board implements Serializable{
 		//chest = 2 large, thief = 1, toad = 1, crypt = 1
 		
 		//instanciate the treasures within treasures
-		for (TreasureWithinTreasureName n : TreasureWithinTreasureName.values()) {
-			twit.add(new TreasureWithinTreasure(n));
-		}
+		Treasure[] t1 = {large.get(0), large.get(1)};
+		large.remove(0); large.remove(0);
+		twit.add(new TreasureWithinTreasure(TreasureWithinTreasureName.CHEST, t1));
 
+		Treasure[] t2 = {large.get(0)};
+		large.remove(0);
+		twit.add(new TreasureWithinTreasure(TreasureWithinTreasureName.REMAINS_OF_THIEF, t2));
+		
+		Treasure[] t3 = {large.get(0)};
+		large.remove(0);
+		twit.add(new TreasureWithinTreasure(TreasureWithinTreasureName.TOADSTOOL_CIRCLE, t3));
+		
+		Treasure[] t4 = {large.get(0)};
+		large.remove(0);
+		twit.add(new TreasureWithinTreasure(TreasureWithinTreasureName.CRYPT_OF_THE_KNIGHT, t4));
+		
 		Collections.shuffle(small);
 		Collections.shuffle(large);
 		Collections.shuffle(twit);
 		
+		while(!twit.isEmpty()){
+			large.add(twit.get(0));
+			large.remove(0);
+		}
 	}
 	
 	public void createAndPlaceWarningChits(int p1, int p2, int p3, int p4, int p5){
