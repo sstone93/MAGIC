@@ -109,6 +109,7 @@ public class View extends JFrame {
 		CharacterInfoPanel.add(lblScore);
 		
 		armourText = new JTextArea();
+		armourText.setEditable(false);
 		armourText.setLineWrap(true);
 		armourText.setBounds(10, 164, 177, 142);
 		CharacterInfoPanel.add(armourText);
@@ -136,6 +137,7 @@ public class View extends JFrame {
 		CharacterInfoPanel.add(lblTreasures);
 		
 		treasuresText = new JTextArea();
+		treasuresText.setEditable(false);
 		treasuresText.setLineWrap(true);
 		treasuresText.setBounds(10, 342, 177, 142);
 		CharacterInfoPanel.add(treasuresText);
@@ -195,6 +197,7 @@ public class View extends JFrame {
 		CharacterInfoPanel.add(lblWeapons);
 		
 		weaponsText = new JTextArea();
+		weaponsText.setEditable(false);
 		weaponsText.setLineWrap(true);
 		weaponsText.setBounds(224, 167, 177, 142);
 		CharacterInfoPanel.add(weaponsText);
@@ -204,6 +207,7 @@ public class View extends JFrame {
 		CharacterInfoPanel.add(lblChits);
 		
 		chitsText = new JTextArea();
+		chitsText.setEditable(false);
 		chitsText.setLineWrap(true);
 		chitsText.setBounds(224, 342, 177, 142);
 		CharacterInfoPanel.add(chitsText);
