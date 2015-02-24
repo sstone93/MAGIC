@@ -68,7 +68,7 @@ public class ClientController extends Handler{
 				//System.out.println("Your NetworkClient has CLOSED.");
 			}
 			if(text.equalsIgnoreCase("SEND COMBAT")){
-				state = GameState.CHOOSE_COMBAT;
+				state = GameState.CHOOSE_COMBATTARGET;
 				model.addMessage("Please Select Combat TARGET");
 				view.update();
 				//System.out.println("Your NetworkClient has CLOSED.");
@@ -120,9 +120,11 @@ public class ClientController extends Handler{
 	 * @param a the player's attack
 	 * @param d the player's defense
 	 * @param m the player's maneuver
+	 * @param aF the player's attack fatigue
+	 * @param mF the player's maneuver fatigue
 	 */
 	//TODO CREATES COMBAT MOVE OBJECT, SENDS IT IN THE MESSAGE
-	public void handleCombatMoves(Attacks a, Defenses d, Maneuvers m){
+	public void handleCombatMoves(Attacks a, Defenses d, Maneuvers m, int aF, int mF){
 		Object[] mes = {a,d,m};
 		network.send(new Message(MessageType.ACTIVITIES, mes));
 		System.out.println("Sent "+a+d+m);
@@ -162,6 +164,15 @@ public class ClientController extends Handler{
 		System.out.println(name);
 		this.view.update();
 	}
+	
+	/**
+	 * Handles the selection of a target for combat
+	 * @param name the CharacterName of the player to target
+	 */
+	public void handleTargetSelection(CharacterName name){
+		System.out.println(name);
+	}
+	
 	/**
 	 * Running this method will trigger the process of creating a MagicRealm client.
 	 * @param args Command line arguments, likely to remain unused

@@ -206,10 +206,8 @@ public class ServerController extends Handler{
     }
 
     /**
-     * Sets a player's weapon to a specific state s
+     * Sets a player's weapon to the opposite state of what it is currently
      * @param p The player
-     * @param pos The position of the weapon in the weapon array
-     * @param state the new state of the weapon
      */
     public void alert(Player p) {
        p.getWeapons()[0].setActive(!p.getWeapons()[0].isActive());
@@ -224,9 +222,10 @@ public class ServerController extends Handler{
             return false;
         }
 
-        unAlertWeapons();		//moved this functionality to the player class, where it belongs
-        						//TODO face up map chits (except lost city and lost castle) are turned face down
+        unAlertWeapons();
+        //TODO face up map chits (except lost city and lost castle) are turned face down
         
+        // reset their fatigue
         for (int i = 0; i < playerCount; i++) {
         	players[i].setFatigue(0);
         }
@@ -235,7 +234,7 @@ public class ServerController extends Handler{
     }
 
     /**
-     * Cycles through players, unalterts their weapons
+     * Cycles through players, unalerts their weapons
      */
     public void unAlertWeapons(){
     	for (int i = 0; i < players.length; i++) {
@@ -252,27 +251,33 @@ public class ServerController extends Handler{
         //TODO reset natives
     }
 
- // TODO: need to figure out how to save the clearing the player wants to move to
-    // and the weapons/armour (??) they want to alert/unalert
+    /**
+     * Cycles through players and their moves for the day
+     */
     public void doTodaysActivities(Player player) {
-    	for (int i = 0; i < player.getActivities().length; i++) {
+    	int moves = 0;
+    	while (moves < player.getActivities().length) {
+    		// TODO: for testing
+    		System.out.println("moves: " + moves + " activities: " + player.getActivities().length);
+    		
     		Player[] canBlock = blockable(player);					// check if they can block another player
     		if (currentDay != 1) {
 	    		for (int j = 0; j < canBlock.length; j++) {
 	    			if (canBlock[j] != null) {
 	    				canBlock[j].setBlocked(true);
+	    				System.out.println("blocking player!"); // TODO: for testing
 	    				// TODO: send message to players that have been blocked
 	    			}
 	    		}
     		}
 
     		Object[] activities = player.getActivities();
-    		int moves = 0;
-    		if (!player.isBlocked()) {				//assuming the player is not being blocked by another
+    		
+    		if (!player.isBlocked()) {	//assuming the player is not being blocked by another
     			// format: [MOVE, clearing]
 
     			if (activities[moves] != null) {
-		    		switch((Actions) activities[0]) {
+		    		switch((Actions) activities[moves]) {
 
 		    		case MOVE: board.move(player, (Clearing)activities[moves + 1]); moves = moves + 2; break;
 		    		case HIDE: hide(player); moves++; break;
@@ -284,7 +289,7 @@ public class ServerController extends Handler{
 		    		}
     			}
     		}
-    		else if (activities[0] == Utility.Actions.HIDE) {
+    		else if (activities[moves] == Utility.Actions.HIDE) {
     			player.setBlocked(false);
     			hide(player);
     			moves++;

@@ -1,7 +1,13 @@
 package model;
 
-public class Treasure {
-    Clearing location;
+import java.io.Serializable;
+
+public class Treasure implements Serializable{
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -2440018576886400929L;
+	Clearing location;
     String   type = "gold"; // for now we only have gold
     int      gold = 10; // initial
 

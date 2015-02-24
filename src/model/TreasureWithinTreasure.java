@@ -6,6 +6,10 @@ import utils.Utility.WeaponName;
 
 public class TreasureWithinTreasure extends Treasure{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8782838058247096888L;
 	private TreasureWithinTreasureName name;
 	private Treasure[] treasures;
 	private Weapon[] weapon;
@@ -61,15 +65,19 @@ public class TreasureWithinTreasure extends Treasure{
 	
 	@Override
 	public String toString(){
-		System.out.println(name.toString()+", Value:"+gold);
+		System.out.println(name.toString()+", Value:"+gold+", Contains: ");
 		for(int i=0;i<treasures.length;i++){					//prints treasures it contains
 			System.out.println("	"+treasures[i]);
 		}
-		for(int i=0;i<treasures.length;i++){					//prints weapons it contains
-			System.out.println("	"+treasures[i]);
+		for(int i=0;i<armour.length;i++){					//prints weapons it contains
+			if(armour[i] != null){
+				System.out.println("	"+armour[i]);
+			}
 		}
-		for(int i=0;i<treasures.length;i++){					//prints armour it contains
-			System.out.println("	"+treasures[i]);
+		for(int i=0;i<weapon.length;i++){					//prints armour it contains
+			if(weapon[i] != null){
+				System.out.println("	"+weapon[i]);
+			}
 		}
 		
 		return "";

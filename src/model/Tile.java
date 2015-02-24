@@ -16,6 +16,7 @@ public class Tile implements Serializable{
 	private int nextClearing =0;
 	private int x;
 	private int y;
+	private MapChit sound;
 	
 	/**
 	 * 

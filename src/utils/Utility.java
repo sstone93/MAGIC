@@ -39,10 +39,10 @@ public class Utility {
         }
         return false;
     }
-    
+
     public static String getTileImage(TileName name) {
     	switch(name){
-	    	case AWFULVALLEY: return "awfulvalley1.gif"; 
+	    	case AWFULVALLEY: return "awfulvalley1.gif";
 	    	case BADVALLEY: return "badvalley1.gif";
 	    	case BORDERLAND: return "borderland1.gif";
 	    	case CAVERN: return "cavern1.gif";
@@ -65,17 +65,17 @@ public class Utility {
 	    	default: return null;
     	}
     }
-    
+
     public static String getGarrisonImage(GarrisonName name) {
     	switch(name){
-	    	case CHAPEL: return "chapel.gif"; 
+	    	case CHAPEL: return "chapel.gif";
 	    	case HOUSE: return "house.gif";
 	    	case INN: return "inn.gif";
 	    	case GUARD: return "guard.gif";
 	    	default: return null;
     	}
     }
-    
+
     public enum MessageType {COMBAT_TARGET, COMBAT_MOVES, CHARACTER_SELECT, ACTIVITIES}
 
     public enum ItemWeight {NEGLIGIBLE, LIGHT, MEDIUM, HEAVY, TREMENDOUS}
@@ -130,12 +130,12 @@ public class Utility {
     public enum TreasureLocations{ HOARD, LAIR, ALTAR, SHRINE, POOL, VAULT, CAIRNS, STATUE, LOST_CASTLE, LOST_CITY}
 
     public enum Actions {MOVE, HIDE, ALERT, REST, SEARCH, TRADE, FOLLOW}
-    
+
     public enum Attacks {THRUST, SWING, SMASH}
-    
+
     public enum Maneuvers {CHARGE, DODGE, DUCK}
-    
+
     public enum Defenses {AHEAD, SIDE, ABOVE}
-    
-    public enum GameState {CHOOSE_CHARACTER, CHOOSE_PLAYS, MOVE, ALERT, REST, CHOOSE_COMBAT, CHOOSE_COMBATMOVES, NULL}
+
+    public enum GameState {CHOOSE_CHARACTER, CHOOSE_PLAYS, MOVE, ALERT, CHOOSE_COMBATTARGET, CHOOSE_COMBAT, CHOOSE_COMBATMOVES, NULL}
 }
