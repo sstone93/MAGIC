@@ -32,7 +32,9 @@ public class View extends JFrame {
 	private JPanel combatPanel;
 	private JPanel movesPanel;
 	private JPanel alertPanel;
+	private JPanel characterSelectPanel;
 	private JLayeredPane boardPanel;
+	private JScrollPane scrollPanel;
 	private JTextField characterText;
 	private JTextField vpText;
 	private JTextField healthText;
@@ -235,17 +237,140 @@ public class View extends JFrame {
 		contentPane.add(textDisplay);
 		textDisplay.setEditable(false);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane.setBounds(0, 0, 819, 500);
-		contentPane.add(scrollPane);
+		scrollPanel = new JScrollPane();
+		scrollPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPanel.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPanel.setBounds(0, 0, 819, 500);
+		contentPane.add(scrollPanel);
 		
 		boardPanel = new JLayeredPane();
 		boardPanel.setPreferredSize(new Dimension(800, 1018));
-		scrollPane.setViewportView(boardPanel);
-		boardPanel.setLayout(null);
+		scrollPanel.setViewportView(boardPanel);
+		boardPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
+		characterSelectPanel = new JPanel();
+		characterSelectPanel.setPreferredSize(new Dimension(800, 1200));
+		characterSelectPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
+		try{
+			BufferedImage pic;
+			pic = ImageIO.read(this.getClass().getResource("amazonDetail.jpg"));
+			JButton btnAmazon = new JButton(new ImageIcon(pic));
+			btnAmazon.setSize(360, 284);
+			btnAmazon.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					control.handleCharacterSelection(CharacterName.AMAZON);
+				}
+			});
+			characterSelectPanel.add(btnAmazon);
+		} catch (IOException e){
+			
+		}
+		
+		try{
+			BufferedImage pic;
+			pic = ImageIO.read(this.getClass().getResource("berserkerDetail.jpg"));
+			JButton btnBerserker = new JButton(new ImageIcon(pic));
+			btnBerserker.setSize(360, 284);
+			btnBerserker.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					control.handleCharacterSelection(CharacterName.BERSERKER);
+				}
+			});
+			characterSelectPanel.add(btnBerserker);
+		} catch (IOException e){
+			
+		}
+		
+		try{
+			BufferedImage pic;
+			pic = ImageIO.read(this.getClass().getResource("black_knightDetail.jpg"));
+			JButton btnBlack = new JButton(new ImageIcon(pic));
+			btnBlack.setSize(360, 284);
+			btnBlack.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					control.handleCharacterSelection(CharacterName.BLACK_KNIGHT);
+				}
+			});
+			characterSelectPanel.add(btnBlack);
+		} catch (IOException e){
+			
+		}
+		
+		try{
+			BufferedImage pic;
+			pic = ImageIO.read(this.getClass().getResource("captainDetail.jpg"));
+			JButton btnCaptain = new JButton(new ImageIcon(pic));
+			btnCaptain.setSize(360, 284);
+			btnCaptain.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					control.handleCharacterSelection(CharacterName.CAPTAIN);
+				}
+			});
+			characterSelectPanel.add(btnCaptain);
+		} catch (IOException e){
+			
+		}
+		
+		try{
+			BufferedImage pic;
+			pic = ImageIO.read(this.getClass().getResource("dwarfDetail.jpg"));
+			JButton btnDwarf = new JButton(new ImageIcon(pic));
+			btnDwarf.setSize(360, 284);
+			btnDwarf.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					control.handleCharacterSelection(CharacterName.DWARF);
+				}
+			});
+			characterSelectPanel.add(btnDwarf);
+		} catch (IOException e){
+			
+		}
+		
+		try{
+			BufferedImage pic;
+			pic = ImageIO.read(this.getClass().getResource("elfDetail.jpg"));
+			JButton btnElf = new JButton(new ImageIcon(pic));
+			btnElf.setSize(360, 284);
+			btnElf.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					control.handleCharacterSelection(CharacterName.ELF);
+				}
+			});
+			characterSelectPanel.add(btnElf);
+		} catch (IOException e){
+			
+		}
+		
+		try{
+			BufferedImage pic;
+			pic = ImageIO.read(this.getClass().getResource("swordsmanDetail.jpg"));
+			JButton btnSwordsman = new JButton(new ImageIcon(pic));
+			btnSwordsman.setSize(360, 284);
+			btnSwordsman.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					control.handleCharacterSelection(CharacterName.SWORDSMAN);
+				}
+			});
+			characterSelectPanel.add(btnSwordsman);
+		} catch (IOException e){
+			
+		}
+		
+		try{
+			BufferedImage pic;
+			pic = ImageIO.read(this.getClass().getResource("white_knightDetail.jpg"));
+			JButton btnWhite = new JButton(new ImageIcon(pic));
+			btnWhite.setSize(360, 284);
+			btnWhite.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					control.handleCharacterSelection(CharacterName.WHITE_KNIGHT);
+				}
+			});
+			characterSelectPanel.add(btnWhite);
+		} catch (IOException e){
+			
+		}
 		movesPanel = new JPanel();
 		movesPanel.setBorder(new LineBorder(Color.GRAY));
 		movesPanel.setBounds(750, 500, 524, 192);
@@ -334,32 +459,33 @@ public class View extends JFrame {
 	
 	public void update(){
 		Board b = control.model.getBoard();
-		boardPanel.removeAll();
-		BufferedImage pic;
-		for (int i = 0; i < b.tiles.length; i++){
-			try {
-				TileName name = b.tiles[i].getName();
-				pic = ImageIO.read(this.getClass().getResource(Utility.getTileImage(name)));
-				JLabel tile = new JLabel(new ImageIcon(pic));
-				tile.setBounds(b.tiles[i].getX() - 100, b.tiles[i].getY() - 86, 200, 173);
-				boardPanel.add(tile);
-			} catch (IOException e){
-				
+		if (b != null) {
+			boardPanel.removeAll();
+			BufferedImage pic;
+			for (int i = 0; i < b.tiles.length; i++){
+				try {
+					TileName name = b.tiles[i].getName();
+					pic = ImageIO.read(this.getClass().getResource(Utility.getTileImage(name)));
+					JLabel tile = new JLabel(new ImageIcon(pic));
+					tile.setBounds(b.tiles[i].getX() - 100, b.tiles[i].getY() - 86, 200, 173);
+					boardPanel.add(tile);
+				} catch (IOException e){
+					
+				}
+			}
+			for (int i = 0; i < b.garrisons.length; i++){
+				try {
+					GarrisonName name = b.garrisons[i].getName();
+					pic = ImageIO.read(this.getClass().getResource(Utility.getGarrisonImage(name)));
+					JLabel garrison = new JLabel(new ImageIcon(pic));
+					garrison.setBounds(b.garrisons[i].getLocation().parent.getX() - 25, b.garrisons[i].getLocation().parent.getY() - 21, 50, 43);
+					boardPanel.add(garrison, new Integer(5), 0);
+					garrison.repaint();
+				} catch (IOException e){
+					
+				}
 			}
 		}
-		for (int i = 0; i < b.garrisons.length; i++){
-			try {
-				GarrisonName name = b.garrisons[i].getName();
-				pic = ImageIO.read(this.getClass().getResource(Utility.getGarrisonImage(name)));
-				JLabel garrison = new JLabel(new ImageIcon(pic));
-				garrison.setBounds(b.garrisons[i].getLocation().parent.getX() - 25, b.garrisons[i].getLocation().parent.getY() - 21, 50, 43);
-				boardPanel.add(garrison, new Integer(5), 0);
-				garrison.repaint();
-			} catch (IOException e){
-				
-			}
-		}
-		
 		Player p = control.model.getPlayer();
 		if (p != null){
 			characterText.setText(p.getCharacter().getName().toString());
@@ -401,10 +527,8 @@ public class View extends JFrame {
 				for(int i = 0; i < weapons.length; i++){
 					if (weapons[i] != null) {
 						weaponsS += weapons[i].getType().toString() + " weight - " + weapons[i].getWeight().toString()+ 
-								" damage - " + weapons[i].getDamage() + " attack - " + weapons[i].getAttack() + 
 								" length - " + Integer.toString(weapons[i].getLength()) + 
 								" speed - " + Integer.toString(weapons[i].getSpeed()) + 
-								" sharpness - " + Integer.toString(weapons[i].getSharpness()) + 
 								" ranged - " + String.valueOf(weapons[i].isRanged()) + 
 								" active - " + String.valueOf(weapons[i].isActive()) + "\n";
 					}
@@ -427,12 +551,14 @@ public class View extends JFrame {
 		
 		switch(control.state){
 			case CHOOSE_CHARACTER:
+				scrollPanel.setViewportView(characterSelectPanel);
 				break;
 			case CHOOSE_PLAYS:
 				alertPanel.setVisible(false);
 				combatPanel.setVisible(false);
 				movesPanel.setVisible(false);
 				playsPanel.setVisible(true);
+				scrollPanel.setViewportView(boardPanel);
 				break;
 			case MOVE:
 				for(Enumeration<AbstractButton> buttons = movesGroup.getElements(); buttons.hasMoreElements();){
@@ -451,6 +577,7 @@ public class View extends JFrame {
 				combatPanel.setVisible(false);
 				movesPanel.setVisible(true);
 				playsPanel.setVisible(false);
+				scrollPanel.setViewportView(boardPanel);
 				break;
 			case ALERT:
 				for(Enumeration<AbstractButton> buttons = alertGroup.getElements(); buttons.hasMoreElements();){
@@ -469,6 +596,7 @@ public class View extends JFrame {
 				combatPanel.setVisible(false);
 				movesPanel.setVisible(true);
 				playsPanel.setVisible(false);
+				scrollPanel.setViewportView(boardPanel);
 				break;
 			case REST:
 				break;
@@ -477,6 +605,7 @@ public class View extends JFrame {
 				combatPanel.setVisible(true);
 				movesPanel.setVisible(false);
 				playsPanel.setVisible(false);
+				scrollPanel.setViewportView(boardPanel);
 				break;
 		}
 		
