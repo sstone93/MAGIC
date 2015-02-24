@@ -23,6 +23,8 @@ import model.Weapon;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 @SuppressWarnings("serial")
 public class View extends JFrame {
@@ -66,6 +68,7 @@ public class View extends JFrame {
 	private JComboBox target;
 	private ButtonGroup movesGroup;
 	private ButtonGroup alertGroup;
+	private JPanel [] iconPanels;
 	
 	/**
 	 * Create the frame.
@@ -580,6 +583,7 @@ public class View extends JFrame {
 		Board b = control.model.getBoard();
 		if (b != null) {
 			boardPanel.removeAll();
+			iconPanels = new JPanel[20];
 			BufferedImage pic;
 			for (int i = 0; i < b.tiles.length; i++){
 				try {
@@ -602,6 +606,41 @@ public class View extends JFrame {
 										c.setBounds(b.tiles[i].getX() - 25, b.tiles[i].getY() - 25, 50, 50);
 										boardPanel.add(c, new Integer(5), 0);
 										c.repaint();
+										
+										if (iconPanels[i] == null){
+											JPanel newPane = new JPanel();
+											newPane.setBounds(b.tiles[i].getX(), b.tiles[i].getY(), 200, 300);
+											newPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+											newPane.setVisible(false);
+											boardPanel.add(newPane, new Integer(10), 0);
+											iconPanels[i] = newPane;
+										}
+										JPanel panel = new JPanel();
+										panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+										panel.setSize(65, 75);
+										JLabel img = new JLabel(new ImageIcon(pic));
+										img.setSize(50, 50);
+										panel.add(img);
+										
+										JLabel lbl = new JLabel(Integer.toString(clearings[j].getClearingNumber()));
+										lbl.setSize(10, 15);
+										panel.add(lbl);
+										iconPanels[i].add(panel);
+										
+										final int index = i;
+										
+										c.addMouseListener(new MouseAdapter() {
+											@Override
+											public void mouseEntered(MouseEvent e) {
+												iconPanels[index].setVisible(true);
+											}
+										});
+										c.addMouseListener(new MouseAdapter() {
+											@Override
+											public void mouseExited(MouseEvent e) {
+												iconPanels[index].setVisible(false);
+											}
+										});
 									}
 								}
 							}
