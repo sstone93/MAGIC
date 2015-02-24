@@ -12,6 +12,7 @@ public class ClientModel {
 	private Board board;
 	private Player player;
 	private String messages;
+	private int    messageCount;
 	
 	public ClientModel(){
 		//Player[] players = new Player[1];
@@ -37,7 +38,13 @@ public class ClientModel {
 	}
 	
 	public void addMessage(String m){
-		this.messages += m+"\n";
+		messageCount++;
+		if (messageCount == 10) {
+			this.messages = m+"\n";
+			messageCount = 0;
+		}
+		else
+			this.messages += m+"\n";
 	}
 	
 	/**
