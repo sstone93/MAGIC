@@ -326,7 +326,7 @@ public class ServerController extends Handler{
      * Ends the game, basicly determines platyers scores and determines the winner
      * @return The winning player
      */
-    public Player endGame() {
+    public void endGame() {
 
         Player winner = null;
         Player player = null;
@@ -354,7 +354,8 @@ public class ServerController extends Handler{
             }
         }
 
-        return winner;
+        network.broadCast(winner.getCharacter().getName()+ " is the winner");
+        network.stop();
     }
 
     /**
@@ -364,7 +365,14 @@ public class ServerController extends Handler{
     	state = GameState.CHOOSE_PLAYS;
     	network.broadCast("SEND MOVES");
     	recievedMoves = 0;
-    	while(recievedMoves < playerCount){}	//TODO HANDLE PLAYERS DROPPING OUT DURING THIS STEP
+    	while(recievedMoves < playerCount){
+    		try {
+				Thread.sleep(20);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}	//TODO HANDLE PLAYERS DROPPING OUT DURING THIS STEP
     	state = GameState.NULL;
     }
 
@@ -372,7 +380,14 @@ public class ServerController extends Handler{
     	state = GameState.CHOOSE_COMBAT;
     	recievedCombat = 0;
     	network.broadCast("SEND COMBAT");
-    	while(recievedCombat < playerCount){}	//TODO HANDLE PLAYERS DROPPING OUT DURING THIS STEP
+    	while(recievedCombat < playerCount){
+    		try {
+				Thread.sleep(20);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}	//TODO HANDLE PLAYERS DROPPING OUT DURING THIS STEP
     	state = GameState.NULL;
     }
 
@@ -776,7 +791,12 @@ public class ServerController extends Handler{
     	System.out.println("start selection loop");
     	
     	while(this.addedPlayers < Config.MAX_CLIENTS){
-    		System.out.println(this.addedPlayers);
+    		try {
+				Thread.sleep(20);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
     	}
     	
     	//cant get past here until the list of players is done

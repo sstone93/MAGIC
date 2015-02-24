@@ -101,6 +101,7 @@ public class NetworkServer extends NetworkEntity implements Runnable{
 		while (busy){}							//stops the server from shutting down while a thread is being added.
 		while (clientCount > 0){
 			this.remove(clients[0].getID());	//Close all threads 1 by 1
+			clientCount --;
 		}
 		System.out.println("Server: 	All Threads Closed.");
 		if (thread != null){		//if the thread is currently exceduting

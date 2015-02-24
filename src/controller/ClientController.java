@@ -64,6 +64,10 @@ public class ClientController extends Handler{
 			String text = ((String) message );
 			if(text.equalsIgnoreCase("NC CLOSED")){
 				model.addMessage("Network Client Has Closed");
+			
+				//TODO SHUT THE CLIENT DOWN!!!!
+				
+				
 				//System.out.println("Your NetworkClient has CLOSED.");
 			}
 			if(text.equalsIgnoreCase("SEND MOVES")){

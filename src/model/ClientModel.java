@@ -37,7 +37,7 @@ public class ClientModel {
 	}
 	
 	public void addMessage(String m){
-		this.messages += m;
+		this.messages += m+"\n";
 	}
 	
 	/**

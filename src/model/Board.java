@@ -33,15 +33,7 @@ public class Board implements Serializable{
 		setupGarrisons();
 		placeGarrisons();
 		placePlayers(players);
-		//System.out.println("Built Board with no Crashes");
-		//instanciateTreasures();
-	}
-	
-	public Board(){
-		tiles = new Tile[20];
-		setupBoard();
-		setupGarrisons();
-		placeGarrisons();
+		setUpMapChits();
 		//System.out.println("Built Board with no Crashes");
 		//instanciateTreasures();
 	}
