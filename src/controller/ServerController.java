@@ -321,7 +321,7 @@ public class ServerController extends Handler{
     		else if (activities[moves] == Utility.Actions.HIDE) {
     			player.setBlocked(false);
     			hide(player);
-    			moves++;
+    			moves=moves+2;
     		}
     	}
     }
