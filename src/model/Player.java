@@ -42,6 +42,41 @@ public class Player implements Serializable{
    // [MOVE, clearing, ALERT, weapon, trueOrFalse, REST, SEARCH, HIDE]
    // so, move needs to be followed by a clearing, and alert by a weapon and true or false (in that order)
 
+    /**
+     * tyring to fix a random networking issue (never changing object)
+     */
+    public Player clone (){
+    	Player p = new Player(this.getCharacter(), this.getID());
+    	p.victoryPoints = this.victoryPoints;
+    	p.gold = this.gold;
+        p.health = this.health;
+        p.fatigue = this.fatigue;
+        p.fame  = this.fame;
+        p.notoriety = this.notoriety;
+        p.finalScore    = this.finalScore;
+        p.order = this.order; // in which order does the player play
+        p.numberOfChits = this.numberOfChits;
+        p.numberOfWeapons = this.numberOfWeapons;
+        p.numberOfArmour = this.numberOfArmour;
+        p.activityCount = this.activityCount;
+        p.treasureCount = this.treasureCount;
+        p.hidden = this.hidden;
+        p.dead = this.dead;
+        p.blocked = this.blocked;
+        p.character = this.character;
+        p.moves = this.moves;
+        p.target = this.target;
+        p.location = this.location;
+        p.armour = this.armour;
+        p.weapons = this.weapons;
+        p.chits = this.chits;
+        p.activities = this.activities; // the players moves for the day
+        p.treasures = this.treasures;
+        p.secretLocations = this.secretLocations;
+        
+    	return p;
+    }
+    
     public Player(Character character, int ID) {
         this.character = character;
         this.chits     = new Chit[100];     // arbitrary number

@@ -800,7 +800,9 @@ public class ServerController extends Handler{
 
 		//sends each player object to the right client
 		for(int i=0;i<playerCount;i++){
-			network.send(players[i].getID(), players[i]);
+			Player t = players[i].clone();
+			network.send(players[i].getID(), t);
+			players[i] = t;
 		}
 
 	}
