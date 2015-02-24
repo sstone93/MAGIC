@@ -29,7 +29,7 @@ public class ClientController extends Handler{
 		this.model = new ClientModel();
 		System.out.println("Client Model Successfully Created.");
 		
-		state = GameState.CHOOSE_PLAYS;
+		state = GameState.CHOOSE_CHARACTER;
 		//instantiate the view
 		this.view = new View(this);
 		view.setVisible(true);									//Activates the GUI
@@ -106,11 +106,19 @@ public class ClientController extends Handler{
 	}
 	
 	/**
+	 * Should verify that character is available and then set character
+	 * @param name the name of the selected character
+	 */
+	public void handleCharacterSelection(CharacterName name){
+		System.out.println(name);
+		this.view.update();
+	}
+	/**
 	 * Running this method will trigger the process of creating a MagicRealm client.
 	 * @param args Command line arguments, likely to remain unused
 	 */
 	public static void main(String args[]){
-		ClientController control = new ClientController();		//instanciate the controller
+		ClientController control = new ClientController();		//Instantiate the controller
 		control.run();											//start the controller
 	}	
 
