@@ -67,6 +67,11 @@ public class ServerController extends Handler{
 	 * @param message the contents of the message
 	 */
 	public void handle(int ID, Object message){
+		
+		if(message == null){
+			
+		}
+		
 		if(message instanceof String){
 			String text = ((String) message );
 			if(text.equalsIgnoreCase("START GAME")){
@@ -125,7 +130,11 @@ public class ServerController extends Handler{
 					break;
 					
 					}
-					addedPlayers += 1;
+					this.addedPlayers += 1;
+					
+					System.out.println((CharacterName) m.getData()[0]);
+					System.out.println(addedPlayers);
+					
 				}else{
 					network.send(ID, "NOT ACCEPTING CHARACTER SELECT ATM");
 				}
@@ -762,9 +771,16 @@ public class ServerController extends Handler{
 		
 		//ask clients to send moves!
 		state = GameState.CHOOSE_CHARACTER;
-    	addedPlayers = 0;
+    	this.addedPlayers = 0;
     	network.broadCast("CHARACTER SELECT");
-    	while(addedPlayers < Config.MAX_CLIENTS){}		//cant get past here until the list of players is done
+    	System.out.println("start selection loop");
+    	
+    	while(this.addedPlayers < Config.MAX_CLIENTS){
+    		System.out.println(this.addedPlayers);
+    	}
+    	
+    	//cant get past here until the list of players is done
+    	System.out.println("end selection loop");
     	state = GameState.NULL;
 
 		//instanciate the model

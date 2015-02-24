@@ -22,7 +22,7 @@ public abstract class NetworkEntity {
 		if (input == null)		//handles random noise
 			return;
 		this.controller.handle(ID, input);	//send message to controller to be handled
-		System.out.println("Controller Told to Handle");
+		//System.out.println("Controller Told to Handle");
 	}
 	
 	/**

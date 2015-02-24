@@ -55,51 +55,53 @@ public class ClientController extends Handler{
 	 * 
 	 */
 	public void handle(int ID, Object message){
+		
+		if(message == null){
+			
+		}
+		
 		if(message instanceof String){
 			String text = ((String) message );
 			if(text.equalsIgnoreCase("NC CLOSED")){
 				model.addMessage("Network Client Has Closed");
-				view.update();
 				//System.out.println("Your NetworkClient has CLOSED.");
 			}
 			if(text.equalsIgnoreCase("SEND MOVES")){
 				state = GameState.CHOOSE_PLAYS;
 				model.addMessage("Please Select Your Moves");
-				view.update();
 				//System.out.println("Your NetworkClient has CLOSED.");
 			}
 			if(text.equalsIgnoreCase("SEND COMBAT")){
 				state = GameState.CHOOSE_COMBATTARGET;
 				model.addMessage("Please Select Combat TARGET");
-				view.update();
 				//System.out.println("Your NetworkClient has CLOSED.");
 			}
 			if(text.equalsIgnoreCase("SEND COMBATMOVES")){
 				state = GameState.CHOOSE_COMBATMOVES;
 				model.addMessage("Please Select Combat Actions");
-				view.update();
 				//System.out.println("Your NetworkClient has CLOSED.");
 			}
 			if(text.equalsIgnoreCase("CHARACTER SELECT")){
 				state = GameState.CHOOSE_CHARACTER;
 				model.addMessage("START CHARACTER SELECT");
-				view.update();
 				//System.out.println("Your NetworkClient has CLOSED.");
 			}else{
 				model.addMessage((String) message);
-				view.update();
 			}
 		}
 		if(message instanceof Board){
 			model.setBoard((Board) message);
 			model.addMessage("New Board Recieved");
-			view.update();
 		}
 		if(message instanceof Player){
 			model.setPlayer((Player) message);
 			model.addMessage("New Player Recieved");
+		}
+		
+		if(view != null){
 			view.update();
 		}
+		
 	}
 	
 	/**
@@ -163,8 +165,7 @@ public class ClientController extends Handler{
 	 * @param name the name of the selected character
 	 */
 	public void handleCharacterSelection(CharacterName name){
-		Object[] mes = new CharacterName[0];
-		mes[0] = name;
+		Object[] mes = {name};
 		network.send(new Message(MessageType.CHARACTER_SELECT, mes));
 		System.out.println("Sent character select");
 		this.view.update();

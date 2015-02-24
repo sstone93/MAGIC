@@ -128,7 +128,7 @@ public class Clearing implements Serializable{
     		System.out.println("		"+dwelling);
     	}
     	for(int i=0;i<occupants.length;i++){
-			if(connections[i] != null){
+			if(occupants[i] != null){
 				System.out.println("		-contains Player "+occupants[i].getID());
 			}
 		}
