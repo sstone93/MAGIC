@@ -251,7 +251,7 @@ public class View extends JFrame {
 		boardPanel = new JLayeredPane();
 		boardPanel.setPreferredSize(new Dimension(800, 1018));
 		scrollPanel.setViewportView(boardPanel);
-		boardPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		boardPanel.setLayout(null);
 		
 		characterSelectPanel = new JPanel();
 		characterSelectPanel.setPreferredSize(new Dimension(800, 1200));
