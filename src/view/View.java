@@ -10,6 +10,7 @@ import javax.swing.*;
 import javax.swing.border.*;
 
 import utils.Utility;
+import utils.Utility.CharacterName;
 import utils.Utility.*;
 import controller.ClientController;
 import model.Armour;
@@ -33,6 +34,7 @@ public class View extends JFrame {
 	private JPanel movesPanel;
 	private JPanel alertPanel;
 	private JPanel characterSelectPanel;
+	private JPanel targetPanel;
 	private JLayeredPane boardPanel;
 	private JScrollPane scrollPanel;
 	private JTextField characterText;
@@ -55,6 +57,9 @@ public class View extends JFrame {
 	private JComboBox attack;
 	private JComboBox defense;
 	private JComboBox maneuvers;
+	private JComboBox attackFatigue;
+	private JComboBox maneuversFatigue;
+	private JComboBox target;
 	private ButtonGroup movesGroup;
 	private ButtonGroup alertGroup;
 	
@@ -450,13 +455,51 @@ public class View extends JFrame {
 		JButton btnSelect = new JButton("Select");
 		btnSelect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				control.handleCombatMoves((Attacks)attack.getSelectedItem(), (Defenses)defense.getSelectedItem(), (Maneuvers)maneuvers.getSelectedItem());
+				control.handleCombatMoves((Attacks)attack.getSelectedItem(), (Defenses)defense.getSelectedItem(), 
+						(Maneuvers)maneuvers.getSelectedItem(), (int)attackFatigue.getSelectedItem(), (int)maneuversFatigue.getSelectedItem());
 			}
 		});
+		
+		attackFatigue = new JComboBox();
+		attackFatigue.setModel(new DefaultComboBoxModel(new Integer[] {0, 1, 2}));
+		attackFatigue.setBounds(10, 70, 50, 20);
+		combatPanel.add(attackFatigue);
+		
+		maneuversFatigue = new JComboBox();
+		maneuversFatigue.setModel(new DefaultComboBoxModel(new Integer[] {0, 1, 2}));
+		maneuversFatigue.setBounds(113, 70, 50, 20);
+		combatPanel.add(maneuversFatigue);
 		btnSelect.setBounds(422, 40, 89, 23);
 		combatPanel.add(btnSelect);
+		
+		targetPanel = new JPanel();
+		targetPanel.setBounds(750, 500, 524, 192);
+		contentPane.add(targetPanel);
+		targetPanel.setLayout(null);
+		targetPanel.setBorder(new LineBorder(Color.GRAY));
+		
+		JLabel lblSelectCombatTarget = new JLabel("Select Combat Target");
+		lblSelectCombatTarget.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
+		lblSelectCombatTarget.setBounds(10, 11, 154, 14);
+		targetPanel.add(lblSelectCombatTarget);
+		
+		target = new JComboBox();
+		target.setBounds(10, 41, 93, 20);
+		targetPanel.add(target);
+		
+		JButton btnSelectTarget = new JButton("Select");
+		btnSelectTarget.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				control.handleTargetSelection((CharacterName)target.getSelectedItem());
+			}
+		});
+
+		btnSelectTarget.setBounds(422, 40, 89, 23);
+		targetPanel.add(btnSelectTarget);
+		
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void update(){
 		Board b = control.model.getBoard();
 		if (b != null) {
@@ -558,6 +601,7 @@ public class View extends JFrame {
 				combatPanel.setVisible(false);
 				movesPanel.setVisible(false);
 				playsPanel.setVisible(true);
+				targetPanel.setVisible(false);
 				scrollPanel.setViewportView(boardPanel);
 				break;
 			case MOVE:
@@ -577,6 +621,7 @@ public class View extends JFrame {
 				combatPanel.setVisible(false);
 				movesPanel.setVisible(true);
 				playsPanel.setVisible(false);
+				targetPanel.setVisible(false);
 				scrollPanel.setViewportView(boardPanel);
 				break;
 			case ALERT:
@@ -596,15 +641,34 @@ public class View extends JFrame {
 				combatPanel.setVisible(false);
 				movesPanel.setVisible(true);
 				playsPanel.setVisible(false);
+				targetPanel.setVisible(false);
 				scrollPanel.setViewportView(boardPanel);
 				break;
-			case REST:
-				break;
-			case CHOOSE_COMBAT:
+			case CHOOSE_COMBATMOVES:
 				alertPanel.setVisible(false);
 				combatPanel.setVisible(true);
 				movesPanel.setVisible(false);
 				playsPanel.setVisible(false);
+				targetPanel.setVisible(false);
+				scrollPanel.setViewportView(boardPanel);
+				break;
+			case CHOOSE_COMBATTARGET:
+				if (p != null) {
+					Player[] others = p.getLocation().getOccupants();
+					if (others != null) {
+						CharacterName[] targets = new CharacterName[others.length];
+						for (int i = 0; i < others.length; i++){
+							targets[i] = others[i].getCharacter().getName();
+						}
+
+						target.setModel(new DefaultComboBoxModel(targets));
+					}
+				}
+				alertPanel.setVisible(false);
+				combatPanel.setVisible(false);
+				movesPanel.setVisible(false);
+				playsPanel.setVisible(false);
+				targetPanel.setVisible(true);
 				scrollPanel.setViewportView(boardPanel);
 				break;
 		}
