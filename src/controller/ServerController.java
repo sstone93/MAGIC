@@ -149,8 +149,10 @@ public class ServerController extends Handler{
 	 * @param player who is resting
 	 */
 	public void rest(Player player) {
-		//TODO IS THIS EVEN WHAT REST DOES?
-        player.setFatigue(0); // I'm assuming it resets the fatigue, which I'm pretty sure is wrong
+        player.setFatigue(0);
+        if (player.getHealth() > 0) {
+        	player.setHealth(player.getHealth() - 1);
+        }
     }
 
 	/**

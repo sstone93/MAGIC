@@ -229,17 +229,25 @@ public class Board implements Serializable{
         ItemWeight highestWeight = Utility.ItemWeight.NEGLIGIBLE;
 
         // find the highest weight of the active move chits of the player
-        for (int i = 0; i < chits.length; i++) {
-            if (chits[i].isVisible()) {
-                if (chits[i].getType() == Utility.Actions.MOVE) {
-                    ItemWeight currentWeight = Utility.getItemWeight(chits[i].getName());
-                    boolean check = Utility.isWeightHeavier(currentWeight, highestWeight);
-                    if (check) {
-                        highestWeight = currentWeight;
-                    }
-                }
-            }
-        }
+//        for (int i = 0; i < chits.length; i++) {
+//            if (chits[i].isVisible()) {
+//                if (chits[i].getType() == Utility.Actions.MOVE) {
+//                    ItemWeight currentWeight = Utility.getItemWeight(chits[i].getName());
+//                    boolean check = Utility.isWeightHeavier(currentWeight, highestWeight);
+//                    if (check) {
+//                        highestWeight = currentWeight;
+//                    }
+//                }
+//            }
+//        }
+        
+        
+        // remove items that have a higher weight than the characters weight
+        ItemWeight currentWeight = player.getCharacter().getWeight();
+        boolean check = Utility.isWeightHeavier(currentWeight, highestWeight);
+	    if (check) {
+	    	highestWeight = currentWeight;
+	    }
 
         if (canChange) {
         	// discard anything that player can't carry
