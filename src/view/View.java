@@ -768,7 +768,8 @@ public class View extends JFrame {
 					if (others != null) {
 						CharacterName[] targets = new CharacterName[others.length];
 						for (int i = 0; i < others.length; i++){
-							targets[i] = others[i].getCharacter().getName();
+							if (targets[i] != null)
+								targets[i] = others[i].getCharacter().getName();
 						}
 
 						target.setModel(new DefaultComboBoxModel(targets));

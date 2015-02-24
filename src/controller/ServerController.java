@@ -285,7 +285,7 @@ public class ServerController extends Handler{
     		// TODO: for testing
     		System.out.println("moves: " + moves + " activities: " + player.getActivities().length);
 
-    		
+
 
     		Object[] activities = player.getActivities();
 
@@ -293,7 +293,7 @@ public class ServerController extends Handler{
     			// format: [MOVE, clearing]
 
     			if (activities[moves] != null) {
-    				
+
     				Player[] canBlock = blockable(player);					// check if they can block another player
 
     	    		if (currentDay != 1) {
@@ -305,7 +305,7 @@ public class ServerController extends Handler{
     		    			}
     		    		}
     	    		}
-    				
+
 		    		switch((Actions) activities[moves]) {
 
 		    		case MOVE: board.move(player, (Clearing)activities[moves + 1]); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is moving!"); break;
@@ -836,7 +836,7 @@ public class ServerController extends Handler{
 		System.out.println("Server Models Created.");
 
 		network.broadCast(board);  				//sends the board to all clients
-		System.out.println(board);
+		// System.out.println(board);
 		distributeCharacters();					//broadcast each player to the proper client
 		startDay();								//starts the game!
 
