@@ -149,8 +149,10 @@ public class ServerController extends Handler{
 	 * @param player who is resting
 	 */
 	public void rest(Player player) {
-		//TODO IS THIS EVEN WHAT REST DOES?
-        player.setFatigue(0); // I'm assuming it resets the fatigue, which I'm pretty sure is wrong
+        player.setFatigue(0);
+        if (player.getHealth() > 0) {
+        	player.setHealth(player.getHealth() - 1);
+        }
     }
 
 	/**
@@ -198,7 +200,7 @@ public class ServerController extends Handler{
         for (int i = 0; i < clearingTreasures.length; i++) {
             if (clearingTreasures[i] != null) {
                 player.addTreasure(clearingTreasures[i]);
-                // TODO: let player know they found treasures
+                network.send(player.getID(), "You've found a treasure! + " + clearingTreasures[i].getGold() + "gold");
                 player.getLocation().removeTreasure(clearingTreasures[i]);
             }
         }
@@ -269,7 +271,7 @@ public class ServerController extends Handler{
 	    			if (canBlock[j] != null) {
 	    				canBlock[j].setBlocked(true);
 	    				System.out.println("blocking player!"); // TODO: for testing
-	    				// TODO: send message to players that have been blocked
+	    				network.send(canBlock[j].getID(), "You've been blocked! :( " );
 	    			}
 	    		}
     		}
@@ -309,13 +311,15 @@ public class ServerController extends Handler{
         Player winner = null;
         Player player = null;
 
-        // TODO: player has to discard any items an active move chit can't carry
         // TODO: treasures
         // TODO: Actually determine score based on individual victory points? or is it different for a day 28 time out?
         for (int i = 0; i < playerCount; i++ ) {
             player = players[i];
             if (winner == null)
                 winner = players[i];
+            
+            player.removeArmourWithHigherWeight(player.getCharacter().getWeight());
+            player.removeWeaponsWithHigherWeight(player.getCharacter().getWeight());
 
             int basicScore     = 0;
             int fameScore      = players[i].getFame() / 10;
@@ -363,10 +367,17 @@ public class ServerController extends Handler{
     public void startDay() {
 
         currentDay++;
+        
         updateClients();
         collectActivities(); //asks player's for their activities and waits until it gets them all
 
         orderPlayers();	//randomly orders the players
+        
+        if (playerCount == 1) {
+        	network.broadCast("There is only one player alive");
+        	endGame();
+        	
+        }
 
         //Does the activities of all players
         int nextMover = 0;
@@ -383,25 +394,19 @@ public class ServerController extends Handler{
         updateClients();
         collectCombat(); //2 players, 1 attacker 1 deffender
 
-        //TODO MICHAEL RESOLVE COMBAT
         //All players choose attackers
         nextMover = 0;
         while (nextMover < playerCount) {
             for (int i = 0; i < playerCount; i++) {
                 if (players[i].order == nextMover) {
-                    // TODO choose attackers and save somewhere
                 	encounter(players[i], players[i].getTarget());
-                	//TODO MICHAEL DO COMBAT HERE
-
                     nextMover++;
                     break;
                 }
             }
         }
 
-        // TODO combat loop
-
-        //Porgresses to the next day or ends the game
+        //Progresses to the next day or ends the game
         if(!resetDay()){ //if it is not the 28th day....
         	startDay();
         } else {
