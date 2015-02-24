@@ -60,18 +60,18 @@ public class ServerController extends Handler{
 		}
 		return null;
 	}
-	
+
 	/**
 	 * This is the method that handles incomming messages from the networking components
 	 * @param ID The ID of the client sending the message
 	 * @param message the contents of the message
 	 */
 	public void handle(int ID, Object message){
-		
+
 		if(message == null){
-			
+
 		}
-		
+
 		if(message instanceof String){
 			String text = ((String) message );
 			if(text.equalsIgnoreCase("START GAME")){
@@ -92,7 +92,7 @@ public class ServerController extends Handler{
 			if( m.getType() == MessageType.COMBAT_TARGET){
 				if(state == GameState.CHOOSE_COMBAT){
 					recievedCombat += 1;
-					
+
 					//turns the recieved charctername into a player
 					findPlayer(ID).setTarget(charToPlayer((CharacterName) m.getData()[0]));
 				}else{
@@ -110,7 +110,7 @@ public class ServerController extends Handler{
 			if( m.getType() == MessageType.CHARACTER_SELECT){
 				if(state == GameState.CHOOSE_CHARACTER){
 					switch((CharacterName) m.getData()[0]){
-					
+
 					case AMAZON: players[addedPlayers] = new Player(new Amazon(), ID); break;
 					case BERSERKER:players[addedPlayers] = new Player(new Berserker() , ID);
 					break;
@@ -128,13 +128,13 @@ public class ServerController extends Handler{
 					break;
 					default:;
 					break;
-					
+
 					}
 					this.addedPlayers += 1;
-					
+
 					System.out.println((CharacterName) m.getData()[0]);
 					System.out.println(addedPlayers);
-					
+
 				}else{
 					network.send(ID, "NOT ACCEPTING CHARACTER SELECT ATM");
 				}
@@ -183,7 +183,7 @@ public class ServerController extends Handler{
     public Player[] blockable(Player player) {
     	Player[] blockedPlayers = player.getLocation().getOccupants();
     	for (int i = 0; i < blockedPlayers.length; i++) {
-    		if (blockedPlayers[i] != null && blockedPlayers[i].isHidden()) {
+    		if (blockedPlayers[i] != null && !blockedPlayers[i].isHidden() && blockedPlayers[i].getID() != player.getID()) {
     			blockedPlayers[i] = null;
     		}
     	}
@@ -212,7 +212,7 @@ public class ServerController extends Handler{
     	Player[] sameClearingPlayers = player.getLocation().getOccupants();
     	for (int i = 0; i < sameClearingPlayers.length; i++) {
     		// do not unhide yourself
-    		if (sameClearingPlayers[i] != null && sameClearingPlayers[i].getID() != player.getID()) 
+    		if (sameClearingPlayers[i] != null && sameClearingPlayers[i].getID() != player.getID())
     		    sameClearingPlayers[i].setHidden(false);
     	}
 
@@ -246,9 +246,9 @@ public class ServerController extends Handler{
         }
 
         unAlertWeapons();
-        
+
         //TODO face up map chits (except lost city and lost castle) are turned face down
-        
+
         // reset their fatigue and order
         for (int i = 0; i < playerCount; i++) {
         	players[i].setFatigue(0);
@@ -284,25 +284,28 @@ public class ServerController extends Handler{
     	while (moves < player.getActivities().length) {
     		// TODO: for testing
     		System.out.println("moves: " + moves + " activities: " + player.getActivities().length);
+
     		
-    		Player[] canBlock = blockable(player);					// check if they can block another player
-    		
-    		if (currentDay != 1) {
-	    		for (int j = 0; j < canBlock.length; j++) {
-	    			if (canBlock[j] != null) {
-	    				canBlock[j].setBlocked(true);
-	    				System.out.println("blocking player!"); // TODO: for testing
-	    				network.send(canBlock[j].getID(), "You've been blocked! :( " );
-	    			}
-	    		}
-    		}
 
     		Object[] activities = player.getActivities();
-    		
+
     		if (!player.isBlocked()) {	//assuming the player is not being blocked by another
     			// format: [MOVE, clearing]
 
     			if (activities[moves] != null) {
+    				
+    				Player[] canBlock = blockable(player);					// check if they can block another player
+
+    	    		if (currentDay != 1) {
+    		    		for (int j = 0; j < canBlock.length; j++) {
+    		    			if (canBlock[j] != null) {
+    		    				canBlock[j].setBlocked(true);
+    		    				System.out.println("blocking player!"); // TODO: for testing
+    		    				network.send(canBlock[j].getID(), "You've been blocked! :( " );
+    		    			}
+    		    		}
+    	    		}
+    				
 		    		switch((Actions) activities[moves]) {
 
 		    		case MOVE: board.move(player, (Clearing)activities[moves + 1]); moves = moves + 2; network.broadCast(player.getCharacter().getName() + "is moving!"); break;
@@ -339,7 +342,7 @@ public class ServerController extends Handler{
             player = players[i];
             if (winner == null)
                 winner = players[i];
-            
+
             player.removeArmourWithHigherWeight(player.getCharacter().getWeight());
             player.removeWeaponsWithHigherWeight(player.getCharacter().getWeight());
 
@@ -404,19 +407,19 @@ public class ServerController extends Handler{
      * Starts a new day
      */
     public void startDay() {
-    	
+
         currentDay++;
         network.broadCast("This is the start of Day " + currentDay + "!");
-        
+
         updateClients();
         collectActivities(); //asks player's for their activities and waits until it gets them all
 
         orderPlayers();	//randomly orders the players
-        
+
         if (playerCount == 1) {
         	network.broadCast("There is only one player alive");
         	endGame();
-        	
+
         }
 
         //Does the activities of all players
@@ -468,9 +471,9 @@ public class ServerController extends Handler{
         		playerCount--;
         		i--;
         	}
-        	
+
         	players[i].order = Utility.roll(100);
-        	
+
         }
 
         int[] ordering = new int[playerCount];
@@ -509,13 +512,13 @@ public class ServerController extends Handler{
     		network.send(attacker.getID(), "Stop attacking yourself!");
     		return;
     	}
-    	
+
     	//ask clients to send moves!
     	state = GameState.CHOOSE_COMBATMOVES;
     	recievedCombat = 0;
     	network.send(attacker.getID(), "SEND COMBATMOVES");
     	network.send(defender.getID(), "SEND COMBATMOVES");
-    	
+
     	while(recievedCombat < 2){
     		try {
 				Thread.sleep(20);
@@ -524,10 +527,10 @@ public class ServerController extends Handler{
 				e.printStackTrace();
 			}
     	}
-    	
+
     	System.out.println("got combat moves");
     	state = GameState.NULL;
-    	
+
     	if (attacker.isDead() == true) {
     		network.send(attacker.getID(), "You are dead.");
     		return;
@@ -806,13 +809,13 @@ public class ServerController extends Handler{
 	 * calld via a "START GAME" message in order to setup the board and start the game.
 	 */
 	public void startGame(){
-		
+
 		//ask clients to send moves!
 		state = GameState.CHOOSE_CHARACTER;
     	this.addedPlayers = 0;
     	network.broadCast("CHARACTER SELECT");
     	System.out.println("start selection loop");
-    	
+
     	while(this.addedPlayers < Config.MAX_CLIENTS){
     		try {
 				Thread.sleep(20);
@@ -821,7 +824,7 @@ public class ServerController extends Handler{
 				e.printStackTrace();
 			}
     	}
-    	
+
     	//cant get past here until the list of players is done
     	System.out.println("end selection loop");
     	state = GameState.NULL;
