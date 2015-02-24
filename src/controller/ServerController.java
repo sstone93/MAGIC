@@ -225,10 +225,13 @@ public class ServerController extends Handler{
         unAlertWeapons();
         //TODO face up map chits (except lost city and lost castle) are turned face down
         
-        // reset their fatigue
+        // reset their fatigue and order
         for (int i = 0; i < playerCount; i++) {
         	players[i].setFatigue(0);
+        	players[i].setOrder(0);
         }
+        
+        
 
         return true;
     }
@@ -413,7 +416,16 @@ public class ServerController extends Handler{
     	// Silly way to order players from 1 to playerCount+1
         for (int i = 0; i < playerCount; i++) {
         	System.out.println(i);
-            players[i].order = Utility.roll(100);
+        	if (players[i].isDead()) {
+        		for (int j = i; j < playerCount - 1; j++) {
+        			players[j] = players[j+1];
+        		}
+        		playerCount--;
+        		i--;
+        	}
+        	
+        	players[i].order = Utility.roll(100);
+        	
         }
 
         int[] ordering = new int[playerCount];
@@ -454,8 +466,17 @@ public class ServerController extends Handler{
     	network.send(defender.getID(), "SEND COMBATMOVES");
     	while(recievedCombat < 2){}
     	state = GameState.NULL;
-
-		doFight(attacker, defender);
+    	if (attacker.isDead() == true) {
+    		network.send(attacker.getID(), "You are dead.");
+    		return;
+    	}
+    	else if (defender.isDead() == true) {
+    		network.send(defender.getID(), "You are dead.");
+    		return;
+    	}
+    	else {
+    		doFight(attacker, defender);
+    	}
 	}
 
 	//TODO Finding active weapon rather than assuming the active weapon is at position 0
@@ -613,7 +634,7 @@ public class ServerController extends Handler{
 	public void hit(Player attacker, Player defender) {
 		ItemWeight level = defender.getWeapons()[0].getWeight();
 
-		//TODO Print out "hit" to console
+		network.broadCast("Hit!");
 
 		if (attacker.getMoves().getAttackFatigue() == 1) {
 			switch(level){
@@ -677,27 +698,28 @@ public class ServerController extends Handler{
 		else if (level == ItemWeight.MEDIUM && defender.getCharacter().getWeight() == ItemWeight.LIGHT) {
 			deadPlayer(attacker, defender);
 		}
-		//TODO Change player health on client and server side
 		else if (level == ItemWeight.MEDIUM && defender.getCharacter().getWeight() == ItemWeight.HEAVY) {
 			defender.setHealth(defender.getHealth() + 1);
+			network.send(defender.getID(), "You have been wounded!");
 			if (defender.getHealth() == 3) {
 				deadPlayer(attacker, defender);
 			}
 		}
 		else if (level == ItemWeight.LIGHT && defender.getCharacter().getWeight() == ItemWeight.HEAVY) {
 			defender.setHealth(defender.getHealth() + 1);
+			network.send(defender.getID(), "You have been wounded!");
 			if (defender.getHealth() == 3) {
 				deadPlayer(attacker, defender);
 			}
 		}
 		else if (level == ItemWeight.LIGHT && defender.getCharacter().getWeight() == ItemWeight.MEDIUM) {
 			defender.setHealth(defender.getHealth() + 1);
+			network.send(defender.getID(), "You have been wounded!");
 			if (defender.getHealth() == 2) {
 				deadPlayer(attacker, defender);
 			}
 		}
 	}
-	//TODO Change values on client and server side
 	public void deadPlayer(Player attacker, Player defender) {
 		attacker.addFame(10); // Arbitrary value
 		attacker.addGold(defender.getGold());
@@ -705,7 +727,7 @@ public class ServerController extends Handler{
 		attacker.addNotoriety(defender.getNotoriety());
 		defender.removeNotoriety(defender.getNotoriety());
 		defender.kill();
-		//TODO Print death message to console
+		network.send(defender.getID(), "You are dead.");
 	}
 
 	public void distributeCharacters(){
