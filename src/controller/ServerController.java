@@ -505,6 +505,11 @@ public class ServerController extends Handler{
 			return;
 		}*/
 
+    	if (attacker == defender) {
+    		network.send(attacker.getID(), "Stop attacking yourself!");
+    		return;
+    	}
+    	
     	//ask clients to send moves!
     	state = GameState.CHOOSE_COMBATMOVES;
     	recievedCombat = 0;
