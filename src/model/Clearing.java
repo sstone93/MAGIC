@@ -97,11 +97,15 @@ public class Clearing implements Serializable{
 
     public boolean canChangeClearing(Clearing clearing) {
         // if they're connected
-        if (Arrays.asList(connections).contains(clearing)) {
-            return true;
-        } else {
-            return false;
-        }
+    	
+        for (int i = 0; i < 4; i++) {
+        	if (connections[i] != null) {
+	        	if (clearing.getClearingNumber() == connections[i].getClearingNumber() ) 
+	        		if (clearing.parent.getName() == connections[i].parent.getName())
+	        			return true;
+        	}
+        } 
+        return false;
     }
 
     public void addTreasures(Treasure[] treasure) {
