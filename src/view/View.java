@@ -244,7 +244,7 @@ public class View extends JFrame {
 			}
 		});
 		play2.setModel(new DefaultComboBoxModel(Actions.values()));
-		play2.setBounds(113, 41, 93, 20);
+		play2.setBounds(131, 41, 93, 20);
 		playsPanel.add(play2);
 		
 		play3 = new JComboBox();
@@ -258,7 +258,7 @@ public class View extends JFrame {
 			}
 		});
 		play3.setModel(new DefaultComboBoxModel(Actions.values()));
-		play3.setBounds(216, 41, 93, 20);
+		play3.setBounds(262, 41, 93, 20);
 		playsPanel.add(play3);
 		
 		play4 = new JComboBox();
@@ -272,7 +272,7 @@ public class View extends JFrame {
 			}
 		});
 		play4.setModel(new DefaultComboBoxModel(Actions.values()));
-		play4.setBounds(319, 41, 93, 20);
+		play4.setBounds(393, 41, 93, 20);
 		playsPanel.add(play4);
 		
 		JButton btnRecord = new JButton("Record");
@@ -284,24 +284,24 @@ public class View extends JFrame {
 						(Actions)play1.getSelectedItem(), (String)play4Location.getSelectedItem());
 			}
 		});
-		btnRecord.setBounds(422, 40, 89, 23);
+		btnRecord.setBounds(220, 145, 89, 23);
 		playsPanel.add(btnRecord);
 		
 		play1Location = new JComboBox();
-		play1Location.setBounds(10, 84, 93, 20);
+		play1Location.setBounds(10, 84, 111, 20);
 		playsPanel.add(play1Location);
 		
 		play2Location = new JComboBox();
-		play2Location.setBounds(113, 84, 93, 20);
+		play2Location.setBounds(131, 84, 111, 20);
 		playsPanel.add(play2Location);
 		
 		play3Location = new JComboBox();
-		play3Location.setBounds(216, 84, 93, 20);
+		play3Location.setBounds(262, 84, 111, 20);
 		playsPanel.add(play3Location);
 		
 		play4Location = new JComboBox();
 		play4Location.setDoubleBuffered(true);
-		play4Location.setBounds(319, 84, 93, 20);
+		play4Location.setBounds(393, 84, 111, 20);
 		playsPanel.add(play4Location);
 		
 		textDisplay = new JTextArea();
