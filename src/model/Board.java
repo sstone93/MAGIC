@@ -41,6 +41,16 @@ public class Board implements Serializable{
 		setUpMapChits();
 	}
 	
+	public int convertTileName(TileName n){
+		for(int i=0; i<20; i++){
+			if(tiles[i].getName() == n){
+				return i;
+			}
+		}
+		return -1;
+		
+	}
+	
 	/**
 	 * Creates the board based on the images provided by JP
 	 */
