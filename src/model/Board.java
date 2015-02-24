@@ -384,6 +384,8 @@ public class Board implements Serializable{
      * @return boolean based on if the action was valid or not
      */
     public boolean move(Player player, Clearing newClearing) {
+    	System.out.println("START MOVE");
+    	System.out.println(newClearing);
     	
         player.setHidden(false);
         boolean canChange =  (player.getLocation().canChangeClearing((Clearing)newClearing));
@@ -412,8 +414,10 @@ public class Board implements Serializable{
 	    if (check) {
 	    	highestWeight = currentWeight;
 	    }
-
+	    System.out.println(player.getLocation());
+	    System.out.println("THEY CAN CHANGE?????: " + canChange);
         if (canChange) {
+        	System.out.println("CHANGING!!!!!!!" ) ;
         	// discard anything that player can't carry
             player.removeWeaponsWithHigherWeight(highestWeight);
             player.removeArmourWithHigherWeight(highestWeight);
@@ -421,6 +425,7 @@ public class Board implements Serializable{
             player.moveTo(newClearing);
 
         }
+        System.out.println("END MOVE");
         return canChange;
     }
 	
