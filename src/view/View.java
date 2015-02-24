@@ -584,6 +584,25 @@ public class View extends JFrame {
 					JLabel tile = new JLabel(new ImageIcon(pic));
 					tile.setBounds(b.tiles[i].getX() - 100, b.tiles[i].getY() - 86, 200, 173);
 					boardPanel.add(tile);
+					
+					Clearing[] clearings = b.tiles[i].getClearings();
+					if (clearings != null) {
+						for(int j = 0; j < clearings.length; j++){
+							Player[] occupants = clearings[j].occupants;
+							if(occupants != null){
+								for(int k = 0; k < occupants.length; k++){
+									if (occupants[k] != null){
+										CharacterName character = occupants[k].getCharacter().getName();
+										pic = ImageIO.read(this.getClass().getResource(Utility.getCharacterImage(character)));
+										JLabel c = new JLabel(new ImageIcon(pic));
+										c.setBounds(b.tiles[i].getX() - 25, b.tiles[i].getY() - 25, 50, 50);
+										boardPanel.add(c, new Integer(5), 0);
+										c.repaint();
+									}
+								}
+							}
+						}
+					}
 				} catch (IOException e){
 					
 				}
