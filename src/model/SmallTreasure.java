@@ -1,21 +1,23 @@
 package model;
 
+import utils.Utility.SmallTreasureName;
+
 public class SmallTreasure extends Treasure{
 	
-	private SmallTreasure name;
+	private SmallTreasureName name;
 	
-	public SmallTreasure(SmallTreasure n){
+	public SmallTreasure(SmallTreasureName n){
 		super(10);
 		this.name = n;
 	}
 	
-	public SmallTreasure getName(){
+	public SmallTreasureName getName(){
 		return this.name;
 	}
 
 	@Override
 	public String toString(){
-		System.out.println(name+", Value:"+gold);
+		System.out.println(name.toString()+", Value:"+gold);
 		return "";
 	}
 	
