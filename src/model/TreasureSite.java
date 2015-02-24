@@ -40,14 +40,14 @@ public class TreasureSite extends MapChit implements Serializable{
 				t+=sounds[i]+", ";
 			}
 		}
-		System.out.println("		Contains Sounds: "+t);
+		System.out.println("			Contains Sounds: "+t);
 		t = "";
 		for(int i=0;i<this.treasures.length;i++){					//prints treasures it contains
 			if(treasures[i] != null){
 				t+=treasures[i]+", ";
 			}
 		}
-		System.out.println("		Contains Treasures: "+t);
+		System.out.println("			Contains Treasures: "+t);
 		return t;
 	}
 }

@@ -17,7 +17,7 @@ public class LostCity extends LostPlace implements Serializable{
 		String s = ("The Lost City contains: ");
 		for(int i=0; i<this.chits.length;i++){					//prints sounds it contains
 			if(chits[i] != null){
-				s+=this.chits[i]+", ";
+				System.out.println("			"+this.chits[i]+", ");
 			}
 		}
 		return s;
