@@ -17,6 +17,7 @@ public class Tile implements Serializable{
 	private int x;
 	private int y;
 	private MapChit sound;
+	private WarningChit warning;
 	
 	/**
 	 * 
@@ -28,6 +29,22 @@ public class Tile implements Serializable{
 		this.y = y;
 		this.clearings = new Clearing[determineClearings(name)];
 		setUpTile();			//this will set up the clearings on this tile.
+	}
+	
+	public void setWarningChit(WarningChit s){
+		this.warning = s;
+	}
+	
+	public WarningChit getWarningChit(){
+		return this.warning;
+	}
+	
+	public void setMapChit(MapChit s){
+		this.sound = s;
+	}
+	
+	public MapChit getMapChit(){
+		return this.sound;
 	}
 	
 	/**

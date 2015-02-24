@@ -170,17 +170,21 @@ public class Board implements Serializable{
 	
 	public void setUpMapChits(){
 		//encounter chits
-		//4 groups of 5?
-		//cave/valley/woods/mountain
-		//assigned to a TILE not a clearing
-		//
 		
+		//20 yellow warning chits, divide into 4 groups of 5 by letter
+		//Assigned to the 20 tiles (1 per tile)
+		
+		//8 orange site chits
+		//10 red sound chits
 		//mix the sound and treasure site chits
 		//5 given to the lost city
 		//5 given to the lost castle
+		
 		//8 left, 2 groups of 4
+		
 		//add lost city to 1 of the groups of 4 (now 5)
 		//1 placed in each caves tile
+		
 		//add lost castle to the other group
 		//put one into each mountain tile
 		
