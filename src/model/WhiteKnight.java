@@ -9,7 +9,7 @@ public class WhiteKnight extends Character {
 	 */
 	private static final long serialVersionUID = -222522844248917902L;
 
-	WhiteKnight() { // might want the name to be sent in
+	public WhiteKnight() { // might want the name to be sent in
         this.name             = CharacterName.WHITE_KNIGHT;
         this.weight           = ItemWeight.HEAVY;
         this.speed            = 5;

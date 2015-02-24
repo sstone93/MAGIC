@@ -7,7 +7,7 @@ public class Amazon extends Character {
 
 	private static final long serialVersionUID = -7673779318581569510L;
 
-	Amazon() { // might want the name to be sent in
+	public Amazon() { // might want the name to be sent in
         this.name = CharacterName.AMAZON;
         this.weight = ItemWeight.MEDIUM;
         this.speed = 4;

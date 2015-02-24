@@ -76,7 +76,7 @@ public class Utility {
     	}
     }
     
-    public enum MessageType {COMBAT_TARGET,COMBAT_MOVES, ACTIVITIES}
+    public enum MessageType {COMBAT_TARGET, COMBAT_MOVES, CHARACTER_SELECT, ACTIVITIES}
 
     public enum ItemWeight {NEGLIGIBLE, LIGHT, MEDIUM, HEAVY, TREMENDOUS}
 
@@ -137,5 +137,5 @@ public class Utility {
     
     public enum Defenses {AHEAD, SIDE, ABOVE}
     
-    public enum GameState {CHOOSE_CHARACTER, CHOOSE_PLAYS, MOVE, ALERT, REST, CHOOSE_COMBAT, CHOOSE_COMBATMOVES}
+    public enum GameState {CHOOSE_CHARACTER, CHOOSE_PLAYS, MOVE, ALERT, REST, CHOOSE_COMBAT, CHOOSE_COMBATMOVES, NULL}
 }

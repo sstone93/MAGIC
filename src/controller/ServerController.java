@@ -2,6 +2,7 @@ package controller;
 
 import networking.Message;
 import networking.NetworkServer;
+import model.Amazon;
 import model.Board;
 import model.Clearing;
 import model.CombatMoves;
@@ -11,6 +12,7 @@ import model.Swordsman;
 import model.Treasure;
 
 import java.util.Arrays;
+
 import utils.Config;
 import utils.Utility;
 import utils.Utility.*;
@@ -24,12 +26,12 @@ public class ServerController extends Handler{
 	public Board board;		//THIS IS THE MODEL
 	public NetworkServer network;
 	Player[] players = new Player[Config.MAX_CLIENTS] ;
+	int addedPlayers = 0;
     int playerCount    = Config.MAX_CLIENTS;
     int currentDay     = 0;
     int recievedCombat = 0;
-	boolean acceptingCombat = false;
+	GameState state = GameState.NULL;
 	int recievedMoves = 0;
-	boolean acceptingMoves = false;
 
 	/**
 	 * Constructor for a ServerController
@@ -60,7 +62,7 @@ public class ServerController extends Handler{
 		if(message instanceof Message){
 			Message m = (Message) message;
 			if( m.getType() == MessageType.ACTIVITIES){
-				if(acceptingMoves){
+				if(state == GameState.CHOOSE_PLAYS){
 					recievedMoves += 1;
 					findPlayer(ID).setActivities(m.getData());
 				}else{
@@ -68,7 +70,7 @@ public class ServerController extends Handler{
 				}
 			}
 			if( m.getType() == MessageType.COMBAT_TARGET){
-				if(acceptingCombat){
+				if(state == GameState.CHOOSE_COMBAT){
 					recievedCombat += 1;
 					findPlayer(ID).setTarget((Player) m.getData()[0]);
 				}else{
@@ -76,15 +78,49 @@ public class ServerController extends Handler{
 				}
 			}
 			if( m.getType() == MessageType.COMBAT_MOVES){
-				if(acceptingCombat){
+				if(state == GameState.CHOOSE_COMBATMOVES){
 					recievedCombat += 1;
 					findPlayer(ID).setMoves((CombatMoves) m.getData()[0]);
 				}else{
 					network.send(ID, "NOT ACCEPTING COMBAT MOVES ATM");
 				}
 			}
+			if( m.getType() == MessageType.CHARACTER_SELECT){
+				if(state == GameState.CHOOSE_CHARACTER){
+					players[addedPlayers] = new Player((CharacterName) m.getData(), ID);
+					addedPlayers += 1;
+				}else{
+					network.send(ID, "NOT ACCEPTING COMBAT MOVES ATM");
+				}
+			}
 		}
 	}
+	
+	public Character createCharacter(CharacterName n){
+		switch(n){
+		case AMAZON: return new Amazon(); break;
+		case BERSERKER:
+			
+			break;
+		case BLACK_KNIGHT:
+			break;
+		case CAPTAIN:
+			break;
+		case DWARF:
+			break;
+		case ELF:
+			break;
+		case SWORDSMAN:
+			break;
+		case WHITE_KNIGHT:
+			break;
+		default:
+			break;
+	}
+		
+		
+	}
+	
 
 	/**
 	 * Turns a player ID into a player
@@ -292,19 +328,19 @@ public class ServerController extends Handler{
      * Waits untill all activities have been submitted (and tells the clients to send them)
      */
     public void collectActivities(){
-    	acceptingMoves = true;
+    	state = GameState.CHOOSE_PLAYS;
     	network.broadCast("SEND MOVES");
     	recievedMoves = 0;
     	while(recievedMoves < playerCount){}	//TODO HANDLE PLAYERS DROPPING OUT DURING THIS STEP
-    	acceptingMoves = false;
+    	state = GameState.NULL;
     }
 
     public void collectCombat(){
-    	acceptingCombat = true;
+    	state = GameState.CHOOSE_COMBAT;
     	recievedCombat = 0;
     	network.broadCast("SEND COMBAT");
     	while(recievedCombat < playerCount){}	//TODO HANDLE PLAYERS DROPPING OUT DURING THIS STEP
-    	acceptingCombat = false;
+    	state = GameState.NULL;
     }
 
     public void updateClients(){
@@ -406,12 +442,12 @@ public class ServerController extends Handler{
 		}*/
 
     	//ask clients to send moves!
-    	acceptingCombat = true;
+    	state = GameState.CHOOSE_COMBATMOVES;
     	recievedCombat = 0;
     	network.send(attacker.getID(), "SEND COMBATMOVES");
     	network.send(defender.getID(), "SEND COMBATMOVES");
     	while(recievedCombat < 2){}
-    	acceptingCombat = false;
+    	state = GameState.NULL;
     	
     	//TODO getMoves should query the clients, which will then choose their moves and send them back to the server. I just left it as is for now
 		CombatMoves attackerMoves = attacker.getMoves();
@@ -715,16 +751,20 @@ public class ServerController extends Handler{
 	 * calld via a "START GAME" message in order to setup the board and start the game.
 	 */
 	public void startGame(){
-
-		//selectCharacters();	//broadcast to clients to submit character choices and wait until all conflicts are resolved.
-
-
+		
+		//ask clients to send moves!
+		state = GameState.CHOOSE_CHARACTER;
+    	addedPlayers = 0;
+    	network.broadCast("CHARACTER SELECT");
+    	while(addedPlayers < Config.MAX_CLIENTS){}				//cant get past here until the list of players is done
+    	state = GameState.NULL;
+		
 		//create array of players, feed it to the board constructor
-		int[] IDs = network.getIDs();
+		//int[] IDs = network.getIDs();
 
-		for(int i=0; i<Config.MAX_CLIENTS; i++){
-			players[i] = new Player(new Swordsman(), IDs[i]);
-		}
+		//for(int i=0; i<Config.MAX_CLIENTS; i++){
+			//players[i] = new Player(new Swordsman(), IDs[i]);
+	//	}
 
 		//instanciate the model
 		this.board = new Board(players);

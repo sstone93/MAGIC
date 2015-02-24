@@ -9,7 +9,7 @@ public class Dwarf extends Character {
 	 */
 	private static final long serialVersionUID = -5092440245558002595L;
 
-	Dwarf() { // might want the name to be sent in
+	public Dwarf() { // might want the name to be sent in
         this.name             = CharacterName.DWARF;
         this.weight           = ItemWeight.HEAVY;
         this.speed            = 3;
