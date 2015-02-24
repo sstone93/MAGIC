@@ -71,7 +71,9 @@ public class TreasureWithinTreasure extends Treasure{
 	public String toString(){
 		System.out.println(name.toString()+", Value:"+gold+", Contains: ");
 		for(int i=0;i<treasures.length;i++){					//prints treasures it contains
-			System.out.println("	"+treasures[i]);
+			if(treasures[i] != null){
+				System.out.println("	"+treasures[i]);
+			}
 		}
 		for(int i=0;i<armour.length;i++){					//prints weapons it contains
 			if(armour[i] != null){

@@ -305,8 +305,9 @@ public class Tile implements Serializable{
 		
 		System.out.println("	has WarningChit: " + warning);
 		
-		System.out.println("	has LostPlace: " + lost);
-		
+		if(lost != null){
+			System.out.println("	has LostPlace: " + lost);	
+		}
 		for(int i=0;i<clearings.length;i++){			//iterates over clearings on tile
 			System.out.println("	"+clearings[i]);
 		}

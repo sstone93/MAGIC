@@ -171,6 +171,10 @@ public class Board implements Serializable{
 		large.remove(0);
 		twit.add(new TreasureWithinTreasure(TreasureWithinTreasureName.CRYPT_OF_THE_KNIGHT, t4));
 		
+		Treasure[] t5 = {null};
+		twit.add(new TreasureWithinTreasure(TreasureWithinTreasureName.ENCHANTED_MEADOW, t5));
+		twit.add(new TreasureWithinTreasure(TreasureWithinTreasureName.MOULDY_SKELETON, t5));
+		
 		Collections.shuffle(small);
 		Collections.shuffle(large);
 		Collections.shuffle(twit);
@@ -297,10 +301,10 @@ public class Board implements Serializable{
 		//8 left, 2 groups of 4
 		//add lost city to 1 of the groups of 4 (now 5)
 		ArrayList<Object> caves = new ArrayList<Object>();
-		caves.add(mc.get(0));caves.remove(0);
-		caves.add(mc.get(0));caves.remove(0);
-		caves.add(mc.get(0));caves.remove(0);
-		caves.add(mc.get(0));caves.remove(0);
+		caves.add(mc.get(0));mc.remove(0);
+		caves.add(mc.get(0));mc.remove(0);
+		caves.add(mc.get(0));mc.remove(0);
+		caves.add(mc.get(0));mc.remove(0);
 		caves.add(lostcity);
 		Collections.shuffle(caves);
 		//1 placed in each caves tile
@@ -310,10 +314,10 @@ public class Board implements Serializable{
 		
 		//add lost castle to the other group
 		ArrayList<Object> mountains = new ArrayList<Object>();
-		mountains.add(mc.get(0));mountains.remove(0);
-		mountains.add(mc.get(0));mountains.remove(0);
-		mountains.add(mc.get(0));mountains.remove(0);
-		mountains.add(mc.get(0));mountains.remove(0);
+		mountains.add(mc.get(0));mc.remove(0);
+		mountains.add(mc.get(0));mc.remove(0);
+		mountains.add(mc.get(0));mc.remove(0);
+		mountains.add(mc.get(0));mc.remove(0);
 		mountains.add(lostcastle);
 		Collections.shuffle(mountains);
 		//put one into each mountain tile
@@ -329,11 +333,12 @@ public class Board implements Serializable{
 		
 		int[] temps = {p1, p2, p3, p4, p5};
 		for(int i=0; i<5; i++){
-			if(a.get(i) instanceof LostPlace){
-				
+			if(a.get(0) instanceof LostPlace){
+				tiles[temps[i]].setLostPlace((LostPlace) a.get(0));
 			}else{
-				tiles[temps[i]].setMapChit((MapChit)a.get(i));
+				tiles[temps[i]].setMapChit((MapChit)a.get(0));
 			}
+			a.remove(0);
 		}
 	}
 	
