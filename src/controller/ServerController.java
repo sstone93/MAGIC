@@ -790,7 +790,7 @@ public class ServerController extends Handler{
 		defender.removeNotoriety(defender.getNotoriety());
 		//defender.kill();//TODO YOU CANNOT DIE
 		network.send(defender.getID(), "You are dead.");
-		network.broadCast(defender.getCharacter().getName() + "has been killed!");
+		network.broadCast(defender.getCharacter().getName() + " has been killed!");
 	}
 
 	public void distributeCharacters(){
