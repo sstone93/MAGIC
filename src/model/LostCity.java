@@ -14,13 +14,13 @@ public class LostCity extends LostPlace implements Serializable{
 	}
 	
 	public String toString(){
-		System.out.println("The Lost City contains: ");
+		String s = ("The Lost City contains: ");
 		for(int i=0; i<this.chits.length;i++){					//prints sounds it contains
 			if(chits[i] != null){
-				System.out.println("	"+this.chits[i]);
+				s+=this.chits[i]+", ";
 			}
 		}
-		return "";
+		return s;
 	}
 
 }

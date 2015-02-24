@@ -33,17 +33,20 @@ public class TreasureSite extends MapChit implements Serializable{
 	}
 
 	public String toString(){
-		System.out.println(name.toString()+", Contains: ");
+		String t = name.toString()+":\n+ Contains Sounds: ";
 		for(int i=0;i<this.sounds.length;i++){					//prints sounds it contains
 			if(sounds[i] != null){
-				System.out.println("	"+this.sounds[i]);
+				t+=sounds[i]+", ";
 			}
 		}
+		//System.out.println(name.toString()+", Contains Sounds: "+t);
+		t += "\n + Contains Treasures: ";
 		for(int i=0;i<this.treasures.length;i++){					//prints treasures it contains
 			if(treasures[i] != null){
-				System.out.println("	"+this.treasures[i]);
+				t+=treasures[i]+", ";
 			}
 		}
-		return "";
+		//System.out.println(name.toString()+", Contains Treasures: "+t);
+		return t;
 	}
 }

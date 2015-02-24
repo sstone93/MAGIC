@@ -64,4 +64,8 @@ public class Armour implements Serializable {
     public void setActive(boolean active) {
         this.active = active;
     }
+    
+    public String toString(){
+    	return this.type.toString();
+    }
 }

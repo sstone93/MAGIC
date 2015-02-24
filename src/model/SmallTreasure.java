@@ -21,8 +21,7 @@ public class SmallTreasure extends Treasure{
 
 	@Override
 	public String toString(){
-		System.out.println(name.toString()+", Value:"+gold);
-		return "";
+		return name.toString()+", Value:"+gold;
 	}
 	
 }

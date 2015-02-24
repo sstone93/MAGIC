@@ -2,6 +2,7 @@ package model;
 
 import java.io.Serializable;
 
+import utils.Utility.ArmourName;
 import utils.Utility.GarrisonName;
 import utils.Utility.WeaponName;
 
@@ -14,7 +15,7 @@ public class Garrison implements Serializable{
 	//private Native[] natives;
 	//private Visitor[] visitors;
 	private Weapon[] weapons;
-	//private Armour[] armour;
+	private Armour[] armour;
 	private Treasure[] treasures = new Treasure[2];
 	//private Horses[] horses;
 	
@@ -43,11 +44,17 @@ public class Garrison implements Serializable{
 					WeaponName.CROSSBOW};
 			this.weapons = generateWeapons(n);
 			
+			ArmourName[] a = {ArmourName.SUIT_OF_ARMOR, ArmourName.SUIT_OF_ARMOR};
+			this.armour = generateArmour(a);
+			
 		} else if (name == GarrisonName.GUARD){
 			
 			WeaponName[] n = {WeaponName.MACE, WeaponName.MACE,
 					WeaponName.AXE, WeaponName.AXE, WeaponName.BROADSWORD};
 			this.weapons = generateWeapons(n);
+			
+			ArmourName[] a = {ArmourName.HELMET, ArmourName.BREASTPLATE};
+			this.armour = generateArmour(a);
 			
 		}else if(name == GarrisonName.HOUSE){
 
@@ -57,8 +64,13 @@ public class Garrison implements Serializable{
 					WeaponName.STAFF, WeaponName.STAFF};
 			this.weapons = generateWeapons(n);
 			
+			ArmourName[] a = {ArmourName.HELMET, ArmourName.HELMET, ArmourName.HELMET,
+					ArmourName.SHIELD, ArmourName.SHIELD};
+			this.armour = generateArmour(a);
+			
 		} else if (name == GarrisonName.INN){
 			
+			this.armour = null;
 			this.weapons = null;
 		}
 	}
@@ -69,6 +81,14 @@ public class Garrison implements Serializable{
 			w[i] = new Weapon(names[i]);
 		}
 		return w;
+	}
+	
+	private Armour[] generateArmour(ArmourName[] names){
+		Armour[] a = new Armour[names.length];
+		for(int i=0;i<names.length;i++){
+			a[i] = new Armour(names[i]);
+		}
+		return a;
 	}
 	
 	public GarrisonName getName(){
@@ -88,9 +108,19 @@ public class Garrison implements Serializable{
 			i+= this.weapons[this.weapons.length - 1];
 			System.out.println("			-contains weapons: "+ i);
 		}
+		i = "";
+		if(this.armour != null){
+			for(int z=0; z<this.armour.length-1;z++){
+				i+= this.armour[z]+", ";
+			}
+			i+= this.armour[this.armour.length - 1];
+			System.out.println("			-contains armour: "+ i);
+		}
+		i = "";
 		for(int z=0; z<this.treasures.length-1;z++){
 			if(this.treasures[z] != null){
-				System.out.println("			-contains treasure: "+this.treasures[z]);
+				i+= this.treasures[z]+", ";
+				System.out.println("			-contains treasures: "+i);
 			}
 		}
 		return "";

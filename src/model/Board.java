@@ -278,13 +278,13 @@ public class Board implements Serializable{
 		garrisons[0].setTreasures(g1);
 		Treasure[] g2 = {small.get(0),small.get(1)};
 		small.remove(0);small.remove(0);
-		garrisons[0].setTreasures(g2);
+		garrisons[1].setTreasures(g2);
 		Treasure[] g3 = {small.get(0),small.get(1)};
 		small.remove(0);small.remove(0);
-		garrisons[0].setTreasures(g3);
+		garrisons[2].setTreasures(g3);
 		Treasure[] g4 = {small.get(0),small.get(1)};
 		small.remove(0);small.remove(0);
-		garrisons[0].setTreasures(g4);
+		garrisons[3].setTreasures(g4);
 		
 		//mix the sound and treasure site chits
 		Collections.shuffle(mc);

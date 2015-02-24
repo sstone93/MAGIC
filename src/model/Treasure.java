@@ -34,4 +34,8 @@ public class Treasure implements Serializable{
     public void setGold(int gold) {
         this.gold = gold;
     }
+    
+    public String toString(){
+    	return this.type.toString();
+    }
 }

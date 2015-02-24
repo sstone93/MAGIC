@@ -14,13 +14,13 @@ public class LostCastle extends LostPlace implements Serializable{
 	}
 	
 	public String toString(){
-		System.out.println("The Lost Castle contains: ");
-		for(int i=0;i<this.chits.length;i++){					//prints sounds it contains
+		String s = ("The Lost Castle contains: ");
+		for(int i=0; i<this.chits.length;i++){					//prints sounds it contains
 			if(chits[i] != null){
-				System.out.println("	"+this.chits[i]);
+				s+=this.chits[i]+", ";
 			}
 		}
-		return "";
+		return s;
 	}
 
 }
