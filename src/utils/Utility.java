@@ -65,6 +65,20 @@ public class Utility {
 	    	default: return null;
     	}
     }
+    
+    public static String getCharacterImage(CharacterName name) {
+    	switch(name){
+	    	case AMAZON: return "amazon.gif";
+	    	case BERSERKER: return "berserker.gif";
+	    	case BLACK_KNIGHT: return "black_knight.gif";
+	    	case CAPTAIN: return "captain.gif";
+	    	case DWARF: return "dwarf.gif";
+	    	case ELF: return "elf.gif";
+	    	case SWORDSMAN: return "swordsman.gif";
+	    	case WHITE_KNIGHT: return "white_knight.gif";
+	    	default: return null;
+    	}
+    }
 
     public static String getGarrisonImage(GarrisonName name) {
     	switch(name){
