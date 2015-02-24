@@ -48,7 +48,7 @@ public class Player implements Serializable{
         this.treasures = new Treasure[100]; // arbitrary number
         this.weapons   = new Weapon[Config.WEAPON_AND_ARMOUR_COUNT];
         this.armour    = new Armour[Config.WEAPON_AND_ARMOUR_COUNT];
-        this.activities = new Object[13];
+        this.activities = new Object[8];
         this.ID = ID;
 
         for (int i = 0; i < character.startingWeapons.length; i++) {
