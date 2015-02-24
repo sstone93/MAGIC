@@ -308,13 +308,13 @@ public class ServerController extends Handler{
     				
 		    		switch((Actions) activities[moves]) {
 
-		    		case MOVE: board.move(player, (Clearing)activities[moves + 1]); moves = moves + 2; network.broadCast(player.getCharacter().getName() + "is moving!"); break;
-		    		case HIDE: hide(player); moves++; network.broadCast(player.getCharacter().getName() + " is hiding!"); break;
-		    		case ALERT: alert(player); moves++; network.broadCast(player.getCharacter().getName() + " is alerting their weapon!"); break;
-		    		case REST: rest(player); moves++; network.broadCast(player.getCharacter().getName() + " is resting!"); break;
-		    		case SEARCH: search(player); moves++; network.broadCast(player.getCharacter().getName() + " is searching!"); break;
-		    		case TRADE: moves++; network.broadCast(player.getCharacter().getName() + " is trading!"); break;
-		    		case FOLLOW: moves++; network.broadCast(player.getCharacter().getName() + " is following!"); break;
+		    		case MOVE: board.move(player, (Clearing)activities[moves + 1]); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is moving!"); break;
+		    		case HIDE: hide(player); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is hiding!"); break;
+		    		case ALERT: alert(player); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is alerting their weapon!"); break;
+		    		case REST: rest(player); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is resting!"); break;
+		    		case SEARCH: search(player); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is searching!"); break;
+		    		case TRADE: moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is trading!"); break;
+		    		case FOLLOW: moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is following!"); break;
 		    		}
     			}
     		}
