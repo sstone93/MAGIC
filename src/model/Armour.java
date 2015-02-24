@@ -9,16 +9,29 @@ public class Armour implements Serializable {
 
 	private static final long serialVersionUID = 5965156814348780830L;
 	ItemWeight  weight;
-    String      health;
     ArmourName  type;
     boolean     damaged;
     boolean     active;
 
     Armour(ArmourName type) {
     	this.type = type;
-    	this.weight = ItemWeight.NEGLIGIBLE;
     	this.active = true;
     	this.damaged = false;
+    	if (type == ArmourName.BREASTPLATE) {
+    		this.weight = ItemWeight.MEDIUM;
+    	}
+    	else if (type == ArmourName.HELMET) {
+    		this.weight = ItemWeight.LIGHT;
+    	}
+    	else if (type == ArmourName.SHIELD) {
+    		this.weight = ItemWeight.LIGHT;
+    	}
+    	else if (type == ArmourName.SUIT_OF_ARMOR) {
+    		this.weight = ItemWeight.HEAVY;
+    	}
+    	else {
+    		this.weight = ItemWeight.NEGLIGIBLE;
+    	}
     }
 
     public ItemWeight getWeight() {
@@ -27,13 +40,6 @@ public class Armour implements Serializable {
 
     public void setWeight(ItemWeight weight) {
         this.weight = weight;
-    }
-
-    public String getHealth() {
-        return health;
-    }
-    public void setHealth(String health) {
-        this.health = health;
     }
 
     public ArmourName getType() {

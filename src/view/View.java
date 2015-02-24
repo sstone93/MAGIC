@@ -546,7 +546,7 @@ public class View extends JFrame {
 				for(int i = 0; i < armour.length; i++){
 					if(armour[i] != null) {
 						armourS += armour[i].getType().toString() + " weight - " + armour[i].getWeight().toString() + 
-								" health - " + armour[i].getHealth() + " damaged - " + String.valueOf(armour[i].isDamaged()) + 
+								" damaged - " + String.valueOf(armour[i].isDamaged()) + 
 								" active - " + String.valueOf(armour[i].isActive()) + "\n";
 					}
 				}
