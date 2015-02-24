@@ -15,7 +15,7 @@ public class CombatMoves implements Serializable{
 	public int maneuverFatigue;
 	public Defenses defense;
 	
-	public CombatMoves (Player target, Attacks attack, int attackFatigue, Maneuvers maneuver, int maneuverFatigue, Defenses defense) {
+	public CombatMoves (Attacks attack, int attackFatigue, Maneuvers maneuver, int maneuverFatigue, Defenses defense) {
 		this.attack = attack;
 		this.attackFatigue = attackFatigue;
 		this.maneuver = maneuver;

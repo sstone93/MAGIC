@@ -4,6 +4,7 @@ import networking.Message;
 import networking.NetworkClient;
 import model.Board;
 import model.ClientModel;
+import model.CombatMoves;
 import model.Player;
 import utils.Utility.*;
 import view.View;
@@ -125,9 +126,10 @@ public class ClientController extends Handler{
 	 */
 	//TODO CREATES COMBAT MOVE OBJECT, SENDS IT IN THE MESSAGE
 	public void handleCombatMoves(Attacks a, Defenses d, Maneuvers m, int aF, int mF){
-		Object[] mes = {a,d,m};
-		network.send(new Message(MessageType.ACTIVITIES, mes));
-		System.out.println("Sent "+a+d+m);
+		Object[] mes = new Object[0];
+		mes[0] = new CombatMoves(a, aF, m, mF, d);
+		network.send(new Message(MessageType.COMBAT_MOVES, mes));
+		System.out.println("Sent COMBATMOVES");
 		this.view.update();
 	}
 	
@@ -161,7 +163,10 @@ public class ClientController extends Handler{
 	 * @param name the name of the selected character
 	 */
 	public void handleCharacterSelection(CharacterName name){
-		System.out.println(name);
+		Object[] mes = new CharacterName[0];
+		mes[0] = name;
+		network.send(new Message(MessageType.CHARACTER_SELECT, mes));
+		System.out.println("Sent character select");
 		this.view.update();
 	}
 	
@@ -170,7 +175,11 @@ public class ClientController extends Handler{
 	 * @param name the CharacterName of the player to target
 	 */
 	public void handleTargetSelection(CharacterName name){
-		System.out.println(name);
+		Object[] mes = new Character[0];
+		mes[0] = name;
+		network.send(new Message(MessageType.COMBAT_TARGET, mes));
+		System.out.println("Sent target selection");
+		this.view.update();
 	}
 	
 	/**

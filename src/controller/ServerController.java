@@ -52,6 +52,15 @@ public class ServerController extends Handler{
 		System.out.println("Now waiting for clients to connect.");
 	}
 
+	public Player charToPlayer(CharacterName n){
+		for(int j=0; j< playerCount; j++){
+			if(players[j].getCharacter().getName() == n){
+				return players[j];
+			}
+		}
+		return null;
+	}
+	
 	/**
 	 * This is the method that handles incomming messages from the networking components
 	 * @param ID The ID of the client sending the message
@@ -78,7 +87,9 @@ public class ServerController extends Handler{
 			if( m.getType() == MessageType.COMBAT_TARGET){
 				if(state == GameState.CHOOSE_COMBAT){
 					recievedCombat += 1;
-					findPlayer(ID).setTarget((Player) m.getData()[0]);
+					
+					//turns the recieved charctername into a player
+					findPlayer(ID).setTarget(charToPlayer((CharacterName) m.getData()[0]));
 				}else{
 					network.send(ID, "NOT ACCEPTING COMBAT TARGETS ATM");
 				}
