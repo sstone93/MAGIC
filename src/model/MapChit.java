@@ -18,8 +18,7 @@ public class MapChit implements Serializable{
 	}
 	
 	public String toString(){
-		System.out.println("sound: "+name.toString());
-		return "";
+		return name.toString();
 	}
 
 }

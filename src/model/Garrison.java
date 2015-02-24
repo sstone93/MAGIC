@@ -117,11 +117,11 @@ public class Garrison implements Serializable{
 			System.out.println("			-contains armour: "+ i);
 		}
 		i = "";
-		for(int z=0; z<this.treasures.length-1;z++){
-			if(this.treasures[z] != null){
+		if(this.treasures != null){
+			for(int z=0; z<this.treasures.length;z++){
 				i+= this.treasures[z]+", ";
-				System.out.println("			-contains treasures: "+i);
 			}
+			System.out.println("			-contains treasures: "+i);
 		}
 		return "";
 	}

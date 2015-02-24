@@ -302,9 +302,14 @@ public class Tile implements Serializable{
 	public String toString(){
 		
 		System.out.println(this.name.toString());	//name of tile
-		System.out.println("	has WarningChit: " + warning);
+		if(warning != null){
+			System.out.println("	has WarningChit: " + warning.toString());
+		}
+		if(sound != null){
+			System.out.println("	has MapChit: " + sound.toString());
+		}
 		if(lost != null){
-			System.out.println("	has LostPlace: " + lost);	
+			System.out.println("	has LostPlace: " + lost.toString());	
 		}
 		for(int i=0;i<clearings.length;i++){			//iterates over clearings on tile
 			System.out.println("	"+clearings[i]);

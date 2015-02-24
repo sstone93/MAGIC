@@ -18,7 +18,6 @@ public class WarningChit implements Serializable{
 	}
 	
 	public String toString(){
-		System.out.println(name.toString());
-		return "";
+		return name.toString();
 	}
 }
