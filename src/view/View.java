@@ -54,6 +54,10 @@ public class View extends JFrame {
 	private JComboBox play2;
 	private JComboBox play3;
 	private JComboBox play4;
+	private JComboBox play1Location;
+	private JComboBox play2Location;
+	private JComboBox play3Location;
+	private JComboBox play4Location;
 	private JComboBox attack;
 	private JComboBox defense;
 	private JComboBox maneuvers;
@@ -208,21 +212,57 @@ public class View extends JFrame {
 		playsPanel.add(lblNewLabel_1);
 		
 		play1 = new JComboBox();
+		play1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if((Actions)play1.getSelectedItem() == Actions.MOVE) {
+					play1Location.setVisible(true);
+				} else {
+					play1Location.setVisible(false);
+				}
+			}
+		});
 		play1.setModel(new DefaultComboBoxModel(Actions.values()));
 		play1.setBounds(10, 41, 93, 20);
 		playsPanel.add(play1);
 		
 		play2 = new JComboBox();
+		play2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if((Actions)play2.getSelectedItem() == Actions.MOVE) {
+					play2Location.setVisible(true);
+				} else {
+					play2Location.setVisible(false);
+				}
+			}
+		});
 		play2.setModel(new DefaultComboBoxModel(Actions.values()));
 		play2.setBounds(113, 41, 93, 20);
 		playsPanel.add(play2);
 		
 		play3 = new JComboBox();
+		play3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if((Actions)play3.getSelectedItem() == Actions.MOVE) {
+					play3Location.setVisible(true);
+				} else {
+					play3Location.setVisible(false);
+				}
+			}
+		});
 		play3.setModel(new DefaultComboBoxModel(Actions.values()));
 		play3.setBounds(216, 41, 93, 20);
 		playsPanel.add(play3);
 		
 		play4 = new JComboBox();
+		play4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if((Actions)play4.getSelectedItem() == Actions.MOVE) {
+					play4Location.setVisible(true);
+				} else {
+					play4Location.setVisible(false);
+				}
+			}
+		});
 		play4.setModel(new DefaultComboBoxModel(Actions.values()));
 		play4.setBounds(319, 41, 93, 20);
 		playsPanel.add(play4);
@@ -230,11 +270,31 @@ public class View extends JFrame {
 		JButton btnRecord = new JButton("Record");
 		btnRecord.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				control.handlePlaysRecorded((Actions)play1.getSelectedItem(), (Actions)play2.getSelectedItem(), (Actions)play3.getSelectedItem(), (Actions)play1.getSelectedItem());
+				control.handlePlaysRecorded((Actions)play1.getSelectedItem(), (String)play1Location.getSelectedItem(), 
+						(Actions)play2.getSelectedItem(), (String)play2Location.getSelectedItem(), 
+						(Actions)play3.getSelectedItem(), (String)play3Location.getSelectedItem(), 
+						(Actions)play1.getSelectedItem(), (String)play4Location.getSelectedItem());
 			}
 		});
 		btnRecord.setBounds(422, 40, 89, 23);
 		playsPanel.add(btnRecord);
+		
+		play1Location = new JComboBox();
+		play1Location.setBounds(10, 84, 93, 20);
+		playsPanel.add(play1Location);
+		
+		play2Location = new JComboBox();
+		play2Location.setBounds(113, 84, 93, 20);
+		playsPanel.add(play2Location);
+		
+		play3Location = new JComboBox();
+		play3Location.setBounds(216, 84, 93, 20);
+		playsPanel.add(play3Location);
+		
+		play4Location = new JComboBox();
+		play4Location.setDoubleBuffered(true);
+		play4Location.setBounds(319, 84, 93, 20);
+		playsPanel.add(play4Location);
 		
 		textDisplay = new JTextArea();
 		textDisplay.setBounds(0, 500, 750, 192);
@@ -377,6 +437,7 @@ public class View extends JFrame {
 			
 		}
 		movesPanel = new JPanel();
+		movesPanel.setVisible(false);
 		movesPanel.setBorder(new LineBorder(Color.GRAY));
 		movesPanel.setBounds(750, 500, 524, 192);
 		contentPane.add(movesPanel);
@@ -402,6 +463,7 @@ public class View extends JFrame {
 		movesPanel.add(btnSelectMoves);
 		
 		alertPanel = new JPanel();
+		alertPanel.setVisible(false);
 		alertPanel.setBorder(new LineBorder(Color.GRAY));
 		alertPanel.setBounds(750, 500, 524, 192);
 		contentPane.add(alertPanel);
@@ -427,6 +489,7 @@ public class View extends JFrame {
 		movesPanel.add(btnSelectAlert);
 		
 		combatPanel = new JPanel();
+		combatPanel.setVisible(false);
 		combatPanel.setBounds(750, 500, 524, 192);
 		contentPane.add(combatPanel);
 		combatPanel.setLayout(null);
@@ -473,6 +536,7 @@ public class View extends JFrame {
 		combatPanel.add(btnSelect);
 		
 		targetPanel = new JPanel();
+		targetPanel.setVisible(false);
 		targetPanel.setBounds(750, 500, 524, 192);
 		contentPane.add(targetPanel);
 		targetPanel.setLayout(null);
@@ -597,6 +661,20 @@ public class View extends JFrame {
 				scrollPanel.setViewportView(characterSelectPanel);
 				break;
 			case CHOOSE_PLAYS:
+				if (b != null){
+					String[] clearings = new String[95];//had to hardcode the number for this interation
+					int count = 0;
+					for (int i = 0; i < b.tiles.length; i++){
+						for (int j=0; j < b.tiles[i].getClearings().length; j++){
+							clearings[count] = b.tiles[i].getName().toString() + " clearing " + b.tiles[i].getClearings()[j].getClearingNumber();
+							count++;
+						}
+					}
+					play1Location.setModel(new DefaultComboBoxModel(clearings));
+					play2Location.setModel(new DefaultComboBoxModel(clearings));
+					play3Location.setModel(new DefaultComboBoxModel(clearings));
+					play4Location.setModel(new DefaultComboBoxModel(clearings));
+				}
 				alertPanel.setVisible(false);
 				combatPanel.setVisible(false);
 				movesPanel.setVisible(false);

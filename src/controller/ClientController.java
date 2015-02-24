@@ -111,11 +111,16 @@ public class ClientController extends Handler{
 	/**
 	 * Should send the selected plays to the server.
 	 * @param p1 the player's first play
+	 * @param l1 location where the player wants to move, in the form "<TileName> clearing <clearingNumber>"
 	 * @param p2 the player's second play
+	 * @param l2 location where the player wants to move, in the form "<TileName> clearing <clearingNumber>"
 	 * @param p3 the player's third play
+	 * @param l3 location where the player wants to move, in the form "<TileName> clearing <clearingNumber>"
 	 * @param p4 the player's fourth play
+	 * @param l4 location where the player wants to move, in the form "<TileName> clearing <clearingNumber>"
+	 * Assumes locations will be ignored by server if not move action
 	 */
-	public void handlePlaysRecorded(Actions p1, Actions p2, Actions p3, Actions p4){
+	public void handlePlaysRecorded(Actions p1, String l1, Actions p2, String l2, Actions p3, String l3, Actions p4, String l4){
 		Object[] mes = {p1, p2, p3, p4};
 		network.send(new Message(MessageType.ACTIVITIES, mes));
 		System.out.println("Sent "+p1+p2+p3+p4);
