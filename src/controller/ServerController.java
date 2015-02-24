@@ -209,8 +209,8 @@ public class ServerController extends Handler{
      * @param pos The position of the weapon in the weapon array
      * @param state the new state of the weapon
      */
-    public void alert(Player p, int pos, Boolean state) {
-       p.getWeapons()[pos].setActive(state);
+    public void alert(Player p) {
+       p.getWeapons()[0].setActive(!p.getWeapons()[0].isActive());
     }
 
     /**
@@ -268,14 +268,13 @@ public class ServerController extends Handler{
     		int moves = 0;
     		if (!player.isBlocked()) {				//assuming the player is not being blocked by another
     			// format: [MOVE, clearing]
-    			// format: [ALERT, weaponposition, trueOrFalse]
 
     			if (activities[moves] != null) {
 		    		switch((Actions) activities[0]) {
 
 		    		case MOVE: board.move(player, (Clearing)activities[moves + 1]); moves = moves + 2; break;
 		    		case HIDE: hide(player); moves++; break;
-		    		case ALERT: alert(player, (int)activities[moves + 1], (boolean)activities[moves + 2]); moves = moves + 3; break;
+		    		case ALERT: alert(player); moves++; break;
 		    		case REST: rest(player); moves++; break;
 		    		case SEARCH: search(player); moves++; break;
 		    		case TRADE: moves++; break;
