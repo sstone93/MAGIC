@@ -442,8 +442,10 @@ public class ServerController extends Handler{
         while (nextMover < playerCount) {
             for (int i = 0; i < playerCount; i++) {
                 if (players[i].order == nextMover) {
-                	encounter(players[i], players[i].getTarget());
-                    nextMover++;
+                	if (players[i].getTarget() != null) {
+                		encounter(players[i], players[i].getTarget());	
+                	}
+                	nextMover++;
                     break;
                 }
             }
