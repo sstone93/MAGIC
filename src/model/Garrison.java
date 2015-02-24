@@ -15,7 +15,7 @@ public class Garrison implements Serializable{
 	//private Visitor[] visitors;
 	private Weapon[] weapons;
 	//private Armour[] armour;
-	//private Treasure[] treasures;
+	private Treasure[] treasures = new Treasure[2];
 	//private Horses[] horses;
 	
 	public Garrison(GarrisonName n){
@@ -75,6 +75,10 @@ public class Garrison implements Serializable{
 		return name;
 	}
 	
+	public void setTreasures(Treasure[] t){
+		treasures = t;
+	}
+	
 	public String toString(){
 		String i = "";
 		if(this.weapons != null){
@@ -84,7 +88,11 @@ public class Garrison implements Serializable{
 			i+= this.weapons[this.weapons.length - 1];
 			System.out.println("			-contains weapons: "+ i);
 		}
-		//System.out.println("			-contains weapons: "+this.weapons);
+		for(int z=0; z<this.treasures.length-1;z++){
+			if(this.treasures[z] != null){
+				System.out.println("			-contains treasure: "+this.treasures[z]);
+			}
+		}
 		return "";
 	}
 	

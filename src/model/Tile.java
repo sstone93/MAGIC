@@ -18,6 +18,7 @@ public class Tile implements Serializable{
 	private int y;
 	private MapChit sound;
 	private WarningChit warning;
+	private LostPlace lost;
 	
 	/**
 	 * 
@@ -29,6 +30,14 @@ public class Tile implements Serializable{
 		this.y = y;
 		this.clearings = new Clearing[determineClearings(name)];
 		setUpTile();			//this will set up the clearings on this tile.
+	}
+	
+	public void setLostPlace(LostPlace l){
+		this.lost = l;
+	}
+	
+	public LostPlace getLostPlace(){
+		return this.lost;
 	}
 	
 	public void setWarningChit(WarningChit s){
@@ -295,6 +304,8 @@ public class Tile implements Serializable{
 		System.out.println(this.name.toString());	//name of tile
 		
 		System.out.println("	has WarningChit: " + warning);
+		
+		System.out.println("	has LostPlace: " + lost);
 		
 		for(int i=0;i<clearings.length;i++){			//iterates over clearings on tile
 			System.out.println("	"+clearings[i]);

@@ -25,7 +25,10 @@ public class Board implements Serializable{
 	private static final long serialVersionUID = -4906643706682852990L;
 	public Tile[] tiles;
 	public Garrison[] garrisons;
-	//public Treasure
+	ArrayList<SmallTreasure> small = new ArrayList<SmallTreasure>();
+	ArrayList<LargeTreasure> large = new ArrayList<LargeTreasure>();
+	ArrayList<TreasureWithinTreasure> twit = new ArrayList<TreasureWithinTreasure>();
+
 	/**
 	 * 
 	 */
@@ -36,9 +39,6 @@ public class Board implements Serializable{
 		placeGarrisons();
 		placePlayers(players);
 		setUpMapChits();
-		treasureSetup();
-		//System.out.println("Built Board with no Crashes");
-		//instanciateTreasures();
 	}
 	
 	/**
@@ -138,59 +138,30 @@ public class Board implements Serializable{
 		this.garrisons[3].setLocation(tiles[11].getClearing(5));
 	}
 	
-	public void treasureSetup(){
-		
-		ArrayList<SmallTreasure> small = new ArrayList<SmallTreasure>();
-		ArrayList<LargeTreasure> large = new ArrayList<LargeTreasure>();
-		ArrayList<TreasureWithinTreasure> twit = new ArrayList<TreasureWithinTreasure>();
-		
+	public void instanciateTreasures(){
 		//instanciate the small treasures
 		for (SmallTreasureName n : SmallTreasureName.values()) {
-			  small.add(new SmallTreasure(n));
+			small.add(new SmallTreasure(n));
 		}
-		
+
 		//instanciate the large treasures
 		for (LargeTreasureName n : LargeTreasureName.values()) {
-			  large.add(new LargeTreasure(n));
+			large.add(new LargeTreasure(n));
 		}
-		
-		//instanciate the treasures within treasures
-		for (TreasureWithinTreasureName n : TreasureWithinTreasureName.values()) {
-			  twit.add(new TreasureWithinTreasure(n));
-		}
-		
-		Collections.shuffle(small);
-		Collections.shuffle(large);
-		Collections.shuffle(twit);
-		
+
+		//TODO SETUP TREASURE WITHIN TREASURES AND ADD TO LARGE TREASURES
 		//setup treasure within treasures
 		//1. choose 5 random LARGE treasures and put them "in" the twts'
 		//chest = 2 large, thief = 1, toad = 1, crypt = 1
 		
-		
-		
-		//2. now we merge tne twts and large treasures together
-		//hoard = 5 large, 4 small (below large treasures)
-		
-		//lair = 3 large, 4 small (below large treasures)
-		//altar = 4 large
-		//shrine = 2 large, 2 small (below large treasures)
-		//pool = 3 large, 6 small (below large treasures)
-		//vault = 5 large
-		//cairns = 1 large, 6 small (below large treasures)
-		//statue = 1 large, 2 small (below large treasures)
-		
-		//dwellings (company, woodfolk, patrol, lancers, bashkars)
-		//all 5 take 2 small treasures
-		
-		//visitors
-		//scholar = 3 small
-		
-		//garrisons (chapel, house, inn, guard(house)
-		//all 4 take 2 small treasures each
-		
-		
-		//thats all large treasures 24/24, and 
+		//instanciate the treasures within treasures
+		for (TreasureWithinTreasureName n : TreasureWithinTreasureName.values()) {
+			twit.add(new TreasureWithinTreasure(n));
+		}
+
+		Collections.shuffle(small);
+		Collections.shuffle(large);
+		Collections.shuffle(twit);
 		
 	}
 	
@@ -223,26 +194,127 @@ public class Board implements Serializable{
 		for (SoundChits n : SoundChits.values()) {
 			  mc.add(new MapChit(n));
 		}
-		for (TreasureLocations n : TreasureLocations.values()) {
-			  mc.add(new TreasureSite(n));
-		}
+	
+		instanciateTreasures();
 		
-		Collections.shuffle(mc);
+		//2. now we merge tne twts and large treasures together
+		
+		//TODO TURN THIS INTO FUNCTIONS AND STUFF
+		
+		//altar = 4 large
+		Treasure[] altart = {large.get(0), large.get(1),large.get(2), large.get(3)};
+		large.remove(0);large.remove(0);large.remove(0);large.remove(0);
+		mc.add(new TreasureSite(TreasureLocations.ALTAR, altart));
+		
+		//cairns = 1 large, 6 small (below large treasures)
+		Treasure[] cairnt = {large.get(0), small.get(0),small.get(1),small.get(2),small.get(3),small.get(4), small.get(5)};
+		large.remove(0);small.remove(0);small.remove(0);small.remove(0);small.remove(0);small.remove(0);
+		mc.add(new TreasureSite(TreasureLocations.CAIRNS, cairnt));
+		
+		//hoard = 5 large, 4 small (below large treasures)
+		Treasure[] he = {large.get(0), large.get(1),large.get(2), large.get(3),large.get(4),small.get(0),small.get(1),small.get(2),small.get(3)};
+		large.remove(0);large.remove(0);large.remove(0);large.remove(0);large.remove(0);small.remove(0);small.remove(0);small.remove(0);small.remove(0);
+		mc.add(new TreasureSite(TreasureLocations.HOARD,he));
+		
+		//lair = 3 large, 4 small (below large treasures)
+		Treasure[] la = {large.get(0), large.get(1),large.get(2),small.get(0),small.get(1),small.get(2),small.get(3)};
+		large.remove(0);large.remove(0);large.remove(0);small.remove(0);small.remove(0);small.remove(0);small.remove(0);
+		mc.add(new TreasureSite(TreasureLocations.LAIR,la));
+		
+		//pool = 3 large, 6 small (below large treasures)
+		Treasure[] pol ={large.get(0), large.get(1),large.get(2),small.get(0),small.get(1),small.get(2),small.get(3),small.get(4), small.get(5)};
+		large.remove(0);large.remove(0);large.remove(0);;small.remove(0);small.remove(0);small.remove(0);small.remove(0);small.remove(0);
+		mc.add(new TreasureSite(TreasureLocations.POOL, pol));
+		
+		//shrine = 2 large, 2 small (below large treasures)
+		Treasure[] SH = {large.get(0),large.get(1), small.get(0),small.get(1)};
+		large.remove(0);large.remove(0);small.remove(0);small.remove(0);
+		mc.add(new TreasureSite(TreasureLocations.SHRINE,SH));
+		
+		//statue = 1 large, 2 small (below large treasures)
+		Treasure[] statt = {large.get(0), small.get(0),small.get(1)};
+		large.remove(0);small.remove(0);small.remove(0);
+		mc.add(new TreasureSite(TreasureLocations.STATUE, statt));
+		
+		//vault = 5 large
+		Treasure[] vaultt = {large.get(0), large.get(1),large.get(2), large.get(3),large.get(4)};
+		large.remove(0);large.remove(0);large.remove(0);large.remove(0);large.remove(0);
+		mc.add(new TreasureSite(TreasureLocations.VAULT, vaultt));
+				
+		//dwellings (company, woodfolk, patrol, lancers, bashkars)
+		//all 5 take 2 small treasures
+				
+		//visitors
+		//scholar = 3 small
+		
+		//garrisons (chapel, house, inn, guard(house)
+		//all 4 take 2 small treasures each
+		Treasure[] g1 = {small.get(0),small.get(1)};
+		small.remove(0);small.remove(0);
+		garrisons[0].setTreasures(g1);
+		Treasure[] g2 = {small.get(0),small.get(1)};
+		small.remove(0);small.remove(0);
+		garrisons[0].setTreasures(g2);
+		Treasure[] g3 = {small.get(0),small.get(1)};
+		small.remove(0);small.remove(0);
+		garrisons[0].setTreasures(g3);
+		Treasure[] g4 = {small.get(0),small.get(1)};
+		small.remove(0);small.remove(0);
+		garrisons[0].setTreasures(g4);
 		
 		//mix the sound and treasure site chits
+		Collections.shuffle(mc);
+
 		//5 given to the lost city
+		MapChit[] c1 = {mc.get(0), mc.get(1),mc.get(2), mc.get(3),mc.get(4)};
+		mc.remove(0);mc.remove(0);mc.remove(0);mc.remove(0);mc.remove(0);
+		LostCity lostcity = new LostCity(c1);
 		//5 given to the lost castle
+		MapChit[] c2 = {mc.get(0), mc.get(1),mc.get(2), mc.get(3),mc.get(4)};
+		mc.remove(0);mc.remove(0);mc.remove(0);mc.remove(0);mc.remove(0);
+		LostCastle lostcastle = new LostCastle(c2);
 		
 		//8 left, 2 groups of 4
-		
 		//add lost city to 1 of the groups of 4 (now 5)
+		ArrayList<Object> caves = new ArrayList<Object>();
+		caves.add(mc.get(0));caves.remove(0);
+		caves.add(mc.get(0));caves.remove(0);
+		caves.add(mc.get(0));caves.remove(0);
+		caves.add(mc.get(0));caves.remove(0);
+		caves.add(lostcity);
+		Collections.shuffle(caves);
 		//1 placed in each caves tile
 		
+		//puts the chits into the caves tiles
+		placeChits(caves, 5,6,10,15,16);
+		
 		//add lost castle to the other group
+		ArrayList<Object> mountains = new ArrayList<Object>();
+		mountains.add(mc.get(0));mountains.remove(0);
+		mountains.add(mc.get(0));mountains.remove(0);
+		mountains.add(mc.get(0));mountains.remove(0);
+		mountains.add(mc.get(0));mountains.remove(0);
+		mountains.add(lostcastle);
+		Collections.shuffle(mountains);
 		//put one into each mountain tile
+		
+		//puts the chits into the caves tiles
+		placeChits(mountains, 0,2,3,9,14);
 		
 		//reveal all of the VALLEY map chits (after character selection stuff done)
 		//this is done already!
+	}
+	
+	public void placeChits(ArrayList<Object> a,int p1,int p2,int p3, int p4, int p5){
+		
+		int[] temps = {p1, p2, p3, p4, p5};
+		for(int i=0; i<5; i++){
+			if(a.get(i) instanceof LostPlace){
+				
+			}else{
+				tiles[temps[i]].setMapChit((MapChit)a.get(i));
+			}
+		}
 	}
 	
 	public void placePlayers(Player[] p){

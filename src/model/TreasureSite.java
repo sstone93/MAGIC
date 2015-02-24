@@ -21,6 +21,13 @@ public class TreasureSite extends MapChit implements Serializable{
 		
 	}
 	
+	public TreasureSite(TreasureLocations name, Treasure[] t){
+		super(SoundChits.FLUTTER_1);
+		this.name = name;
+		this.treasures = t;
+		
+	}
+	
 	public void setTreasures(Treasure[] t){
 		this.treasures = t;
 	}
