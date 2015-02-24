@@ -113,16 +113,19 @@ public class View extends JFrame {
 		characterText.setBounds(101, 41, 86, 20);
 		CharacterInfoPanel.add(characterText);
 		characterText.setColumns(10);
+		characterText.setEditable(false);
 		
 		vpText = new JTextField();
 		vpText.setBounds(101, 66, 86, 20);
 		CharacterInfoPanel.add(vpText);
 		vpText.setColumns(10);
+		vpText.setEditable(false);
 		
 		healthText = new JTextField();
 		healthText.setBounds(101, 117, 86, 20);
 		CharacterInfoPanel.add(healthText);
 		healthText.setColumns(10);
+		healthText.setEditable(false);
 		
 		JLabel lblTreasures = new JLabel("Treasures");
 		lblTreasures.setBounds(10, 317, 65, 14);
@@ -141,6 +144,7 @@ public class View extends JFrame {
 		goldText.setBounds(101, 91, 86, 20);
 		CharacterInfoPanel.add(goldText);
 		goldText.setColumns(10);
+		goldText.setEditable(false);
 		
 		JLabel lblFatigue = new JLabel("Fatigue");
 		lblFatigue.setBounds(224, 47, 65, 14);
@@ -149,6 +153,7 @@ public class View extends JFrame {
 		fatigueText = new JTextField();
 		fatigueText.setColumns(10);
 		fatigueText.setBounds(315, 41, 86, 20);
+		fatigueText.setEditable(false);
 		CharacterInfoPanel.add(fatigueText);
 		
 		JLabel lblFame = new JLabel("Fame");
@@ -158,6 +163,7 @@ public class View extends JFrame {
 		fameText = new JTextField();
 		fameText.setColumns(10);
 		fameText.setBounds(315, 66, 86, 20);
+		fameText.setEditable(false);
 		CharacterInfoPanel.add(fameText);
 		
 		JLabel lblNotoriety = new JLabel("Notoriety");
@@ -167,11 +173,13 @@ public class View extends JFrame {
 		notorietyText = new JTextField();
 		notorietyText.setColumns(10);
 		notorietyText.setBounds(315, 91, 86, 20);
+		notorietyText.setEditable(false);
 		CharacterInfoPanel.add(notorietyText);
 		
 		hiddenText = new JTextField();
 		hiddenText.setColumns(10);
 		hiddenText.setBounds(315, 117, 86, 20);
+		hiddenText.setEditable(false);
 		CharacterInfoPanel.add(hiddenText);
 		
 		JLabel lblHidden = new JLabel("Hidden");
