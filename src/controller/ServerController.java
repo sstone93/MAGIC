@@ -452,11 +452,12 @@ public class ServerController extends Handler{
         }
 
         //Progresses to the next day or ends the game
-       // if(!resetDay()){ //if it is not the 28th day....
+//        boolean thing = resetDay();
+//        if(thing == false){ //if it is not the 28th day....
         	startDay();
-      //  } else {
-        	//endGame();
-       // }
+//        } else {
+//        	endGame();
+//        }
     }
 
     /**

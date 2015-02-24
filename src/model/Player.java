@@ -67,6 +67,7 @@ public class Player implements Serializable{
         p.moves = this.moves;
         p.target = this.target;
         p.location = this.location;
+        p.location.occupants = this.location.occupants;
         p.armour = this.armour;
         p.weapons = this.weapons;
         p.chits = this.chits;

@@ -49,8 +49,8 @@ public class Clearing implements Serializable{
     public void moveIn(Player p){
     	p.getLocation().moveOut(p);
     	p.setLocation(this);
-    	this.occupants[nextOccupant] = p;
-    	this.nextOccupant += 1;	//TODO THIS IS A PROBLEM, TOO MANY MOVES IN AND OUT DESTROY THE ARRAY, NEED AN ARAY LIST!!!!!!!!!!11
+//    	this.addOccupant(p);
+//    	this.nextOccupant += 1;	//TODO THIS IS A PROBLEM, TOO MANY MOVES IN AND OUT DESTROY THE ARRAY, NEED AN ARAY LIST!!!!!!!!!!11
     }
     
     /**

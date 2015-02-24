@@ -422,7 +422,12 @@ public class Board implements Serializable{
             player.removeWeaponsWithHigherWeight(highestWeight);
             player.removeArmourWithHigherWeight(highestWeight);
 
-            player.moveTo(newClearing);
+//            player.moveTo(newClearing);
+//            player.getLocation() ; 
+            // TODO: need to remove player from old clearing
+            player.setLocation(newClearing);
+            
+            newClearing.addOccupant(player);
 
         }
         System.out.println("END MOVE");
