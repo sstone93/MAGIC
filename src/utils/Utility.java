@@ -76,6 +76,8 @@ public class Utility {
     	}
     }
 
+    public enum WarningChits {SMOKE, DANK, RUINS, STINK, BONES}
+
     public enum SoundChits {HOWL_4, HOWL_5, FLUTTER_1, FLUTTER_2, PATTER_2, PATTER_5, ROAR_4, ROAR_6, SLITHER_3, SLITHER_6}
     
     public enum MessageType {COMBAT_TARGET, COMBAT_MOVES, CHARACTER_SELECT, ACTIVITIES}

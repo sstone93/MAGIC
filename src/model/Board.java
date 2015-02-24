@@ -1,11 +1,17 @@
 package model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 
 import utils.Utility;
 import utils.Utility.GarrisonName;
 import utils.Utility.ItemWeight;
+import utils.Utility.LargeTreasureName;
+import utils.Utility.SmallTreasureName;
 import utils.Utility.TileName;
+import utils.Utility.TreasureWithinTreasureName;
+import utils.Utility.WarningChits;
 
 /**
  * 
@@ -139,7 +145,27 @@ public class Board implements Serializable{
 	
 	public void treasureSetup(){
 		
+		ArrayList<SmallTreasure> small = new ArrayList<SmallTreasure>();
+		ArrayList<LargeTreasure> large = new ArrayList<LargeTreasure>();
+		ArrayList<TreasureWithinTreasure> twit = new ArrayList<TreasureWithinTreasure>();
+		
+		//instanciate the small treasures
+		for (SmallTreasureName n : SmallTreasureName.values()) {
+			  small.add(new SmallTreasure(n));
+		}
+		
+		//instanciate the large treasures
+		for (LargeTreasureName n : LargeTreasureName.values()) {
+			  large.add(new LargeTreasure(n));
+		}
+		
+		//instanciate the treasures within treasures
+		for (TreasureWithinTreasureName n : TreasureWithinTreasureName.values()) {
+			  twit.add(new TreasureWithinTreasure(n));
+		}
+		
 		//setup treasure within treasures
+		//TODO
 		
 		//1. choose 5 random LARGE treasures and put them "in" the twts'
 		//chest = 2 large, thief = 1, toad = 1, crypt = 1
@@ -168,11 +194,28 @@ public class Board implements Serializable{
 		
 	}
 	
-	public void setUpMapChits(){
-		//encounter chits
+	public void createAndPlaceWarningChits(int p1, int p2, int p3, int p4, int p5){
+		ArrayList<WarningChit> temp = new ArrayList<WarningChit>();
+		for(WarningChits n : WarningChits.values()){
+			temp.add(new WarningChit(n));
+		}
+		Collections.shuffle(temp);
 		
+		int[] temps = {p1, p2, p3, p4, p5};
+		
+		for(int i=0; i< temps.length; i++){
+			tiles[temps[i]].setWarningChit(temp.get(i));
+		}
+		
+	}
+	
+	public void setUpMapChits(){
 		//20 yellow warning chits, divide into 4 groups of 5 by letter
 		//Assigned to the 20 tiles (1 per tile)
+		//5 OF THESE (VALLEY) BECOME DEWLLINGS + GHOST
+		createAndPlaceWarningChits(5,6,10,15,16);	//sets up Caves
+		createAndPlaceWarningChits(0,2,3,9,14);	//sets up Mountains
+		createAndPlaceWarningChits(7,12,13,18,19);	//sets up Woods
 		
 		//8 orange site chits
 		//10 red sound chits

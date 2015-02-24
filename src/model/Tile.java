@@ -294,6 +294,8 @@ public class Tile implements Serializable{
 		
 		System.out.println(this.name.toString());	//name of tile
 		
+		System.out.println("	has WarningChit: "+warning);
+		
 		for(int i=0;i<clearings.length;i++){			//iterates over clearings on tile
 			System.out.println("	"+clearings[i]);
 		}

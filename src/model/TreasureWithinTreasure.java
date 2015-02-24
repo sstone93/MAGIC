@@ -17,10 +17,9 @@ public class TreasureWithinTreasure extends Treasure{
 	//private Horse[] horse;
 	//private Spell[] spells;
 	
-	public TreasureWithinTreasure(TreasureWithinTreasureName n, Treasure[] t){
+	public TreasureWithinTreasure(TreasureWithinTreasureName n){
 		super(10);
 		this.name = n;
-		treasures = t;
 		weapon = new Weapon[1];
 		armour = new Armour[3];
 		setUpTreasure();
@@ -61,6 +60,10 @@ public class TreasureWithinTreasure extends Treasure{
 	
 	public Treasure[] getTreasures(){
 		return this.treasures;
+	}
+	
+	public void setTreasures(Treasure[] t){
+		this.treasures = t;
 	}
 	
 	@Override
