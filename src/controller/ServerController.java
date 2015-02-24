@@ -305,13 +305,13 @@ public class ServerController extends Handler{
     			if (activities[moves] != null) {
 		    		switch((Actions) activities[moves]) {
 
-		    		case MOVE: board.move(player, (Clearing)activities[moves + 1]); moves = moves + 2; break;
-		    		case HIDE: hide(player); moves++; break;
-		    		case ALERT: alert(player); moves++; break;
-		    		case REST: rest(player); moves++; break;
-		    		case SEARCH: search(player); moves++; break;
-		    		case TRADE: moves++; break;
-		    		case FOLLOW: moves++; break;
+		    		case MOVE: board.move(player, (Clearing)activities[moves + 1]); moves = moves + 2; network.broadCast(player.getCharacter().getName() + "is moving!"); break;
+		    		case HIDE: hide(player); moves++; network.broadCast(player.getCharacter().getName() + " is hiding!"); break;
+		    		case ALERT: alert(player); moves++; network.broadCast(player.getCharacter().getName() + " is alerting their weapon!"); break;
+		    		case REST: rest(player); moves++; network.broadCast(player.getCharacter().getName() + " is resting!"); break;
+		    		case SEARCH: search(player); moves++; network.broadCast(player.getCharacter().getName() + " is searching!"); break;
+		    		case TRADE: moves++; network.broadCast(player.getCharacter().getName() + " is trading!"); break;
+		    		case FOLLOW: moves++; network.broadCast(player.getCharacter().getName() + " is following!"); break;
 		    		}
     			}
     		}
@@ -404,8 +404,9 @@ public class ServerController extends Handler{
      * Starts a new day
      */
     public void startDay() {
-
+    	
         currentDay++;
+        network.broadCast("This is the start of Day " + currentDay + "!");
         
         updateClients();
         collectActivities(); //asks player's for their activities and waits until it gets them all
@@ -484,6 +485,7 @@ public class ServerController extends Handler{
             for (int j = 0; j < playerCount; j++) {
                 if (ordering[i] == players[j].order) {
                     players[j].order = i;
+                    network.broadCast(players[j].getCharacter().getName() + " is in position # " + (players[j].getOrder() + 1));
                     break;
                 }
             }
@@ -687,9 +689,9 @@ public class ServerController extends Handler{
 	}
 
 	public void hit(Player attacker, Player defender) {
-		ItemWeight level = defender.getWeapons()[0].getWeight();
+		ItemWeight level = attacker.getWeapons()[0].getWeight();
 
-		network.broadCast("Hit!");
+		network.broadCast(attacker.getCharacter().getName() + " has hit " + defender.getCharacter().getName());
 
 		if (attacker.getMoves().getAttackFatigue() == 1) {
 			switch(level){
@@ -755,21 +757,21 @@ public class ServerController extends Handler{
 		}
 		else if (level == ItemWeight.MEDIUM && defender.getCharacter().getWeight() == ItemWeight.HEAVY) {
 			defender.setHealth(defender.getHealth() + 1);
-			network.send(defender.getID(), "You have been wounded!");
+			network.broadCast(defender.getCharacter().getName() + " has been wounded!");
 			if (defender.getHealth() == 3) {
 				deadPlayer(attacker, defender);
 			}
 		}
 		else if (level == ItemWeight.LIGHT && defender.getCharacter().getWeight() == ItemWeight.HEAVY) {
 			defender.setHealth(defender.getHealth() + 1);
-			network.send(defender.getID(), "You have been wounded!");
+			network.broadCast(defender.getCharacter().getName() + " has been wounded!");
 			if (defender.getHealth() == 3) {
 				deadPlayer(attacker, defender);
 			}
 		}
 		else if (level == ItemWeight.LIGHT && defender.getCharacter().getWeight() == ItemWeight.MEDIUM) {
 			defender.setHealth(defender.getHealth() + 1);
-			network.send(defender.getID(), "You have been wounded!");
+			network.broadCast(defender.getCharacter().getName() + " has been wounded!");
 			if (defender.getHealth() == 2) {
 				deadPlayer(attacker, defender);
 			}
@@ -781,8 +783,9 @@ public class ServerController extends Handler{
 		defender.removeGold(defender.getGold());
 		attacker.addNotoriety(defender.getNotoriety());
 		defender.removeNotoriety(defender.getNotoriety());
-		defender.kill();//TODO YOU CANNOT DIE
+		//defender.kill();//TODO YOU CANNOT DIE
 		network.send(defender.getID(), "You are dead.");
+		network.broadCast(defender.getCharacter().getName() + "has been killed!");
 	}
 
 	public void distributeCharacters(){
