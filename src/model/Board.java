@@ -175,10 +175,14 @@ public class Board implements Serializable{
 		Collections.shuffle(large);
 		Collections.shuffle(twit);
 		
+		System.out.println("Starting loop");
+		
 		while(!twit.isEmpty()){
 			large.add(twit.get(0));
-			large.remove(0);
+			twit.remove(0);
 		}
+		
+		System.out.println("ending loop");
 	}
 	
 	public void createAndPlaceWarningChits(int p1, int p2, int p3, int p4, int p5){
