@@ -240,11 +240,13 @@ public class ServerController extends Handler{
      * @return returns true if day was reset, false if it's the 28th day
      */
     public boolean resetDay() {
+    	System.out.println("ResetDay start");
         if (currentDay == 28) {
             return false;
         }
 
         unAlertWeapons();
+        
         //TODO face up map chits (except lost city and lost castle) are turned face down
         
         // reset their fatigue and order
@@ -252,9 +254,7 @@ public class ServerController extends Handler{
         	players[i].setFatigue(0);
         	players[i].setOrder(0);
         }
-        
-        
-
+        System.out.println("ResetDay end");
         return true;
     }
 
@@ -329,6 +329,7 @@ public class ServerController extends Handler{
      */
     public void endGame() {
 
+    	System.out.println("End Game Called");
         Player winner = null;
         Player player = null;
 
@@ -445,11 +446,11 @@ public class ServerController extends Handler{
         }
 
         //Progresses to the next day or ends the game
-        if(!resetDay()){ //if it is not the 28th day....
+       // if(!resetDay()){ //if it is not the 28th day....
         	startDay();
-        } else {
-        	endGame();
-        }
+      //  } else {
+        	//endGame();
+       // }
     }
 
     /**
@@ -780,7 +781,7 @@ public class ServerController extends Handler{
 		defender.removeGold(defender.getGold());
 		attacker.addNotoriety(defender.getNotoriety());
 		defender.removeNotoriety(defender.getNotoriety());
-		defender.kill();
+		defender.kill();//TODO YOU CANNOT DIE
 		network.send(defender.getID(), "You are dead.");
 	}
 

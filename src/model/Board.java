@@ -9,7 +9,9 @@ import utils.Utility.GarrisonName;
 import utils.Utility.ItemWeight;
 import utils.Utility.LargeTreasureName;
 import utils.Utility.SmallTreasureName;
+import utils.Utility.SoundChits;
 import utils.Utility.TileName;
+import utils.Utility.TreasureLocations;
 import utils.Utility.TreasureWithinTreasureName;
 import utils.Utility.WarningChits;
 
@@ -34,6 +36,7 @@ public class Board implements Serializable{
 		placeGarrisons();
 		placePlayers(players);
 		setUpMapChits();
+		treasureSetup();
 		//System.out.println("Built Board with no Crashes");
 		//instanciateTreasures();
 	}
@@ -156,14 +159,19 @@ public class Board implements Serializable{
 			  twit.add(new TreasureWithinTreasure(n));
 		}
 		
-		//setup treasure within treasures
-		//TODO
+		Collections.shuffle(small);
+		Collections.shuffle(large);
+		Collections.shuffle(twit);
 		
+		//setup treasure within treasures
 		//1. choose 5 random LARGE treasures and put them "in" the twts'
 		//chest = 2 large, thief = 1, toad = 1, crypt = 1
-		//2. now we merge tne twts and large treasures together
 		
+		
+		
+		//2. now we merge tne twts and large treasures together
 		//hoard = 5 large, 4 small (below large treasures)
+		
 		//lair = 3 large, 4 small (below large treasures)
 		//altar = 4 large
 		//shrine = 2 large, 2 small (below large treasures)
@@ -211,6 +219,16 @@ public class Board implements Serializable{
 		
 		//8 orange site chits
 		//10 red sound chits
+		ArrayList<MapChit> mc = new ArrayList<MapChit>();
+		for (SoundChits n : SoundChits.values()) {
+			  mc.add(new MapChit(n));
+		}
+		for (TreasureLocations n : TreasureLocations.values()) {
+			  mc.add(new TreasureSite(n));
+		}
+		
+		Collections.shuffle(mc);
+		
 		//mix the sound and treasure site chits
 		//5 given to the lost city
 		//5 given to the lost castle
@@ -225,14 +243,6 @@ public class Board implements Serializable{
 		
 		//reveal all of the VALLEY map chits (after character selection stuff done)
 		//this is done already!
-	}
-	
-	
-	public void equipmentCountersSetup(){
-		
-		//this would be moved to the instanciation of the objects?
-		//do the same w. the treasures?
-		
 	}
 	
 	public void placePlayers(Player[] p){
