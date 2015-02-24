@@ -448,48 +448,12 @@ public class ServerController extends Handler{
     	network.send(defender.getID(), "SEND COMBATMOVES");
     	while(recievedCombat < 2){}
     	state = GameState.NULL;
-    	
-    	//TODO getMoves should query the clients, which will then choose their moves and send them back to the server. I just left it as is for now
-		CombatMoves attackerMoves = attacker.getMoves();
-		CombatMoves defenderMoves = defender.getMoves();
 
-		doFight(attackerMoves, defenderMoves);
+		doFight(attacker, defender);
 	}
 
-    // Will be run on the client side
-    public CombatMoves getMoves(Player player) {
-    	// Player chooses target, attack, maneuver, defense, and fatigue levels for each
-    	boolean properFatigue = false;
-    	CombatMoves moves = null;
-    	Player target = null;
-		Attacks attack = null;
-		int attackFatigue = 0;
-		Maneuvers maneuver = null;
-		int maneuverFatigue = 0;
-		Defenses defense = null;
-
-    	while (properFatigue == false) {
-    		//TODO Will change based on how the panels are implemented, needs to grab input from dropdown boxes for all
-    		// Each value will be filled depending on what the user chooses from the panel
-    		moves.target = target;
-    		moves.attack = attack;
-    		moves.attackFatigue = attackFatigue;
-    		moves.maneuver = maneuver;
-    		moves.maneuverFatigue = maneuverFatigue;
-    		moves.defense = defense;
-
-    		int totalFatigue = (moves.getAttackFatigue() + moves.getManeuverFatigue());
-    		if (totalFatigue <= 2 && player.getFatigue() <= 8) { // Choosing 10 as the arbitrary value of total fatigue
-    			properFatigue = true;
-    			player.setFatigue(player.getFatigue() + totalFatigue);
-    		}
-    		//TODO Print "improper amounts of fatigue" to console or some other error message
-    	}
-    	return moves; //TODO send this to the server
-    }
-
 	//TODO Finding active weapon rather than assuming the active weapon is at position 0
-	public void doFight(CombatMoves attackerMoves, CombatMoves defenderMoves) {
+	public void doFight(Player attacker, Player defender) {
 		if (attackerMoves.getTarget().getWeapons()[0].getSpeed() < defenderMoves.getTarget().getWeapons()[0].getSpeed()) {
 			if ((attackerMoves.getTarget().getWeapons()[0].getSpeed() - attackerMoves.attackFatigue) <= (defenderMoves.getTarget().getCharacter().getSpeed() - defenderMoves.maneuverFatigue)) {
 				hit(attackerMoves, defenderMoves);
