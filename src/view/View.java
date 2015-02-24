@@ -104,7 +104,7 @@ public class View extends JFrame {
 		lblArmour.setBounds(10, 145, 46, 14);
 		CharacterInfoPanel.add(lblArmour);
 		
-		JLabel lblScore = new JLabel("Victory Points");
+		JLabel lblScore = new JLabel("Location"); // TODO : rename. we actually want location
 		lblScore.setBounds(10, 69, 81, 14);
 		CharacterInfoPanel.add(lblScore);
 		
@@ -623,7 +623,8 @@ public class View extends JFrame {
 		Player p = control.model.getPlayer();
 		if (p != null){
 			characterText.setText(p.getCharacter().getName().toString());
-			vpText.setText(Integer.toString(p.getVictoryPoints()));
+//			vpText.setText(Integer.toString(p.getVictoryPoints()));
+			vpText.setText(p.getLocation().parent.getName().toString() + String.valueOf(p.getLocation().getClearingNumber())); // TODO: change later
 			healthText.setText(Integer.toString(p.getHealth()));
 			goldText.setText(Integer.toString(p.getGold()));
 			fatigueText.setText(Integer.toString(p.getFatigue()));
