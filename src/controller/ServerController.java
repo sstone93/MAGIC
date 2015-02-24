@@ -189,7 +189,9 @@ public class ServerController extends Handler{
     public Player[] search(Player player) {
     	Player[] sameClearingPlayers = player.getLocation().getOccupants();
     	for (int i = 0; i < sameClearingPlayers.length; i++) {
-    		sameClearingPlayers[i].setHidden(false);
+    		// do not unhide yourself
+    		if (sameClearingPlayers[i].getID() != player.getID()) 
+    		    sameClearingPlayers[i].setHidden(false);
     	}
 
         Treasure[] clearingTreasures = player.getLocation().getTreasures();
