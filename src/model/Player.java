@@ -2,8 +2,6 @@ package model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-
-import utils.Config;
 import utils.Utility;
 import utils.Utility.ItemWeight;
 
@@ -95,9 +93,9 @@ public class Player implements Serializable{
     }
 
     public void unAlertWeapons(){
-		for (int j = 0; j < weapons.length; j++ ) {
-			if (weapons[j] != null) {
-				weapons[j].setActive(false);
+		for (int j = 0; j < weapons.size(); j++ ) {
+			if (weapons.get(j) != null) {
+				weapons.get(j).setActive(false);
 			}
 		}
     }
@@ -106,7 +104,7 @@ public class Player implements Serializable{
     	return activities;
     }
 
-    public void setActivities(Object[] o){
+    public void setActivities(ArrayList<Object> o){
     	activities = o;
     }
 
@@ -219,42 +217,23 @@ public class Player implements Serializable{
         this.location = location;
     }
 
-    public Weapon[] getWeapons() {
+    public ArrayList<Weapon> getWeapons() {
         return weapons;
     }
 
     public void addWeapon(Weapon weapon) {
-        weapons[numberOfWeapons] = weapon;
-        numberOfWeapons++;
+        weapons.add(weapon);
     }
-    // removes weapons from the array with a higher weight then the one sent in
-    // ignores weapons with negligible weight
+    
     public void removeWeaponsWithHigherWeight(ItemWeight weight) {
-        for (int i = 0; i < numberOfWeapons; i++) {
-            if (weapons[i].getWeight() == ItemWeight.NEGLIGIBLE)
+        for (int i = 0; i < weapons.size(); i++) {
+            if (weapons.get(i).getWeight() == ItemWeight.NEGLIGIBLE)
                 continue;
-            if (weapons[i].getWeight() == weight) {
+            if (weapons.get(i).getWeight() == weight) {
                 continue;
             }
-
-            if (Utility.isWeightHeavier(weapons[i].getWeight(), weight)) {
-                // remove weapon in the array
-                for (int j = i; j < numberOfWeapons - 1; j++) {
-                    weapons[j] = weapons[j+1];
-                }
-                numberOfWeapons--;
-            }
-        }
-    }
-
-    public void removeWeapon(Weapon weapon) {
-        for (int i = 0; i < numberOfWeapons; i++ ) {
-            if (weapons[i] == weapon) {
-                for (int j = i; j < numberOfWeapons - 1; j++) {
-                    weapons[j] = weapons[j+1];
-                }
-                numberOfWeapons--;
-                break;
+            if (Utility.isWeightHeavier(weapons.get(i).getWeight(), weight)) {
+                weapons.remove(i);
             }
         }
     }
@@ -262,19 +241,15 @@ public class Player implements Serializable{
     // removes armour from the array with a higher weight then the one sent in
     // ignores armour with negligible weight
     public void removeArmourWithHigherWeight(ItemWeight weight) {
-        for (int i = 0; i < numberOfArmour; i++) {
-            if (armour[i].getWeight() == ItemWeight.NEGLIGIBLE)
+        for (int i = 0; i < armour.size(); i++) {
+            if (armour.get(i).getWeight() == ItemWeight.NEGLIGIBLE)
                 continue;
-            if (armour[i].getWeight() == weight) {
+            if (armour.get(i).getWeight() == weight) {
                 continue;
             }
 
-            if (Utility.isWeightHeavier(armour[i].getWeight(), weight)) {
-                // remove armour in the array
-                for (int j = i; j < numberOfArmour - 1; j++) {
-                    armour[j] = armour[j+1];
-                }
-                numberOfArmour--;
+            if (Utility.isWeightHeavier(armour.get(i).getWeight(), weight)) {
+            	armour.remove(i);
             }
         }
     }
@@ -288,29 +263,15 @@ public class Player implements Serializable{
         return finalScore;
     }
 
-    public Chit[] getChits() {
-        return chits;
-    }
-
-    public void addChits(Chit chit) {
-        this.chits[numberOfChits] = chit;
-        numberOfChits++;
-    }
-
     public void addTreasure(Treasure treasure) {
-        this.treasures[treasureCount] = treasure;
-        treasureCount++;
+        this.treasures.add(treasure);
     }
 
-    public int getTreasureCount() {
-        return treasureCount;
-    }
-
-    public Treasure[] getTreasures(){
+    public ArrayList<Treasure> getTreasures(){
     	return treasures;
     }
 
-    public Armour[] getArmour() {
+    public ArrayList<Armour> getArmour() {
     	return armour;
     }
 }
