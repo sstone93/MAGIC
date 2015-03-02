@@ -14,10 +14,8 @@ public class Dwarf extends Character {
         this.weight           = ItemWeight.HEAVY;
         this.speed            = 3;
         this.startingLocation = GarrisonName.INN;
-        this.startingWeapons  = new Weapon[1];
-        this.startingArmour   = new Armour[1];
-        startingWeapons[0]    = new Weapon(WeaponName.GREAT_AXE) ;
-        startingArmour[0]     = new Armour(ArmourName.HELMET) ;
+        startingWeapons.add(new Weapon(WeaponName.GREAT_AXE)) ;
+        startingArmour.add(new Armour(ArmourName.HELMET)) ;
     }
 
     // starting location can be either inn or guard house

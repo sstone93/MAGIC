@@ -14,10 +14,8 @@ public class BlackKnight extends Character {
         this.weight           = ItemWeight.MEDIUM;
         this.speed            = 5;
         this.startingLocation = GarrisonName.INN;
-        this.startingWeapons  = new Weapon[1];
-        this.startingArmour   = new Armour[2];
-        startingWeapons[0]    = new Weapon(WeaponName.MACE) ;
-        startingArmour[0]     = new Armour(ArmourName.SUIT_OF_ARMOR) ;
-        startingArmour[1]     = new Armour(ArmourName.SHIELD) ;
+        startingWeapons.add(new Weapon(WeaponName.MACE)) ;
+        startingArmour.add(new Armour(ArmourName.SUIT_OF_ARMOR)) ;
+        startingArmour.add(new Armour(ArmourName.SHIELD)) ;
     }
 }

@@ -1,18 +1,19 @@
 package model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import utils.Utility.*;
 
 public class Character implements Serializable{
 
 	private static final long serialVersionUID = -766962108034752244L;
-	CharacterName name;
-    ItemWeight    weight;
-    int           speed;
-    GarrisonName  startingLocation;
-    Weapon[]      startingWeapons;
-    Armour[]      startingArmour;
+	CharacterName		name;
+    ItemWeight			weight;
+    int					speed;
+    GarrisonName		startingLocation;
+    ArrayList<Weapon>  	startingWeapons;
+    ArrayList<Armour>   startingArmour;
     
     // player can can alert or unalert a weapon
     public void alert(Weapon weapon, Object alert) {
@@ -44,11 +45,11 @@ public class Character implements Serializable{
     	return speed;
     }
 
-    public Weapon[] getStartingWeapons() {
+    public ArrayList<Weapon> getStartingWeapons() {
         return startingWeapons;
     }
 
-    public Armour[] getStartingArmour() {
+    public ArrayList<Armour> getStartingArmour() {
     	return startingArmour;
     }
 }

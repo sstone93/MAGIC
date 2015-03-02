@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import utils.Config;
 import utils.Utility;
@@ -18,11 +19,6 @@ public class Player implements Serializable{
     int notoriety     = 0;
     int finalScore    = 0;
     public int order; // in which order does the player play
-    int numberOfChits   = 0;
-    int numberOfWeapons = 0;
-    int numberOfArmour  = 0;
-    int activityCount   = 0;
-    int treasureCount   = 0;
     boolean hidden    = false;
     boolean dead      = false;
     boolean blocked   = false;
@@ -31,19 +27,13 @@ public class Player implements Serializable{
     CombatMoves moves;
     Player target;
     Clearing location;
-    Armour[] armour;
-    Weapon[] weapons;
-    Chit[]   chits;
-    Object[] activities; // the players moves for the day
-    Treasure[]  treasures;
-    Clearing[]  secretLocations;
-
-   // note: for activities, the format is as follows for the moves:
-   // [MOVE, clearing, ALERT, weapon, trueOrFalse, REST, SEARCH, HIDE]
-   // so, move needs to be followed by a clearing, and alert by a weapon and true or false (in that order)
+    ArrayList<Armour> armour;
+    ArrayList<Weapon> weapons;
+    ArrayList<Object> activities;
+    ArrayList<Treasure>  treasures;
 
     /**
-     * tyring to fix a random networking issue (never changing object)
+     * Used to correct object transmission
      */
     public Player clone (){
     	Player p = new Player(this.getCharacter(), this.getID());
@@ -55,11 +45,6 @@ public class Player implements Serializable{
         p.notoriety = this.notoriety;
         p.finalScore    = this.finalScore;
         p.order = this.order; // in which order does the player play
-        p.numberOfChits = this.numberOfChits;
-        p.numberOfWeapons = this.numberOfWeapons;
-        p.numberOfArmour = this.numberOfArmour;
-        p.activityCount = this.activityCount;
-        p.treasureCount = this.treasureCount;
         p.hidden = this.hidden;
         p.dead = this.dead;
         p.blocked = this.blocked;
@@ -70,40 +55,18 @@ public class Player implements Serializable{
         p.location.occupants = this.location.occupants;
         p.armour = this.armour;
         p.weapons = this.weapons;
-        p.chits = this.chits;
         p.activities = this.activities; // the players moves for the day
         p.treasures = this.treasures;
-        p.secretLocations = this.secretLocations;
         
     	return p;
     }
     
     public Player(Character character, int ID) {
         this.character = character;
-        this.chits     = new Chit[100];     // arbitrary number
-        this.treasures = new Treasure[100]; // arbitrary number
-        this.weapons   = new Weapon[Config.WEAPON_AND_ARMOUR_COUNT];
-        this.armour    = new Armour[Config.WEAPON_AND_ARMOUR_COUNT];
-        this.activities = new Object[8];
         this.ID = ID;
-
-        for (int i = 0; i < character.startingWeapons.length; i++) {
-            weapons[numberOfWeapons] = character.startingWeapons[numberOfWeapons];
-            numberOfWeapons++;
-        }
-        if (character.startingArmour != null) {
-            for (int i = 0; i < character.getStartingArmour().length; i++) {
-                armour[numberOfArmour] = character.startingArmour[numberOfArmour];
-                numberOfArmour++;
-            }
-        }
+        this.armour = character.startingArmour;
+        this.weapons = character.startingWeapons;
     }
-
-   // @Override
-	//public String toString(){
-    	//System.out.println();
-    	//return "";
-    //}
 
     public Player getTarget(){
     	return this.target;
@@ -124,16 +87,9 @@ public class Player implements Serializable{
     public int getID(){
 		return ID;
     }
-
-    // adds one activity at a time
-    public void addActivity(Object newActivity) {
-    	if (activityCount < activities.length) {
-    		activities[activityCount] = newActivity;
-    		activityCount++;
-    	}
-    }
+    
     // replaces all the previous activities
-    public void addActivities(Object[] newActivities) {
+    public void addActivities(ArrayList<Object> newActivities) {
     	activities = null;
     	activities = newActivities;
     }
@@ -146,11 +102,7 @@ public class Player implements Serializable{
 		}
     }
 
-    public void moveTo(Clearing c){
-    	c.moveIn(this);
-    }
-
-    public Object[] getActivities() {
+    public ArrayList<Object> getActivities() {
     	return activities;
     }
 

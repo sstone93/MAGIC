@@ -14,9 +14,7 @@ public class WhiteKnight extends Character {
         this.weight           = ItemWeight.HEAVY;
         this.speed            = 5;
         this.startingLocation = GarrisonName.INN;
-        this.startingWeapons  = new Weapon[1];
-        this.startingArmour   = new Armour[1];
-        startingWeapons[0]    = new Weapon(WeaponName.GREAT_SWORD) ;
-        startingArmour[0]     = new Armour(ArmourName.SUIT_OF_ARMOR) ;
+        startingWeapons.add(new Weapon(WeaponName.GREAT_SWORD)) ;
+        startingArmour.add(new Armour(ArmourName.SUIT_OF_ARMOR)) ;
     }
 }

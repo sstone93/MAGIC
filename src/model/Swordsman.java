@@ -14,7 +14,6 @@ public class Swordsman extends Character {
         this.weight = ItemWeight.LIGHT;
         this.speed = 4;
         this.startingLocation = GarrisonName.INN;
-        this.startingWeapons  = new Weapon[1];
-        startingWeapons[0]    = new Weapon(WeaponName.THRUSTING_SWORD) ;
+        startingWeapons.add(new Weapon(WeaponName.THRUSTING_SWORD)) ;
     }
 }

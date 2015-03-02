@@ -12,10 +12,8 @@ public class Amazon extends Character {
         this.weight = ItemWeight.MEDIUM;
         this.speed = 4;
         this.startingLocation = GarrisonName.INN;
-        this.startingWeapons = new Weapon[1];
-        this.startingArmour  = new Armour[2];
-        startingWeapons[0]   = new Weapon(WeaponName.SHORT_SWORD);
-        startingArmour[0]    = new Armour(ArmourName.BREASTPLATE);
-        startingArmour[1]    = new Armour(ArmourName.SHIELD);
+        startingWeapons.add(new Weapon(WeaponName.SHORT_SWORD));
+        startingArmour.add(new Armour(ArmourName.BREASTPLATE));
+        startingArmour.add(new Armour(ArmourName.SHIELD));
     }
 }
