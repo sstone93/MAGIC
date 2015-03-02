@@ -30,8 +30,34 @@ public class Clearing implements Serializable{
     }
 
     public void addOccupant(Player p){
+    	System.out.println(this);
+    	System.out.println("adding player" + p);
+    	System.out.println(nextOccupant);
     	occupants[nextOccupant] = p;
     	nextOccupant += 1;
+    	System.out.println(this.occupants);
+    }
+    
+    //This will be removed once we change to ArrayLists, I just needed to test the GUI.
+    public void removeOccupant(Player p){
+    	System.out.println(this);
+    	System.out.println("removing player" + p);
+    	int count = 0;
+    	while (count < nextOccupant){
+    		if(occupants[count] == p){
+    			System.out.println("found player to remove");
+    			if(count != nextOccupant - 1){
+	    			int countDown = nextOccupant - 2;
+	    			while (countDown >= count){
+	    				occupants[countDown] = occupants[countDown + 1];
+	    				countDown--;
+	    			}
+    			}
+    			occupants[nextOccupant - 1] = null;
+    			nextOccupant--;
+    		}
+    		count++;
+    	}
     }
     
     /**

@@ -126,6 +126,7 @@ public class ClientController extends Handler{
 		
 		String[] temp =l1.split(" ");
 		Clearing c1 =  model.getBoard().tiles[model.getBoard().convertTileName(TileName.valueOf(temp[0]))].getClearing(Integer.parseInt(temp[2]));
+		System.out.println(c1);
 		temp =l2.split(" ");
 		Clearing c2 =  model.getBoard().tiles[model.getBoard().convertTileName(TileName.valueOf(temp[0]))].getClearing(Integer.parseInt(temp[2]));
 		temp =l3.split(" ");

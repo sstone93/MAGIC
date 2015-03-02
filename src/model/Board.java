@@ -425,6 +425,8 @@ public class Board implements Serializable{
 //            player.moveTo(newClearing);
 //            player.getLocation() ; 
             // TODO: need to remove player from old clearing
+            
+            player.getLocation().removeOccupant(player);
             player.setLocation(newClearing);
             
             newClearing.addOccupant(player);
