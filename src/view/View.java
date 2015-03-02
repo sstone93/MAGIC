@@ -30,6 +30,7 @@ import java.awt.event.MouseEvent;
 public class View extends JFrame {
 	
 	private ClientController control;
+	private boolean boardMade;
 	private JPanel contentPane;
 	private JPanel playsPanel;
 	private JPanel combatPanel;
@@ -69,6 +70,8 @@ public class View extends JFrame {
 	private ButtonGroup movesGroup;
 	private ButtonGroup alertGroup;
 	private JPanel [] iconPanels;
+	private JLabel [] tileLbls;
+	private JLabel [] garrisonLbls;
 	
 	/**
 	 * Create the frame.
@@ -76,6 +79,7 @@ public class View extends JFrame {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public View(final ClientController control) {
 		this.control = control;
+		this.boardMade = false;
 		setResizable(false);
 		setSize(new Dimension(1280, 720));
 		getContentPane().setLayout(null);
@@ -578,20 +582,58 @@ public class View extends JFrame {
 		
 	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void update(){
+	private void makeBoard(){
 		Board b = control.model.getBoard();
 		if (b != null) {
-			boardPanel.removeAll();
-			iconPanels = new JPanel[20];
+			tileLbls = new JLabel[b.tiles.length];
+			garrisonLbls = new JLabel[b.garrisons.length];
+			
 			BufferedImage pic;
 			for (int i = 0; i < b.tiles.length; i++){
 				try {
 					TileName name = b.tiles[i].getName();
 					pic = ImageIO.read(this.getClass().getResource(Utility.getTileImage(name)));
-					JLabel tile = new JLabel(new ImageIcon(pic));
-					tile.setBounds(b.tiles[i].getX() - 100, b.tiles[i].getY() - 86, 200, 173);
-					boardPanel.add(tile);
+					tileLbls[i] = new JLabel(new ImageIcon(pic));
+					tileLbls[i].setBounds(b.tiles[i].getX() - 100, b.tiles[i].getY() - 86, 200, 173);
+					boardPanel.add(tileLbls[i]);
+				}catch (IOException e){
+					
+				}
+			}
+			for (int i = 0; i < b.garrisons.length; i++){
+				try {
+					GarrisonName name = b.garrisons[i].getName();
+					pic = ImageIO.read(this.getClass().getResource(Utility.getGarrisonImage(name)));
+					garrisonLbls[i] = new JLabel(new ImageIcon(pic));
+					garrisonLbls[i].setBounds(b.garrisons[i].getLocation().parent.getX() - 25, b.garrisons[i].getLocation().parent.getY() - 21, 50, 43);
+					boardPanel.add(garrisonLbls[i], new Integer(5), 0);
+					//garrison.repaint();
+				} catch (IOException e){
+					
+				}
+			}
+		}
+		
+		this.boardMade = true;
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void update(){
+		Board b = control.model.getBoard();
+		if (b != null) {
+			if (!this.boardMade){
+				makeBoard();
+			}
+			//boardPanel.removeAll();
+			iconPanels = new JPanel[20];
+			BufferedImage pic;
+			for (int i = 0; i < b.tiles.length; i++){
+				try {
+					//TileName name = b.tiles[i].getName();
+					//pic = ImageIO.read(this.getClass().getResource(Utility.getTileImage(name)));
+					//JLabel tile = new JLabel(new ImageIcon(pic));
+					//tile.setBounds(b.tiles[i].getX() - 100, b.tiles[i].getY() - 86, 200, 173);
+					//boardPanel.add(tile);
 					
 					Clearing[] clearings = b.tiles[i].getClearings();
 					if (clearings != null) {
@@ -601,11 +643,12 @@ public class View extends JFrame {
 								for(int k = 0; k < occupants.length; k++){
 									if (occupants[k] != null){
 										CharacterName character = occupants[k].getCharacter().getName();
+										System.out.println("adding Character " + character.toString() + " to " + b.tiles[i].getName().toString());
 										pic = ImageIO.read(this.getClass().getResource(Utility.getCharacterImage(character)));
 										JLabel c = new JLabel(new ImageIcon(pic));
 										c.setBounds(b.tiles[i].getX() - 25, b.tiles[i].getY() - 25, 50, 50);
 										boardPanel.add(c, new Integer(5), 0);
-										c.repaint();
+										//c.repaint();
 										
 										if (iconPanels[i] == null){
 											JPanel newPane = new JPanel();
@@ -650,18 +693,18 @@ public class View extends JFrame {
 					
 				}
 			}
-			for (int i = 0; i < b.garrisons.length; i++){
+			/*for (int i = 0; i < b.garrisons.length; i++){
 				try {
 					GarrisonName name = b.garrisons[i].getName();
 					pic = ImageIO.read(this.getClass().getResource(Utility.getGarrisonImage(name)));
 					JLabel garrison = new JLabel(new ImageIcon(pic));
 					garrison.setBounds(b.garrisons[i].getLocation().parent.getX() - 25, b.garrisons[i].getLocation().parent.getY() - 21, 50, 43);
 					boardPanel.add(garrison, new Integer(5), 0);
-					garrison.repaint();
+					//garrison.repaint();
 				} catch (IOException e){
 					
 				}
-			}
+			}*/
 		}
 		Player p = control.model.getPlayer();
 		if (p != null){
@@ -823,6 +866,6 @@ public class View extends JFrame {
 				break;
 		}
 		
-		this.repaint();
+		//this.repaint();
 	}
 }
