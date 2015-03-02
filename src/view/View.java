@@ -3,7 +3,9 @@ package view;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Enumeration;
+import java.util.Iterator;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -18,6 +20,7 @@ import model.Board;
 import model.Chit;
 import model.Clearing;
 import model.Player;
+import model.Tile;
 import model.Treasure;
 import model.Weapon;
 
@@ -25,6 +28,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.HashMap;
 
 @SuppressWarnings("serial")
 public class View extends JFrame {
@@ -69,9 +73,10 @@ public class View extends JFrame {
 	private JComboBox target;
 	private ButtonGroup movesGroup;
 	private ButtonGroup alertGroup;
-	private JPanel [] iconPanels;
+	private HashMap<Tile, JPanel> iconPanels = new HashMap<Tile, JPanel>();
 	private JLabel [] tileLbls;
 	private JLabel [] garrisonLbls;
+	private JLabel [] charLbls;
 	
 	/**
 	 * Create the frame.
@@ -587,6 +592,7 @@ public class View extends JFrame {
 		if (b != null) {
 			tileLbls = new JLabel[b.tiles.length];
 			garrisonLbls = new JLabel[b.garrisons.length];
+			charLbls = new JLabel[control.model.getNumPlayers()];
 			
 			BufferedImage pic;
 			for (int i = 0; i < b.tiles.length; i++){
@@ -625,7 +631,24 @@ public class View extends JFrame {
 				makeBoard();
 			}
 			//boardPanel.removeAll();
-			iconPanels = new JPanel[20];
+			
+			Iterator it = iconPanels.entrySet().iterator();
+		    while (it.hasNext()) {
+		        JPanel panel = (JPanel)((HashMap.Entry)it.next()).getValue();
+		        if(panel != null){
+		        	boardPanel.remove(panel);
+		        }
+		    }
+			iconPanels.clear();
+			
+			for(int i = 0; i < charLbls.length; i++){
+				if(charLbls[i] != null){
+					boardPanel.remove(charLbls[i]);
+				}
+			}
+			
+			charLbls = new JLabel[control.model.getNumPlayers()];
+			
 			BufferedImage pic;
 			for (int i = 0; i < b.tiles.length; i++){
 				try {
@@ -637,6 +660,7 @@ public class View extends JFrame {
 					
 					Clearing[] clearings = b.tiles[i].getClearings();
 					if (clearings != null) {
+						int chars = 0;
 						for(int j = 0; j < clearings.length; j++){
 							Player[] occupants = clearings[j].occupants;
 							if(occupants != null){
@@ -645,18 +669,18 @@ public class View extends JFrame {
 										CharacterName character = occupants[k].getCharacter().getName();
 										System.out.println("adding Character " + character.toString() + " to " + b.tiles[i].getName().toString());
 										pic = ImageIO.read(this.getClass().getResource(Utility.getCharacterImage(character)));
-										JLabel c = new JLabel(new ImageIcon(pic));
-										c.setBounds(b.tiles[i].getX() - 25, b.tiles[i].getY() - 25, 50, 50);
-										boardPanel.add(c, new Integer(5), 0);
+										charLbls[chars] = new JLabel(new ImageIcon(pic));
+										charLbls[chars].setBounds(b.tiles[i].getX() - 25, b.tiles[i].getY() - 25, 50, 50);
+										boardPanel.add(charLbls[chars], new Integer(5), 0);
 										//c.repaint();
 										
-										if (iconPanels[i] == null){
+										if (!iconPanels.containsKey(b.tiles[i])){
 											JPanel newPane = new JPanel();
 											newPane.setBounds(b.tiles[i].getX(), b.tiles[i].getY(), 200, 300);
 											newPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 											newPane.setVisible(false);
 											boardPanel.add(newPane, new Integer(10), 0);
-											iconPanels[i] = newPane;
+											iconPanels.put(b.tiles[i], newPane);
 										}
 										JPanel panel = new JPanel();
 										panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
@@ -668,22 +692,23 @@ public class View extends JFrame {
 										JLabel lbl = new JLabel(Integer.toString(clearings[j].getClearingNumber()));
 										lbl.setSize(10, 15);
 										panel.add(lbl);
-										iconPanels[i].add(panel);
+										iconPanels.get(b.tiles[i]).add(panel);
 										
 										final int index = i;
 										
-										c.addMouseListener(new MouseAdapter() {
+										charLbls[chars].addMouseListener(new MouseAdapter() {
 											@Override
 											public void mouseEntered(MouseEvent e) {
-												iconPanels[index].setVisible(true);
+												iconPanels.get(b.tiles[index]).setVisible(true);
 											}
 										});
-										c.addMouseListener(new MouseAdapter() {
+										charLbls[chars].addMouseListener(new MouseAdapter() {
 											@Override
 											public void mouseExited(MouseEvent e) {
-												iconPanels[index].setVisible(false);
+												iconPanels.get(b.tiles[index]).setVisible(false);
 											}
 										});
+										chars++;
 									}
 								}
 							}
@@ -693,18 +718,49 @@ public class View extends JFrame {
 					
 				}
 			}
-			/*for (int i = 0; i < b.garrisons.length; i++){
+			for (int i = 0; i < b.garrisons.length; i++){
 				try {
 					GarrisonName name = b.garrisons[i].getName();
 					pic = ImageIO.read(this.getClass().getResource(Utility.getGarrisonImage(name)));
-					JLabel garrison = new JLabel(new ImageIcon(pic));
-					garrison.setBounds(b.garrisons[i].getLocation().parent.getX() - 25, b.garrisons[i].getLocation().parent.getY() - 21, 50, 43);
-					boardPanel.add(garrison, new Integer(5), 0);
-					//garrison.repaint();
+					Tile parent = b.garrisons[i].getLocation().parent;
+					
+					if (!iconPanels.containsKey(parent)){
+						JPanel newPane = new JPanel();
+						newPane.setBounds(parent.getX(), parent.getY(), 200, 300);
+						newPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+						newPane.setVisible(false);
+						boardPanel.add(newPane, new Integer(10), 0);
+						iconPanels.put(parent, newPane);
+					}
+					
+					JPanel panel = new JPanel();
+					panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+					panel.setSize(65, 75);
+					JLabel img = new JLabel(new ImageIcon(pic));
+					img.setSize(50, 50);
+					panel.add(img);
+					
+					JLabel lbl = new JLabel(Integer.toString(b.garrisons[i].getLocation().getClearingNumber()));
+					lbl.setSize(10, 15);
+					panel.add(lbl);
+					iconPanels.get(parent).add(panel);
+					
+					garrisonLbls[i].addMouseListener(new MouseAdapter() {
+						@Override
+						public void mouseEntered(MouseEvent e) {
+							iconPanels.get(parent).setVisible(true);
+						}
+					});
+					garrisonLbls[i].addMouseListener(new MouseAdapter() {
+						@Override
+						public void mouseExited(MouseEvent e) {
+							iconPanels.get(parent).setVisible(false);
+						}
+					});
 				} catch (IOException e){
 					
 				}
-			}*/
+			}
 		}
 		Player p = control.model.getPlayer();
 		if (p != null){

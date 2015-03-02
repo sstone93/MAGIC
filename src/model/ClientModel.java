@@ -13,6 +13,7 @@ public class ClientModel {
 	private Player player;
 	private String messages;
 	private int    messageCount;
+	private int    numPlayers = 2; //just temporary, should be set by the server.
 	
 	public ClientModel(){
 		//Player[] players = new Player[1];
@@ -53,6 +54,14 @@ public class ClientModel {
 	 */
 	public String getMessages(){
 		return messages;
+	}
+
+	public int getNumPlayers() {
+		return numPlayers;
+	}
+
+	public void setNumPlayers(int numPlayers) {
+		this.numPlayers = numPlayers;
 	}
 
 }
