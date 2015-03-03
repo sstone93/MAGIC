@@ -16,10 +16,7 @@ public class ClientModel {
 	private int    numPlayers = 2; //just temporary, should be set by the server.
 	
 	public ClientModel(){
-		//Player[] players = new Player[1];
-		//player = new Player(new Swordsman());
-		//players[0] = player;
-		//board = new Board(players);
+
 	}
 	
 	public Board getBoard(){

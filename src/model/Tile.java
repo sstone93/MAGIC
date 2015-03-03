@@ -1,6 +1,8 @@
 package model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+
 import utils.Utility.TileName;
 
 /**
@@ -11,9 +13,8 @@ import utils.Utility.TileName;
 public class Tile implements Serializable{
 	
 	private static final long serialVersionUID = -85070866055297558L;
-	private Clearing[] clearings;
+	private ArrayList<Clearing> clearings = new ArrayList<Clearing>();
 	private TileName name;
-	private int nextClearing =0;
 	private int x;
 	private int y;
 	private MapChit sound;
@@ -28,7 +29,6 @@ public class Tile implements Serializable{
 		this.name = name;
 		this.x = x;
 		this.y = y;
-		this.clearings = new Clearing[determineClearings(name)];
 		setUpTile();			//this will set up the clearings on this tile.
 	}
 	
@@ -54,37 +54,6 @@ public class Tile implements Serializable{
 	
 	public MapChit getMapChit(){
 		return this.sound;
-	}
-	
-	/**
-	 * This function returns how many clearings a tile will have, based on it's name
-	 * @param name The name of the tile
-	 * @return The number of clearings found on this tile
-	 */
-	public int determineClearings(TileName name){
-		switch(name){
-		case AWFULVALLEY:	return 4;
-		case BADVALLEY: 	return 4;
-		case BORDERLAND: 	return 6;
-		case CAVERN:		return 6;
-		case CAVES:			return 6;
-		case CLIFF: 		return 6;
-		case CRAG: 			return 6;
-		case CURSTVALLEY: 	return 4;
-		case DARKVALLEY: 	return 4;
-		case DEEPWOODS: 	return 6;
-		case EVILVALLEY:	return 4;
-		case HIGHPASS:		return 6;
-		case LEDGES:		return 6;
-		case LINDENWOODS:	return 3;
-		case MAPLEWOODS:	return 3;
-		case MOUNTAIN:		return 6;
-		case NUTWOODS:		return 3;
-		case OAKWOODS:		return 3;
-		case PINEWOODS:		return 3;
-		case RUINS:			return 6;
-		default:			return 0;
-		}
 	}
 	
 	/**
@@ -244,9 +213,7 @@ public class Tile implements Serializable{
 	 * @param position
 	 */
 	public void addNewClearing(int position){
-		
-		this.clearings[nextClearing] = new Clearing(position, this);
-		nextClearing +=1;
+		this.clearings.add(new Clearing(position, this));
 	}
 	
 	/**
@@ -280,7 +247,7 @@ public class Tile implements Serializable{
 	 * 
 	 * @return
 	 */
-	public Clearing[] getClearings(){
+	public ArrayList<Clearing> getClearings(){
 		return this.clearings;
 	}
 	
@@ -290,9 +257,9 @@ public class Tile implements Serializable{
 	 * @return the clearing you were looking for (or null if it doesnt exist)
 	 */
 	public Clearing getClearing(int clearingNumber){
-		for(int i=0; i <clearings.length; i++){
-			if(clearings[i].getClearingNumber() == clearingNumber){
-				return clearings[i];
+		for(int i=0; i <clearings.size(); i++){
+			if(clearings.get(i).getClearingNumber() == clearingNumber){
+				return clearings.get(i);
 			}
 		}
 		return null;
@@ -311,8 +278,8 @@ public class Tile implements Serializable{
 		if(lost != null){
 			System.out.println("	has LostPlace: " + lost.toString());	
 		}
-		for(int i=0;i<clearings.length;i++){			//iterates over clearings on tile
-			System.out.println("	"+clearings[i]);
+		for(int i=0;i<clearings.size();i++){			//iterates over clearings on tile
+			System.out.println("	"+clearings.get(i));
 		}
 		return "";
 	}
