@@ -87,33 +87,33 @@ public class Board implements Serializable{
 		connect(tiles.get(1), tiles.get(2), 4, 2);		//evil valley and ledges		
 		connect(tiles.get(2), tiles.get(6), 4, 4);		//ledges and borderlands
 		connect(tiles.get(2), tiles.get(7), 5, 2);		//ledges and oakwoods		
-		connect(tiles[3], tiles[8], 2, 1);		//crag and deep woods		
-		connect(tiles[4], tiles[8], 5, 2);		//dark valley and deep woods
-		connect(tiles[4], tiles[9], 1, 1);		//dark valley and curst valley		
-		connect(tiles[5], tiles[10], 3, 5);		//highpass and cavern
-		connect(tiles[5], tiles[6], 2, 1);		//highpass and borderlands		
-		connect(tiles[6], tiles[10], 5, 2);		//borderlands and cavern
-		connect(tiles[6], tiles[11], 1, 5);		//borderlands and badvalley
-		connect(tiles[6], tiles[7], 2, 2);		//borderlands and oakwoods		
-		connect(tiles[7], tiles[11], 5, 1);		//oakvwoods and bad valley
-		connect(tiles[7], tiles[12], 5, 5);		//oakwoods and maple woods
-		connect(tiles[7], tiles[8], 4, 1);		//oakwoods and deepwoods
-		connect(tiles[8], tiles[12], 5, 5);		//deepwoods and maple woods
-		connect(tiles[8], tiles[9], 2, 2);		//deepwoods and curst valley		
-		connect(tiles[9], tiles[13], 4, 5);		//curst valley and nut woods		
-		connect(tiles[10], tiles[11], 1, 4);	//cavern and bad valley		
-		connect(tiles[11], tiles[14], 4, 5);	//bad valley and mountain
-		connect(tiles[11], tiles[15], 2, 2);	//bad valley and caves		
-		connect(tiles[12], tiles[15], 4, 5);	//maple woods and caves
-		connect(tiles[12], tiles[16], 2, 5);	//maple woods and ruins
-		connect(tiles[12], tiles[13], 2, 5);	//maple woods and nut woods		
-		connect(tiles[13], tiles[16], 4, 1);	//nut woods and ruins
-		connect(tiles[13], tiles[17], 2, 5);	//nut woods and awful valley
-		connect(tiles[14], tiles[18], 2, 4);	//mountain and pine woods		
-		connect(tiles[15], tiles[18], 1, 5);	//caves and pine woods
-		connect(tiles[16], tiles[19], 2, 4);	//ruins and linden woods
-		connect(tiles[16], tiles[17], 2, 1);	//ruins and awful valley
-		connect(tiles[17], tiles[19], 2, 5);	//awful valley and linden woods	
+		connect(tiles.get(3), tiles.get(8), 2, 1);		//crag and deep woods		
+		connect(tiles.get(4), tiles.get(8), 5, 2);		//dark valley and deep woods
+		connect(tiles.get(4), tiles.get(9), 1, 1);		//dark valley and curst valley		
+		connect(tiles.get(5), tiles.get(10), 3, 5);		//highpass and cavern
+		connect(tiles.get(5), tiles.get(6), 2, 1);		//highpass and borderlands		
+		connect(tiles.get(6), tiles.get(10), 5, 2);		//borderlands and cavern
+		connect(tiles.get(6), tiles.get(11), 1, 5);		//borderlands and badvalley
+		connect(tiles.get(6), tiles.get(7), 2, 2);		//borderlands and oakwoods		
+		connect(tiles.get(7), tiles.get(11), 5, 1);		//oakvwoods and bad valley
+		connect(tiles.get(7), tiles.get(12), 5, 5);		//oakwoods and maple woods
+		connect(tiles.get(7), tiles.get(8), 4, 1);		//oakwoods and deepwoods
+		connect(tiles.get(8), tiles.get(12), 5, 5);		//deepwoods and maple woods
+		connect(tiles.get(8), tiles.get(9), 2, 2);		//deepwoods and curst valley		
+		connect(tiles.get(9), tiles.get(13), 4, 5);		//curst valley and nut woods		
+		connect(tiles.get(10), tiles.get(11), 1, 4);	//cavern and bad valley		
+		connect(tiles.get(11), tiles.get(14), 4, 5);	//bad valley and mountain
+		connect(tiles.get(11), tiles.get(15), 2, 2);	//bad valley and caves		
+		connect(tiles.get(12), tiles.get(15), 4, 5);	//maple woods and caves
+		connect(tiles.get(12), tiles.get(16), 2, 5);	//maple woods and ruins
+		connect(tiles.get(12), tiles.get(13), 2, 5);	//maple woods and nut woods		
+		connect(tiles.get(13), tiles.get(16), 4, 1);	//nut woods and ruins
+		connect(tiles.get(13), tiles.get(17), 2, 5);	//nut woods and awful valley
+		connect(tiles.get(14), tiles.get(18), 2, 4);	//mountain and pine woods		
+		connect(tiles.get(15), tiles.get(18), 1, 5);	//caves and pine woods
+		connect(tiles.get(16), tiles.get(19), 2, 4);	//ruins and linden woods
+		connect(tiles.get(16), tiles.get(17), 2, 1);	//ruins and awful valley
+		connect(tiles.get(17), tiles.get(19), 2, 5);	//awful valley and linden woods	
 	}
 	
 	/**
@@ -347,7 +347,7 @@ public class Board implements Serializable{
 		}
 	}
 	
-	public void placePlayers(Player[] p){
+	public void placePlayers(ArrayList<Player> p){
 		
 		//cycle through lsit of characters
 		//set their current location as the INN
@@ -355,9 +355,9 @@ public class Board implements Serializable{
 		// which right now is a garrison name
 		//update the INN with all the new occupants
 		
-		for(int i=0; i < p.length; i++){
-			p[i].setLocation(tiles.get(11).getClearing(5));
-			tiles.get(11).getClearing(5).addOccupant(p[i]);
+		for(int i=0; i < p.size(); i++){
+			p.get(i).setLocation(tiles.get(11).getClearing(5));
+			tiles.get(11).getClearing(5).addOccupant(p.get(i));
 		}
 		
 		
