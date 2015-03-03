@@ -1,15 +1,17 @@
 package networking;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+
 import utils.Utility.MessageType;
 
 public class Message implements Serializable{
 
 	private static final long serialVersionUID = -2288820887835157202L;
 	private MessageType type;
-	private Object[] data;
+	private ArrayList<Object> data;
 	
-	public Message(MessageType type, Object[] data){
+	public Message(MessageType type, ArrayList<Object> data){
 		this.type = type;
 		this.data = data;
 	}
@@ -18,7 +20,7 @@ public class Message implements Serializable{
 		return this.type;
 	}
 	
-	public Object[] getData(){
+	public ArrayList<Object> getData(){
 		return this.data;
 	}
 	

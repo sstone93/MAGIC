@@ -23,17 +23,13 @@ import utils.Utility.WarningChits;
 public class Board implements Serializable{
 	
 	private static final long serialVersionUID = -4906643706682852990L;
-	public Tile[] tiles;
-	public Garrison[] garrisons;
+	public ArrayList<Tile> tiles = new ArrayList<Tile>();
+	public ArrayList<Garrison> garrisons = new ArrayList<Garrison>();
 	ArrayList<SmallTreasure> small = new ArrayList<SmallTreasure>();
 	ArrayList<Treasure> large = new ArrayList<Treasure>();
 	ArrayList<TreasureWithinTreasure> twit = new ArrayList<TreasureWithinTreasure>();
 
-	/**
-	 * 
-	 */
-	public Board(Player[] players){
-		tiles = new Tile[20];
+	public Board(ArrayList<Player> players){
 		setupBoard();
 		setupGarrisons();
 		placeGarrisons();
@@ -43,12 +39,11 @@ public class Board implements Serializable{
 	
 	public int convertTileName(TileName n){
 		for(int i=0; i<20; i++){
-			if(tiles[i].getName() == n){
+			if(tiles.get(i).getName() == n){
 				return i;
 			}
 		}
 		return -1;
-		
 	}
 	
 	/**
@@ -63,35 +58,35 @@ public class Board implements Serializable{
 		*/
 		
 		//CREATE ALL THE TILES (THIS IS SETUP INTERNAL CLEARINGS AUTOMATICALLY)
-		tiles[0] = new Tile(TileName.CLIFF, 400, 82);
-		tiles[1] = new Tile(TileName.EVILVALLEY, 253, 167);
-		tiles[2] = new Tile(TileName.LEDGES, 400, 252);
-		tiles[3] = new Tile(TileName.CRAG, 547, 337);
-		tiles[4] = new Tile(TileName.DARKVALLEY, 694, 422);
-		tiles[5] = new Tile(TileName.HIGHPASS, 106, 252);
-		tiles[6] = new Tile(TileName.BORDERLAND, 253, 337);
-		tiles[7] = new Tile(TileName.OAKWOODS, 400, 422);
-		tiles[8] = new Tile(TileName.DEEPWOODS, 547, 507);
-		tiles[9] = new Tile(TileName.CURSTVALLEY, 694, 592);
-		tiles[10] = new Tile(TileName.CAVERN, 106, 422);
-		tiles[11] = new Tile(TileName.BADVALLEY, 253, 507);
-		tiles[12] = new Tile(TileName.MAPLEWOODS, 400, 592);
-		tiles[13] = new Tile(TileName.NUTWOODS, 547, 677);
-		tiles[14] = new Tile(TileName.MOUNTAIN, 106, 592);
-		tiles[15] = new Tile(TileName.CAVES, 253, 677);
-		tiles[16] = new Tile(TileName.RUINS, 400, 762);
-		tiles[17] = new Tile(TileName.AWFULVALLEY, 547, 847);
-		tiles[18] = new Tile(TileName.PINEWOODS, 106, 762);
-		tiles[19] = new Tile(TileName.LINDENWOODS, 400, 932);
+		tiles.add(new Tile(TileName.CLIFF, 400, 82));
+		tiles.add(new Tile(TileName.EVILVALLEY, 253, 167));
+		tiles.add(new Tile(TileName.LEDGES, 400, 252));
+		tiles.add(new Tile(TileName.CRAG, 547, 337));
+		tiles.add(new Tile(TileName.DARKVALLEY, 694, 422));
+		tiles.add(new Tile(TileName.HIGHPASS, 106, 252));
+		tiles.add(new Tile(TileName.BORDERLAND, 253, 337));
+		tiles.add(new Tile(TileName.OAKWOODS, 400, 422));
+		tiles.add(new Tile(TileName.DEEPWOODS, 547, 507));
+		tiles.add(new Tile(TileName.CURSTVALLEY, 694, 592));
+		tiles.add(new Tile(TileName.CAVERN, 106, 422));
+		tiles.add(new Tile(TileName.BADVALLEY, 253, 507));
+		tiles.add(new Tile(TileName.MAPLEWOODS, 400, 592));
+		tiles.add(new Tile(TileName.NUTWOODS, 547, 677));
+		tiles.add(new Tile(TileName.MOUNTAIN, 106, 592));
+		tiles.add(new Tile(TileName.CAVES, 253, 677));
+		tiles.add(new Tile(TileName.RUINS, 400, 762));
+		tiles.add(new Tile(TileName.AWFULVALLEY, 547, 847));
+		tiles.add(new Tile(TileName.PINEWOODS, 106, 762));
+		tiles.add(new Tile(TileName.LINDENWOODS, 400, 932));
 		
 		//MANUALLY SET TILE CONNECTIONS (DOES BOTH ENDS IN 1 CONNECT)
-		connect(tiles[0], tiles[1], 1, 2);		//cliff and evil valley
-		connect(tiles[0], tiles[2], 2, 3);		//cliff and ledges		
-		connect(tiles[1], tiles[5], 5, 6);		//evil valley and high pass
-		connect(tiles[1], tiles[6], 4, 2);		//evil valley and borderlands
-		connect(tiles[1], tiles[2], 4, 2);		//evil valley and ledges		
-		connect(tiles[2], tiles[6], 4, 4);		//ledges and borderlands
-		connect(tiles[2], tiles[7], 5, 2);		//ledges and oakwoods		
+		connect(tiles.get(0), tiles.get(1), 1, 2);		//cliff and evil valley
+		connect(tiles.get(0), tiles.get(2), 2, 3);		//cliff and ledges		
+		connect(tiles.get(1), tiles.get(5), 5, 6);		//evil valley and high pass
+		connect(tiles.get(1), tiles.get(6), 4, 2);		//evil valley and borderlands
+		connect(tiles.get(1), tiles.get(2), 4, 2);		//evil valley and ledges		
+		connect(tiles.get(2), tiles.get(6), 4, 4);		//ledges and borderlands
+		connect(tiles.get(2), tiles.get(7), 5, 2);		//ledges and oakwoods		
 		connect(tiles[3], tiles[8], 2, 1);		//crag and deep woods		
 		connect(tiles[4], tiles[8], 5, 2);		//dark valley and deep woods
 		connect(tiles[4], tiles[9], 1, 1);		//dark valley and curst valley		
@@ -134,18 +129,17 @@ public class Board implements Serializable{
 	}
 	
 	public void setupGarrisons(){
-		this.garrisons = new Garrison[4];
-		this.garrisons[0] = new Garrison(GarrisonName.CHAPEL);
-		this.garrisons[1] = new Garrison(GarrisonName.GUARD);
-		this.garrisons[2] = new Garrison(GarrisonName.HOUSE);
-		this.garrisons[3] = new Garrison(GarrisonName.INN);
+		this.garrisons.add(new Garrison(GarrisonName.CHAPEL));
+		this.garrisons.add(new Garrison(GarrisonName.GUARD));
+		this.garrisons.add(new Garrison(GarrisonName.HOUSE));
+		this.garrisons.add(new Garrison(GarrisonName.INN));
 	}
 	
 	public void placeGarrisons(){
-		this.garrisons[0].setLocation(tiles[17].getClearing(5));
-		this.garrisons[1].setLocation(tiles[4].getClearing(5));
-		this.garrisons[2].setLocation(tiles[9].getClearing(5));
-		this.garrisons[3].setLocation(tiles[11].getClearing(5));
+		this.garrisons.get(0).setLocation(tiles.get(17).getClearing(5));
+		this.garrisons.get(1).setLocation(tiles.get(4).getClearing(5));
+		this.garrisons.get(2).setLocation(tiles.get(9).getClearing(5));
+		this.garrisons.get(3).setLocation(tiles.get(11).getClearing(5));
 	}
 	
 	public void instanciateTreasures(){
@@ -167,6 +161,7 @@ public class Board implements Serializable{
 		//instanciate the treasures within treasures
 		Treasure[] t1 = {large.get(0), large.get(1)};
 		large.remove(0); large.remove(0);
+		//large.s
 		twit.add(new TreasureWithinTreasure(TreasureWithinTreasureName.CHEST, t1));
 
 		Treasure[] t2 = {large.get(0)};
@@ -209,7 +204,7 @@ public class Board implements Serializable{
 		int[] temps = {p1, p2, p3, p4, p5};
 		
 		for(int i=0; i< temps.length; i++){
-			tiles[temps[i]].setWarningChit(temp.get(i));
+			tiles.get(temps[i]).setWarningChit(temp.get(i));
 		}
 		
 	}
@@ -344,9 +339,9 @@ public class Board implements Serializable{
 		int[] temps = {p1, p2, p3, p4, p5};
 		for(int i=0; i<5; i++){
 			if(a.get(0) instanceof LostPlace){
-				tiles[temps[i]].setLostPlace((LostPlace) a.get(0));
+				tiles.get(temps[i]).setLostPlace((LostPlace) a.get(0));
 			}else{
-				tiles[temps[i]].setMapChit((MapChit)a.get(0));
+				tiles.get(temps[i]).setMapChit((MapChit)a.get(0));
 			}
 			a.remove(0);
 		}
@@ -361,8 +356,8 @@ public class Board implements Serializable{
 		//update the INN with all the new occupants
 		
 		for(int i=0; i < p.length; i++){
-			p[i].setLocation(tiles[11].getClearing(5));
-			tiles[11].getClearing(5).addOccupant(p[i]);
+			p[i].setLocation(tiles.get(11).getClearing(5));
+			tiles.get(11).getClearing(5).addOccupant(p[i]);
 		}
 		
 		
@@ -389,9 +384,6 @@ public class Board implements Serializable{
     	
         player.setHidden(false);
         boolean canChange =  (player.getLocation().canChangeClearing((Clearing)newClearing));
-        
-        //TODO check if player knows secret locations
-        Chit[] chits             = player.getChits();
         ItemWeight highestWeight = Utility.ItemWeight.NEGLIGIBLE;
 
         // find the highest weight of the active move chits of the player
@@ -406,8 +398,7 @@ public class Board implements Serializable{
 //                }
 //            }
 //        }
-        
-        
+
         // remove items that have a higher weight than the characters weight
         ItemWeight currentWeight = player.getCharacter().getWeight();
         boolean check = Utility.isWeightHeavier(currentWeight, highestWeight);
@@ -438,8 +429,8 @@ public class Board implements Serializable{
 	
 	@Override
 	public String toString(){
-		for(int i=0;i<tiles.length;i++){
-			System.out.println(tiles[i]);
+		for(int i=0;i<tiles.size();i++){
+			System.out.println(tiles.get(i));
 		}
 		return "";
 	}

@@ -14,9 +14,11 @@ import model.Elf;
 import model.Monster;
 import model.Player;
 import model.Swordsman;
-import model.Treasure;
+//import model.Treasure;
+//import model.TreasureWithinTreasure;
 import model.WhiteKnight;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import utils.Config;
@@ -31,7 +33,7 @@ public class ServerController extends Handler{
 
 	public Board board;		//THIS IS THE MODEL
 	public NetworkServer network;
-	Player[] players = new Player[Config.MAX_CLIENTS] ;
+	ArrayList<Player> players = new ArrayList<Player>();
 	int addedPlayers = 0;
     int playerCount    = Config.MAX_CLIENTS;
     int currentDay     = 0;
@@ -54,8 +56,8 @@ public class ServerController extends Handler{
 
 	public Player charToPlayer(CharacterName n){
 		for(int j=0; j< playerCount; j++){
-			if(players[j].getCharacter().getName() == n){
-				return players[j];
+			if(players.get(j).getCharacter().getName() == n){
+				return players.get(j);
 			}
 		}
 		return null;
@@ -94,7 +96,7 @@ public class ServerController extends Handler{
 					recievedCombat += 1;
 
 					//turns the recieved charctername into a player
-					findPlayer(ID).setTarget(charToPlayer((CharacterName) m.getData()[0]));
+					findPlayer(ID).setTarget(charToPlayer((CharacterName) m.getData().get(0)));
 				}else{
 					network.send(ID, "NOT ACCEPTING COMBAT TARGETS ATM");
 				}
@@ -102,29 +104,29 @@ public class ServerController extends Handler{
 			if( m.getType() == MessageType.COMBAT_MOVES){
 				if(state == GameState.CHOOSE_COMBATMOVES){
 					recievedCombat += 1;
-					findPlayer(ID).setMoves((CombatMoves) m.getData()[0]);
+					findPlayer(ID).setMoves((CombatMoves) m.getData().get(0));
 				}else{
 					network.send(ID, "NOT ACCEPTING COMBAT MOVES ATM");
 				}
 			}
 			if( m.getType() == MessageType.CHARACTER_SELECT){
 				if(state == GameState.CHOOSE_CHARACTER){
-					switch((CharacterName) m.getData()[0]){
+					switch((CharacterName) m.getData().get(0)){
 
-					case AMAZON: players[addedPlayers] = new Player(new Amazon(), ID); break;
-					case BERSERKER:players[addedPlayers] = new Player(new Berserker() , ID);
+					case AMAZON: players.add(new Player(new Amazon(), ID)); break;
+					case BERSERKER:players.add(new Player(new Berserker() , ID));
 					break;
-					case BLACK_KNIGHT:players[addedPlayers] = new Player(new BlackKnight(), ID);
+					case BLACK_KNIGHT:players.add(new Player(new BlackKnight(), ID));
 					break;
-					case CAPTAIN:players[addedPlayers] = new Player(new Captain(), ID);
+					case CAPTAIN:players.add(new Player(new Captain(), ID));
 					break;
-					case DWARF:players[addedPlayers] = new Player(new Dwarf(), ID);
+					case DWARF:players.add(new Player(new Dwarf(), ID));
 					break;
-					case ELF:players[addedPlayers] = new Player(new Elf(), ID);
+					case ELF:players.add(new Player(new Elf(), ID));
 					break;
-					case SWORDSMAN:players[addedPlayers] = new Player(new Swordsman(), ID);
+					case SWORDSMAN:players.add(new Player(new Swordsman(), ID));
 					break;
-					case WHITE_KNIGHT:players[addedPlayers] = new Player(new WhiteKnight(), ID);
+					case WHITE_KNIGHT:players.add(new Player(new WhiteKnight(), ID));
 					break;
 					default:;
 					break;
@@ -132,7 +134,7 @@ public class ServerController extends Handler{
 					}
 					this.addedPlayers += 1;
 
-					System.out.println((CharacterName) m.getData()[0]);
+					System.out.println((CharacterName) m.getData().get(0));
 					System.out.println(addedPlayers);
 
 				}else{
@@ -149,8 +151,8 @@ public class ServerController extends Handler{
 	 */
 	public Player findPlayer(int ID){
 		for(int i=0;i<playerCount;i++){
-			if(players[i].getID() == ID){
-				return players[i];
+			if(players.get(0).getID() == ID){
+				return players.get(0);
 			}
 		}
 		return null;
@@ -180,11 +182,11 @@ public class ServerController extends Handler{
 	 * @param player The player who's options are being determined
 	 * @return The players that the (param) player is able to block
 	 */
-    public Player[] blockable(Player player) {
-    	Player[] blockedPlayers = player.getLocation().getOccupants();
-    	for (int i = 0; i < blockedPlayers.length; i++) {
-    		if (blockedPlayers[i] != null && !blockedPlayers[i].isHidden() && blockedPlayers[i].getID() != player.getID()) {
-    			blockedPlayers[i] = null;
+    public ArrayList<Player> blockable(Player player) {
+    	ArrayList<Player> blockedPlayers = player.getLocation().getOccupants();
+    	for (int i = 0; i < blockedPlayers.size(); i++) {
+    		if (blockedPlayers.get(i) != null && !blockedPlayers.get(i).isHidden() && blockedPlayers.get(i).getID() != player.getID()) {
+    			blockedPlayers.remove(i);
     		}
     	}
     	return blockedPlayers;
@@ -195,10 +197,10 @@ public class ServerController extends Handler{
      * @param monster the monster blocking people
      */
     public void block(Monster monster) {
-    	Player[] blockablePlayers = monster.getLocation().getOccupants();
-    	for (int i = 0; i < blockablePlayers.length; i++) {
-    		if (!blockablePlayers[i].isHidden()) {
-    			players[i].setBlocked(true);
+    	ArrayList<Player> blockablePlayers = monster.getLocation().getOccupants();
+    	for (int i = 0; i < blockablePlayers.size(); i++) {
+    		if (!blockablePlayers.get(i).isHidden()) {
+    			players.get(i).setBlocked(true);
     		}
     	}
     }
@@ -208,22 +210,25 @@ public class ServerController extends Handler{
 	 * @param The player doing the searching
 	 * @return A list of all players in the clearing (now unhidden)
 	 */
-    public Player[] search(Player player) {
-    	Player[] sameClearingPlayers = player.getLocation().getOccupants();
-    	for (int i = 0; i < sameClearingPlayers.length; i++) {
+    public ArrayList<Player> search(Player player) {
+    	ArrayList<Player> sameClearingPlayers = player.getLocation().getOccupants();
+    	for (int i = 0; i < sameClearingPlayers.size(); i++) {
     		// do not unhide yourself
-    		if (sameClearingPlayers[i] != null && sameClearingPlayers[i].getID() != player.getID())
-    		    sameClearingPlayers[i].setHidden(false);
+    		if (sameClearingPlayers.get(i) != null && sameClearingPlayers.get(i).getID() != player.getID())
+    		    sameClearingPlayers.get(i).setHidden(false);
     	}
 
-        Treasure[] clearingTreasures = player.getLocation().getTreasures();
+    	//TODO NICK: I disabled this for now, going to need search tables anyways
+    	
+    	/*ArrayList<Treasure> clearingTreasures = player.getLocation().getTreasures();
         for (int i = 0; i < clearingTreasures.length; i++) {
             if (clearingTreasures[i] != null) {
                 player.addTreasure(clearingTreasures[i]);
                 network.send(player.getID(), "You've found a treasure! + " + clearingTreasures[i].getGold() + "gold");
                 player.getLocation().removeTreasure(clearingTreasures[i]);
             }
-        }
+        }*/
+    	
     	return sameClearingPlayers;
     }
 
@@ -232,7 +237,7 @@ public class ServerController extends Handler{
      * @param p The player
      */
     public void alert(Player p) {
-       p.getWeapons()[0].setActive(!p.getWeapons()[0].isActive());
+       p.getWeapons().get(0).setActive(!p.getWeapons().get(0).isActive());
     }
 
     /**
@@ -251,8 +256,8 @@ public class ServerController extends Handler{
 
         // reset their fatigue and order
         for (int i = 0; i < playerCount; i++) {
-        	players[i].setFatigue(0);
-        	players[i].setOrder(0);
+        	players.get(i).setFatigue(0);
+        	players.get(i).setOrder(0);
         }
         System.out.println("ResetDay end");
         return true;
@@ -262,8 +267,8 @@ public class ServerController extends Handler{
      * Cycles through players, unalerts their weapons
      */
     public void unAlertWeapons(){
-    	for (int i = 0; i < players.length; i++) {
-    		players[i].unAlertWeapons();
+    	for (int i = 0; i < players.size(); i++) {
+    		players.get(i).unAlertWeapons();
     	}
     }
 
@@ -281,34 +286,34 @@ public class ServerController extends Handler{
      */
     public void doTodaysActivities(Player player) {
     	int moves = 0;
-    	while (moves < player.getActivities().length) {
+    	while (moves < player.getActivities().size()) {
     		// TODO: for testing
-    		System.out.println("moves: " + moves + " activities: " + player.getActivities().length);
+    		System.out.println("moves: " + moves + " activities: " + player.getActivities().size());
 
 
 
-    		Object[] activities = player.getActivities();
+    		ArrayList<Object> activities = player.getActivities();
 
     		if (!player.isBlocked()) {	//assuming the player is not being blocked by another
     			// format: [MOVE, clearing]
 
-    			if (activities[moves] != null) {
+    			if (activities.get(moves) != null) {
 
-    				Player[] canBlock = blockable(player);					// check if they can block another player
+    				ArrayList<Player> canBlock = blockable(player);					// check if they can block another player
 
     	    		if (currentDay != 1) {
-    		    		for (int j = 0; j < canBlock.length; j++) {
-    		    			if (canBlock[j] != null) {
-    		    				canBlock[j].setBlocked(true);
+    		    		for (int j = 0; j < canBlock.size(); j++) {
+    		    			if (canBlock.get(j) != null) {
+    		    				canBlock.get(j).setBlocked(true);
     		    				System.out.println("blocking player!"); // TODO: for testing
-    		    				network.send(canBlock[j].getID(), "You've been blocked! :( " );
+    		    				network.send(canBlock.get(j).getID(), "You've been blocked! :( " );
     		    			}
     		    		}
     	    		}
 
-		    		switch((Actions) activities[moves]) {
+		    		switch((Actions) activities.get(moves)) {
 
-		    		case MOVE: board.move(player, (Clearing)activities[moves + 1]); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is moving!"); break;
+		    		case MOVE: board.move(player, (Clearing)activities.get(moves+1)); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is moving!"); break;
 		    		case HIDE: hide(player); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is hiding!"); break;
 		    		case ALERT: alert(player); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is alerting their weapon!"); break;
 		    		case REST: rest(player); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is resting!"); break;
@@ -318,7 +323,7 @@ public class ServerController extends Handler{
 		    		}
     			}
     		}
-    		else if (activities[moves] == Utility.Actions.HIDE) {
+    		else if (activities.get(moves) == Utility.Actions.HIDE) {
     			player.setBlocked(false);
     			hide(player);
     			moves=moves+2;
@@ -339,17 +344,17 @@ public class ServerController extends Handler{
         // TODO: treasures
         // TODO: Actually determine score based on individual victory points? or is it different for a day 28 time out?
         for (int i = 0; i < playerCount; i++ ) {
-            player = players[i];
+            player = players.get(i);
             if (winner == null)
-                winner = players[i];
+                winner = players.get(i);
 
             player.removeArmourWithHigherWeight(player.getCharacter().getWeight());
             player.removeWeaponsWithHigherWeight(player.getCharacter().getWeight());
 
             int basicScore     = 0;
-            int fameScore      = players[i].getFame() / 10;
-            int notorietyScore = players[i].getNotoriety() / 20;
-            int goldScore      = players[i].getGold() / 30;
+            int fameScore      = players.get(i).getFame() / 10;
+            int notorietyScore = players.get(i).getNotoriety() / 20;
+            int goldScore      = players.get(i).getGold() / 30;
 
             basicScore = fameScore + notorietyScore + goldScore;
             player.setFinalScore(basicScore);
@@ -426,8 +431,8 @@ public class ServerController extends Handler{
         int nextMover = 0;
         while (nextMover < playerCount) {
             for (int i = 0; i < playerCount; i++) {
-                if (players[i].order == nextMover) {
-                	doTodaysActivities(players[i]);
+                if (players.get(i).order == nextMover) {
+                	doTodaysActivities(players.get(i));
                     nextMover++;
                     break;
                 }
@@ -441,9 +446,9 @@ public class ServerController extends Handler{
         nextMover = 0;
         while (nextMover < playerCount) {
             for (int i = 0; i < playerCount; i++) {
-                if (players[i].order == nextMover) {
-                	if (players[i].getTarget() != null) {
-                		encounter(players[i], players[i].getTarget());	
+                if (players.get(i).order == nextMover) {
+                	if (players.get(i).getTarget() != null) {
+                		encounter(players.get(i), players.get(i).getTarget());	
                 	}
                 	nextMover++;
                     break;
@@ -464,34 +469,33 @@ public class ServerController extends Handler{
      * Randomly orders the players //TODO AFTER ARRAYLIST CONVERSION, JUST .SHUFFLE
      */
     public void orderPlayers(){
+    	
     	// Silly way to order players from 1 to playerCount+1
         for (int i = 0; i < playerCount; i++) {
         	System.out.println(i);
-        	if (players[i].isDead()) {
+        	if (players.get(0).isDead()) {
         		for (int j = i; j < playerCount - 1; j++) {
-        			players[j] = players[j+1];
+        			players.set(j, players.get(j+1));
         		}
         		playerCount--;
         		i--;
         	}
-
-        	players[i].order = Utility.roll(100);
-
+        	players.get(0).order = Utility.roll(100);
         }
 
         int[] ordering = new int[playerCount];
 
         for (int i = 0; i < playerCount; i++) {
-            ordering[i] = players[i].order;
+            ordering[i] = players.get(0).order;
         }
 
         Arrays.sort(ordering);
 
         for (int i = 0; i < playerCount; i++) {
             for (int j = 0; j < playerCount; j++) {
-                if (ordering[i] == players[j].order) {
-                    players[j].order = i;
-                    network.broadCast(players[j].getCharacter().getName() + " is in position # " + (players[j].getOrder() + 1));
+                if (ordering[i] == players.get(j).order) {
+                    players.get(j).order = i;
+                    network.broadCast(players.get(j).getCharacter().getName() + " is in position # " + (players.get(j).getOrder() + 1));
                     break;
                 }
             }
@@ -549,8 +553,8 @@ public class ServerController extends Handler{
 
 	//TODO Finding active weapon rather than assuming the active weapon is at position 0
 	public void doFight(Player attacker, Player defender) {
-		if (defender.getWeapons()[0].getSpeed() < attacker.getWeapons()[0].getSpeed()) {
-			if ((defender.getWeapons()[0].getSpeed() - attacker.getMoves().attackFatigue) <= (attacker.getCharacter().getSpeed() - defender.getMoves().maneuverFatigue)) {
+		if (defender.getWeapons().get(0).getSpeed() < attacker.getWeapons().get(0).getSpeed()) {
+			if ((defender.getWeapons().get(0).getSpeed() - attacker.getMoves().attackFatigue) <= (attacker.getCharacter().getSpeed() - defender.getMoves().maneuverFatigue)) {
 				hit(attacker, defender);
 			}
 			else if (attacker.getMoves().getAttack() == Attacks.THRUST && defender.getMoves().getManeuver() == Maneuvers.CHARGE) {
@@ -564,7 +568,7 @@ public class ServerController extends Handler{
 			}
 
 			if (defender.isDead() == false) {
-				if ((attacker.getWeapons()[0].getSpeed() - defender.getMoves().attackFatigue) <= (defender.getCharacter().getSpeed() - attacker.getMoves().maneuverFatigue)) {
+				if ((attacker.getWeapons().get(0).getSpeed() - defender.getMoves().attackFatigue) <= (defender.getCharacter().getSpeed() - attacker.getMoves().maneuverFatigue)) {
 					hit(defender, attacker);
 				}
 				else if (defender.getMoves().getAttack() == Attacks.THRUST && attacker.getMoves().getManeuver() == Maneuvers.CHARGE) {
@@ -578,8 +582,8 @@ public class ServerController extends Handler{
 				}
 			}
 		}
-		else if (defender.getWeapons()[0].getSpeed() > attacker.getWeapons()[0].getSpeed()) {
-			if ((attacker.getWeapons()[0].getSpeed() - defender.getMoves().attackFatigue) <= (defender.getCharacter().getSpeed() - attacker.getMoves().maneuverFatigue)) {
+		else if (defender.getWeapons().get(0).getSpeed() > attacker.getWeapons().get(0).getSpeed()) {
+			if ((attacker.getWeapons().get(0).getSpeed() - defender.getMoves().attackFatigue) <= (defender.getCharacter().getSpeed() - attacker.getMoves().maneuverFatigue)) {
 				hit(defender, attacker);
 			}
 			else if (defender.getMoves().getAttack() == Attacks.THRUST && attacker.getMoves().getManeuver() == Maneuvers.CHARGE) {
@@ -593,7 +597,7 @@ public class ServerController extends Handler{
 			}
 
 			if (defender.isDead() == false) {
-				if ((defender.getWeapons()[0].getSpeed() - attacker.getMoves().attackFatigue) <= (attacker.getCharacter().getSpeed() - defender.getMoves().maneuverFatigue)) {
+				if ((defender.getWeapons().get(0).getSpeed() - attacker.getMoves().attackFatigue) <= (attacker.getCharacter().getSpeed() - defender.getMoves().maneuverFatigue)) {
 					hit(attacker, defender);
 				}
 				else if (attacker.getMoves().getAttack() == Attacks.THRUST && defender.getMoves().getManeuver() == Maneuvers.CHARGE) {
@@ -609,8 +613,8 @@ public class ServerController extends Handler{
 		}
 
 		else {
-			if (defender.getWeapons()[0].getLength() < attacker.getWeapons()[0].getLength()) {
-				if ((defender.getWeapons()[0].getSpeed() - attacker.getMoves().attackFatigue) <= (attacker.getCharacter().getSpeed() - defender.getMoves().maneuverFatigue)) {
+			if (defender.getWeapons().get(0).getLength() < attacker.getWeapons().get(0).getLength()) {
+				if ((defender.getWeapons().get(0).getSpeed() - attacker.getMoves().attackFatigue) <= (attacker.getCharacter().getSpeed() - defender.getMoves().maneuverFatigue)) {
 					hit(attacker, defender);
 				}
 				else if (attacker.getMoves().getAttack() == Attacks.THRUST && defender.getMoves().getManeuver() == Maneuvers.CHARGE) {
@@ -624,7 +628,7 @@ public class ServerController extends Handler{
 				}
 
 				if (defender.isDead() == false) {
-					if ((attacker.getWeapons()[0].getSpeed() - defender.getMoves().attackFatigue) <= (defender.getCharacter().getSpeed() - attacker.getMoves().maneuverFatigue)) {
+					if ((attacker.getWeapons().get(0).getSpeed() - defender.getMoves().attackFatigue) <= (defender.getCharacter().getSpeed() - attacker.getMoves().maneuverFatigue)) {
 						hit(defender, attacker);
 					}
 					else if (defender.getMoves().getAttack() == Attacks.THRUST && attacker.getMoves().getManeuver() == Maneuvers.CHARGE) {
@@ -638,8 +642,8 @@ public class ServerController extends Handler{
 					}
 				}
 			}
-			else if (defender.getWeapons()[0].getLength() > attacker.getWeapons()[0].getLength()) {
-				if ((attacker.getWeapons()[0].getSpeed() - defender.getMoves().attackFatigue) <= (defender.getCharacter().getSpeed() - attacker.getMoves().maneuverFatigue)) {
+			else if (defender.getWeapons().get(0).getLength() > attacker.getWeapons().get(0).getLength()) {
+				if ((attacker.getWeapons().get(0).getSpeed() - defender.getMoves().attackFatigue) <= (defender.getCharacter().getSpeed() - attacker.getMoves().maneuverFatigue)) {
 					hit(defender, attacker);
 				}
 				else if (defender.getMoves().getAttack() == Attacks.THRUST && attacker.getMoves().getManeuver() == Maneuvers.CHARGE) {
@@ -653,7 +657,7 @@ public class ServerController extends Handler{
 				}
 
 				if (defender.isDead() == false) {
-					if ((defender.getWeapons()[0].getSpeed() - attacker.getMoves().attackFatigue) <= (attacker.getCharacter().getSpeed() - defender.getMoves().maneuverFatigue)) {
+					if ((defender.getWeapons().get(0).getSpeed() - attacker.getMoves().attackFatigue) <= (attacker.getCharacter().getSpeed() - defender.getMoves().maneuverFatigue)) {
 						hit(attacker, defender);
 					}
 					else if (attacker.getMoves().getAttack() == Attacks.THRUST && defender.getMoves().getManeuver() == Maneuvers.CHARGE) {
@@ -668,7 +672,7 @@ public class ServerController extends Handler{
 				}
 			}
 			else {
-				if ((defender.getWeapons()[0].getSpeed() - attacker.getMoves().attackFatigue) <= (attacker.getCharacter().getSpeed() - defender.getMoves().maneuverFatigue)) {
+				if ((defender.getWeapons().get(0).getSpeed() - attacker.getMoves().attackFatigue) <= (attacker.getCharacter().getSpeed() - defender.getMoves().maneuverFatigue)) {
 					hit(attacker, defender);
 				}
 				else if (attacker.getMoves().getAttack() == Attacks.THRUST && defender.getMoves().getManeuver() == Maneuvers.CHARGE) {
@@ -682,7 +686,7 @@ public class ServerController extends Handler{
 				}
 
 				if (defender.isDead() == false) {
-					if ((attacker.getWeapons()[0].getSpeed() - defender.getMoves().attackFatigue) <= (defender.getCharacter().getSpeed() - attacker.getMoves().maneuverFatigue)) {
+					if ((attacker.getWeapons().get(0).getSpeed() - defender.getMoves().attackFatigue) <= (defender.getCharacter().getSpeed() - attacker.getMoves().maneuverFatigue)) {
 						hit(defender, attacker);
 					}
 					else if (defender.getMoves().getAttack() == Attacks.THRUST && attacker.getMoves().getManeuver() == Maneuvers.CHARGE) {
@@ -700,7 +704,7 @@ public class ServerController extends Handler{
 	}
 
 	public void hit(Player attacker, Player defender) {
-		ItemWeight level = attacker.getWeapons()[0].getWeight();
+		ItemWeight level = attacker.getWeapons().get(0).getWeight();
 
 		network.broadCast(attacker.getCharacter().getName() + " has hit " + defender.getCharacter().getName());
 
@@ -803,9 +807,10 @@ public class ServerController extends Handler{
 
 		//sends each player object to the right client
 		for(int i=0;i<playerCount;i++){
-			Player t = players[i].clone();
-			network.send(players[i].getID(), t);
-			players[i] = t;
+			Player t = players.get(i).clone();
+			network.send(players.get(i).getID(), t);
+			players.remove(i);
+			players.add(t);
 		}
 
 	}
