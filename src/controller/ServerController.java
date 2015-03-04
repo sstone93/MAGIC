@@ -24,6 +24,7 @@ import java.util.Arrays;
 import utils.Config;
 import utils.Utility;
 import utils.Utility.*;
+import view.ServerView;
 
 /**
  * Main controller class for the server
@@ -854,9 +855,10 @@ public class ServerController extends Handler{
 	 * Running this method will trigger the process of creating a MagicRealm server.
 	 * @param args Command line arguments, likely to remain unused
 	 */
-	@SuppressWarnings("unused")
 	public static void main(String args[]){
 		ServerController control = new ServerController();		//instanciate the controller
+		ServerView view = new ServerView(control);
+		view.setVisible(true);
 	}
 
 }

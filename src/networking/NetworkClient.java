@@ -80,12 +80,15 @@ public class NetworkClient extends NetworkEntity  implements Runnable{
 	public void stop(){
 		System.out.println("Client: Begin Shutdown.");
 		NetworkThread toTerminate = clients[0];
-		try{
-			toTerminate.close();	//This SHOULD properly terminate the thread being shut down.
-			toTerminate = null;		//allows the garbage collector to have it???
-		} catch (IOException ioe) {
-			toTerminate = null;		//allows the garbage collector to have it???
-			System.out.println("Error closing thread: " + ioe);
+		
+		if(toTerminate != null){
+			try{
+				toTerminate.close();	//This SHOULD properly terminate the thread being shut down.
+				toTerminate = null;		//allows the garbage collector to have it???
+			} catch (IOException ioe) {
+				toTerminate = null;		//allows the garbage collector to have it???
+				System.out.println("Error closing thread: " + ioe);
+			}
 		}
 
 		System.out.println("Client: Connection Closed.");
@@ -93,6 +96,6 @@ public class NetworkClient extends NetworkEntity  implements Runnable{
 			thread = null;
 		}
 		System.out.println("Client: Loop Thread Destroyed. See ya.");
-		controller.handle(socket.getLocalPort(), "NC CLOSED");
+		controller.handle(0, "NC CLOSED");		//due to random null pointer shit, dont actually use a valid port here
 	}
 }

@@ -96,10 +96,14 @@ public class View extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+		/**
+		 * NICK'S FUNCTION TO AID IN PROPER CLIENT/SERVER SHUTDOWN, IF IT IS A PROBLEM, LET ME KNOW
+		 */
 		this.addWindowListener( new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent we) {
-                System.out.println("Closed Window");
+                System.out.println("Window Was Closed: Triggering Shutdown");
+                control.network.stop();
                 System.exit(0);
             }
         } );
@@ -636,7 +640,7 @@ public class View extends JFrame {
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void update(){
-		Board b = control.model.getBoard();
+		final Board b = control.model.getBoard();
 		if (b != null) {
 			if (!this.boardMade){
 				makeBoard();
@@ -645,7 +649,7 @@ public class View extends JFrame {
 			
 			Iterator it = iconPanels.entrySet().iterator();
 		    while (it.hasNext()) {
-		        JPanel panel = (JPanel)((HashMap.Entry)it.next()).getValue();
+		        JPanel panel = (JPanel)((HashMap)it.next()).values();
 		        if(panel != null){
 		        	boardPanel.remove(panel);
 		        }
@@ -733,7 +737,7 @@ public class View extends JFrame {
 				try {
 					GarrisonName name = b.garrisons.get(i).getName();
 					pic = ImageIO.read(this.getClass().getResource(Utility.getGarrisonImage(name)));
-					Tile parent = b.garrisons.get(i).getLocation().parent;
+					final Tile parent = b.garrisons.get(i).getLocation().parent;
 					
 					if (!iconPanels.containsKey(parent)){
 						JPanel newPane = new JPanel();
