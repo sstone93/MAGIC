@@ -12,8 +12,8 @@ public class Character implements Serializable{
     ItemWeight			weight;
     int					speed;
     GarrisonName		startingLocation;
-    ArrayList<Weapon>  	startingWeapons;
-    ArrayList<Armour>   startingArmour;
+    ArrayList<Weapon>  	startingWeapons = new ArrayList<Weapon>();
+    ArrayList<Armour>   startingArmour = new ArrayList<Armour>();
     
     // player can can alert or unalert a weapon
     public void alert(Weapon weapon, Object alert) {

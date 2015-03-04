@@ -663,7 +663,7 @@ public class View extends JFrame {
 					if (clearings != null) {
 						int chars = 0;
 						for(int j = 0; j < clearings.size(); j++){
-							ArrayList<Player> occupants = clearings.get(i).getOccupants();
+							ArrayList<Player> occupants = clearings.get(j).getOccupants();
 							if(occupants != null){
 								for(int k = 0; k < occupants.size(); k++){
 									if (occupants.get(k) != null){
