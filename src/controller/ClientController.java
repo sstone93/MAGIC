@@ -1,5 +1,7 @@
 package controller;
 
+import java.util.ArrayList;
+
 import networking.Message;
 import networking.NetworkClient;
 import model.Board;
@@ -125,15 +127,17 @@ public class ClientController extends Handler{
 	public void handlePlaysRecorded(Actions p1, String l1, Actions p2, String l2, Actions p3, String l3, Actions p4, String l4){
 		
 		String[] temp =l1.split(" ");
-		Clearing c1 =  model.getBoard().tiles[model.getBoard().convertTileName(TileName.valueOf(temp[0]))].getClearing(Integer.parseInt(temp[2]));
+		Clearing c1 =  model.getBoard().tiles.get(model.getBoard().convertTileName(TileName.valueOf(temp[0]))).getClearing(Integer.parseInt(temp[2]));
 		System.out.println(c1);
 		temp =l2.split(" ");
-		Clearing c2 =  model.getBoard().tiles[model.getBoard().convertTileName(TileName.valueOf(temp[0]))].getClearing(Integer.parseInt(temp[2]));
+		Clearing c2 =  model.getBoard().tiles.get(model.getBoard().convertTileName(TileName.valueOf(temp[0]))).getClearing(Integer.parseInt(temp[2]));
 		temp =l3.split(" ");
-		Clearing c3 =  model.getBoard().tiles[model.getBoard().convertTileName(TileName.valueOf(temp[0]))].getClearing(Integer.parseInt(temp[2]));
+		Clearing c3 =  model.getBoard().tiles.get(model.getBoard().convertTileName(TileName.valueOf(temp[0]))).getClearing(Integer.parseInt(temp[2]));
 		temp =l4.split(" ");
-		Clearing c4 =  model.getBoard().tiles[model.getBoard().convertTileName(TileName.valueOf(temp[0]))].getClearing(Integer.parseInt(temp[2]));
-		Object[] mes = {p1, c1, p2, c2, p3, c3, p4, c4};
+		Clearing c4 =  model.getBoard().tiles.get(model.getBoard().convertTileName(TileName.valueOf(temp[0]))).getClearing(Integer.parseInt(temp[2]));
+
+		ArrayList<Object> mes = new ArrayList<Object>();
+		mes.add(p1);mes.add(c1);mes.add(p2);mes.add(c2);mes.add(p3);mes.add(c3);mes.add(p4);mes.add(c4);
 		network.send(new Message(MessageType.ACTIVITIES, mes));
 		model.addMessage("Sent activities");
 		this.view.update();
@@ -150,7 +154,8 @@ public class ClientController extends Handler{
 	//TODO CREATES COMBAT MOVE OBJECT, SENDS IT IN THE MESSAGE
 	public void handleCombatMoves(Attacks a, Defenses d, Maneuvers m, int aF, int mF){
 		CombatMoves temp = new CombatMoves(a, aF, m, mF, d);
-		Object[] mes = {temp};
+		ArrayList<Object> mes = new ArrayList<Object>();
+		mes.add(temp);
 		network.send(new Message(MessageType.COMBAT_MOVES, mes));
 		model.addMessage("Sent COMBATMOVES");
 		this.view.update();
@@ -164,7 +169,8 @@ public class ClientController extends Handler{
 	//TODO NEEDS TO BE CHANGED TO A BETTER FORMAT?
 	
 	public void handleMoveSelection(String location){
-		Object[] mes = {location};
+		ArrayList<Object> mes = new ArrayList<Object>();
+		mes.add(location);
 		network.send(new Message(MessageType.ACTIVITIES, mes));
 		model.addMessage("Sent "+location);
 		this.view.update();
@@ -175,7 +181,8 @@ public class ClientController extends Handler{
 	 * @param weapon the weapon to alert, in the form "<WeaponName> <active>"
 	 */
 	public void handleAlertSelection(String weapon){
-		Object[] mes = {weapon};
+		ArrayList<Object> mes = new ArrayList<Object>();
+		mes.add(weapon);
 		network.send(new Message(MessageType.ACTIVITIES, mes));
 		model.addMessage("Sent alert");
 		this.view.update();
@@ -186,7 +193,12 @@ public class ClientController extends Handler{
 	 * @param name the name of the selected character
 	 */
 	public void handleCharacterSelection(CharacterName name){
-		Object[] mes = {name};
+		ArrayList<Object> mes = new ArrayList<Object>();
+		mes.add(name);
+		
+		//TODO MAKE THIS ATTACHED TO THE UI, SO THE USER CAN CHOOSE THE STARTING LOCATIION
+		mes.add(GarrisonName.INN);
+		
 		network.send(new Message(MessageType.CHARACTER_SELECT, mes));
 		model.addMessage("Sent character select");
 		this.view.update();
@@ -197,7 +209,8 @@ public class ClientController extends Handler{
 	 * @param name the CharacterName of the player to target
 	 */
 	public void handleTargetSelection(CharacterName name){
-		Object[] mes = {name};
+		ArrayList<Object> mes = new ArrayList<Object>();
+		mes.add(name);
 		network.send(new Message(MessageType.COMBAT_TARGET, mes));
 		model.addMessage("Sent target selection");
 		this.view.update();
