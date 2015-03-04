@@ -3,6 +3,7 @@ package view;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -590,28 +591,28 @@ public class View extends JFrame {
 	private void makeBoard(){
 		Board b = control.model.getBoard();
 		if (b != null) {
-			tileLbls = new JLabel[b.tiles.length];
-			garrisonLbls = new JLabel[b.garrisons.length];
+			tileLbls = new JLabel[b.tiles.size()];
+			garrisonLbls = new JLabel[b.garrisons.size()];
 			charLbls = new JLabel[control.model.getNumPlayers()];
 			
 			BufferedImage pic;
-			for (int i = 0; i < b.tiles.length; i++){
+			for (int i = 0; i < b.tiles.size(); i++){
 				try {
-					TileName name = b.tiles[i].getName();
+					TileName name = b.tiles.get(i).getName();
 					pic = ImageIO.read(this.getClass().getResource(Utility.getTileImage(name)));
 					tileLbls[i] = new JLabel(new ImageIcon(pic));
-					tileLbls[i].setBounds(b.tiles[i].getX() - 100, b.tiles[i].getY() - 86, 200, 173);
+					tileLbls[i].setBounds(b.tiles.get(i).getX() - 100, b.tiles.get(i).getY() - 86, 200, 173);
 					boardPanel.add(tileLbls[i]);
 				}catch (IOException e){
 					
 				}
 			}
-			for (int i = 0; i < b.garrisons.length; i++){
+			for (int i = 0; i < b.garrisons.size(); i++){
 				try {
-					GarrisonName name = b.garrisons[i].getName();
+					GarrisonName name = b.garrisons.get(i).getName();
 					pic = ImageIO.read(this.getClass().getResource(Utility.getGarrisonImage(name)));
 					garrisonLbls[i] = new JLabel(new ImageIcon(pic));
-					garrisonLbls[i].setBounds(b.garrisons[i].getLocation().parent.getX() - 25, b.garrisons[i].getLocation().parent.getY() - 21, 50, 43);
+					garrisonLbls[i].setBounds(b.garrisons.get(i).getLocation().parent.getX() - 25, b.garrisons.get(i).getLocation().parent.getY() - 21, 50, 43);
 					boardPanel.add(garrisonLbls[i], new Integer(5), 0);
 					//garrison.repaint();
 				} catch (IOException e){
@@ -650,7 +651,7 @@ public class View extends JFrame {
 			charLbls = new JLabel[control.model.getNumPlayers()];
 			
 			BufferedImage pic;
-			for (int i = 0; i < b.tiles.length; i++){
+			for (int i = 0; i < b.tiles.size(); i++){
 				try {
 					//TileName name = b.tiles[i].getName();
 					//pic = ImageIO.read(this.getClass().getResource(Utility.getTileImage(name)));
@@ -658,29 +659,29 @@ public class View extends JFrame {
 					//tile.setBounds(b.tiles[i].getX() - 100, b.tiles[i].getY() - 86, 200, 173);
 					//boardPanel.add(tile);
 					
-					Clearing[] clearings = b.tiles[i].getClearings();
+					ArrayList<Clearing> clearings = b.tiles.get(i).getClearings();
 					if (clearings != null) {
 						int chars = 0;
-						for(int j = 0; j < clearings.length; j++){
-							Player[] occupants = clearings[j].occupants;
+						for(int j = 0; j < clearings.size(); j++){
+							ArrayList<Player> occupants = clearings.get(i).getOccupants();
 							if(occupants != null){
-								for(int k = 0; k < occupants.length; k++){
-									if (occupants[k] != null){
-										CharacterName character = occupants[k].getCharacter().getName();
-										System.out.println("adding Character " + character.toString() + " to " + b.tiles[i].getName().toString());
+								for(int k = 0; k < occupants.size(); k++){
+									if (occupants.get(k) != null){
+										CharacterName character = occupants.get(k).getCharacter().getName();
+										System.out.println("adding Character " + character.toString() + " to " + b.tiles.get(i).getName().toString());
 										pic = ImageIO.read(this.getClass().getResource(Utility.getCharacterImage(character)));
 										charLbls[chars] = new JLabel(new ImageIcon(pic));
-										charLbls[chars].setBounds(b.tiles[i].getX() - 25, b.tiles[i].getY() - 25, 50, 50);
+										charLbls[chars].setBounds(b.tiles.get(i).getX() - 25, b.tiles.get(i).getY() - 25, 50, 50);
 										boardPanel.add(charLbls[chars], new Integer(5), 0);
 										//c.repaint();
 										
-										if (!iconPanels.containsKey(b.tiles[i])){
+										if (!iconPanels.containsKey(b.tiles.get(i))){
 											JPanel newPane = new JPanel();
-											newPane.setBounds(b.tiles[i].getX(), b.tiles[i].getY(), 200, 300);
+											newPane.setBounds(b.tiles.get(i).getX(), b.tiles.get(i).getY(), 200, 300);
 											newPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 											newPane.setVisible(false);
 											boardPanel.add(newPane, new Integer(10), 0);
-											iconPanels.put(b.tiles[i], newPane);
+											iconPanels.put(b.tiles.get(i), newPane);
 										}
 										JPanel panel = new JPanel();
 										panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
@@ -689,23 +690,23 @@ public class View extends JFrame {
 										img.setSize(50, 50);
 										panel.add(img);
 										
-										JLabel lbl = new JLabel(Integer.toString(clearings[j].getClearingNumber()));
+										JLabel lbl = new JLabel(Integer.toString(clearings.get(j).getClearingNumber()));
 										lbl.setSize(10, 15);
 										panel.add(lbl);
-										iconPanels.get(b.tiles[i]).add(panel);
+										iconPanels.get(b.tiles.get(i)).add(panel);
 										
 										final int index = i;
 										
 										charLbls[chars].addMouseListener(new MouseAdapter() {
 											@Override
 											public void mouseEntered(MouseEvent e) {
-												iconPanels.get(b.tiles[index]).setVisible(true);
+												iconPanels.get(b.tiles.get(index)).setVisible(true);
 											}
 										});
 										charLbls[chars].addMouseListener(new MouseAdapter() {
 											@Override
 											public void mouseExited(MouseEvent e) {
-												iconPanels.get(b.tiles[index]).setVisible(false);
+												iconPanels.get(b.tiles.get(index)).setVisible(false);
 											}
 										});
 										chars++;
@@ -718,11 +719,11 @@ public class View extends JFrame {
 					
 				}
 			}
-			for (int i = 0; i < b.garrisons.length; i++){
+			for (int i = 0; i < b.garrisons.size(); i++){
 				try {
-					GarrisonName name = b.garrisons[i].getName();
+					GarrisonName name = b.garrisons.get(i).getName();
 					pic = ImageIO.read(this.getClass().getResource(Utility.getGarrisonImage(name)));
-					Tile parent = b.garrisons[i].getLocation().parent;
+					Tile parent = b.garrisons.get(i).getLocation().parent;
 					
 					if (!iconPanels.containsKey(parent)){
 						JPanel newPane = new JPanel();
@@ -740,7 +741,7 @@ public class View extends JFrame {
 					img.setSize(50, 50);
 					panel.add(img);
 					
-					JLabel lbl = new JLabel(Integer.toString(b.garrisons[i].getLocation().getClearingNumber()));
+					JLabel lbl = new JLabel(Integer.toString(b.garrisons.get(i).getLocation().getClearingNumber()));
 					lbl.setSize(10, 15);
 					panel.add(lbl);
 					iconPanels.get(parent).add(panel);
@@ -774,46 +775,48 @@ public class View extends JFrame {
 			notorietyText.setText(Integer.toString(p.getNotoriety()));
 			hiddenText.setText(String.valueOf(p.isHidden()));
 			
-			Armour[] armour = p.getArmour();
+			ArrayList<Armour> armour = p.getArmour();
 			String armourS = "";
 			if (armour != null) {
-				for(int i = 0; i < armour.length; i++){
-					if(armour[i] != null) {
-						armourS += armour[i].getType().toString() + " weight - " + armour[i].getWeight().toString() + 
-								" damaged - " + String.valueOf(armour[i].isDamaged()) + 
-								" active - " + String.valueOf(armour[i].isActive()) + "\n";
+				for(int i = 0; i < armour.size(); i++){
+					if(armour.get(i) != null) {
+						armourS += armour.get(i).getType().toString() + " weight - " + armour.get(i).getWeight().toString() + 
+								" damaged - " + String.valueOf(armour.get(i).isDamaged()) + 
+								" active - " + String.valueOf(armour.get(i).isActive()) + "\n";
 					}
 				}
 			}
 			armourText.setText(armourS);
 			
-			Treasure[] treasures = p.getTreasures();
+			ArrayList<Treasure> treasures = p.getTreasures();
 			String treasuresS = "";
 			if (treasures != null) {
-				for(int i = 0; i < treasures.length; i++){
-					if ( treasures[i] != null) {
-						treasuresS += treasures[i].getType() + " gold - " + Integer.toString(treasures[i].getGold()) + "\n";
+				for(int i = 0; i < treasures.size(); i++){
+					if ( treasures.get(i) != null) {
+						treasuresS += treasures.get(i).getType() + " gold - " + Integer.toString(treasures.get(i).getGold()) + "\n";
 					}
 				}
 			}
 			treasuresText.setText(treasuresS);
 			
-			Weapon[] weapons = p.getWeapons();
+			ArrayList<Weapon> weapons = p.getWeapons();
 			String weaponsS = "";
 			if (weapons != null) {
-				for(int i = 0; i < weapons.length; i++){
-					if (weapons[i] != null) {
-						weaponsS += weapons[i].getType().toString() + " weight - " + weapons[i].getWeight().toString()+ 
-								" length - " + Integer.toString(weapons[i].getLength()) + 
-								" speed - " + Integer.toString(weapons[i].getSpeed()) + 
-								" ranged - " + String.valueOf(weapons[i].isRanged()) + 
-								" active - " + String.valueOf(weapons[i].isActive()) + "\n";
+				for(int i = 0; i < weapons.size(); i++){
+					if (weapons.get(i) != null) {
+						weaponsS += weapons.get(i).getType().toString() + " weight - " + weapons.get(i).getWeight().toString()+ 
+								" length - " + Integer.toString(weapons.get(i).getLength()) + 
+								" speed - " + Integer.toString(weapons.get(i).getSpeed()) + 
+								" ranged - " + String.valueOf(weapons.get(i).isRanged()) + 
+								" active - " + String.valueOf(weapons.get(i).isActive()) + "\n";
 					}
 				}
 			}
 			weaponsText.setText(weaponsS);
 			
-			Chit[] chits = p.getChits();
+			
+			//TODO I DESTROYED CHITS, WILL REPLACE THIS WITH SOMETHIGN ELSE
+			Chit[] chits = new Chit[0];
 			String chitsS = "";
 			if (chits != null) {
 				for(int i = 0; i < chits.length; i++){
@@ -834,9 +837,9 @@ public class View extends JFrame {
 				if (b != null){
 					String[] clearings = new String[95];//had to hardcode the number for this interation
 					int count = 0;
-					for (int i = 0; i < b.tiles.length; i++){
-						for (int j=0; j < b.tiles[i].getClearings().length; j++){
-							clearings[count] = b.tiles[i].getName().toString() + " clearing " + b.tiles[i].getClearings()[j].getClearingNumber();
+					for (int i = 0; i < b.tiles.size(); i++){
+						for (int j=0; j < b.tiles.get(i).getClearings().size(); j++){
+							clearings[count] = b.tiles.get(i).getName().toString() + " clearing " + b.tiles.get(i).getClearings().get(j).getClearingNumber();
 							count++;
 						}
 					}
@@ -858,13 +861,15 @@ public class View extends JFrame {
 					movesGroup.remove(button);
 					movesPanel.remove(button);
 				}
-				Clearing[] connections = this.control.model.getPlayer().getLocation().connections;
-				for(int i = 0; i < connections.length; i++){
-					String label = connections[i].parent.getName().toString() + " clearing " + connections[i].getClearingNumber();
+				ArrayList<Clearing> connections = this.control.model.getPlayer().getLocation().getConnections();
+				
+				for(int i = 0; i < connections.size(); i++){
+					String label = connections.get(i).parent.getName().toString() + " clearing " + connections.get(i).getClearingNumber();
 					JRadioButton button = new JRadioButton(label);
 					movesGroup.add(button);
 					movesPanel.add(button, movesPanel.getComponents().length - 2);
 				}
+				
 				alertPanel.setVisible(false);
 				combatPanel.setVisible(false);
 				movesPanel.setVisible(true);
@@ -878,9 +883,9 @@ public class View extends JFrame {
 					alertGroup.remove(button);
 					alertPanel.remove(button);
 				}
-				Weapon[] weapons = this.control.model.getPlayer().getWeapons();
-				for(int i = 0; i < weapons.length; i++){
-					String label = weapons[i].getType().toString() + " " + weapons[i].isActive();
+				ArrayList<Weapon> weapons = this.control.model.getPlayer().getWeapons();
+				for(int i = 0; i < weapons.size(); i++){
+					String label = weapons.get(i).getType().toString() + " " + weapons.get(i).isActive();
 					JRadioButton button = new JRadioButton(label);
 					alertGroup.add(button);
 					alertPanel.add(button, alertPanel.getComponents().length - 2);
@@ -902,12 +907,12 @@ public class View extends JFrame {
 				break;
 			case CHOOSE_COMBATTARGET:
 				if (p != null) {
-					Player[] others = p.getLocation().getOccupants();
+					ArrayList<Player> others = p.getLocation().getOccupants();
 					if (others != null) {
-						CharacterName[] targets = new CharacterName[others.length];
-						for (int i = 0; i < others.length; i++){
-							if (others[i] != null)
-								targets[i] = others[i].getCharacter().getName();
+						CharacterName[] targets = new CharacterName[others.size()];
+						for (int i = 0; i < others.size(); i++){
+							if (others.get(i) != null)
+								targets[i] = others.get(i).getCharacter().getName();
 						}
 
 						target.setModel(new DefaultComboBoxModel(targets));

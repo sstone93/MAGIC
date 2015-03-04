@@ -20,6 +20,9 @@ public class Clearing implements Serializable{
         this.parent   = parent;
     }
 
+    public ArrayList<Clearing> getConnections(){
+    	return this.connections;
+    }
     public void addOccupant(Player p){
     	System.out.println("adding player" + p);
     	occupants.add(p);
