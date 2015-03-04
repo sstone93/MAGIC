@@ -3,9 +3,7 @@ package model;
 import java.io.Serializable;
 
 public class Treasure implements Serializable{
-    /**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -2440018576886400929L;
 	Clearing location;
     String   type = "gold"; // for now we only have gold

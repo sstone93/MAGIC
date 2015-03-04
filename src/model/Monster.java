@@ -1,7 +1,11 @@
 package model;
 
-public class Monster {
-    Clearing location;
+import java.io.Serializable;
+
+public class Monster implements Serializable{
+
+	private static final long serialVersionUID = -582083574086670219L;
+	Clearing location;
     int      length = 0; // represents length of the tooth/claw
     // todo: put weight, in enum
     

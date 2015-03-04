@@ -5,9 +5,6 @@ import java.util.ArrayList;
 
 public class LostCastle extends LostPlace implements Serializable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1116222759723378173L;
 	
 	public LostCastle(ArrayList<MapChit> ch){

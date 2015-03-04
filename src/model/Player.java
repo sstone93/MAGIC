@@ -25,10 +25,10 @@ public class Player implements Serializable{
     CombatMoves moves;
     Player target;
     Clearing location;
-    ArrayList<Armour> armour;
-    ArrayList<Weapon> weapons;
-    ArrayList<Object> activities;
-    ArrayList<Treasure>  treasures;
+    ArrayList<Armour> armour = new ArrayList<Armour>();
+    ArrayList<Weapon> weapons = new ArrayList<Weapon>();
+    ArrayList<Object> activities = new ArrayList<Object>();
+    ArrayList<Treasure>  treasures = new ArrayList<Treasure>();
 
     /**
      * Used to correct object transmission
