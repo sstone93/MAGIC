@@ -241,7 +241,9 @@ public class ServerController extends Handler{
      * @param p The player
      */
     public void alert(Player p) {
-       p.getWeapons().get(0).setActive(!p.getWeapons().get(0).isActive());
+    	// TODO: this needs to change to not just the first weapon 
+    	// presumably they will have more then 1 weapon
+    	p.getWeapons().get(0).setActive(!p.getWeapons().get(0).isActive());
     }
 
     /**
@@ -334,7 +336,7 @@ public class ServerController extends Handler{
     }
 
     /**
-     * Ends the game, basicly determines platyers scores and determines the winner
+     * Ends the game, basically determines players scores and determines the winner
      * @return The winning player
      */
     public void endGame() {
@@ -371,7 +373,7 @@ public class ServerController extends Handler{
     }
 
     /**
-     * Waits untill all activities have been submitted (and tells the clients to send them)
+     * Waits until all activities have been submitted (and tells the clients to send them)
      */
     public void collectActivities(){
     	state = GameState.CHOOSE_PLAYS;
