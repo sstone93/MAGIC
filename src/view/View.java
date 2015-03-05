@@ -4,7 +4,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Iterator;
 
@@ -20,6 +19,7 @@ import model.Armour;
 import model.Board;
 import model.Chit;
 import model.Clearing;
+import model.Path;
 import model.Player;
 import model.Tile;
 import model.Treasure;
@@ -875,10 +875,11 @@ public class View extends JFrame {
 					movesGroup.remove(button);
 					movesPanel.remove(button);
 				}
-				ArrayList<Clearing> connections = this.control.model.getPlayer().getLocation().getConnections();
+				
+				ArrayList<Path> connections = this.control.model.getPlayer().getLocation().getConnections();
 				
 				for(int i = 0; i < connections.size(); i++){
-					String label = connections.get(i).parent.getName().toString() + " clearing " + connections.get(i).getClearingNumber();
+					String label = this.control.model.getPlayer().getLocation().parent.getName().toString() + " clearing " + connections.get(i).getDestination(this.control.model.getPlayer().getLocation()).getClearingNumber();
 					JRadioButton button = new JRadioButton(label);
 					movesGroup.add(button);
 					movesPanel.add(button, movesPanel.getComponents().length - 2);

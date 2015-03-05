@@ -12,7 +12,7 @@ public class Clearing implements Serializable{
     public int location;		 		// indicating which clearing on the tile this is CHANGED BACK TO AN INT
     public Tile parent;
     ClearingType type;
-    ArrayList<Clearing> connections = new ArrayList<Clearing>();
+    ArrayList<Path> connections = new ArrayList<Path>();
     ArrayList<Treasure> treasures = new ArrayList<Treasure>();
     ArrayList<Player> occupants = new ArrayList<Player>();
     
@@ -21,7 +21,7 @@ public class Clearing implements Serializable{
         this.parent   = parent;
     }
 
-    public ArrayList<Clearing> getConnections(){
+    public ArrayList<Path> getConnections(){
     	return this.connections;
     }
     public void addOccupant(Player p){
@@ -50,7 +50,7 @@ public class Clearing implements Serializable{
      * This method adds a new connection to this clearing
      * @param toAdd The clearing being added to this one as a connection
      */
-    public void addConnection(Clearing toAdd){
+    public void addConnection(Path toAdd){
     	this.connections.add(toAdd);
     }
 
@@ -75,11 +75,13 @@ public class Clearing implements Serializable{
     }
 
     public boolean canChangeClearing(Clearing clearing) {
-    	if(connections.contains(clearing)){
-    		return true;
-    	}else{
-    		return false;
+    	//TODO Double check this, I think it should work but I am not 100% as I cannot test it.
+    	for(int i=0; i< connections.size(); i++){
+    		if(connections.get(i).getDestination(this) == clearing){
+    			return true;
+    		}
     	}
+    	return false;
     }
 
     public void addTreasures(ArrayList<Treasure> treasure) {
@@ -104,7 +106,7 @@ public class Clearing implements Serializable{
 		}
 		for(int i=0;i<connections.size();i++){
 			if(connections.get(i) != null){
-				System.out.println("		-connected to "+connections.get(i).parent.getName()+" clearing #"+connections.get(i).location);
+				System.out.println("		-connected to "+connections.get(i).getDestination(this).parent.getName()+" clearing #"+connections.get(i).getDestination(this).location);
 			}
 		}
 		return "";

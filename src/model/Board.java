@@ -8,6 +8,7 @@ import utils.Utility;
 import utils.Utility.GarrisonName;
 import utils.Utility.ItemWeight;
 import utils.Utility.LargeTreasureName;
+import utils.Utility.PathType;
 import utils.Utility.SmallTreasureName;
 import utils.Utility.SoundChits;
 import utils.Utility.TileName;
@@ -124,10 +125,11 @@ public class Board implements Serializable{
 	 * @param c2 the clearing number of the clearing being connected on t2
 	 */
 	public void connect(Tile t1, Tile t2, int c1, int c2){
-		t1.getClearing(c1).addConnection(t2.getClearing(c2));
-		t2.getClearing(c2).addConnection(t1.getClearing(c1));
+		Path temp = new Path(t1.getClearing(c1), t2.getClearing(c2), PathType.OPEN_ROAD);//All tiles connect with open roads
+		t1.getClearing(c1).addConnection(temp);
+		t2.getClearing(c2).addConnection(temp);
 	}
-	
+
 	public void setupGarrisons(){
 		this.garrisons.add(new Garrison(GarrisonName.CHAPEL));
 		this.garrisons.add(new Garrison(GarrisonName.GUARD));
