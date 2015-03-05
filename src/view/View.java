@@ -42,10 +42,6 @@ public class View extends JFrame {
 	private JLayeredPane boardPanel;
 	private JScrollPane scrollPanel;
 	private JTextArea textDisplay;
-	private JComboBox play1Location;
-	private JComboBox play2Location;
-	private JComboBox play3Location;
-	private JComboBox play4Location;
 	private JComboBox target;
 	private ButtonGroup movesGroup;
 	private ButtonGroup alertGroup;
@@ -230,22 +226,15 @@ public class View extends JFrame {
 				makeBoard();
 			}
 			
-			//boardPanel.removeAll();
-			//Iterator it = iconPanels.entrySet().iterator();
+			Iterator it = iconPanels.entrySet().iterator();
 
-			for (JPanel panel : iconPanels.values()) {
+			while (it.hasNext()) {
+				JPanel panel = (JPanel)((HashMap.Entry)it.next()).getValue();
 				if(panel != null){
 					boardPanel.remove(panel);
 				}
 			}
 
-			//  while (it.hasNext()) {
-			//   JPanel panel = (JPanel)(it.next());
-			// if(panel != null){
-			//	boardPanel.remove(panel);
-			// }
-			//}
-			
 			iconPanels.clear();
 			
 			for(int i = 0; i < charLbls.length; i++){
@@ -379,32 +368,10 @@ public class View extends JFrame {
 				scrollPanel.setViewportView(characterSelectPanel);
 				break;
 			case CHOOSE_PLAYS:
-				if (b != null){
-					
-					
-					//TODO MOVE THIS INTO ACTIVITIES, DOESN NEED THE VIEW
-					ArrayList<String> clearings = new ArrayList<String>();//had to hardcode the number for this interation
-					
-					
-					//TODO
-					//TODO ONLY DO THIS LIST OF CLEARINGS 1 TIME, THEN STORE IT
-					for (int i = 0; i < b.tiles.size(); i++){
-						for (int j=0; j < b.tiles.get(i).getClearings().size(); j++){
-							clearings.add(b.tiles.get(i).getName().toString() + " clearing " + b.tiles.get(i).getClearings().get(j).getClearingNumber());
-						}
-					}
-					
-					//TODO
-					//TODO DOES THIS ON CREATION, THEN NEVER AGAIN
-					play1Location.setModel(new DefaultComboBoxModel(clearings));
-					play2Location.setModel(new DefaultComboBoxModel(clearings));
-					play3Location.setModel(new DefaultComboBoxModel(clearings));
-					play4Location.setModel(new DefaultComboBoxModel(clearings));
-					
-				}
+				playsPanel.update();
 				makePanelVisible(playsPanel);
 				break;
-			case MOVE:
+			/*case MOVE:
 				for(Enumeration<AbstractButton> buttons = movesGroup.getElements(); buttons.hasMoreElements();){
 					AbstractButton button = buttons.nextElement();
 					movesGroup.remove(button);
@@ -435,7 +402,7 @@ public class View extends JFrame {
 					alertPanel.add(button, alertPanel.getComponents().length - 2);
 				}
 				makePanelVisible(movesPanel);
-				break;
+				break;*/
 			case CHOOSE_COMBATMOVES:
 				makePanelVisible(combatPanel);
 				break;
@@ -454,15 +421,9 @@ public class View extends JFrame {
 				}
 				makePanelVisible(targetPanel);
 				break;
-		case CHOOSE_COMBAT:
-			break;
-		case NULL:
-			break;
 		default:
 			break;
 		}
-		
-		//this.repaint();
 	}
 	
 	public void makePanelVisible(JPanel newPanel){

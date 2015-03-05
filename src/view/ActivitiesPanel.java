@@ -12,16 +12,22 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
+import model.Board;
 import controller.ClientController;
 import utils.Utility.Actions;
 
-@SuppressWarnings("serial")
+@SuppressWarnings({ "rawtypes", "unchecked", "serial"})
 public class ActivitiesPanel extends JPanel{
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private JComboBox play1Location;
+	private JComboBox play2Location;
+	private JComboBox play3Location;
+	private JComboBox play4Location;
+	private ClientController control;
+	
 	public ActivitiesPanel(ClientController c){
 		
-		ClientController control = c;
+		this.control = c;
 		
 		setBounds(750, 500, 524, 192);
 		setBorder(new LineBorder(Color.GRAY));
@@ -31,21 +37,20 @@ public class ActivitiesPanel extends JPanel{
 		lblNewLabel_1.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
 		lblNewLabel_1.setBounds(10, 11, 72, 14);
 		add(lblNewLabel_1);
-		
-		JComboBox play1Location = new JComboBox();
+
+		play1Location = new JComboBox();
 		play1Location.setBounds(10, 84, 111, 20);
 		add(play1Location);
 		
-		JComboBox play2Location = new JComboBox();
+		play2Location = new JComboBox();
 		play2Location.setBounds(131, 84, 111, 20);
 		add(play2Location);
 		
-		JComboBox play3Location = new JComboBox();
+		play3Location = new JComboBox();
 		play3Location.setBounds(262, 84, 111, 20);
 		add(play3Location);
 		
-		JComboBox play4Location = new JComboBox();
-		play4Location.setDoubleBuffered(true);
+		play4Location = new JComboBox();
 		play4Location.setBounds(393, 84, 111, 20);
 		add(play4Location);
 		
@@ -117,5 +122,24 @@ public class ActivitiesPanel extends JPanel{
 		
 		btnRecord.setBounds(220, 145, 89, 23);
 		add(btnRecord);
+	}
+	
+	public void update(){
+		//TODO MOVE THIS INTO ACTIVITIES, DOESN NEED THE VIEW
+				String[] clearings = new String[95];//had to hardcode the number for this interation
+				Board b = control.model.getBoard();
+
+				int count = 0;
+				for (int i = 0; i <b.tiles.size(); i++){
+					for (int j=0; j < b.tiles.get(i).getClearings().size(); j++){
+						clearings[count] = (b.tiles.get(i).getName().toString() + " " + b.tiles.get(i).getClearings().get(j).getClearingNumber());
+						count++;
+					}
+				}
+				
+				play1Location.setModel(new DefaultComboBoxModel(clearings));
+				play2Location.setModel(new DefaultComboBoxModel(clearings));
+				play3Location.setModel(new DefaultComboBoxModel(clearings));
+				play4Location.setModel(new DefaultComboBoxModel(clearings));
 	}
 }
