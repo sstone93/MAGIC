@@ -23,6 +23,14 @@ public class Tile implements Serializable{
 	private WarningChit warning;
 	private LostPlace lost;
 	
+	public boolean equals(Tile t){
+		if(t.getName() == this.name){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
 	/**
 	 * 
 	 * @param name

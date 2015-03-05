@@ -94,7 +94,7 @@ public class Clearing implements Serializable{
     }
 
     public boolean equals(Clearing c) {
-    	if(c.parent == this.parent && c.location == this.location){
+    	if(c.parent.equals(this.parent) && c.location == this.location){
     		return true;
     	}else{
     		return false;
