@@ -90,6 +90,12 @@ public class Utility {
     	}
     }
 
+    public enum ClearingType {CAVE, MOUNTAIN, WOODS}
+    
+    public enum TileType {VALLEY, MOUNTAINS, CAVES, WOODS}
+    
+    public enum PathType {TUNNEL, OPEN_ROAD, HIDDEN_PATH, SECRET_PASSAGEWAY}
+    
     public enum WarningChits {SMOKE, DANK, RUINS, STINK, BONES}
 
     public enum SoundChits {HOWL_4, HOWL_5, FLUTTER_1, FLUTTER_2, PATTER_2, PATTER_5, ROAR_4, ROAR_6, SLITHER_3, SLITHER_6}

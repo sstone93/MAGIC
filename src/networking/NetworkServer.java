@@ -15,7 +15,6 @@ import utils.Config;
 public class NetworkServer extends NetworkEntity implements Runnable{
 
 	private ServerSocket server = null;
-	private boolean busy = false;
 	
 	/**
 	 * Contructor for a NetworkServer
@@ -38,7 +37,6 @@ public class NetworkServer extends NetworkEntity implements Runnable{
 	 * @param socket The client socket being communicated with
 	 */
 	private void addThread(Socket socket){
-		busy = true;
 		if (clientCount < clients.length){							//if there is room for another client...
 			System.out.println("Client acceptied: " + socket);
 			clients[clientCount] = new NetworkThread(this, socket, socket.getPort());
@@ -47,7 +45,6 @@ public class NetworkServer extends NetworkEntity implements Runnable{
 				clients[clientCount].start();
 				clientCount++;
 			} catch (IOException ioe){
-				busy = false;
 				System.out.println("Server Error adding new thread: ");
 			}
 			if(clientCount == Config.MAX_CLIENTS){						//checks to see if the clientCount has been reached and the game should start
@@ -56,7 +53,6 @@ public class NetworkServer extends NetworkEntity implements Runnable{
 		} else {
 			System.out.println("Client refused: maximum " + clients.length + " reached.");
 		}
-		busy = false;
 	}
 	
 	/**
@@ -98,7 +94,7 @@ public class NetworkServer extends NetworkEntity implements Runnable{
 	 */
 	public void stop(){
 		System.out.println("Server: Begin Shutdown.");
-		while (busy){}							//stops the server from shutting down while a thread is being added.
+		System.out.println("Not Busy");
 		while (clientCount > 0){
 			this.remove(clients[0].getID());	//Close all threads 1 by 1
 		}

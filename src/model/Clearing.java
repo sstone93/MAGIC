@@ -3,19 +3,20 @@ package model;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import utils.Utility.ClearingType;
+
 public class Clearing implements Serializable{
 	
 	private static final long serialVersionUID = -688806816964894689L;
-	public String type;
     public Garrison dwelling = null; 			// not sure what type this should actually be
     public int location;		 		// indicating which clearing on the tile this is CHANGED BACK TO AN INT
     public Tile parent;
+    ClearingType type;
     ArrayList<Clearing> connections = new ArrayList<Clearing>();
     ArrayList<Treasure> treasures = new ArrayList<Treasure>();
     ArrayList<Player> occupants = new ArrayList<Player>();
     
-    Clearing(int location, Tile parent) {
-        this.type     = "";
+    Clearing(int location, Tile parent, ClearingType t) {
         this.location = location;
         this.parent   = parent;
     }
@@ -53,11 +54,11 @@ public class Clearing implements Serializable{
     	this.connections.add(toAdd);
     }
 
-    public String getType() {
+    public ClearingType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(ClearingType type) {
         this.type = type;
     }
 

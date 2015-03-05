@@ -649,7 +649,7 @@ public class View extends JFrame {
 			
 			Iterator it = iconPanels.entrySet().iterator();
 		    while (it.hasNext()) {
-		        JPanel panel = (JPanel)((HashMap)it.next()).values();
+		        JPanel panel = (JPanel)(((HashMap)it.next()).values());
 		        if(panel != null){
 		        	boardPanel.remove(panel);
 		        }
