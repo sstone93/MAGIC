@@ -18,7 +18,7 @@ public abstract class NetworkEntity {
 	 * @param input the message being transmitted
 	 */
 	public synchronized void handle(int ID, Object input) {
-		System.out.println("New Message Recieved: " + input);
+		//System.out.println("New Message Recieved: " + input);
 		if (input == null)		//handles random noise
 			return;
 		this.controller.handle(ID, input);	//send message to controller to be handled

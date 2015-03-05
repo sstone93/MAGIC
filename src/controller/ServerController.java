@@ -20,6 +20,7 @@ import model.WhiteKnight;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 import utils.Config;
 import utils.Utility;
@@ -87,6 +88,7 @@ public class ServerController extends Handler{
 			if( m.getType() == MessageType.ACTIVITIES){
 				if(state == GameState.CHOOSE_PLAYS){
 					recievedMoves += 1;
+					System.out.println(ID);
 					findPlayer(ID).setActivities(m.getData());
 				}else{
 					network.send(ID, "NOT ACCEPTING ACTIVITIES ATM");
@@ -152,10 +154,11 @@ public class ServerController extends Handler{
 	 */
 	public Player findPlayer(int ID){
 		for(int i=0;i<playerCount;i++){
-			if(players.get(0).getID() == ID){
+			if(players.get(i).getID() == ID){
 				return players.get(0);
 			}
 		}
+		System.out.println("failed to find player");
 		return null;
 	}
 
@@ -291,8 +294,6 @@ public class ServerController extends Handler{
     		// TODO: for testing
     		System.out.println("moves: " + moves + " activities: " + player.getActivities().size());
 
-
-
     		ArrayList<Object> activities = player.getActivities();
 
     		if (!player.isBlocked()) {	//assuming the player is not being blocked by another
@@ -425,7 +426,6 @@ public class ServerController extends Handler{
         if (playerCount == 1) {
         	network.broadCast("There is only one player alive");
         	endGame();
-
         }
 
         //Does the activities of all players
@@ -471,8 +471,9 @@ public class ServerController extends Handler{
      */
     public void orderPlayers(){
     	
+    	Collections.shuffle(players);
     	// Silly way to order players from 1 to playerCount+1
-        for (int i = 0; i < playerCount; i++) {
+       /* for (int i = 0; i < playerCount; i++) {
         	System.out.println(i);
         	if (players.get(0).isDead()) {
         		for (int j = i; j < playerCount - 1; j++) {
@@ -491,16 +492,11 @@ public class ServerController extends Handler{
         }
 
         Arrays.sort(ordering);
-
-        for (int i = 0; i < playerCount; i++) {
-            for (int j = 0; j < playerCount; j++) {
-                if (ordering[i] == players.get(j).order) {
-                    players.get(j).order = i;
-                    network.broadCast(players.get(j).getCharacter().getName() + " is in position # " + (players.get(j).getOrder() + 1));
-                    break;
-                }
-            }
-        }
+*/
+    	for (int j = 0; j < playerCount; j++) {
+    		players.get(j).order = j;
+    		network.broadCast(players.get(j).getCharacter().getName() + " is in position # " + (players.get(j).getOrder() + 1));
+    	}
     }
 
     /**

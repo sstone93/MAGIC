@@ -646,14 +646,21 @@ public class View extends JFrame {
 				makeBoard();
 			}
 			//boardPanel.removeAll();
-			
-			Iterator it = iconPanels.entrySet().iterator();
-		    while (it.hasNext()) {
-		        JPanel panel = (JPanel)(((HashMap)it.next()).values());
-		        if(panel != null){
-		        	boardPanel.remove(panel);
-		        }
-		    }
+
+			//Iterator it = iconPanels.entrySet().iterator();
+
+			for (JPanel panel : iconPanels.values()) {
+				if(panel != null){
+					boardPanel.remove(panel);
+				}
+			}
+
+			//  while (it.hasNext()) {
+			//   JPanel panel = (JPanel)(it.next());
+			// if(panel != null){
+			//	boardPanel.remove(panel);
+			// }
+			//}
 			iconPanels.clear();
 			
 			for(int i = 0; i < charLbls.length; i++){

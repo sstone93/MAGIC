@@ -75,9 +75,10 @@ public class Clearing implements Serializable{
     }
 
     public boolean canChangeClearing(Clearing clearing) {
+    	//System.out.println("checking "+this.parent.getName()+" #"+this.location+" moving to "+clearing.parent.getName()+" #"+clearing.location);
     	//TODO Double check this, I think it should work but I am not 100% as I cannot test it.
     	for(int i=0; i< connections.size(); i++){
-    		if(connections.get(i).getDestination(this) == clearing){
+    		if(connections.get(i).getDestination(this).equals(clearing)){
     			return true;
     		}
     	}
@@ -92,6 +93,14 @@ public class Clearing implements Serializable{
         return treasures;
     }
 
+    public boolean equals(Clearing c) {
+    	if(c.parent == this.parent && c.location == this.location){
+    		return true;
+    	}else{
+    		return false;
+    	}
+    }
+    
     @Override
 	public String toString(){
     	System.out.println("	Clearing #"+location);
@@ -106,7 +115,7 @@ public class Clearing implements Serializable{
 		}
 		for(int i=0;i<connections.size();i++){
 			if(connections.get(i) != null){
-				System.out.println("		-connected to "+connections.get(i).getDestination(this).parent.getName()+" clearing #"+connections.get(i).getDestination(this).location);
+				System.out.println("		-Path: "+connections.get(i));
 			}
 		}
 		return "";

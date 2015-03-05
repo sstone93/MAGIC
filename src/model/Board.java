@@ -343,7 +343,7 @@ public class Board implements Serializable{
     	System.out.println(newClearing);
     	
         player.setHidden(false);
-        boolean canChange =  (player.getLocation().canChangeClearing((Clearing)newClearing));
+        boolean canChange =  (player.getLocation().canChangeClearing(newClearing));
         ItemWeight highestWeight = Utility.ItemWeight.NEGLIGIBLE;
 
         // find the highest weight of the active move chits of the player

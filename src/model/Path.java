@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+
 import utils.Utility.PathType;
 
 public class Path implements Serializable {
@@ -31,6 +32,12 @@ public class Path implements Serializable {
 		}else{
 			return null;
 		}
+	}
+	
+	@Override
+	public String toString(){
+		//System.out.println("checking "+this.parent.getName()+" #"+this.location+" moving to "+clearing.parent.getName()+" #"+clearing.location);
+		return this.clearingA.parent.getName()+" #"+this.clearingA.location+" connects to "+this.clearingB.parent.getName()+" #"+this.clearingB.location+" via "+this.type;
 	}
 
 }
