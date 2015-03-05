@@ -39,40 +39,13 @@ public class View extends JFrame {
 	private ClientController control;
 	private boolean boardMade;
 	private JPanel contentPane;
-	private JPanel playsPanel;
-	private JPanel combatPanel;
-	private JPanel movesPanel;
-	private JPanel alertPanel;
-	private JPanel characterSelectPanel;
-	private JPanel targetPanel;
 	private JLayeredPane boardPanel;
 	private JScrollPane scrollPanel;
-	private JTextField characterText;
-	private JTextField vpText;
-	private JTextField healthText;
-	private JTextField goldText;
-	private JTextField fatigueText;
-	private JTextField fameText;
-	private JTextField notorietyText;
-	private JTextField hiddenText;
-	private JTextArea armourText;
-	private JTextArea treasuresText;
-	private JTextArea weaponsText;
-	private JTextArea chitsText;
 	private JTextArea textDisplay;
-	//private JComboBox play1;
-	//private JComboBox play2;
-	//private JComboBox play3;
-	//private JComboBox play4;
 	private JComboBox play1Location;
 	private JComboBox play2Location;
 	private JComboBox play3Location;
 	private JComboBox play4Location;
-	//private JComboBox attack;
-	//private JComboBox defense;
-	//private JComboBox maneuvers;
-	//private JComboBox attackFatigue;
-	//private JComboBox maneuversFatigue;
 	private JComboBox target;
 	private ButtonGroup movesGroup;
 	private ButtonGroup alertGroup;
@@ -81,11 +54,16 @@ public class View extends JFrame {
 	private JLabel [] garrisonLbls;
 	private JLabel [] charLbls;
 	
-	/**
-	 * Create the frame.
-	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private CharacterInfoPanel characterInfoPanel;
+	private ActivitiesPanel playsPanel;
+	private CombatPanel combatPanel;
+	private JPanel movesPanel;//TODO
+	private JPanel alertPanel;//TODO
+	private CharacterSelectPanel characterSelectPanel;
+	private TargetPanel targetPanel;
+
 	public View(final ClientController control) {
+		
 		this.control = control;
 		this.boardMade = false;
 		setResizable(false);
@@ -109,8 +87,8 @@ public class View extends JFrame {
         } );
 
 		//Creates the characterinfo panel and adds it to the view
-		JPanel CharacterInfoPanel = new CharacterInfoPanel();
-		contentPane.add(CharacterInfoPanel);
+		characterInfoPanel = new CharacterInfoPanel();
+		contentPane.add(characterInfoPanel);
 		
 		//creates the plays/activities panel
 		playsPanel = new ActivitiesPanel(control);
@@ -246,11 +224,13 @@ public class View extends JFrame {
 	public void update(){
 		final Board b = control.model.getBoard();
 		if (b != null) {
+			
+			//ENSURE TH BOARD IS ONLY DRAWN ONCE
 			if (!this.boardMade){
 				makeBoard();
 			}
+			
 			//boardPanel.removeAll();
-
 			//Iterator it = iconPanels.entrySet().iterator();
 
 			for (JPanel panel : iconPanels.values()) {
@@ -265,6 +245,7 @@ public class View extends JFrame {
 			//	boardPanel.remove(panel);
 			// }
 			//}
+			
 			iconPanels.clear();
 			
 			for(int i = 0; i < charLbls.length; i++){
@@ -278,12 +259,6 @@ public class View extends JFrame {
 			BufferedImage pic;
 			for (int i = 0; i < b.tiles.size(); i++){
 				try {
-					//TileName name = b.tiles[i].getName();
-					//pic = ImageIO.read(this.getClass().getResource(Utility.getTileImage(name)));
-					//JLabel tile = new JLabel(new ImageIcon(pic));
-					//tile.setBounds(b.tiles[i].getX() - 100, b.tiles[i].getY() - 86, 200, 173);
-					//boardPanel.add(tile);
-					
 					ArrayList<Clearing> clearings = b.tiles.get(i).getClearings();
 					if (clearings != null) {
 						int chars = 0;
@@ -388,90 +363,44 @@ public class View extends JFrame {
 				}
 			}
 		}
+		
+		//UPDATES THE PLAYER PANEL
 		Player p = control.model.getPlayer();
 		if (p != null){
-			characterText.setText(p.getCharacter().getName().toString());
-//			vpText.setText(Integer.toString(p.getVictoryPoints()));
-			vpText.setText(p.getLocation().parent.getName().toString() + String.valueOf(p.getLocation().getClearingNumber())); // TODO: change later
-			healthText.setText(Integer.toString(p.getHealth()));
-			goldText.setText(Integer.toString(p.getGold()));
-			fatigueText.setText(Integer.toString(p.getFatigue()));
-			fameText.setText(Integer.toString(p.getFame()));
-			notorietyText.setText(Integer.toString(p.getNotoriety()));
-			hiddenText.setText(String.valueOf(p.isHidden()));
-			
-			ArrayList<Armour> armour = p.getArmour();
-			String armourS = "";
-			if (armour != null) {
-				for(int i = 0; i < armour.size(); i++){
-					if(armour.get(i) != null) {
-						armourS += armour.get(i).getType().toString() + " weight - " + armour.get(i).getWeight().toString() + 
-								" damaged - " + String.valueOf(armour.get(i).isDamaged()) + 
-								" active - " + String.valueOf(armour.get(i).isActive()) + "\n";
-					}
-				}
-			}
-			armourText.setText(armourS);
-			
-			ArrayList<Treasure> treasures = p.getTreasures();
-			String treasuresS = "";
-			if (treasures != null) {
-				for(int i = 0; i < treasures.size(); i++){
-					if ( treasures.get(i) != null) {
-						treasuresS += treasures.get(i).getType() + " gold - " + Integer.toString(treasures.get(i).getGold()) + "\n";
-					}
-				}
-			}
-			treasuresText.setText(treasuresS);
-			
-			ArrayList<Weapon> weapons = p.getWeapons();
-			String weaponsS = "";
-			if (weapons != null) {
-				for(int i = 0; i < weapons.size(); i++){
-					if (weapons.get(i) != null) {
-						weaponsS += weapons.get(i).getType().toString() + " weight - " + weapons.get(i).getWeight().toString()+ 
-								" length - " + Integer.toString(weapons.get(i).getLength()) + 
-								" speed - " + Integer.toString(weapons.get(i).getSpeed()) + 
-								" ranged - " + String.valueOf(weapons.get(i).isRanged()) + 
-								" active - " + String.valueOf(weapons.get(i).isActive()) + "\n";
-					}
-				}
-			}
-			weaponsText.setText(weaponsS);
-			
-			
-			//TODO I DESTROYED CHITS, WILL REPLACE THIS WITH SOMETHIGN ELSE
-			Chit[] chits = new Chit[0];
-			String chitsS = "";
-			if (chits != null) {
-				for(int i = 0; i < chits.length; i++){
-					if (chits[i] != null) {
-						chitsS += chits[i].getType() + " name - " + chits[i].getName() + "\n";
-					}
-				}
-			}
-			chitsText.setText(chitsS);
-			textDisplay.setText(control.model.getMessages());
+			characterInfoPanel.update(p);
 		}
 		
+		//UPDATES THE TEXTBOX
+		textDisplay.setText(control.model.getMessages());
+		
+		//UPDATES THE INPUT PANEL BASED ON IT'S TYPE
 		switch(control.state){
 			case CHOOSE_CHARACTER:
 				scrollPanel.setViewportView(characterSelectPanel);
 				break;
 			case CHOOSE_PLAYS:
 				if (b != null){
-					String[] clearings = new String[95];//had to hardcode the number for this interation
-					int count = 0;
+					
+					
+					//TODO MOVE THIS INTO ACTIVITIES, DOESN NEED THE VIEW
+					ArrayList<String> clearings = new ArrayList<String>();//had to hardcode the number for this interation
+					
+					
+					//TODO
+					//TODO ONLY DO THIS LIST OF CLEARINGS 1 TIME, THEN STORE IT
 					for (int i = 0; i < b.tiles.size(); i++){
 						for (int j=0; j < b.tiles.get(i).getClearings().size(); j++){
-							clearings[count] = b.tiles.get(i).getName().toString() + " clearing " + b.tiles.get(i).getClearings().get(j).getClearingNumber();
-							count++;
+							clearings.add(b.tiles.get(i).getName().toString() + " clearing " + b.tiles.get(i).getClearings().get(j).getClearingNumber());
 						}
 					}
+					
+					//TODO
+					//TODO DOES THIS ON CREATION, THEN NEVER AGAIN
 					play1Location.setModel(new DefaultComboBoxModel(clearings));
 					play2Location.setModel(new DefaultComboBoxModel(clearings));
 					play3Location.setModel(new DefaultComboBoxModel(clearings));
 					play4Location.setModel(new DefaultComboBoxModel(clearings));
+					
 				}
 				makePanelVisible(playsPanel);
 				break;
