@@ -62,7 +62,7 @@ public class ClientController extends Handler{
 			String text = ((String) message );
 			if(text.equalsIgnoreCase("NC CLOSED")){
 				model.addMessage("Network Client Has Closed");	//the client seems to be able to figure that out for itself.
-				//TODO remove this message being sent or recieved on cliet and server
+				//TODO remove this message being sent or received on client and server
 			}else if(text.equalsIgnoreCase("SEND MOVES")){
 				state = GameState.CHOOSE_PLAYS;
 				model.addMessage("Please Select Your Moves");
@@ -134,7 +134,6 @@ public class ClientController extends Handler{
 	 * @param aF the player's attack fatigue
 	 * @param mF the player's maneuver fatigue
 	 */
-	//TODO CREATES COMBAT MOVE OBJECT, SENDS IT IN THE MESSAGE
 	public void handleCombatMoves(Attacks a, Defenses d, Maneuvers m, int aF, int mF){
 		CombatMoves temp = new CombatMoves(a, aF, m, mF, d);
 		ArrayList<Object> mes = new ArrayList<Object>();
@@ -149,8 +148,6 @@ public class ClientController extends Handler{
 	 * Should parse the move and send it to the server
 	 * @param location where the player wants to move, in the form "<TileName> clearing <clearingNumber>"
 	 */
-	
-	//TODO NEEDS TO BE CHANGED TO A BETTER FORMAT?
 	
 	/*public void handleMoveSelection(String location){
 		ArrayList<Object> mes = new ArrayList<Object>();

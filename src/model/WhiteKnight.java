@@ -8,6 +8,8 @@ public class WhiteKnight extends Character {
 	 * 
 	 */
 	private static final long serialVersionUID = -222522844248917902L;
+	
+	public static GarrisonName[] possibleStartingLocations = {GarrisonName.INN, GarrisonName.CHAPEL};
 
 	public WhiteKnight() { // might want the name to be sent in
         this.name             = CharacterName.WHITE_KNIGHT;

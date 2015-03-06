@@ -63,7 +63,7 @@ public class ServerController extends Handler{
 	}
 
 	/**
-	 * This is the method that handles incomming messages from the networking components
+	 * This is the method that handles incoming messages from the networking components
 	 * @param ID The ID of the client sending the message
 	 * @param message the contents of the message
 	 */
@@ -95,7 +95,7 @@ public class ServerController extends Handler{
 				if(state == GameState.CHOOSE_COMBATTARGET){
 					recievedCombat += 1;
 
-					//turns the recieved charctername into a player
+					//turns the received character name into a player
 					findPlayer(ID).setTarget(charToPlayer((CharacterName) m.getData().get(0)));
 				}else{
 					network.send(ID, "NOT ACCEPTING COMBAT TARGETS ATM");
@@ -147,7 +147,7 @@ public class ServerController extends Handler{
 	/**
 	 * Turns a player ID into a player
 	 * @param ID of the player you are looking for
-	 * @return the player you are looknig for
+	 * @return the player you are looking for
 	 */
 	public Player findPlayer(int ID){
 		for(int i=0;i<playerCount;i++){
@@ -343,7 +343,6 @@ public class ServerController extends Handler{
         Player player = null;
 
         // TODO: treasures
-        // TODO: Actually determine score based on individual victory points? or is it different for a day 28 time out?
         for (int i = 0; i < playerCount; i++ ) {
             player = players.get(i);
             if (winner == null)
@@ -380,7 +379,7 @@ public class ServerController extends Handler{
     		try {
 				Thread.sleep(20);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				// Auto-generated catch block
 				e.printStackTrace();
 			}
     	}	//TODO HANDLE PLAYERS DROPPING OUT DURING THIS STEP
@@ -396,7 +395,7 @@ public class ServerController extends Handler{
     		try {
 				Thread.sleep(20);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				// Auto-generated catch block
 				e.printStackTrace();
 			}
     	}	//TODO HANDLE PLAYERS DROPPING OUT DURING THIS STEP
@@ -443,7 +442,7 @@ public class ServerController extends Handler{
         }
 
         updateClients();
-        collectCombat(); //2 players, 1 attacker 1 deffender
+        collectCombat(); //2 players, 1 attacker 1 defender
 
         //All players choose attackers
         nextMover = 0;
@@ -486,7 +485,7 @@ public class ServerController extends Handler{
      * @param defender
      */
     public void encounter(Player attacker, Player defender) {
-    	//TODO Weapons active, networking
+    	//TODO Weapons active
 		// Check if weapon is active
 		/*if (player.weapons[0].isActive() == false) {
 			player.weapons[0].setActive(true);
@@ -494,6 +493,10 @@ public class ServerController extends Handler{
 		}*/
 
     	if (attacker == defender) {
+    		network.send(attacker.getID(), "Stop attacking yourself!");
+    		return;
+    	}
+    	else if (attacker.getID() == defender.getID()) {
     		network.send(attacker.getID(), "Stop attacking yourself!");
     		return;
     	}
@@ -508,14 +511,14 @@ public class ServerController extends Handler{
     		try {
 				Thread.sleep(20);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				// Auto-generated catch block
 				e.printStackTrace();
 			}
     	}
 
     	System.out.println("got combat moves");
     	state = GameState.NULL;
-
+    	
     	if (attacker.isDead() == true) {
     		network.send(attacker.getID(), "You are dead.");
     		return;
@@ -528,11 +531,32 @@ public class ServerController extends Handler{
     		doFight(attacker, defender);
     	}
 	}
-
+    
 	//TODO Finding active weapon rather than assuming the active weapon is at position 0
 	public void doFight(Player attacker, Player defender) {
 		if (defender.getWeapons().get(0).getSpeed() < attacker.getWeapons().get(0).getSpeed()) {
-			if ((defender.getWeapons().get(0).getSpeed() - attacker.getMoves().attackFatigue) <= (attacker.getCharacter().getSpeed() - defender.getMoves().maneuverFatigue)) {
+			checkHit(attacker, defender);
+		}
+		else if (defender.getWeapons().get(0).getSpeed() > attacker.getWeapons().get(0).getSpeed()) {
+			checkHit(defender, attacker);
+		}
+
+		else {
+			if (defender.getWeapons().get(0).getLength() < attacker.getWeapons().get(0).getLength()) {
+				checkHit(attacker, defender);
+			}
+			else if (defender.getWeapons().get(0).getLength() > attacker.getWeapons().get(0).getLength()) {
+				checkHit(defender, attacker);
+			}
+			else {
+				checkHit(attacker, defender);
+			}
+		}
+	}
+
+	public void checkHit(Player attacker, Player defender) {
+		if (attacker.isDead() == false && defender.isDead() == false) {
+	    	if ((defender.getWeapons().get(0).getSpeed() - attacker.getMoves().attackFatigue) <= (attacker.getCharacter().getSpeed() - defender.getMoves().maneuverFatigue)) {
 				hit(attacker, defender);
 			}
 			else if (attacker.getMoves().getAttack() == Attacks.THRUST && defender.getMoves().getManeuver() == Maneuvers.CHARGE) {
@@ -544,23 +568,8 @@ public class ServerController extends Handler{
 			else if (attacker.getMoves().getAttack() == Attacks.SMASH && defender.getMoves().getManeuver() == Maneuvers.DUCK) {
 				hit(attacker, defender);
 			}
-
-			if (defender.isDead() == false) {
-				if ((attacker.getWeapons().get(0).getSpeed() - defender.getMoves().attackFatigue) <= (defender.getCharacter().getSpeed() - attacker.getMoves().maneuverFatigue)) {
-					hit(defender, attacker);
-				}
-				else if (defender.getMoves().getAttack() == Attacks.THRUST && attacker.getMoves().getManeuver() == Maneuvers.CHARGE) {
-					hit(defender, attacker);
-				}
-				else if (defender.getMoves().getAttack() == Attacks.SWING && attacker.getMoves().getManeuver() == Maneuvers.DODGE) {
-					hit(defender, attacker);
-				}
-				else if (defender.getMoves().getAttack() == Attacks.SMASH && attacker.getMoves().getManeuver() == Maneuvers.DUCK) {
-					hit(defender, attacker);
-				}
-			}
 		}
-		else if (defender.getWeapons().get(0).getSpeed() > attacker.getWeapons().get(0).getSpeed()) {
+		if (defender.isDead() == false && attacker.isDead() == false) {
 			if ((attacker.getWeapons().get(0).getSpeed() - defender.getMoves().attackFatigue) <= (defender.getCharacter().getSpeed() - attacker.getMoves().maneuverFatigue)) {
 				hit(defender, attacker);
 			}
@@ -573,114 +582,9 @@ public class ServerController extends Handler{
 			else if (defender.getMoves().getAttack() == Attacks.SMASH && attacker.getMoves().getManeuver() == Maneuvers.DUCK) {
 				hit(defender, attacker);
 			}
-
-			if (defender.isDead() == false) {
-				if ((defender.getWeapons().get(0).getSpeed() - attacker.getMoves().attackFatigue) <= (attacker.getCharacter().getSpeed() - defender.getMoves().maneuverFatigue)) {
-					hit(attacker, defender);
-				}
-				else if (attacker.getMoves().getAttack() == Attacks.THRUST && defender.getMoves().getManeuver() == Maneuvers.CHARGE) {
-					hit(attacker, defender);
-				}
-				else if (attacker.getMoves().getAttack() == Attacks.SWING && defender.getMoves().getManeuver() == Maneuvers.DODGE) {
-					hit(attacker, defender);
-				}
-				else if (attacker.getMoves().getAttack() == Attacks.SMASH && defender.getMoves().getManeuver() == Maneuvers.DUCK) {
-					hit(attacker, defender);
-				}
-			}
 		}
-
-		else {
-			if (defender.getWeapons().get(0).getLength() < attacker.getWeapons().get(0).getLength()) {
-				if ((defender.getWeapons().get(0).getSpeed() - attacker.getMoves().attackFatigue) <= (attacker.getCharacter().getSpeed() - defender.getMoves().maneuverFatigue)) {
-					hit(attacker, defender);
-				}
-				else if (attacker.getMoves().getAttack() == Attacks.THRUST && defender.getMoves().getManeuver() == Maneuvers.CHARGE) {
-					hit(attacker, defender);
-				}
-				else if (attacker.getMoves().getAttack() == Attacks.SWING && defender.getMoves().getManeuver() == Maneuvers.DODGE) {
-					hit(attacker, defender);
-				}
-				else if (attacker.getMoves().getAttack() == Attacks.SMASH && defender.getMoves().getManeuver() == Maneuvers.DUCK) {
-					hit(attacker, defender);
-				}
-
-				if (defender.isDead() == false) {
-					if ((attacker.getWeapons().get(0).getSpeed() - defender.getMoves().attackFatigue) <= (defender.getCharacter().getSpeed() - attacker.getMoves().maneuverFatigue)) {
-						hit(defender, attacker);
-					}
-					else if (defender.getMoves().getAttack() == Attacks.THRUST && attacker.getMoves().getManeuver() == Maneuvers.CHARGE) {
-						hit(defender, attacker);
-					}
-					else if (defender.getMoves().getAttack() == Attacks.SWING && attacker.getMoves().getManeuver() == Maneuvers.DODGE) {
-						hit(defender, attacker);
-					}
-					else if (defender.getMoves().getAttack() == Attacks.SMASH && attacker.getMoves().getManeuver() == Maneuvers.DUCK) {
-						hit(defender, attacker);
-					}
-				}
-			}
-			else if (defender.getWeapons().get(0).getLength() > attacker.getWeapons().get(0).getLength()) {
-				if ((attacker.getWeapons().get(0).getSpeed() - defender.getMoves().attackFatigue) <= (defender.getCharacter().getSpeed() - attacker.getMoves().maneuverFatigue)) {
-					hit(defender, attacker);
-				}
-				else if (defender.getMoves().getAttack() == Attacks.THRUST && attacker.getMoves().getManeuver() == Maneuvers.CHARGE) {
-					hit(defender, attacker);
-				}
-				else if (defender.getMoves().getAttack() == Attacks.SWING && attacker.getMoves().getManeuver() == Maneuvers.DODGE) {
-					hit(defender, attacker);
-				}
-				else if (defender.getMoves().getAttack() == Attacks.SMASH && attacker.getMoves().getManeuver() == Maneuvers.DUCK) {
-					hit(defender, attacker);
-				}
-
-				if (defender.isDead() == false) {
-					if ((defender.getWeapons().get(0).getSpeed() - attacker.getMoves().attackFatigue) <= (attacker.getCharacter().getSpeed() - defender.getMoves().maneuverFatigue)) {
-						hit(attacker, defender);
-					}
-					else if (attacker.getMoves().getAttack() == Attacks.THRUST && defender.getMoves().getManeuver() == Maneuvers.CHARGE) {
-						hit(attacker, defender);
-					}
-					else if (attacker.getMoves().getAttack() == Attacks.SWING && defender.getMoves().getManeuver() == Maneuvers.DODGE) {
-						hit(attacker, defender);
-					}
-					else if (attacker.getMoves().getAttack() == Attacks.SMASH && defender.getMoves().getManeuver() == Maneuvers.DUCK) {
-						hit(attacker, defender);
-					}
-				}
-			}
-			else {
-				if ((defender.getWeapons().get(0).getSpeed() - attacker.getMoves().attackFatigue) <= (attacker.getCharacter().getSpeed() - defender.getMoves().maneuverFatigue)) {
-					hit(attacker, defender);
-				}
-				else if (attacker.getMoves().getAttack() == Attacks.THRUST && defender.getMoves().getManeuver() == Maneuvers.CHARGE) {
-					hit(attacker, defender);
-				}
-				else if (attacker.getMoves().getAttack() == Attacks.SWING && defender.getMoves().getManeuver() == Maneuvers.DODGE) {
-					hit(attacker, defender);
-				}
-				else if (attacker.getMoves().getAttack() == Attacks.SMASH && defender.getMoves().getManeuver() == Maneuvers.DUCK) {
-					hit(attacker, defender);
-				}
-
-				if (defender.isDead() == false) {
-					if ((attacker.getWeapons().get(0).getSpeed() - defender.getMoves().attackFatigue) <= (defender.getCharacter().getSpeed() - attacker.getMoves().maneuverFatigue)) {
-						hit(defender, attacker);
-					}
-					else if (defender.getMoves().getAttack() == Attacks.THRUST && attacker.getMoves().getManeuver() == Maneuvers.CHARGE) {
-						hit(defender, attacker);
-					}
-					else if (defender.getMoves().getAttack() == Attacks.SWING && attacker.getMoves().getManeuver() == Maneuvers.DODGE) {
-						hit(defender, attacker);
-					}
-					else if (defender.getMoves().getAttack() == Attacks.SMASH && attacker.getMoves().getManeuver() == Maneuvers.DUCK) {
-						hit(defender, attacker);
-					}
-				}
-			}
-		}
-	}
-
+    }
+	
 	public void hit(Player attacker, Player defender) {
 		ItemWeight level = attacker.getWeapons().get(0).getWeight();
 
@@ -795,7 +699,7 @@ public class ServerController extends Handler{
 	}
 
 	/**
-	 * calld via a "START GAME" message in order to setup the board and start the game.
+	 * called via a "START GAME" message in order to setup the board and start the game.
 	 */
 	public void startGame(){
 
@@ -809,12 +713,12 @@ public class ServerController extends Handler{
     		try {
 				Thread.sleep(20);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				// Auto-generated catch block
 				e.printStackTrace();
 			}
     	}
 
-    	//cant get past here until the list of players is done
+    	//can't get past here until the list of players is done
     	System.out.println("end selection loop");
     	state = GameState.NULL;
 

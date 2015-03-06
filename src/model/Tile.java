@@ -73,19 +73,25 @@ public class Tile implements Serializable{
 		if(name == TileName.AWFULVALLEY){
 			int [ ] num = {1,2,4,5};
 			ClearingType [ ] t = {ClearingType.WOODS,ClearingType.WOODS,ClearingType.WOODS,ClearingType.WOODS};
-			addNewClearings(num,t);
+			int [] x = {0,0,0,0,0,0};
+			int [] y = {0,0,0,0,0,0};
+			addNewClearings(num, t, x, y);
 			connect(1,4,PathType.OPEN_ROAD);
 			connect(2,5,PathType.OPEN_ROAD);
 		} else if (name == TileName.BADVALLEY){
 			int [ ] num = {1,2,4,5};
 			ClearingType [ ] t = {ClearingType.WOODS,ClearingType.WOODS,ClearingType.WOODS,ClearingType.WOODS};
-			addNewClearings(num,t);
+			int [] x = {0,0,0,0,0,0};
+			int [] y = {0,0,0,0,0,0};
+			addNewClearings(num, t, x, y);
 			connect(1,4,PathType.OPEN_ROAD);
 			connect(2,5,PathType.OPEN_ROAD);
 		} else if (name == TileName.BORDERLAND){
 			int [ ] num = {1,2,3,4,5,6};
 			ClearingType [ ] t = {ClearingType.WOODS,ClearingType.WOODS,ClearingType.WOODS,ClearingType.CAVE,ClearingType.CAVE,ClearingType.CAVE};
-			addNewClearings(num,t);
+			int [] x = {0,0,0,0,0,0};
+			int [] y = {0,0,0,0,0,0};
+			addNewClearings(num, t, x, y);
 			connect(1,6,PathType.OPEN_ROAD);
 			connect(6,3,PathType.OPEN_ROAD);
 			connect(3,2,PathType.OPEN_ROAD);
@@ -94,7 +100,9 @@ public class Tile implements Serializable{
 		} else if (name == TileName.CAVERN){
 			int [ ] num = {1,2,3,4,5,6};
 			ClearingType [ ] t = {ClearingType.CAVE,ClearingType.CAVE,ClearingType.CAVE,ClearingType.CAVE,ClearingType.CAVE,ClearingType.CAVE};
-			addNewClearings(num,t);
+			int [] x = {0,0,0,0,0,0};
+			int [] y = {0,0,0,0,0,0};
+			addNewClearings(num, t, x, y);
 			connect(1,3,PathType.TUNNEL);
 			connect(2,3,PathType.TUNNEL);
 			connect(6,3,PathType.TUNNEL);
@@ -105,7 +113,9 @@ public class Tile implements Serializable{
 		} else if (name == TileName.CAVES){
 			int [ ] num = {1,2,3,4,5,6};
 			ClearingType [ ] t = {ClearingType.CAVE,ClearingType.CAVE,ClearingType.CAVE,ClearingType.CAVE,ClearingType.CAVE,ClearingType.CAVE};
-			addNewClearings(num,t);
+			int [] x = {0,0,0,0,0,0};
+			int [] y = {0,0,0,0,0,0};
+			addNewClearings(num, t, x, y);
 			connect(1,6,PathType.TUNNEL);
 			connect(6,4,PathType.TUNNEL);
 			connect(4,2,PathType.TUNNEL);
@@ -114,7 +124,9 @@ public class Tile implements Serializable{
 		} else if (name == TileName.CLIFF){
 			int [ ] num = {1,2,3,4,5,6};
 			ClearingType [ ] t = {ClearingType.MOUNTAIN,ClearingType.WOODS,ClearingType.WOODS,ClearingType.MOUNTAIN,ClearingType.WOODS,ClearingType.MOUNTAIN};
-			addNewClearings(num,t);
+			int [] x = {0,0,0,0,0,0};
+			int [] y = {0,0,0,0,0,0};
+			addNewClearings(num, t, x, y);
 			connect(1,6,PathType.OPEN_ROAD);
 			connect(6,4,PathType.OPEN_ROAD);
 			connect(6,3,PathType.SECRET_PASSAGEWAY);
@@ -124,7 +136,9 @@ public class Tile implements Serializable{
 		} else if (name == TileName.CRAG){
 			int [ ] num = {1,2,3,4,5,6};
 			ClearingType [ ] t = {ClearingType.MOUNTAIN,ClearingType.MOUNTAIN,ClearingType.MOUNTAIN,ClearingType.MOUNTAIN,ClearingType.MOUNTAIN,ClearingType.MOUNTAIN};
-			addNewClearings(num,t);
+			int [] x = {0,0,0,0,0,0};
+			int [] y = {0,0,0,0,0,0};
+			addNewClearings(num, t, x, y);
 			connect(1,4,PathType.OPEN_ROAD);
 			connect(1,6,PathType.SECRET_PASSAGEWAY);
 			connect(6,4,PathType.OPEN_ROAD);
@@ -135,19 +149,25 @@ public class Tile implements Serializable{
 		} else if (name == TileName.CURSTVALLEY){
 			int [ ] num = {1,2,4,5};
 			ClearingType [ ] t = {ClearingType.WOODS,ClearingType.WOODS,ClearingType.WOODS,ClearingType.WOODS};
-			addNewClearings(num,t);
+			int [] x = {0,0,0,0,0,0};
+			int [] y = {0,0,0,0,0,0};
+			addNewClearings(num, t, x, y);
 			connect(1,4,PathType.OPEN_ROAD);
 			connect(2,5,PathType.OPEN_ROAD);
 		} else if (name == TileName.DARKVALLEY){
 			int [ ] num = {1,2,4,5};
 			ClearingType [ ] t = {ClearingType.WOODS,ClearingType.WOODS,ClearingType.WOODS,ClearingType.WOODS};
-			addNewClearings(num,t);
+			int [] x = {0,0,0,0,0,0};
+			int [] y = {0,0,0,0,0,0};
+			addNewClearings(num, t, x, y);
 			connect(1,4,PathType.OPEN_ROAD);
 			connect(2,5,PathType.OPEN_ROAD);
 		} else if (name == TileName.DEEPWOODS){
 			int [ ] num = {1,2,3,4,5,6};
 			ClearingType [ ] t = {ClearingType.WOODS,ClearingType.WOODS,ClearingType.WOODS,ClearingType.WOODS,ClearingType.WOODS,ClearingType.WOODS};
-			addNewClearings(num,t);
+			int [] x = {0,0,0,0,0,0};
+			int [] y = {0,0,0,0,0,0};
+			addNewClearings(num, t, x, y);
 			connect(1,4,PathType.HIDDEN_PATH);
 			connect(1,6,PathType.OPEN_ROAD);
 			connect(4,6,PathType.OPEN_ROAD);
@@ -158,13 +178,17 @@ public class Tile implements Serializable{
 		} else if (name == TileName.EVILVALLEY){
 			int [ ] num = {1,2,4,5};
 			ClearingType [ ] t = {ClearingType.WOODS,ClearingType.WOODS,ClearingType.WOODS,ClearingType.WOODS};
-			addNewClearings(num,t);
+			int [] x = {0,0,0,0,0,0};
+			int [] y = {0,0,0,0,0,0};
+			addNewClearings(num, t, x, y);
 			connect(1,4,PathType.OPEN_ROAD);
 			connect(2,5,PathType.OPEN_ROAD);
 		} else if (name == TileName.HIGHPASS){
 			int [ ] num = {1,2,3,4,5,6};
 			ClearingType [ ] t = {ClearingType.MOUNTAIN,ClearingType.MOUNTAIN,ClearingType.CAVE,ClearingType.MOUNTAIN,ClearingType.MOUNTAIN,ClearingType.CAVE};
-			addNewClearings(num,t);
+			int [] x = {0,0,0,0,0,0};
+			int [] y = {0,0,0,0,0,0};
+			addNewClearings(num, t, x, y);
 			connect(1,5,PathType.OPEN_ROAD);
 			connect(1,4,PathType.OPEN_ROAD);
 			connect(2,4,PathType.OPEN_ROAD);
@@ -172,7 +196,9 @@ public class Tile implements Serializable{
 		} else if (name == TileName.LEDGES){
 			int [ ] num = {1,2,3,4,5,6};
 			ClearingType [ ] t = {ClearingType.WOODS,ClearingType.MOUNTAIN,ClearingType.WOODS,ClearingType.WOODS,ClearingType.MOUNTAIN,ClearingType.WOODS};
-			addNewClearings(num,t);
+			int [] x = {0,0,0,0,0,0};
+			int [] y = {0,0,0,0,0,0};
+			addNewClearings(num, t, x, y);
 			connect(1,4,PathType.OPEN_ROAD);
 			connect(2,5,PathType.OPEN_ROAD);
 			connect(4,6,PathType.HIDDEN_PATH);
@@ -182,17 +208,23 @@ public class Tile implements Serializable{
 		} else if (name == TileName.LINDENWOODS){
 			int [ ] num = {2,4,5};
 			ClearingType [ ] t = {ClearingType.WOODS,ClearingType.WOODS,ClearingType.WOODS};
-			addNewClearings(num,t);
+			int [] x = {0,0,0,0,0,0};
+			int [] y = {0,0,0,0,0,0};
+			addNewClearings(num, t, x, y);
 			connect(2,4,PathType.OPEN_ROAD);
 		} else if (name == TileName.MAPLEWOODS){
 			int [ ] num = {2,4,5};
 			ClearingType [ ] t = {ClearingType.WOODS,ClearingType.WOODS,ClearingType.WOODS};
-			addNewClearings(num,t);
+			int [] x = {0,0,0,0,0,0};
+			int [] y = {0,0,0,0,0,0};
+			addNewClearings(num, t, x, y);
 			connect(2,4,PathType.OPEN_ROAD);
 		} else if (name == TileName.MOUNTAIN){
 			int [ ] num = {1,2,3,4,5,6};
 			ClearingType [ ] t = {ClearingType.MOUNTAIN,ClearingType.WOODS,ClearingType.MOUNTAIN,ClearingType.WOODS,ClearingType.MOUNTAIN,ClearingType.MOUNTAIN};
-			addNewClearings(num,t);
+			int [] x = {0,0,0,0,0,0};
+			int [] y = {0,0,0,0,0,0};
+			addNewClearings(num, t, x, y);
 			connect(1,3,PathType.OPEN_ROAD);
 			connect(3,6,PathType.HIDDEN_PATH);
 			connect(5,6,PathType.OPEN_ROAD);
@@ -201,22 +233,30 @@ public class Tile implements Serializable{
 		} else if (name == TileName.NUTWOODS){
 			int [ ] num = {2,4,5};
 			ClearingType [ ] t = {ClearingType.WOODS,ClearingType.WOODS,ClearingType.WOODS};
-			addNewClearings(num,t);
+			int [] x = {0,0,0,0,0,0};
+			int [] y = {0,0,0,0,0,0};
+			addNewClearings(num, t, x, y);
 			connect(2,4,PathType.OPEN_ROAD);
 		} else if (name == TileName.OAKWOODS){
 			int [ ] num = {2,4,5};
 			ClearingType [ ] t = {ClearingType.WOODS,ClearingType.WOODS,ClearingType.WOODS};
-			addNewClearings(num,t);
+			int [] x = {0,0,0,0,0,0};
+			int [] y = {0,0,0,0,0,0};
+			addNewClearings(num, t, x, y);
 			connect(2,4,PathType.OPEN_ROAD);
 		} else if (name == TileName.PINEWOODS){
 			int [ ] num = {2,4,5};
 			ClearingType [ ] t = {ClearingType.WOODS,ClearingType.WOODS,ClearingType.WOODS};
-			addNewClearings(num,t);
+			int [] x = {0,0,0,0,0,0};
+			int [] y = {0,0,0,0,0,0};
+			addNewClearings(num, t, x, y);
 			connect(2,4,PathType.OPEN_ROAD);
 		} else if (name == TileName.RUINS){
 			int [ ] num = {1,2,3,4,5,6};
 			ClearingType [ ] t = {ClearingType.WOODS,ClearingType.WOODS,ClearingType.WOODS,ClearingType.WOODS,ClearingType.WOODS,ClearingType.CAVE};
-			addNewClearings(num,t);
+			int [] x = {0,0,0,0,0,0};
+			int [] y = {0,0,0,0,0,0};
+			addNewClearings(num, t, x, y);
 			connect(2,1,PathType.OPEN_ROAD);
 			connect(1,4,PathType.OPEN_ROAD);
 			connect(5,1,PathType.HIDDEN_PATH);
@@ -243,18 +283,18 @@ public class Tile implements Serializable{
 	 * 
 	 * @param position
 	 */
-	public void addNewClearing(int position, ClearingType t){
-		this.clearings.add(new Clearing(position, this, t));
+	public void addNewClearing(int position, ClearingType t, int x, int y){
+		this.clearings.add(new Clearing(position, this, t, x, y));
 	}
 	
 	/**
 	 * 
 	 * @param positions
 	 */
-	public void addNewClearings(int[] positions, ClearingType[] types){
+	public void addNewClearings(int[] positions, ClearingType[] types, int[] x, int[] y){
 		
 		for(int i=0; i<positions.length;i++){
-			addNewClearing(positions[i], types[i]);
+			addNewClearing(positions[i], types[i], x[i], y[i]);
 		}
 	}
 	

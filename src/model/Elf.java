@@ -6,6 +6,8 @@ import utils.Utility.*;
 public class Elf extends Character {
 
 	private static final long serialVersionUID = -2632362486714584059L;
+	
+	public static GarrisonName[] possibleStartingLocations = {GarrisonName.INN};
 
 	public Elf() {
         this.name             = CharacterName.ELF;

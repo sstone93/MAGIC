@@ -8,6 +8,8 @@ public class Swordsman extends Character {
 	 * 
 	 */
 	private static final long serialVersionUID = -8947910234723882366L;
+	
+	public static GarrisonName[] possibleStartingLocations = {GarrisonName.INN};
 
 	public Swordsman() { // might want the name to be sent in
         this.name             = CharacterName.SWORDSMAN;
