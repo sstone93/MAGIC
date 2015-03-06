@@ -86,6 +86,9 @@ public class ServerController extends Handler{
 				if(state == GameState.CHOOSE_PLAYS){
 					recievedMoves += 1;
 					System.out.println(ID);
+					
+					
+					
 					findPlayer(ID).setActivities(m.getData());
 				}else{
 					network.send(ID, "NOT ACCEPTING ACTIVITIES ATM");
@@ -158,7 +161,7 @@ public class ServerController extends Handler{
 	public Player findPlayer(int ID){
 		for(int i=0;i<playerCount;i++){
 			if(players.get(i).getID() == ID){
-				return players.get(0);
+				return players.get(i);
 			}
 		}
 		System.out.println("failed to find player");
@@ -294,10 +297,15 @@ public class ServerController extends Handler{
      * Cycles through players and their moves for the day
      */
     public void doTodaysActivities(Player player) {
+    	
     	int moves = 0;
+    	
+    	System.out.println("Start "+player.getCharacter().getName()+" activities: " + player.getActivities().size());
+    	
     	while (moves < player.getActivities().size()) {
+    		
     		// TODO: for testing
-    		System.out.println("moves: " + moves + " activities: " + player.getActivities().size());
+    		System.out.println("	moves: " + moves + " activities: " + player.getActivities().size());
 
     		ArrayList<Object> activities = player.getActivities();
 
@@ -442,7 +450,6 @@ public class ServerController extends Handler{
                 if (players.get(i).order == nextMover) {
                 	doTodaysActivities(players.get(i));
                     nextMover++;
-                    break;
                 }
             }
         }
@@ -460,7 +467,6 @@ public class ServerController extends Handler{
                 		//System.out.println("")
                 	}
                 	nextMover++;
-                    break;
                 }
             }
         }

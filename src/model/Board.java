@@ -419,7 +419,7 @@ public class Board implements Serializable{
     					if(player.getActivities().get(moves-2) == Actions.MOVE){
     						if(((Clearing) player.getActivities().get(moves-1)).equals(newClearing)){
     							move(player, newClearing);
-    							System.out.println(player.getCharacter().getName()+" SUCCEEDED move to "+newClearing.parent.toString()+" "+newClearing.location);
+    							System.out.println(player.getCharacter().getName()+" SUCCEEDED move to "+newClearing.parent.getName().toString()+" "+newClearing.location);
     						}
     					}
     				} 
@@ -430,13 +430,13 @@ public class Board implements Serializable{
     			//handles moving to woods
     			}else{
     				move(player, newClearing);
-					System.out.println(player.getCharacter().getName()+" SUCCEEDED move to "+newClearing.parent.toString()+" "+newClearing.location);
+					System.out.println(player.getCharacter().getName()+" SUCCEEDED move to "+newClearing.parent.getName().toString()+" "+newClearing.location);
     			}
     		}else{// THIS MEANS THE MOVE FAILED DUE TO NOT KNOWING
-    			System.out.println(player.getCharacter().getName()+" failed to move to "+newClearing.parent.toString()+" "+newClearing.location+" (route type error)");
+    			System.out.println(player.getCharacter().getName()+" failed to move to "+newClearing.parent.getName().toString()+" "+newClearing.location+" (route type error)");
     		}
     	}else{	//THIS MEANS YOU FAILED TO MOVE CLEARINGS DUE TO A LACK OF PATH BETWEEN YOUR LOCATION AND THE DESTINATION
-    		System.out.println(player.getCharacter().getName()+" failed to move to "+newClearing.parent.toString()+" "+newClearing.location+" (no path)");
+    		System.out.println(player.getCharacter().getName()+" failed to move to "+newClearing.parent.getName().toString()+" "+newClearing.location+" (no path)");
     	}
     }
 	
