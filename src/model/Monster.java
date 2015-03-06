@@ -2,11 +2,16 @@ package model;
 
 import java.io.Serializable;
 
+import utils.Utility.ItemWeight;
+
 public class Monster implements Serializable{
 
 	private static final long serialVersionUID = -582083574086670219L;
-	Clearing location;
-    int      length = 0; // represents length of the tooth/claw
+	Clearing   location;
+	ItemWeight weight;
+	int        notorietyPts;
+	int        famePts;
+	boolean    armoured;
     // todo: put weight, in enum
     
     public Clearing getLocation() {
@@ -16,12 +21,22 @@ public class Monster implements Serializable{
     public void setLocation(Clearing location) {
     	this.location = location;
     }
-
-    public int getLength() {
-        return length;
+    
+    public ItemWeight getWeight() {
+    	return weight;
+    }
+    
+    public int getNotorietyPts() {
+    	return notorietyPts;
+    }
+    
+    public int getFamePts() {
+    	return famePts;
+    }
+    
+    public boolean isArmoured() {
+    	return armoured;
     }
 
-    public void setLength(int length) {
-        this.length = length;
-    }
+
 }
