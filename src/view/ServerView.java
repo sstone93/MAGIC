@@ -28,7 +28,7 @@ public class ServerView extends JFrame implements ActionListener{
 		stop.setBackground(Color.white);
 		stop.setEnabled(true);
 		try {
-			stop.setIcon(new ImageIcon(ImageIO.read(this.getClass().getResource("stop.png"))));
+			stop.setIcon(new ImageIcon(ImageIO.read(this.getClass().getResource("/images/stop.png"))));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

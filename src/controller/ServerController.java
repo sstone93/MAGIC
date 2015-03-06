@@ -14,12 +14,9 @@ import model.Elf;
 import model.Monster;
 import model.Player;
 import model.Swordsman;
-//import model.Treasure;
-//import model.TreasureWithinTreasure;
 import model.WhiteKnight;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 import utils.Config;
@@ -95,7 +92,7 @@ public class ServerController extends Handler{
 				}
 			}
 			if( m.getType() == MessageType.COMBAT_TARGET){
-				if(state == GameState.CHOOSE_COMBAT){
+				if(state == GameState.CHOOSE_COMBATTARGET){
 					recievedCombat += 1;
 
 					//turns the recieved charctername into a player
@@ -392,7 +389,7 @@ public class ServerController extends Handler{
     }
 
     public void collectCombat(){
-    	state = GameState.CHOOSE_COMBAT;
+    	state = GameState.CHOOSE_COMBATTARGET;
     	recievedCombat = 0;
     	network.broadCast("SEND COMBAT");
     	while(recievedCombat < playerCount){
