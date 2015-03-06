@@ -303,7 +303,7 @@ public class ServerController extends Handler{
     	System.out.println("Start "+player.getCharacter().getName()+" activities: " + player.getActivities().size());
     	
     	while (moves < player.getActivities().size()) {
-    		
+
     		// TODO: for testing
     		System.out.println("	moves: " + moves + " activities: " + player.getActivities().size());
 
@@ -316,37 +316,34 @@ public class ServerController extends Handler{
 
     				ArrayList<Player> canBlock = blockable(player);					// check if they can block another player
 
-    	    		if (currentDay != 1) {
-    		    		for (int j = 0; j < canBlock.size(); j++) {
-    		    			if (canBlock.get(j) != null) {
-    		    				canBlock.get(j).setBlocked(true);
-    		    				System.out.println("blocking player!"); // TODO: for testing
-    		    				network.send(canBlock.get(j).getID(), "You've been blocked! :( " );
-    		    			}
-    		    		}
-    	    		}
+    				if (currentDay != 1) {
+    					for (int j = 0; j < canBlock.size(); j++) {
+    						if (canBlock.get(j) != null) {
+    							canBlock.get(j).setBlocked(true);
+    							System.out.println("blocking player!"); // TODO: for testing
+    							network.send(canBlock.get(j).getID(), "You've been blocked! :( " );
+    						}
+    					}
+    				}
 
-		    		switch((Actions) activities.get(moves)) {
+    				switch((Actions) activities.get(moves)) {
 
-		    		case MOVE: 
-		    			boolean move = board.move(moves, player, (Clearing)activities.get(moves+1)); moves = moves + 2; 
-		    			network.broadCast(player.getCharacter().getName() + " is moving? : " + move);
-		    			break;
-		    		case HIDE: hide(player); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is hiding!"); break;
-		    		case ALERT: alert(player); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is alerting their weapon!"); break;
-		    		case REST: rest(player); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is resting!"); break;
-		    		case SEARCH: search(player); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is searching!"); break;
-		    		case TRADE: moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is trading!"); break;
-		    		case FOLLOW: moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is following!"); break;
-		    		}
+    				case MOVE: 
+    					boolean move = board.move(moves, player, (Clearing)activities.get(moves+1)); moves = moves + 2; 
+    					network.broadCast(player.getCharacter().getName() + " is moving? : " + move);
+    					break;
+    				case HIDE: hide(player); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is hiding!"); break;
+    				case ALERT: alert(player); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is alerting their weapon!"); break;
+    				case REST: rest(player); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is resting!"); break;
+    				case SEARCH: search(player); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is searching!"); break;
+    				case TRADE: moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is trading!"); break;
+    				case FOLLOW: moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is following!"); break;
+    				}
     			}
     		}
     		else if (activities.get(moves) == Utility.Actions.HIDE) {
     			player.setBlocked(false);
     			hide(player);
-    			moves=moves+2;
-    		}
-    		else {
     			moves=moves+2;
     		}
     	}
@@ -519,15 +516,6 @@ public class ServerController extends Handler{
     		return;
     	}
 
-    	if (attacker.isDead() == true) {
-    		network.send(attacker.getID(), "You are dead.");
-    		return;
-    	}
-    	else if (defender.isDead() == true) {
-    		network.send(defender.getID(), "You are dead.");
-    		return;
-    	}
-    	
     	//System.out.println(attacker.getTarget().getCharacter().getName());
     	//System.out.println(defender.getTarget().getCharacter().getName());
     	
@@ -549,8 +537,15 @@ public class ServerController extends Handler{
     	System.out.println("got combat moves");
     	state = GameState.NULL;
     	
-    	
-    	if (attacker.getMoves() == null) {
+    	if (attacker.isDead() == true) {
+    		network.send(attacker.getID(), "You are dead.");
+    		return;
+    	}
+    	else if (defender.isDead() == true) {
+    		network.send(defender.getID(), "You are dead.");
+    		return;
+    	}
+    	else if (attacker.getMoves() == null) {
     		network.send(attacker.getID(), "It messed up...");
     		return;
     	}
