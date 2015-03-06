@@ -78,16 +78,14 @@ public class Clearing implements Serializable{
     public int getClearingNumber(){
     	return this.location;
     }
-
-    public boolean canChangeClearing(Clearing clearing) {
-    	//System.out.println("checking "+this.parent.getName()+" #"+this.location+" moving to "+clearing.parent.getName()+" #"+clearing.location);
-    	//TODO Double check this, I think it should work but I am not 100% as I cannot test it.
+    
+    public Path routeTo(Clearing clearing){
     	for(int i=0; i< connections.size(); i++){
     		if(connections.get(i).getDestination(this).equals(clearing)){
-    			return true;
+    			return connections.get(i);
     		}
     	}
-    	return false;
+    	return null;
     }
 
     public void addTreasures(ArrayList<Treasure> treasure) {

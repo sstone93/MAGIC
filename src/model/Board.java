@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import utils.Utility;
+import utils.Utility.Actions;
+import utils.Utility.ClearingType;
 import utils.Utility.GarrisonName;
-import utils.Utility.ItemWeight;
 import utils.Utility.LargeTreasureName;
 import utils.Utility.PathType;
 import utils.Utility.SmallTreasureName;
@@ -326,25 +326,14 @@ public class Board implements Serializable{
 	}
 	
 	 // TODO: this is the function for monsters changing clearings
-    public boolean move(Monster monster, Clearing newClearing) {
-    	boolean canChange =  (monster.getLocation().canChangeClearing(newClearing));
+    //public boolean move(Monster monster, Clearing newClearing) {
+    	//boolean canChange =  (monster.getLocation().canChangeClearing(newClearing));
     	//block(monster); // see if it can block any players
-    	return canChange;
-    }
+    	//return canChange;
+   // }
     
-    /**
-     * Moves the player to the new clearing if possible, if not, they forfeit the phase
-     * @param player being moved
-     * @param newClearing clearing being moved to
-     * @return boolean based on if the action was valid or not
-     */
-    public boolean move(Player player, Clearing newClearing) {
-    	System.out.println("START MOVE");
-    	System.out.println(newClearing);
-    	
-        player.setHidden(false);
-        boolean canChange =  (player.getLocation().canChangeClearing(newClearing));
-        ItemWeight highestWeight = Utility.ItemWeight.NEGLIGIBLE;
+    //private boolean weightRestrictions(){
+    	 //  ItemWeight highestWeight = Utility.ItemWeight.NEGLIGIBLE;
 
         // find the highest weight of the active move chits of the player
 //        for (int i = 0; i < chits.length; i++) {
@@ -360,27 +349,95 @@ public class Board implements Serializable{
 //        }
 
         // remove items that have a higher weight than the characters weight
-        ItemWeight currentWeight = player.getCharacter().getWeight();
-        boolean check = Utility.isWeightHeavier(currentWeight, highestWeight);
-	    if (check) {
-	    	highestWeight = currentWeight;
-	    }
-	    System.out.println(player.getLocation());
-	    System.out.println("THEY CAN CHANGE?????: " + canChange);
-        if (canChange) {
-        	System.out.println("CHANGING!!!!!!!" ) ;
-        	// discard anything that player can't carry
-            player.removeWeaponsWithHigherWeight(highestWeight);
-            player.removeArmourWithHigherWeight(highestWeight);
+      //  ItemWeight currentWeight = player.getCharacter().getWeight();
+       // boolean check = Utility.isWeightHeavier(currentWeight, highestWeight);
+	  //  if (check) {
+	    //	highestWeight = currentWeight;
+	  //  }
+    	
+    	// discard anything that player can't carry
+        //player.removeWeaponsWithHigherWeight(highestWeight);
+        //player.removeArmourWithHigherWeight(highestWeight);
+    	
+    //}
+    
+    private boolean canUsePath(Player player, Path route){
+    	//TODO ANYTHING SPECIAL
+    	switch(route.type){
+		case HIDDEN_PATH:
+			if(!player.knowsPath(route)){
+				return true;
+			}
+			return false;
+		case OPEN_ROAD:
+			return true;
+		case SECRET_PASSAGEWAY:
+			if(!player.knowsPath(route)){
+				return true;
+			}
+			return false;
+		case TUNNEL:
+			return true;
+		default:
+			return false;
+    	}
+    }
+    
+    //TODO IS IT A DIFFERENT INSTANCEOF CLEARING THAN THE BOARD HAS?
+    public void move(Player player, Clearing newClearing){
+    	player.getLocation().removeOccupant(player);
+		player.setLocation(newClearing);
+		newClearing.addOccupant(player);
+    }
+    
+    /**
+     * Moves the player to the new clearing if possible, if not, they forfeit the phase
+     * @param player being moved
+     * @param newClearing clearing being moved to
+     * @return boolean based on if the action was valid or not
+     */
+    public void move(int moves, Player player, Clearing newClearing) {
+    	
+    	//Steps to Move
+    	//1. Is your clearing connected to the destination clearing?
+    	//2. Are you able to use the path connecting the two clearings?
+    	//3. What kind of clearing are you moving to?
+    	//		-To climb a mountain, need 2 consecutive moves ON THE SAME TURN
+    	//		-Cannot enter a cave on a turn where sunlight phase was used?
+    	//4. Weight Restrictions
+    	//5. Special Move Abilities !!! <Captain, Dwarf>
+    	
+    	//1. Checks for clearings being connected.
+    	Path route = (player.getLocation().routeTo(newClearing));
+    	if (route!=null) {
+    		//2. Handles special conditions based on path type
+    		if (canUsePath(player, route)){
+    			//3. ClearingType Restrictions
+    			//handles moving to a mountain
+    			if(newClearing.getType() == ClearingType.MOUNTAIN){
+    				if(moves>=2){//meaning it is atleast the second action
+    					if(player.getActivities().get(moves-2) == Actions.MOVE){
+    						if(((Clearing) player.getActivities().get(moves-1)).equals(newClearing)){
+    							move(player, newClearing);
+    							System.out.println(player.getCharacter().getName()+" SUCCEEDED move to "+newClearing.parent.toString()+" "+newClearing.location);
+    						}
+    					}
+    				} 
+    			//handles moving to a cave
+    			}else if(newClearing.getType() == ClearingType.CAVE){
 
-            //Performs the 3 steps to move a player to a new clearing
-            player.getLocation().removeOccupant(player);
-            player.setLocation(newClearing);
-            newClearing.addOccupant(player);
-
-        }
-        System.out.println("END MOVE");
-        return canChange;
+    				
+    			//handles moving to woods
+    			}else{
+    				move(player, newClearing);
+					System.out.println(player.getCharacter().getName()+" SUCCEEDED move to "+newClearing.parent.toString()+" "+newClearing.location);
+    			}
+    		}else{// THIS MEANS THE MOVE FAILED DUE TO NOT KNOWING
+    			System.out.println(player.getCharacter().getName()+" failed to move to "+newClearing.parent.toString()+" "+newClearing.location+" (route type error)");
+    		}
+    	}else{	//THIS MEANS YOU FAILED TO MOVE CLEARINGS DUE TO A LACK OF PATH BETWEEN YOUR LOCATION AND THE DESTINATION
+    		System.out.println(player.getCharacter().getName()+" failed to move to "+newClearing.parent.toString()+" "+newClearing.location+" (no path)");
+    	}
     }
 	
 	@Override

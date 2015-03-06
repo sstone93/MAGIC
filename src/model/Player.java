@@ -29,6 +29,7 @@ public class Player implements Serializable{
     ArrayList<Weapon> weapons = new ArrayList<Weapon>();
     ArrayList<Object> activities = new ArrayList<Object>();
     ArrayList<Treasure>  treasures = new ArrayList<Treasure>();
+    ArrayList<Object> discoveries = new ArrayList<Object>();
 
     /**
      * Used to correct object transmission
@@ -84,6 +85,22 @@ public class Player implements Serializable{
     
     public int getID(){
 		return ID;
+    }
+    
+    public void addDiscovery(Object o){
+    	this.discoveries.add(o);
+    }
+    
+    public ArrayList<Object> getDiscoveries(){
+    	return this.discoveries;
+    }
+    
+    public boolean knowsPath(Path r){
+    	if(this.discoveries.contains(r)){
+    		return true;
+    	}else{
+    		return false;
+    	}
     }
     
     // replaces all the previous activities
