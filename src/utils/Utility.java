@@ -42,50 +42,50 @@ public class Utility {
 
     public static String getTileImage(TileName name) {
     	switch(name){
-	    	case AWFULVALLEY: return "awfulvalley1.gif";
-	    	case BADVALLEY: return "badvalley1.gif";
-	    	case BORDERLAND: return "borderland1.gif";
-	    	case CAVERN: return "cavern1.gif";
-	    	case CAVES: return "caves1.gif";
-	    	case CLIFF: return "cliff1.gif";
-	    	case CRAG: return "crag1.gif";
-	    	case CURSTVALLEY: return "curstvalley1.gif";
-	    	case DARKVALLEY: return "darkvalley1.gif";
-	    	case DEEPWOODS: return "deepwoods1.gif";
-	    	case EVILVALLEY: return "evilvalley1.gif";
-	    	case HIGHPASS: return "highpass1.gif";
-	    	case LEDGES: return "ledges1.gif";
-	    	case LINDENWOODS: return "lindenwoods1.gif";
-	    	case MAPLEWOODS: return "maplewoods1.gif";
-	    	case MOUNTAIN: return "mountain1.gif";
-	    	case NUTWOODS: return "nutwoods1.gif";
-	    	case OAKWOODS: return "oakwoods1.gif";
-	    	case PINEWOODS: return "pinewoods1.gif";
-	    	case RUINS: return "ruins1.gif";
+	    	case AWFULVALLEY: return "/images/awfulvalley1.gif";
+	    	case BADVALLEY: return "/images/badvalley1.gif";
+	    	case BORDERLAND: return "/images/borderland1.gif";
+	    	case CAVERN: return "/images/cavern1.gif";
+	    	case CAVES: return "/images/caves1.gif";
+	    	case CLIFF: return "/images/cliff1.gif";
+	    	case CRAG: return "/images/crag1.gif";
+	    	case CURSTVALLEY: return "/images/curstvalley1.gif";
+	    	case DARKVALLEY: return "/images/darkvalley1.gif";
+	    	case DEEPWOODS: return "/images/deepwoods1.gif";
+	    	case EVILVALLEY: return "/images/evilvalley1.gif";
+	    	case HIGHPASS: return "/images/highpass1.gif";
+	    	case LEDGES: return "/images/ledges1.gif";
+	    	case LINDENWOODS: return "/images/lindenwoods1.gif";
+	    	case MAPLEWOODS: return "/images/maplewoods1.gif";
+	    	case MOUNTAIN: return "/images/mountain1.gif";
+	    	case NUTWOODS: return "/images/nutwoods1.gif";
+	    	case OAKWOODS: return "/images/oakwoods1.gif";
+	    	case PINEWOODS: return "/images/pinewoods1.gif";
+	    	case RUINS: return "/images/ruins1.gif";
 	    	default: return null;
     	}
     }
     
     public static String getCharacterImage(CharacterName name) {
     	switch(name){
-	    	case AMAZON: return "amazon.gif";
-	    	case BERSERKER: return "berserker.gif";
-	    	case BLACK_KNIGHT: return "black_knight.gif";
-	    	case CAPTAIN: return "captain.gif";
-	    	case DWARF: return "dwarf.gif";
-	    	case ELF: return "elf.gif";
-	    	case SWORDSMAN: return "swordsman.gif";
-	    	case WHITE_KNIGHT: return "white_knight.gif";
+	    	case AMAZON: return "/images/amazon.gif";
+	    	case BERSERKER: return "/images/berserker.gif";
+	    	case BLACK_KNIGHT: return "/images/black_knight.gif";
+	    	case CAPTAIN: return "/images/captain.gif";
+	    	case DWARF: return "/images/dwarf.gif";
+	    	case ELF: return "/images/elf.gif";
+	    	case SWORDSMAN: return "/images/swordsman.gif";
+	    	case WHITE_KNIGHT: return "/images/white_knight.gif";
 	    	default: return null;
     	}
     }
 
     public static String getGarrisonImage(GarrisonName name) {
     	switch(name){
-	    	case CHAPEL: return "chapel.gif";
-	    	case HOUSE: return "house.gif";
-	    	case INN: return "inn.gif";
-	    	case GUARD: return "guard.gif";
+	    	case CHAPEL: return "/images/chapel.gif";
+	    	case HOUSE: return "/images/house.gif";
+	    	case INN: return "/images/inn.gif";
+	    	case GUARD: return "/images/guard.gif";
 	    	default: return null;
     	}
     }
@@ -160,5 +160,5 @@ public class Utility {
 
     public enum Defenses {AHEAD, SIDE, ABOVE}
 
-    public enum GameState {CHOOSE_CHARACTER, CHOOSE_PLAYS, CHOOSE_COMBATTARGET, CHOOSE_COMBATMOVES}
+    public enum GameState {CHOOSE_CHARACTER, CHOOSE_PLAYS, CHOOSE_COMBATTARGET, CHOOSE_COMBATMOVES, NULL}
 }

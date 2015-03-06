@@ -24,8 +24,7 @@ public class CombatPanel extends JPanel{
 	public CombatPanel(ClientController c){
 		
 		ClientController control = c;
-		
-		setVisible(false);
+
 		setBounds(750, 500, 524, 192);
 		setLayout(null);
 		setBorder(new LineBorder(Color.GRAY));

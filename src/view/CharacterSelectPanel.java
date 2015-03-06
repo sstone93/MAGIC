@@ -32,7 +32,7 @@ public class CharacterSelectPanel extends JPanel{
 	private void createClassButton(CharacterName n){
 		try{
 			BufferedImage pic;
-			pic = ImageIO.read(this.getClass().getResource(n.toString().toLowerCase()+"Detail.jpg"));
+			pic = ImageIO.read(this.getClass().getResource("/images/"+n.toString().toLowerCase()+"Detail.jpg"));
 			JButton btn = new JButton(new ImageIcon(pic));
 			btn.setSize(360, 284);
 			btn.addActionListener(new ActionListener() {

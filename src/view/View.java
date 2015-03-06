@@ -4,7 +4,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.Iterator;
 
 import javax.imageio.ImageIO;
@@ -15,18 +14,11 @@ import utils.Utility;
 import utils.Utility.CharacterName;
 import utils.Utility.*;
 import controller.ClientController;
-import model.Armour;
 import model.Board;
-import model.Chit;
 import model.Clearing;
-import model.Path;
 import model.Player;
 import model.Tile;
-import model.Treasure;
-import model.Weapon;
 
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
@@ -42,9 +34,7 @@ public class View extends JFrame {
 	private JLayeredPane boardPanel;
 	private JScrollPane scrollPanel;
 	private JTextArea textDisplay;
-	private JComboBox target;
-	private ButtonGroup movesGroup;
-	private ButtonGroup alertGroup;
+
 	private HashMap<Tile, JPanel> iconPanels = new HashMap<Tile, JPanel>();
 	private JLabel [] tileLbls;
 	private JLabel [] garrisonLbls;
@@ -53,8 +43,6 @@ public class View extends JFrame {
 	private CharacterInfoPanel characterInfoPanel;
 	private ActivitiesPanel playsPanel;
 	private CombatPanel combatPanel;
-	private JPanel movesPanel;//TODO
-	private JPanel alertPanel;//TODO
 	private CharacterSelectPanel characterSelectPanel;
 	private TargetPanel targetPanel;
 
@@ -70,9 +58,7 @@ public class View extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		/**
-		 * NICK'S FUNCTION TO AID IN PROPER CLIENT/SERVER SHUTDOWN, IF IT IS A PROBLEM, LET ME KNOW
-		 */
+		//Causes netowrk shutdown by clicking the close button on the window
 		this.addWindowListener( new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent we) {
@@ -111,24 +97,27 @@ public class View extends JFrame {
 		boardPanel.setLayout(null);
 		
 		//creates the character select panel and all its buttons
-		//TODO make visible/add it to content pane?
 		characterSelectPanel = new CharacterSelectPanel(control);
 		
-		//adds moves panel
-		movesPanel = new JPanel();
-		contentPane.add(movesPanel);
+		//creates a new combatpanel and adds it
+		combatPanel = new CombatPanel(control);
+		contentPane.add(combatPanel);
 		
+		//creates a new targetpanel, exact same functionality as before, but in a seperate class to reduce clutter
+		targetPanel = new TargetPanel(control);
+		contentPane.add(targetPanel);
+		
+		//adds moves panel
+		/*movesPanel = new JPanel();
+		contentPane.add(movesPanel);
 		movesPanel.setVisible(false);
 		movesPanel.setBorder(new LineBorder(Color.GRAY));
 		movesPanel.setBounds(750, 500, 524, 192);
 		movesPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		
 		JLabel lblSelectMoveLocation = new JLabel("Select Move Location");
 		lblSelectMoveLocation.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
 		movesPanel.add(lblSelectMoveLocation);
-		
 		movesGroup = new ButtonGroup();
-		
 		JButton btnSelectMoves = new JButton("Select");
 		btnSelectMoves.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -141,10 +130,10 @@ public class View extends JFrame {
 			}
 		});
 		movesPanel.add(btnSelectMoves);
+		*/
 		
-		//-------------------------------
-		
-		alertPanel = new JPanel();
+		//Alert panel
+		/*alertPanel = new JPanel();
 		alertPanel.setVisible(false);
 		alertPanel.setBorder(new LineBorder(Color.GRAY));
 		alertPanel.setBounds(750, 500, 524, 192);
@@ -168,16 +157,7 @@ public class View extends JFrame {
 				}
 			}
 		});
-		movesPanel.add(btnSelectAlert);
-		
-		//creates a new combatpanel and adds it
-		combatPanel = new CombatPanel(control);
-		contentPane.add(combatPanel);
-		
-		//creates a new targetpanel, exact same functionality as before, but in a seperate class to reduce clutter
-		targetPanel = new TargetPanel(control);
-		contentPane.add(targetPanel);
-		
+		alertPanel.add(btnSelectAlert);*/	
 	}
 	
 	private void makeBoard(){
@@ -216,7 +196,7 @@ public class View extends JFrame {
 		this.boardMade = true;
 	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({"rawtypes"})
 	public void update(){
 		final Board b = control.model.getBoard();
 		if (b != null) {
@@ -253,6 +233,9 @@ public class View extends JFrame {
 						int chars = 0;
 						for(int j = 0; j < clearings.size(); j++){
 							ArrayList<Player> occupants = clearings.get(j).getOccupants();
+							
+							//TODO WHY IS THIS RUNNING 6 TIMES PER CHARACTER?
+							
 							if(occupants != null){
 								for(int k = 0; k < occupants.size(); k++){
 									if (occupants.get(k) != null){
@@ -407,17 +390,8 @@ public class View extends JFrame {
 				makePanelVisible(combatPanel);
 				break;
 			case CHOOSE_COMBATTARGET:
-				if (p != null) {
-					ArrayList<Player> others = p.getLocation().getOccupants();
-					if (others != null) {
-						CharacterName[] targets = new CharacterName[others.size()];
-						for (int i = 0; i < others.size(); i++){
-							if (others.get(i) != null)
-								targets[i] = others.get(i).getCharacter().getName();
-						}
-
-						target.setModel(new DefaultComboBoxModel(targets));
-					}
+				if (p != null){
+					targetPanel.update(p);
 				}
 				makePanelVisible(targetPanel);
 				break;
@@ -427,13 +401,8 @@ public class View extends JFrame {
 	}
 	
 	public void makePanelVisible(JPanel newPanel){
-		newPanel.setVisible(true);
-		if(newPanel != alertPanel)
-			alertPanel.setVisible(false);
 		if(newPanel != combatPanel)
 			combatPanel.setVisible(false);
-		if(newPanel != movesPanel)
-			movesPanel.setVisible(false);
 		if(newPanel != playsPanel)
 			playsPanel.setVisible(false);
 		if(newPanel != targetPanel)
