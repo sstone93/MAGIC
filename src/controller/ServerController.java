@@ -173,7 +173,16 @@ public class ServerController extends Handler{
 	 * @param player being hidden
 	 */
 	public void hide(Player player) { // assume it always works
-        player.setHidden(true);
+		int roll = Utility.roll(6);
+		network.broadCast(player.getCharacter().getName() + " rolled " + roll + " for hide");
+		
+		if (roll != 6) {
+			player.setHidden(true);
+			network.broadCast( player.getCharacter().getName() + " is hidden!");
+		}
+		else {
+			network.broadCast("Hide had no effect on " + player.getCharacter().getName());
+		}
     }
 
 	/**
@@ -316,29 +325,30 @@ public class ServerController extends Handler{
 
     				ArrayList<Player> canBlock = blockable(player);					// check if they can block another player
 
-    				if (currentDay != 1) {
-    					for (int j = 0; j < canBlock.size(); j++) {
-    						if (canBlock.get(j) != null) {
-    							canBlock.get(j).setBlocked(true);
-    							System.out.println("blocking player!"); // TODO: for testing
-    							network.send(canBlock.get(j).getID(), "You've been blocked! :( " );
-    						}
-    					}
-    				}
+    	    		if (currentDay != 1) {
+    		    		for (int j = 0; j < canBlock.size(); j++) {
+    		    			if (canBlock.get(j) != null) {
+    		    				canBlock.get(j).setBlocked(true);
+    		    				System.out.println("blocking player!"); // TODO: for testing
+    		    				network.send(canBlock.get(j).getID(), "You've been blocked! :( " );
+    		    			}
+    		    		}
+    	    		}
 
-    				switch((Actions) activities.get(moves)) {
+		    		switch((Actions) activities.get(moves)) {
 
-    				case MOVE: 
-    					boolean move = board.move(moves, player, (Clearing)activities.get(moves+1)); moves = moves + 2; 
-    					network.broadCast(player.getCharacter().getName() + " is moving? : " + move);
-    					break;
-    				case HIDE: hide(player); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is hiding!"); break;
-    				case ALERT: alert(player); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is alerting their weapon!"); break;
-    				case REST: rest(player); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is resting!"); break;
-    				case SEARCH: search(player); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is searching!"); break;
-    				case TRADE: moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is trading!"); break;
-    				case FOLLOW: moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is following!"); break;
-    				}
+		    		case MOVE: 
+		    			boolean move = board.move(moves, player, (Clearing)activities.get(moves+1)); moves = moves + 2; 
+		    			network.broadCast(player.getCharacter().getName() + " is moving? : " + move);
+		    			break;
+		    		case HIDE: hide(player); moves = moves + 2; break;
+		    		case ALERT: alert(player); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is alerting their weapon!"); break;
+		    		case REST: rest(player); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is resting!"); break;
+		    		case SEARCH: search(player); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is searching!"); break;
+		    		case TRADE: moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is trading!"); break;
+		    		case FOLLOW: moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is following!"); break;
+		    		}
+
     			}
     		}
     		else if (activities.get(moves) == Utility.Actions.HIDE) {
