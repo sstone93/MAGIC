@@ -533,7 +533,7 @@ public class ServerController extends Handler{
 
     	System.out.println("got combat moves");
     	state = GameState.NULL;
-
+    	
     	if (attacker.isDead() == true) {
     		network.send(attacker.getID(), "You are dead.");
     		return;
@@ -546,11 +546,32 @@ public class ServerController extends Handler{
     		doFight(attacker, defender);
     	}
 	}
-
+    
 	//TODO Finding active weapon rather than assuming the active weapon is at position 0
 	public void doFight(Player attacker, Player defender) {
 		if (defender.getWeapons().get(0).getSpeed() < attacker.getWeapons().get(0).getSpeed()) {
-			if ((defender.getWeapons().get(0).getSpeed() - attacker.getMoves().attackFatigue) <= (attacker.getCharacter().getSpeed() - defender.getMoves().maneuverFatigue)) {
+			checkHit(attacker, defender);
+		}
+		else if (defender.getWeapons().get(0).getSpeed() > attacker.getWeapons().get(0).getSpeed()) {
+			checkHit(defender, attacker);
+		}
+
+		else {
+			if (defender.getWeapons().get(0).getLength() < attacker.getWeapons().get(0).getLength()) {
+				checkHit(attacker, defender);
+			}
+			else if (defender.getWeapons().get(0).getLength() > attacker.getWeapons().get(0).getLength()) {
+				checkHit(defender, attacker);
+			}
+			else {
+				checkHit(attacker, defender);
+			}
+		}
+	}
+
+	public void checkHit(Player attacker, Player defender) {
+		if (attacker.isDead() == false && defender.isDead() == false) {
+	    	if ((defender.getWeapons().get(0).getSpeed() - attacker.getMoves().attackFatigue) <= (attacker.getCharacter().getSpeed() - defender.getMoves().maneuverFatigue)) {
 				hit(attacker, defender);
 			}
 			else if (attacker.getMoves().getAttack() == Attacks.THRUST && defender.getMoves().getManeuver() == Maneuvers.CHARGE) {
@@ -562,23 +583,8 @@ public class ServerController extends Handler{
 			else if (attacker.getMoves().getAttack() == Attacks.SMASH && defender.getMoves().getManeuver() == Maneuvers.DUCK) {
 				hit(attacker, defender);
 			}
-
-			if (defender.isDead() == false) {
-				if ((attacker.getWeapons().get(0).getSpeed() - defender.getMoves().attackFatigue) <= (defender.getCharacter().getSpeed() - attacker.getMoves().maneuverFatigue)) {
-					hit(defender, attacker);
-				}
-				else if (defender.getMoves().getAttack() == Attacks.THRUST && attacker.getMoves().getManeuver() == Maneuvers.CHARGE) {
-					hit(defender, attacker);
-				}
-				else if (defender.getMoves().getAttack() == Attacks.SWING && attacker.getMoves().getManeuver() == Maneuvers.DODGE) {
-					hit(defender, attacker);
-				}
-				else if (defender.getMoves().getAttack() == Attacks.SMASH && attacker.getMoves().getManeuver() == Maneuvers.DUCK) {
-					hit(defender, attacker);
-				}
-			}
 		}
-		else if (defender.getWeapons().get(0).getSpeed() > attacker.getWeapons().get(0).getSpeed()) {
+		if (defender.isDead() == false && attacker.isDead() == false) {
 			if ((attacker.getWeapons().get(0).getSpeed() - defender.getMoves().attackFatigue) <= (defender.getCharacter().getSpeed() - attacker.getMoves().maneuverFatigue)) {
 				hit(defender, attacker);
 			}
@@ -591,114 +597,9 @@ public class ServerController extends Handler{
 			else if (defender.getMoves().getAttack() == Attacks.SMASH && attacker.getMoves().getManeuver() == Maneuvers.DUCK) {
 				hit(defender, attacker);
 			}
-
-			if (defender.isDead() == false) {
-				if ((defender.getWeapons().get(0).getSpeed() - attacker.getMoves().attackFatigue) <= (attacker.getCharacter().getSpeed() - defender.getMoves().maneuverFatigue)) {
-					hit(attacker, defender);
-				}
-				else if (attacker.getMoves().getAttack() == Attacks.THRUST && defender.getMoves().getManeuver() == Maneuvers.CHARGE) {
-					hit(attacker, defender);
-				}
-				else if (attacker.getMoves().getAttack() == Attacks.SWING && defender.getMoves().getManeuver() == Maneuvers.DODGE) {
-					hit(attacker, defender);
-				}
-				else if (attacker.getMoves().getAttack() == Attacks.SMASH && defender.getMoves().getManeuver() == Maneuvers.DUCK) {
-					hit(attacker, defender);
-				}
-			}
 		}
-
-		else {
-			if (defender.getWeapons().get(0).getLength() < attacker.getWeapons().get(0).getLength()) {
-				if ((defender.getWeapons().get(0).getSpeed() - attacker.getMoves().attackFatigue) <= (attacker.getCharacter().getSpeed() - defender.getMoves().maneuverFatigue)) {
-					hit(attacker, defender);
-				}
-				else if (attacker.getMoves().getAttack() == Attacks.THRUST && defender.getMoves().getManeuver() == Maneuvers.CHARGE) {
-					hit(attacker, defender);
-				}
-				else if (attacker.getMoves().getAttack() == Attacks.SWING && defender.getMoves().getManeuver() == Maneuvers.DODGE) {
-					hit(attacker, defender);
-				}
-				else if (attacker.getMoves().getAttack() == Attacks.SMASH && defender.getMoves().getManeuver() == Maneuvers.DUCK) {
-					hit(attacker, defender);
-				}
-
-				if (defender.isDead() == false) {
-					if ((attacker.getWeapons().get(0).getSpeed() - defender.getMoves().attackFatigue) <= (defender.getCharacter().getSpeed() - attacker.getMoves().maneuverFatigue)) {
-						hit(defender, attacker);
-					}
-					else if (defender.getMoves().getAttack() == Attacks.THRUST && attacker.getMoves().getManeuver() == Maneuvers.CHARGE) {
-						hit(defender, attacker);
-					}
-					else if (defender.getMoves().getAttack() == Attacks.SWING && attacker.getMoves().getManeuver() == Maneuvers.DODGE) {
-						hit(defender, attacker);
-					}
-					else if (defender.getMoves().getAttack() == Attacks.SMASH && attacker.getMoves().getManeuver() == Maneuvers.DUCK) {
-						hit(defender, attacker);
-					}
-				}
-			}
-			else if (defender.getWeapons().get(0).getLength() > attacker.getWeapons().get(0).getLength()) {
-				if ((attacker.getWeapons().get(0).getSpeed() - defender.getMoves().attackFatigue) <= (defender.getCharacter().getSpeed() - attacker.getMoves().maneuverFatigue)) {
-					hit(defender, attacker);
-				}
-				else if (defender.getMoves().getAttack() == Attacks.THRUST && attacker.getMoves().getManeuver() == Maneuvers.CHARGE) {
-					hit(defender, attacker);
-				}
-				else if (defender.getMoves().getAttack() == Attacks.SWING && attacker.getMoves().getManeuver() == Maneuvers.DODGE) {
-					hit(defender, attacker);
-				}
-				else if (defender.getMoves().getAttack() == Attacks.SMASH && attacker.getMoves().getManeuver() == Maneuvers.DUCK) {
-					hit(defender, attacker);
-				}
-
-				if (defender.isDead() == false) {
-					if ((defender.getWeapons().get(0).getSpeed() - attacker.getMoves().attackFatigue) <= (attacker.getCharacter().getSpeed() - defender.getMoves().maneuverFatigue)) {
-						hit(attacker, defender);
-					}
-					else if (attacker.getMoves().getAttack() == Attacks.THRUST && defender.getMoves().getManeuver() == Maneuvers.CHARGE) {
-						hit(attacker, defender);
-					}
-					else if (attacker.getMoves().getAttack() == Attacks.SWING && defender.getMoves().getManeuver() == Maneuvers.DODGE) {
-						hit(attacker, defender);
-					}
-					else if (attacker.getMoves().getAttack() == Attacks.SMASH && defender.getMoves().getManeuver() == Maneuvers.DUCK) {
-						hit(attacker, defender);
-					}
-				}
-			}
-			else {
-				if ((defender.getWeapons().get(0).getSpeed() - attacker.getMoves().attackFatigue) <= (attacker.getCharacter().getSpeed() - defender.getMoves().maneuverFatigue)) {
-					hit(attacker, defender);
-				}
-				else if (attacker.getMoves().getAttack() == Attacks.THRUST && defender.getMoves().getManeuver() == Maneuvers.CHARGE) {
-					hit(attacker, defender);
-				}
-				else if (attacker.getMoves().getAttack() == Attacks.SWING && defender.getMoves().getManeuver() == Maneuvers.DODGE) {
-					hit(attacker, defender);
-				}
-				else if (attacker.getMoves().getAttack() == Attacks.SMASH && defender.getMoves().getManeuver() == Maneuvers.DUCK) {
-					hit(attacker, defender);
-				}
-
-				if (defender.isDead() == false) {
-					if ((attacker.getWeapons().get(0).getSpeed() - defender.getMoves().attackFatigue) <= (defender.getCharacter().getSpeed() - attacker.getMoves().maneuverFatigue)) {
-						hit(defender, attacker);
-					}
-					else if (defender.getMoves().getAttack() == Attacks.THRUST && attacker.getMoves().getManeuver() == Maneuvers.CHARGE) {
-						hit(defender, attacker);
-					}
-					else if (defender.getMoves().getAttack() == Attacks.SWING && attacker.getMoves().getManeuver() == Maneuvers.DODGE) {
-						hit(defender, attacker);
-					}
-					else if (defender.getMoves().getAttack() == Attacks.SMASH && attacker.getMoves().getManeuver() == Maneuvers.DUCK) {
-						hit(defender, attacker);
-					}
-				}
-			}
-		}
-	}
-
+    }
+	
 	public void hit(Player attacker, Player defender) {
 		ItemWeight level = attacker.getWeapons().get(0).getWeight();
 
