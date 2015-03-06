@@ -12,13 +12,18 @@ public class Clearing implements Serializable{
     public int location;		 		// indicating which clearing on the tile this is CHANGED BACK TO AN INT
     public Tile parent;
     ClearingType type;
+    public int xOffset;
+    public int yOffset;
     ArrayList<Path> connections = new ArrayList<Path>();
     ArrayList<Treasure> treasures = new ArrayList<Treasure>();
     ArrayList<Player> occupants = new ArrayList<Player>();
     
-    Clearing(int location, Tile parent, ClearingType t) {
+    Clearing(int location, Tile parent, ClearingType t, int x, int y) {
         this.location = location;
         this.parent   = parent;
+        this.type = t;
+        this.xOffset = x;
+        this.yOffset = y;
     }
 
     public ArrayList<Path> getConnections(){
