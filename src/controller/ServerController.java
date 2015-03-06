@@ -63,7 +63,7 @@ public class ServerController extends Handler{
 	}
 
 	/**
-	 * This is the method that handles incomming messages from the networking components
+	 * This is the method that handles incoming messages from the networking components
 	 * @param ID The ID of the client sending the message
 	 * @param message the contents of the message
 	 */
@@ -95,7 +95,7 @@ public class ServerController extends Handler{
 				if(state == GameState.CHOOSE_COMBATTARGET){
 					recievedCombat += 1;
 
-					//turns the recieved charctername into a player
+					//turns the received character name into a player
 					findPlayer(ID).setTarget(charToPlayer((CharacterName) m.getData().get(0)));
 				}else{
 					network.send(ID, "NOT ACCEPTING COMBAT TARGETS ATM");
@@ -147,7 +147,7 @@ public class ServerController extends Handler{
 	/**
 	 * Turns a player ID into a player
 	 * @param ID of the player you are looking for
-	 * @return the player you are looknig for
+	 * @return the player you are looking for
 	 */
 	public Player findPlayer(int ID){
 		for(int i=0;i<playerCount;i++){
@@ -343,7 +343,6 @@ public class ServerController extends Handler{
         Player player = null;
 
         // TODO: treasures
-        // TODO: Actually determine score based on individual victory points? or is it different for a day 28 time out?
         for (int i = 0; i < playerCount; i++ ) {
             player = players.get(i);
             if (winner == null)
@@ -380,7 +379,7 @@ public class ServerController extends Handler{
     		try {
 				Thread.sleep(20);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				// Auto-generated catch block
 				e.printStackTrace();
 			}
     	}	//TODO HANDLE PLAYERS DROPPING OUT DURING THIS STEP
@@ -396,7 +395,7 @@ public class ServerController extends Handler{
     		try {
 				Thread.sleep(20);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				// Auto-generated catch block
 				e.printStackTrace();
 			}
     	}	//TODO HANDLE PLAYERS DROPPING OUT DURING THIS STEP
@@ -440,7 +439,7 @@ public class ServerController extends Handler{
         }
 
         updateClients();
-        collectCombat(); //2 players, 1 attacker 1 deffender
+        collectCombat(); //2 players, 1 attacker 1 defender
 
         //All players choose attackers
         nextMover = 0;
@@ -466,7 +465,7 @@ public class ServerController extends Handler{
     }
 
     /**
-     * Randomly orders the players //TODO AFTER ARRAYLIST CONVERSION, JUST .SHUFFLE
+     * Randomly orders the players 
      */
     public void orderPlayers(){
     	
@@ -504,7 +503,7 @@ public class ServerController extends Handler{
      * @param defender
      */
     public void encounter(Player attacker, Player defender) {
-    	//TODO Weapons active, networking
+    	//TODO Weapons active
 		// Check if weapon is active
 		/*if (player.weapons[0].isActive() == false) {
 			player.weapons[0].setActive(true);
@@ -512,6 +511,10 @@ public class ServerController extends Handler{
 		}*/
 
     	if (attacker == defender) {
+    		network.send(attacker.getID(), "Stop attacking yourself!");
+    		return;
+    	}
+    	else if (attacker.getID() == defender.getID()) {
     		network.send(attacker.getID(), "Stop attacking yourself!");
     		return;
     	}
@@ -526,7 +529,7 @@ public class ServerController extends Handler{
     		try {
 				Thread.sleep(20);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				// Auto-generated catch block
 				e.printStackTrace();
 			}
     	}
@@ -714,7 +717,7 @@ public class ServerController extends Handler{
 	}
 
 	/**
-	 * calld via a "START GAME" message in order to setup the board and start the game.
+	 * called via a "START GAME" message in order to setup the board and start the game.
 	 */
 	public void startGame(){
 
@@ -728,12 +731,12 @@ public class ServerController extends Handler{
     		try {
 				Thread.sleep(20);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				// Auto-generated catch block
 				e.printStackTrace();
 			}
     	}
 
-    	//cant get past here until the list of players is done
+    	//can't get past here until the list of players is done
     	System.out.println("end selection loop");
     	state = GameState.NULL;
 
