@@ -516,6 +516,15 @@ public class ServerController extends Handler{
     		return;
     	}
 
+    	if (attacker.isDead() == true) {
+    		network.send(attacker.getID(), "You are dead.");
+    		return;
+    	}
+    	else if (defender.isDead() == true) {
+    		network.send(defender.getID(), "You are dead.");
+    		return;
+    	}
+    	
     	//System.out.println(attacker.getTarget().getCharacter().getName());
     	//System.out.println(defender.getTarget().getCharacter().getName());
     	
@@ -537,15 +546,8 @@ public class ServerController extends Handler{
     	System.out.println("got combat moves");
     	state = GameState.NULL;
     	
-    	if (attacker.isDead() == true) {
-    		network.send(attacker.getID(), "You are dead.");
-    		return;
-    	}
-    	else if (defender.isDead() == true) {
-    		network.send(defender.getID(), "You are dead.");
-    		return;
-    	}
-    	else if (attacker.getMoves() == null) {
+    	
+    	if (attacker.getMoves() == null) {
     		network.send(attacker.getID(), "It messed up...");
     		return;
     	}
