@@ -788,6 +788,7 @@ public class ServerController extends Handler{
 			}
 		}
 	}
+	
 	public void deadPlayer(Player attacker, Player defender) {
 		attacker.addFame(10); // Arbitrary value
 		attacker.addGold(defender.getGold());
@@ -799,16 +800,16 @@ public class ServerController extends Handler{
 		network.broadCast(defender.getCharacter().getName() + " has been killed!");
 	}
 
+	/**
+	 * Sends each client their corresponding player object
+	 */
 	public void distributeCharacters(){
-
-		//sends each player object to the right client
 		for(int i=0;i<playerCount;i++){
-			Player t = players.get(i).clone();
-			network.send(players.get(i).getID(), t);
-			players.remove(i);
+			Player t = players.get(0).clone();
+			network.send(players.get(0).getID(), t);
+			players.remove(0);
 			players.add(t);
 		}
-
 	}
 
 	/**
@@ -839,9 +840,7 @@ public class ServerController extends Handler{
 		this.board = new Board(players);
 		System.out.println("Server Models Created.");
 
-		network.broadCast(board);  				//sends the board to all clients
-		// System.out.println(board);
-		distributeCharacters();					//broadcast each player to the proper client
+		//starts the game (first thing called distributes characters and board
 		startDay();								//starts the game!
 
 	}

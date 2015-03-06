@@ -26,6 +26,7 @@ public class Message implements Serializable{
 	
 	public String toString()
 	{
-		return this.type + " Message: " + this.data;
+		//return this.type + " Message: " + this.data;
+		return this.type+"";
 	}
 }

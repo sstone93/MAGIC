@@ -34,6 +34,7 @@ public class View extends JFrame {
 	private JLayeredPane boardPanel;
 	private JScrollPane scrollPanel;
 	private JTextArea textDisplay;
+	private JPanel	blankPanel;
 
 	private HashMap<Tile, JPanel> iconPanels = new HashMap<Tile, JPanel>();
 	private JLabel [] tileLbls;
@@ -95,6 +96,17 @@ public class View extends JFrame {
 		boardPanel.setPreferredSize(new Dimension(800, 1018));
 		scrollPanel.setViewportView(boardPanel);
 		boardPanel.setLayout(null);
+		
+		//adds the blank no actions panel
+		blankPanel = new JPanel();
+		blankPanel.setBounds(750, 500, 524, 192);
+		blankPanel.setBorder(new LineBorder(Color.GRAY));
+		blankPanel.setLayout(null);
+		JLabel lblNewLabel_1 = new JLabel("Waiting on Server or other Players");
+		lblNewLabel_1.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
+		lblNewLabel_1.setBounds(10, 11, 275, 18);
+		blankPanel.add(lblNewLabel_1);
+		contentPane.add(blankPanel);
 		
 		//creates the character select panel and all its buttons
 		characterSelectPanel = new CharacterSelectPanel(control);
@@ -196,6 +208,10 @@ public class View extends JFrame {
 		this.boardMade = true;
 	}
 	
+	public void updateMessageBox(){
+		textDisplay.setText(control.model.getMessages());
+	}
+	
 	@SuppressWarnings({"rawtypes"})
 	public void update(){
 		final Board b = control.model.getBoard();
@@ -208,6 +224,11 @@ public class View extends JFrame {
 			
 			Iterator it = iconPanels.entrySet().iterator();
 
+			//TODO 
+			//TODO Concurrent thread access, is the View thread and the Client control thread both calling update at the same time? possible.
+			//TODO CONTROL THIS!!!!
+			//TODO
+			
 			while (it.hasNext()) {
 				JPanel panel = (JPanel)((HashMap.Entry)it.next()).getValue();
 				if(panel != null){
@@ -226,26 +247,27 @@ public class View extends JFrame {
 			charLbls = new JLabel[control.model.getNumPlayers()];
 			
 			BufferedImage pic;
+			
+			//1. Iterates through every single tile in the board (always 20 TBH), (tile i)
 			for (int i = 0; i < b.tiles.size(); i++){
 				try {
 					ArrayList<Clearing> clearings = b.tiles.get(i).getClearings();
-					if (clearings != null) {
+					if (clearings != null) {//should never be null
 						int chars = 0;
+						//2. Gets all clearings on a given tile, then cycles through all of them, (clearing j)
 						for(int j = 0; j < clearings.size(); j++){
 							ArrayList<Player> occupants = clearings.get(j).getOccupants();
-							
-							//TODO WHY IS THIS RUNNING 6 TIMES PER CHARACTER?
-							
 							if(occupants != null){
+								//3. Gets all Occupants of a clearing, and cycles through them. (occupant k)
 								for(int k = 0; k < occupants.size(); k++){
 									if (occupants.get(k) != null){
+										
 										CharacterName character = occupants.get(k).getCharacter().getName();
-										System.out.println("adding Character " + character.toString() + " to " + b.tiles.get(i).getName().toString());
+										System.out.println("	adding Character " + character.toString() + " to " + b.tiles.get(i).getName().toString());
 										pic = ImageIO.read(this.getClass().getResource(Utility.getCharacterImage(character)));
 										charLbls[chars] = new JLabel(new ImageIcon(pic));
 										charLbls[chars].setBounds(b.tiles.get(i).getX() - 25, b.tiles.get(i).getY() - 25, 50, 50);
 										boardPanel.add(charLbls[chars], new Integer(5), 0);
-										//c.repaint();
 										
 										if (!iconPanels.containsKey(b.tiles.get(i))){
 											JPanel newPane = new JPanel();
@@ -255,6 +277,7 @@ public class View extends JFrame {
 											boardPanel.add(newPane, new Integer(10), 0);
 											iconPanels.put(b.tiles.get(i), newPane);
 										}
+										
 										JPanel panel = new JPanel();
 										panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 										panel.setSize(65, 75);
@@ -341,72 +364,82 @@ public class View extends JFrame {
 		if (p != null){
 			characterInfoPanel.update(p);
 		}
-		
+		updateNonBoardGUI(p);
+	}
+	
+	public void updateNonBoardGUI(Player p){
+
 		//UPDATES THE TEXTBOX
 		textDisplay.setText(control.model.getMessages());
-		
+
 		//UPDATES THE INPUT PANEL BASED ON IT'S TYPE
 		switch(control.state){
-			case CHOOSE_CHARACTER:
-				scrollPanel.setViewportView(characterSelectPanel);
-				break;
-			case CHOOSE_PLAYS:
-				playsPanel.update();
-				makePanelVisible(playsPanel);
-				break;
+		case CHOOSE_CHARACTER:
+			makePanelVisible(blankPanel);
+			scrollPanel.setViewportView(characterSelectPanel);//this must be called AFTER makePanelVisible
+			break;
+		case CHOOSE_PLAYS:
+			playsPanel.update();
+			makePanelVisible(playsPanel);
+			break;
 			/*case MOVE:
-				for(Enumeration<AbstractButton> buttons = movesGroup.getElements(); buttons.hasMoreElements();){
-					AbstractButton button = buttons.nextElement();
-					movesGroup.remove(button);
-					movesPanel.remove(button);
-				}
-				
-				ArrayList<Path> connections = this.control.model.getPlayer().getLocation().getConnections();
-				
-				for(int i = 0; i < connections.size(); i++){
-					String label = this.control.model.getPlayer().getLocation().parent.getName().toString() + " clearing " + connections.get(i).getDestination(this.control.model.getPlayer().getLocation()).getClearingNumber();
-					JRadioButton button = new JRadioButton(label);
-					movesGroup.add(button);
-					movesPanel.add(button, movesPanel.getComponents().length - 2);
-				}
-				makePanelVisible(movesPanel);
-				break;
-			case ALERT:
-				for(Enumeration<AbstractButton> buttons = alertGroup.getElements(); buttons.hasMoreElements();){
-					AbstractButton button = buttons.nextElement();
-					alertGroup.remove(button);
-					alertPanel.remove(button);
-				}
-				ArrayList<Weapon> weapons = this.control.model.getPlayer().getWeapons();
-				for(int i = 0; i < weapons.size(); i++){
-					String label = weapons.get(i).getType().toString() + " " + weapons.get(i).isActive();
-					JRadioButton button = new JRadioButton(label);
-					alertGroup.add(button);
-					alertPanel.add(button, alertPanel.getComponents().length - 2);
-				}
-				makePanelVisible(movesPanel);
-				break;*/
-			case CHOOSE_COMBATMOVES:
-				makePanelVisible(combatPanel);
-				break;
-			case CHOOSE_COMBATTARGET:
-				if (p != null){
-					targetPanel.update(p);
-				}
-				makePanelVisible(targetPanel);
-				break;
+						for(Enumeration<AbstractButton> buttons = movesGroup.getElements(); buttons.hasMoreElements();){
+							AbstractButton button = buttons.nextElement();
+							movesGroup.remove(button);
+							movesPanel.remove(button);
+						}
+
+						ArrayList<Path> connections = this.control.model.getPlayer().getLocation().getConnections();
+
+						for(int i = 0; i < connections.size(); i++){
+							String label = this.control.model.getPlayer().getLocation().parent.getName().toString() + " clearing " + connections.get(i).getDestination(this.control.model.getPlayer().getLocation()).getClearingNumber();
+							JRadioButton button = new JRadioButton(label);
+							movesGroup.add(button);
+							movesPanel.add(button, movesPanel.getComponents().length - 2);
+						}
+						makePanelVisible(movesPanel);
+						break;
+					case ALERT:
+						for(Enumeration<AbstractButton> buttons = alertGroup.getElements(); buttons.hasMoreElements();){
+							AbstractButton button = buttons.nextElement();
+							alertGroup.remove(button);
+							alertPanel.remove(button);
+						}
+						ArrayList<Weapon> weapons = this.control.model.getPlayer().getWeapons();
+						for(int i = 0; i < weapons.size(); i++){
+							String label = weapons.get(i).getType().toString() + " " + weapons.get(i).isActive();
+							JRadioButton button = new JRadioButton(label);
+							alertGroup.add(button);
+							alertPanel.add(button, alertPanel.getComponents().length - 2);
+						}
+						makePanelVisible(movesPanel);
+						break;*/
+		case CHOOSE_COMBATMOVES:
+			makePanelVisible(combatPanel);
+			break;
+		case CHOOSE_COMBATTARGET:
+			if (p != null){
+				targetPanel.update(p);
+			}
+			makePanelVisible(targetPanel);
+			break;
+		case NULL:
+			makePanelVisible(blankPanel);
 		default:
 			break;
 		}
 	}
 	
 	public void makePanelVisible(JPanel newPanel){
+		newPanel.setVisible(true);
 		if(newPanel != combatPanel)
 			combatPanel.setVisible(false);
 		if(newPanel != playsPanel)
 			playsPanel.setVisible(false);
 		if(newPanel != targetPanel)
 			targetPanel.setVisible(false);
+		if(newPanel != blankPanel)
+			blankPanel.setVisible(false);
 		scrollPanel.setViewportView(boardPanel);
 	}
 }

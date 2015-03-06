@@ -26,7 +26,6 @@ public class TargetPanel extends JPanel{
 		
 		ClientController control = c;
 		
-		setVisible(false);
 		setBounds(750, 500, 524, 192);
 		setLayout(null);
 		setBorder(new LineBorder(Color.GRAY));

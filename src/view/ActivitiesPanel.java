@@ -24,6 +24,7 @@ public class ActivitiesPanel extends JPanel{
 	private JComboBox play3Location;
 	private JComboBox play4Location;
 	private ClientController control;
+	public boolean state = false;
 	
 	public ActivitiesPanel(ClientController c){
 		
@@ -123,23 +124,26 @@ public class ActivitiesPanel extends JPanel{
 		btnRecord.setBounds(220, 145, 89, 23);
 		add(btnRecord);
 	}
-	
-	public void update(){
-		//TODO MOVE THIS INTO ACTIVITIES, DOESN NEED THE VIEW
-				String[] clearings = new String[95];//had to hardcode the number for this interation
-				Board b = control.model.getBoard();
 
-				int count = 0;
-				for (int i = 0; i <b.tiles.size(); i++){
-					for (int j=0; j < b.tiles.get(i).getClearings().size(); j++){
-						clearings[count] = (b.tiles.get(i).getName().toString() + " " + b.tiles.get(i).getClearings().get(j).getClearingNumber());
-						count++;
-					}
-				}
-				
-				play1Location.setModel(new DefaultComboBoxModel(clearings));
-				play2Location.setModel(new DefaultComboBoxModel(clearings));
-				play3Location.setModel(new DefaultComboBoxModel(clearings));
-				play4Location.setModel(new DefaultComboBoxModel(clearings));
+	public void update(){
+	
+		String[] clearings = new String[95];//had to hardcode the number for this interation
+		Board b = control.model.getBoard();
+
+		int count = 0;
+		for (int i = 0; i <b.tiles.size(); i++){
+			for (int j=0; j < b.tiles.get(i).getClearings().size(); j++){
+				clearings[count] = (b.tiles.get(i).getName().toString() + " " + b.tiles.get(i).getClearings().get(j).getClearingNumber());
+				count++;
+			}
+		}
+
+		play1Location.setModel(new DefaultComboBoxModel(clearings));
+		play2Location.setModel(new DefaultComboBoxModel(clearings));
+		play3Location.setModel(new DefaultComboBoxModel(clearings));
+		play4Location.setModel(new DefaultComboBoxModel(clearings));
+		
+		state = true;
+		
 	}
 }

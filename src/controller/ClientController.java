@@ -23,7 +23,7 @@ public class ClientController extends Handler{
 	public View view;
 	public ClientModel model;
 	public NetworkClient network;
-	public GameState state;
+	public GameState state = GameState.NULL;
 	/**
 	 * Constructor for a ClientController
 	 */
@@ -37,79 +37,62 @@ public class ClientController extends Handler{
 		this.model = new ClientModel();
 		System.out.println("Client Model Successfully Created.");
 		
-		state = GameState.CHOOSE_CHARACTER;
 		//instantiate the view
 		this.view = new View(this);
+		state = GameState.CHOOSE_CHARACTER;
 		view.setVisible(true);									//Activates the GUI
+		
 		System.out.println("View Successfully Created.");
 		view.update();
-		
 	}
 	
 	/**
 	 * (If actually needed, this will actually start up the client, bring it to life.
 	 */
-	private void run(){
-		//statup the view (all information/errors now displayed there)
-		//start the network up
-		//populate the model as needed
-	}
+	private void run(){}
 	
 	/**
 	 * 
 	 */
 	public void handle(int ID, Object message){
-		
-		if(message == null){
-			
-		}
+
+		boolean needsUpdate = true;
 		
 		if(message instanceof String){
 			String text = ((String) message );
 			if(text.equalsIgnoreCase("NC CLOSED")){
-				model.addMessage("Network Client Has Closed");
-			
-				//TODO SHUT THE CLIENT DOWN!!!!
-				
-				
-				//System.out.println("Your NetworkClient has CLOSED.");
-			}
-			if(text.equalsIgnoreCase("SEND MOVES")){
+				model.addMessage("Network Client Has Closed");	//the client seems to be able to figure that out for itself.
+				//TODO remove this message being sent or recieved on cliet and server
+			}else if(text.equalsIgnoreCase("SEND MOVES")){
 				state = GameState.CHOOSE_PLAYS;
 				model.addMessage("Please Select Your Moves");
-				//System.out.println("Your NetworkClient has CLOSED.");
-			}
-			if(text.equalsIgnoreCase("SEND COMBAT")){
+			}else if(text.equalsIgnoreCase("SEND COMBAT")){
 				state = GameState.CHOOSE_COMBATTARGET;
 				model.addMessage("Please Select Combat TARGET");
-				//System.out.println("Your NetworkClient has CLOSED.");
-			}
-			if(text.equalsIgnoreCase("SEND COMBATMOVES")){
+			}else if(text.equalsIgnoreCase("SEND COMBATMOVES")){
 				state = GameState.CHOOSE_COMBATMOVES;
 				model.addMessage("Please Select Combat Actions");
-				//System.out.println("Your NetworkClient has CLOSED.");
-			}
-			if(text.equalsIgnoreCase("CHARACTER SELECT")){
+			}else if(text.equalsIgnoreCase("CHARACTER SELECT")){
 				state = GameState.CHOOSE_CHARACTER;
 				model.addMessage("START CHARACTER SELECT");
-				//System.out.println("Your NetworkClient has CLOSED.");
+			}else if(text.equalsIgnoreCase("NOT ACCEPTING CHARACTER SELECT ATM")){
+				state = GameState.CHOOSE_CHARACTER;
+				model.addMessage("RE-START CHARACTER SELECT");
 			}else{
 				model.addMessage((String) message);
+				needsUpdate = false; //needs to NOT trigger the update
 			}
-		}
-		if(message instanceof Board){
+		}else if(message instanceof Board){
 			model.setBoard((Board) message);
 			model.addMessage("New Board Recieved");
-		}
-		if(message instanceof Player){
+		}else if(message instanceof Player){
 			model.setPlayer((Player) message);
 			model.addMessage("New Player Recieved");
 		}
 		
-		if(view != null){
-			view.update();
+		if(view != null && needsUpdate){
+			view.update();//is this needed? all of the above operations will call it?????
 		}
-		
 	}
 	
 	/**
@@ -128,7 +111,6 @@ public class ClientController extends Handler{
 		
 		String[] temp =l1.split(" ");
 		Clearing c1 =  model.getBoard().tiles.get(model.getBoard().convertTileName(TileName.valueOf(temp[0]))).getClearing(Integer.parseInt(temp[1]));
-		System.out.println(c1);
 		temp =l2.split(" ");
 		Clearing c2 =  model.getBoard().tiles.get(model.getBoard().convertTileName(TileName.valueOf(temp[0]))).getClearing(Integer.parseInt(temp[1]));
 		temp =l3.split(" ");
@@ -140,7 +122,8 @@ public class ClientController extends Handler{
 		mes.add(p1);mes.add(c1);mes.add(p2);mes.add(c2);mes.add(p3);mes.add(c3);mes.add(p4);mes.add(c4);
 		network.send(new Message(MessageType.ACTIVITIES, mes));
 		model.addMessage("Sent activities");
-		this.view.update();
+		state = GameState.NULL;
+		view.updateNonBoardGUI(null);//sending null rather than the player object, null checks make this safe
 	}
 
 	/**
@@ -158,7 +141,8 @@ public class ClientController extends Handler{
 		mes.add(temp);
 		network.send(new Message(MessageType.COMBAT_MOVES, mes));
 		model.addMessage("Sent COMBATMOVES");
-		this.view.update();
+		state = GameState.NULL;
+		view.updateNonBoardGUI(null);//sending null rather than the player object, null checks make this safe
 	}
 	
 	/**
@@ -168,25 +152,25 @@ public class ClientController extends Handler{
 	
 	//TODO NEEDS TO BE CHANGED TO A BETTER FORMAT?
 	
-	public void handleMoveSelection(String location){
+	/*public void handleMoveSelection(String location){
 		ArrayList<Object> mes = new ArrayList<Object>();
 		mes.add(location);
 		network.send(new Message(MessageType.ACTIVITIES, mes));
 		model.addMessage("Sent "+location);
 		this.view.update();
-	}
+	}*/
 	
 	/**
 	 * Should parse the weapon and send it to the server
 	 * @param weapon the weapon to alert, in the form "<WeaponName> <active>"
 	 */
-	public void handleAlertSelection(String weapon){
+	/*public void handleAlertSelection(String weapon){
 		ArrayList<Object> mes = new ArrayList<Object>();
 		mes.add(weapon);
 		network.send(new Message(MessageType.ACTIVITIES, mes));
 		model.addMessage("Sent alert");
 		this.view.update();
-	}
+	}*/
 	
 	/**
 	 * Should verify that character is available and then set character
@@ -201,7 +185,8 @@ public class ClientController extends Handler{
 		
 		network.send(new Message(MessageType.CHARACTER_SELECT, mes));
 		model.addMessage("Sent character select");
-		this.view.update();
+		state = GameState.NULL;
+		view.updateNonBoardGUI(null);//sending null rather than the player object, null checks make this safe
 	}
 	
 	/**
@@ -213,7 +198,8 @@ public class ClientController extends Handler{
 		mes.add(name);
 		network.send(new Message(MessageType.COMBAT_TARGET, mes));
 		model.addMessage("Sent target selection");
-		this.view.update();
+		state = GameState.NULL;
+		view.updateNonBoardGUI(null);//sending null rather than the player object, null checks make this safe
 	}
 	
 	/**
