@@ -256,8 +256,6 @@ public class ServerController extends Handler{
      * @param p The player
      */
     public void alert(Player p) {
-    	// TODO: this needs to change to not just the first weapon 
-    	// presumably they will have more then 1 weapon
     	p.getActiveWeapon().setActive(!p.getActiveWeapon().isActive());
     }
 
@@ -313,7 +311,7 @@ public class ServerController extends Handler{
     	
     	while (moves < player.getActivities().size()) {
 
-    		// TODO: for testing
+    		// For testing
     		System.out.println("	moves: " + moves + " activities: " + player.getActivities().size());
 
     		ArrayList<Object> activities = player.getActivities();
@@ -329,7 +327,7 @@ public class ServerController extends Handler{
     		    		for (int j = 0; j < canBlock.size(); j++) {
     		    			if (canBlock.get(j) != null) {
     		    				canBlock.get(j).setBlocked(true);
-    		    				System.out.println("blocking player!"); // TODO: for testing
+    		    				System.out.println("blocking player!"); // For testing
     		    				network.send(canBlock.get(j).getID(), "You've been blocked! :( " );
     		    			}
     		    		}
@@ -571,7 +569,6 @@ public class ServerController extends Handler{
     	}
 	}
     
-	//TODO Finding active weapon rather than assuming the active weapon is at position 0
 	public void doFight(Player attacker, Player defender) {
 		if (defender.getActiveWeapon().getSpeed() < attacker.getActiveWeapon().getSpeed()) {
 			checkHit(attacker, defender);
