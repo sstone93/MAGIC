@@ -67,6 +67,15 @@ public class Player implements Serializable{
         this.weapons = character.startingWeapons;
     }
 
+    public Weapon getActiveWeapon() {
+    	for (int i = 0; i < weapons.size(); i++) {
+    		if (this.weapons.get(i).isActive() == true) {
+    			return this.weapons.get(i);
+    		}
+    	}
+    	return null;
+    }
+    
     public Player getTarget(){
     	return this.target;
     }

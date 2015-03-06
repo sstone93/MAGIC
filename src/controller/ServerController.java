@@ -258,7 +258,7 @@ public class ServerController extends Handler{
     public void alert(Player p) {
     	// TODO: this needs to change to not just the first weapon 
     	// presumably they will have more then 1 weapon
-    	p.getWeapons().get(0).setActive(!p.getWeapons().get(0).isActive());
+    	p.getActiveWeapon().setActive(!p.getActiveWeapon().isActive());
     }
 
     /**
@@ -573,18 +573,18 @@ public class ServerController extends Handler{
     
 	//TODO Finding active weapon rather than assuming the active weapon is at position 0
 	public void doFight(Player attacker, Player defender) {
-		if (defender.getWeapons().get(0).getSpeed() < attacker.getWeapons().get(0).getSpeed()) {
+		if (defender.getActiveWeapon().getSpeed() < attacker.getActiveWeapon().getSpeed()) {
 			checkHit(attacker, defender);
 		}
-		else if (defender.getWeapons().get(0).getSpeed() > attacker.getWeapons().get(0).getSpeed()) {
+		else if (defender.getActiveWeapon().getSpeed() > attacker.getActiveWeapon().getSpeed()) {
 			checkHit(defender, attacker);
 		}
 
 		else {
-			if (defender.getWeapons().get(0).getLength() < attacker.getWeapons().get(0).getLength()) {
+			if (defender.getActiveWeapon().getLength() < attacker.getActiveWeapon().getLength()) {
 				checkHit(attacker, defender);
 			}
-			else if (defender.getWeapons().get(0).getLength() > attacker.getWeapons().get(0).getLength()) {
+			else if (defender.getActiveWeapon().getLength() > attacker.getActiveWeapon().getLength()) {
 				checkHit(defender, attacker);
 			}
 			else {
@@ -595,7 +595,7 @@ public class ServerController extends Handler{
 
 	public void checkHit(Player attacker, Player defender) {
 		if (attacker.isDead() == false && defender.isDead() == false) {
-	    	if ((defender.getWeapons().get(0).getSpeed() - attacker.getMoves().attackFatigue) <= (attacker.getCharacter().getSpeed() - defender.getMoves().maneuverFatigue)) {
+	    	if ((defender.getActiveWeapon().getSpeed() - attacker.getMoves().attackFatigue) <= (attacker.getCharacter().getSpeed() - defender.getMoves().maneuverFatigue)) {
 				hit(attacker, defender);
 			}
 			else if (attacker.getMoves().getAttack() == Attacks.THRUST && defender.getMoves().getManeuver() == Maneuvers.CHARGE) {
@@ -609,7 +609,7 @@ public class ServerController extends Handler{
 			}
 		}
 		if (defender.isDead() == false && attacker.isDead() == false) {
-			if ((attacker.getWeapons().get(0).getSpeed() - defender.getMoves().attackFatigue) <= (defender.getCharacter().getSpeed() - attacker.getMoves().maneuverFatigue)) {
+			if ((attacker.getActiveWeapon().getSpeed() - defender.getMoves().attackFatigue) <= (defender.getCharacter().getSpeed() - attacker.getMoves().maneuverFatigue)) {
 				hit(defender, attacker);
 			}
 			else if (defender.getMoves().getAttack() == Attacks.THRUST && attacker.getMoves().getManeuver() == Maneuvers.CHARGE) {
@@ -625,7 +625,7 @@ public class ServerController extends Handler{
     }
 	
 	public void hit(Player attacker, Player defender) {
-		ItemWeight level = attacker.getWeapons().get(0).getWeight();
+		ItemWeight level = attacker.getActiveWeapon().getWeight();
 
 		network.broadCast(attacker.getCharacter().getName() + " has hit " + defender.getCharacter().getName());
 
