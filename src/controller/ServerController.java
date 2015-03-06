@@ -314,7 +314,10 @@ public class ServerController extends Handler{
 
 		    		switch((Actions) activities.get(moves)) {
 
-		    		case MOVE: board.move(moves, player, (Clearing)activities.get(moves+1)); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is moving!"); break;
+		    		case MOVE: 
+		    			boolean move = board.move(moves, player, (Clearing)activities.get(moves+1)); moves = moves + 2; 
+		    			network.broadCast(player.getCharacter().getName() + " is moving? : " + move);
+		    			break;
 		    		case HIDE: hide(player); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is hiding!"); break;
 		    		case ALERT: alert(player); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is alerting their weapon!"); break;
 		    		case REST: rest(player); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is resting!"); break;
