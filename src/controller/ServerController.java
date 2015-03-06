@@ -346,6 +346,9 @@ public class ServerController extends Handler{
     			hide(player);
     			moves=moves+2;
     		}
+    		else {
+    			moves=moves+2;
+    		}
     	}
     }
 
