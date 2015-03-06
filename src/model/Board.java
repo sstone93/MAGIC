@@ -396,8 +396,9 @@ public class Board implements Serializable{
      * @param newClearing clearing being moved to
      * @return boolean based on if the action was valid or not
      */
-    public void move(int moves, Player player, Clearing newClearing) {
+    public boolean move(int moves, Player player, Clearing newClearing) {
     	
+    	boolean moving = false;
     	//Steps to Move
     	//1. Is your clearing connected to the destination clearing?
     	//2. Are you able to use the path connecting the two clearings?
@@ -420,6 +421,7 @@ public class Board implements Serializable{
     						if(((Clearing) player.getActivities().get(moves-1)).equals(newClearing)){
     							move(player, newClearing);
     							System.out.println(player.getCharacter().getName()+" SUCCEEDED move to "+newClearing.parent.getName().toString()+" "+newClearing.location);
+    							moving = true;
     						}
     					}
     				} 
@@ -431,6 +433,7 @@ public class Board implements Serializable{
     			}else{
     				move(player, newClearing);
 					System.out.println(player.getCharacter().getName()+" SUCCEEDED move to "+newClearing.parent.getName().toString()+" "+newClearing.location);
+					moving = true;
     			}
     		}else{// THIS MEANS THE MOVE FAILED DUE TO NOT KNOWING
     			System.out.println(player.getCharacter().getName()+" failed to move to "+newClearing.parent.getName().toString()+" "+newClearing.location+" (route type error)");
@@ -438,6 +441,8 @@ public class Board implements Serializable{
     	}else{	//THIS MEANS YOU FAILED TO MOVE CLEARINGS DUE TO A LACK OF PATH BETWEEN YOUR LOCATION AND THE DESTINATION
     		System.out.println(player.getCharacter().getName()+" failed to move to "+newClearing.parent.getName().toString()+" "+newClearing.location+" (no path)");
     	}
+    	
+    	return moving;
     }
 	
 	@Override
