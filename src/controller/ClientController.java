@@ -195,6 +195,7 @@ public class ClientController extends Handler{
 		mes.add(name);
 		network.send(new Message(MessageType.COMBAT_TARGET, mes));
 		model.addMessage("Sent target selection");
+		System.out.println(name);
 		state = GameState.NULL;
 		view.updateNonBoardGUI(null);//sending null rather than the player object, null checks make this safe
 	}

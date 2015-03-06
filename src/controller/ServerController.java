@@ -94,7 +94,10 @@ public class ServerController extends Handler{
 			if( m.getType() == MessageType.COMBAT_TARGET){
 				if(state == GameState.CHOOSE_COMBATTARGET){
 					recievedCombat += 1;
-
+					System.out.println("This is the target's name!");
+					System.out.println(charToPlayer((CharacterName) m.getData().get(0)));
+					Player temp = charToPlayer((CharacterName) m.getData().get(0));
+					System.out.println(temp.getCharacter().getName());
 					//turns the received character name into a player
 					findPlayer(ID).setTarget(charToPlayer((CharacterName) m.getData().get(0)));
 				}else{
@@ -105,6 +108,9 @@ public class ServerController extends Handler{
 				if(state == GameState.CHOOSE_COMBATMOVES){
 					recievedCombat += 1;
 					findPlayer(ID).setMoves((CombatMoves) m.getData().get(0));
+					//TODO remove console printout
+					System.out.println(findPlayer(ID).getCharacter().getName());
+					System.out.println(findPlayer(ID).getMoves().getAttack());
 				}else{
 					network.send(ID, "NOT ACCEPTING COMBAT MOVES ATM");
 				}
@@ -509,7 +515,7 @@ public class ServerController extends Handler{
 			player.weapons[0].setActive(true);
 			return;
 		}*/
-
+    	
     	if (attacker == defender) {
     		network.send(attacker.getID(), "Stop attacking yourself!");
     		return;
@@ -519,6 +525,9 @@ public class ServerController extends Handler{
     		return;
     	}
 
+    	//System.out.println(attacker.getTarget().getCharacter().getName());
+    	//System.out.println(defender.getTarget().getCharacter().getName());
+    	
     	//ask clients to send moves!
     	state = GameState.CHOOSE_COMBATMOVES;
     	recievedCombat = 0;
@@ -543,6 +552,14 @@ public class ServerController extends Handler{
     	}
     	else if (defender.isDead() == true) {
     		network.send(defender.getID(), "You are dead.");
+    		return;
+    	}
+    	else if (attacker.getMoves() == null) {
+    		network.send(attacker.getID(), "It messed up...");
+    		return;
+    	}
+    	else if (defender.getMoves() == null) {
+    		network.send(defender.getID(), "It messed up...");
     		return;
     	}
     	else {
