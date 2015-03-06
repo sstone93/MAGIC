@@ -5,9 +5,11 @@ import utils.Utility.*;
 // inherits name, startingLocation, startingWeapon
 public class Dwarf extends Character {
     /**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -5092440245558002595L;
+
+    public static GarrisonName[] possibleStartingLocations = {GarrisonName.INN, GarrisonName.GUARD};
 
 	public Dwarf() { // might want the name to be sent in
         this.name             = CharacterName.DWARF;
