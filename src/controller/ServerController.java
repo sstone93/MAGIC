@@ -314,7 +314,7 @@ public class ServerController extends Handler{
 
 		    		switch((Actions) activities.get(moves)) {
 
-		    		case MOVE: board.move(player, (Clearing)activities.get(moves+1)); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is moving!"); break;
+		    		case MOVE: board.move(moves, player, (Clearing)activities.get(moves+1)); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is moving!"); break;
 		    		case HIDE: hide(player); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is hiding!"); break;
 		    		case ALERT: alert(player); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is alerting their weapon!"); break;
 		    		case REST: rest(player); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is resting!"); break;
@@ -404,6 +404,9 @@ public class ServerController extends Handler{
     	System.out.println("FINISH COLLECTING COMBATTARGET");
     }
 
+    /**
+     * Sends up to date board to clients, along with their proper character
+     */
     public void updateClients(){
     	network.broadCast(board);
     	distributeCharacters();
@@ -449,6 +452,7 @@ public class ServerController extends Handler{
                 if (players.get(i).order == nextMover) {
                 	if (players.get(i).getTarget() != null) {
                 		encounter(players.get(i), players.get(i).getTarget());	
+                		//System.out.println("")
                 	}
                 	nextMover++;
                     break;
@@ -466,32 +470,10 @@ public class ServerController extends Handler{
     }
 
     /**
-     * Randomly orders the players //TODO AFTER ARRAYLIST CONVERSION, JUST .SHUFFLE
+     * Randomly orders the players
      */
     public void orderPlayers(){
-    	
     	Collections.shuffle(players);
-    	// Silly way to order players from 1 to playerCount+1
-       /* for (int i = 0; i < playerCount; i++) {
-        	System.out.println(i);
-        	if (players.get(0).isDead()) {
-        		for (int j = i; j < playerCount - 1; j++) {
-        			players.set(j, players.get(j+1));
-        		}
-        		playerCount--;
-        		i--;
-        	}
-        	players.get(0).order = Utility.roll(100);
-        }
-
-        int[] ordering = new int[playerCount];
-
-        for (int i = 0; i < playerCount; i++) {
-            ordering[i] = players.get(0).order;
-        }
-
-        Arrays.sort(ordering);
-*/
     	for (int j = 0; j < playerCount; j++) {
     		players.get(j).order = j;
     		network.broadCast(players.get(j).getCharacter().getName() + " is in position # " + (players.get(j).getOrder() + 1));

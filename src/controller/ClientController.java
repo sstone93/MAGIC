@@ -43,7 +43,7 @@ public class ClientController extends Handler{
 		view.setVisible(true);									//Activates the GUI
 		
 		System.out.println("View Successfully Created.");
-		view.update();
+		view.update();//can maybe change this to view.updateNotBoard
 	}
 	
 	/**
