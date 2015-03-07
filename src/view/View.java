@@ -21,6 +21,7 @@ import model.Tile;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.HashMap;
@@ -340,6 +341,12 @@ public class View extends JFrame {
 					lbl.setSize(10, 15);
 					panel.add(lbl);
 					iconPanels.get(parent).add(panel);
+					
+					MouseListener[] listeners = garrisonLbls[i].getMouseListeners();
+					
+					for(int j = 0; j < listeners.length; j ++){
+						garrisonLbls[i].removeMouseListener(listeners[j]);
+					}
 					
 					garrisonLbls[i].addMouseListener(new MouseAdapter() {
 						@Override
