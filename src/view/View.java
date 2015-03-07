@@ -38,6 +38,7 @@ public class View extends JFrame {
 	private JPanel	blankPanel;
 
 	private HashMap<Tile, JPanel> iconPanels = new HashMap<Tile, JPanel>();
+	private HashMap<Clearing, JPanel> clearingHoverOvers = new HashMap<Clearing, JPanel>();
 	private JLabel [] tileLbls;
 	private JLabel [] garrisonLbls;
 	private JLabel [] charLbls;
@@ -197,9 +198,9 @@ public class View extends JFrame {
 					GarrisonName name = b.garrisons.get(i).getName();
 					pic = ImageIO.read(this.getClass().getResource(Utility.getGarrisonImage(name)));
 					garrisonLbls[i] = new JLabel(new ImageIcon(pic));
-					garrisonLbls[i].setBounds(b.garrisons.get(i).getLocation().parent.getX() - 25, b.garrisons.get(i).getLocation().parent.getY() - 21, 50, 43);
+					garrisonLbls[i].setBounds(b.garrisons.get(i).getLocation().parent.getX() + b.garrisons.get(i).getLocation().xOffset - 25,
+							b.garrisons.get(i).getLocation().parent.getY() + b.garrisons.get(i).getLocation().yOffset - 21, 50, 43);
 					boardPanel.add(garrisonLbls[i], new Integer(5), 0);
-					//garrison.repaint();
 				} catch (IOException e){
 					
 				}
@@ -239,6 +240,22 @@ public class View extends JFrame {
 
 			iconPanels.clear();
 			
+			it = clearingHoverOvers.entrySet().iterator();
+
+			//TODO 
+			//TODO Concurrent thread access, is the View thread and the Client control thread both calling update at the same time? possible.
+			//TODO CONTROL THIS!!!!
+			//TODO
+			
+			while (it.hasNext()) {
+				JPanel panel = (JPanel)((HashMap.Entry)it.next()).getValue();
+				if(panel != null){
+					boardPanel.remove(panel);
+				}
+			}
+
+			clearingHoverOvers.clear();
+			
 			for(int i = 0; i < charLbls.length; i++){
 				if(charLbls[i] != null){
 					boardPanel.remove(charLbls[i]);
@@ -267,10 +284,11 @@ public class View extends JFrame {
 										System.out.println("	adding Character " + character.toString() + " to " + b.tiles.get(i).getName().toString());
 										pic = ImageIO.read(this.getClass().getResource(Utility.getCharacterImage(character)));
 										charLbls[chars] = new JLabel(new ImageIcon(pic));
-										charLbls[chars].setBounds(b.tiles.get(i).getX() - 25, b.tiles.get(i).getY() - 25, 50, 50);
+										charLbls[chars].setBounds(b.tiles.get(i).getX() + clearings.get(j).xOffset - 25,
+												b.tiles.get(i).getY() + clearings.get(j).yOffset - 25, 50, 50);
 										boardPanel.add(charLbls[chars], new Integer(5), 0);
 										
-										if (!iconPanels.containsKey(b.tiles.get(i))){
+										/*if (!iconPanels.containsKey(b.tiles.get(i))){
 											JPanel newPane = new JPanel();
 											newPane.setBounds(b.tiles.get(i).getX(), b.tiles.get(i).getY(), 200, 300);
 											newPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
@@ -304,6 +322,43 @@ public class View extends JFrame {
 											public void mouseExited(MouseEvent e) {
 												iconPanels.get(b.tiles.get(index)).setVisible(false);
 											}
+										});*/
+										
+										if (!clearingHoverOvers.containsKey(clearings.get(j))){
+											JPanel newPane = new JPanel();
+											newPane.setBounds(b.tiles.get(i).getX() + clearings.get(j).xOffset,
+													b.tiles.get(i).getY() + clearings.get(j).yOffset, 200, 300);
+											newPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+											newPane.setVisible(false);
+											boardPanel.add(newPane, new Integer(10), 0);
+											clearingHoverOvers.put(clearings.get(j), newPane);
+										}
+										
+										JPanel panel = new JPanel();
+										panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+										panel.setSize(65, 75);
+										JLabel img = new JLabel(new ImageIcon(pic));
+										img.setSize(50, 50);
+										panel.add(img);
+										
+										JLabel lbl = new JLabel(Integer.toString(clearings.get(j).getClearingNumber()));
+										lbl.setSize(10, 15);
+										panel.add(lbl);
+										clearingHoverOvers.get(clearings.get(j)).add(panel);
+										
+										final int index = j;
+										
+										charLbls[chars].addMouseListener(new MouseAdapter() {
+											@Override
+											public void mouseEntered(MouseEvent e) {
+												clearingHoverOvers.get(clearings.get(index)).setVisible(true);
+											}
+										});
+										charLbls[chars].addMouseListener(new MouseAdapter() {
+											@Override
+											public void mouseExited(MouseEvent e) {
+												clearingHoverOvers.get(clearings.get(index)).setVisible(false);
+											}
 										});
 										chars++;
 									}
@@ -319,15 +374,15 @@ public class View extends JFrame {
 				try {
 					GarrisonName name = b.garrisons.get(i).getName();
 					pic = ImageIO.read(this.getClass().getResource(Utility.getGarrisonImage(name)));
-					final Tile parent = b.garrisons.get(i).getLocation().parent;
+					final Clearing clearing = b.garrisons.get(i).getLocation();
 					
-					if (!iconPanels.containsKey(parent)){
+					if (!clearingHoverOvers.containsKey(clearing)){
 						JPanel newPane = new JPanel();
-						newPane.setBounds(parent.getX(), parent.getY(), 200, 300);
+						newPane.setBounds(clearing.parent.getX() + clearing.xOffset, clearing.parent.getY() + clearing.yOffset, 200, 300);
 						newPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 						newPane.setVisible(false);
 						boardPanel.add(newPane, new Integer(10), 0);
-						iconPanels.put(parent, newPane);
+						clearingHoverOvers.put(clearing, newPane);
 					}
 					
 					JPanel panel = new JPanel();
@@ -340,10 +395,11 @@ public class View extends JFrame {
 					JLabel lbl = new JLabel(Integer.toString(b.garrisons.get(i).getLocation().getClearingNumber()));
 					lbl.setSize(10, 15);
 					panel.add(lbl);
-					iconPanels.get(parent).add(panel);
+					clearingHoverOvers.get(clearing).add(panel);
 					
 					MouseListener[] listeners = garrisonLbls[i].getMouseListeners();
 					
+					//must remove old listeners to prevent trying to show hover overs that no longer exist.
 					for(int j = 0; j < listeners.length; j ++){
 						garrisonLbls[i].removeMouseListener(listeners[j]);
 					}
@@ -351,13 +407,13 @@ public class View extends JFrame {
 					garrisonLbls[i].addMouseListener(new MouseAdapter() {
 						@Override
 						public void mouseEntered(MouseEvent e) {
-							iconPanels.get(parent).setVisible(true);
+							clearingHoverOvers.get(clearing).setVisible(true);
 						}
 					});
 					garrisonLbls[i].addMouseListener(new MouseAdapter() {
 						@Override
 						public void mouseExited(MouseEvent e) {
-							iconPanels.get(parent).setVisible(false);
+							clearingHoverOvers.get(clearing).setVisible(false);
 						}
 					});
 				} catch (IOException e){
