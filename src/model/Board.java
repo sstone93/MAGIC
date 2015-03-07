@@ -38,24 +38,6 @@ public class Board implements Serializable{
 		setUpMapChits();
 	}
 	
-	/**
-	 * Special constructor to work with clone method
-	 * @param t
-	 * @param g
-	 */
-	public Board(ArrayList<Tile> t, ArrayList<Garrison> g){
-		this.tiles = t;
-		this.garrisons = g;
-		this.small = new ArrayList<SmallTreasure>();
-		this.large = new ArrayList<Treasure>();
-		this.twit = new ArrayList<TreasureWithinTreasure>();
-	}
-	
-    public Board clone (){
-    	Board b = new Board(tiles, garrisons);
-    	return b;
-    }
-	
 	public int convertTileName(TileName n){
 		for(int i=0; i<20; i++){
 			if(tiles.get(i).getName() == n){
@@ -440,7 +422,11 @@ public class Board implements Serializable{
     			if(newClearing.getType() == ClearingType.MOUNTAIN){
     				if(moves>=2){//meaning it is atleast the second action
     					if(player.getActivities().get(moves-2) == Actions.MOVE){
-    						if(((Clearing) player.getActivities().get(moves-1)).equals(newClearing)){
+    						
+    						temp = ((String) player.getActivities().get(moves-1)).split(" ");
+    			    		Clearing lastClearing = tiles.get(convertTileName(TileName.valueOf(temp[0]))).getClearing(Integer.parseInt(temp[1]));
+    						
+    						if(lastClearing.equals(newClearing)){
     							move(player, newClearing);
     							System.out.println(player.getCharacter().getName()+" SUCCEEDED move to "+newClearing.parent.getName().toString()+" "+newClearing.location);
     							moving = true;

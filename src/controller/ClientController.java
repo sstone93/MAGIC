@@ -83,7 +83,6 @@ public class ClientController extends Handler{
 		}else if(message instanceof Board){
 			model.setBoard((Board) message);
 			model.addMessage("New Board Recieved");
-			System.out.println((Board) message);
 		}else if(message instanceof Player){
 			model.setPlayer((Player) message);
 			model.addMessage("New Player Recieved");

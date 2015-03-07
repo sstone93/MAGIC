@@ -46,7 +46,8 @@ public class NetworkThread extends Thread implements Serializable{
 	 */
 	public void send(Object o){
 		try{
-			streamOut.writeObject(o);
+			streamOut.reset();
+			streamOut.writeUnshared(o);
 			streamOut.flush();
 			System.out.println("Sent Message: "+o.getClass().toString());
 		} catch (IOException ioe) {
@@ -62,7 +63,7 @@ public class NetworkThread extends Thread implements Serializable{
 		System.out.println("	"+ID + ": Now Running.");
 		while (!done) {												
 			try{						//Trys to read in a new object, if it does, send it to the NetworkEntity to be handled
-				parent.handle(ID, streamIn.readObject());
+				parent.handle(ID, streamIn.readUnshared());
 			} catch (IOException ioe) {
 				System.out.println("	"+ID + ": ERROR reading input (Socket Closed?!?):");
 				parent.remove(ID);									//Parent properly handles killing off this thread
