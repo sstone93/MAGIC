@@ -7,7 +7,6 @@ import model.Berserker;
 import model.BlackKnight;
 import model.Board;
 import model.Captain;
-import model.Clearing;
 import model.CombatMoves;
 import model.Dwarf;
 import model.Elf;

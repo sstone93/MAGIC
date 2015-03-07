@@ -5,11 +5,9 @@ import java.util.ArrayList;
 import networking.Message;
 import networking.NetworkClient;
 import model.Board;
-import model.Clearing;
 import model.ClientModel;
 import model.CombatMoves;
 import model.Player;
-import utils.Utility.TileName;
 import utils.Utility.*;
 import view.View;
 
