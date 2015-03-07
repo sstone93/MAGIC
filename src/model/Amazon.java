@@ -1,6 +1,5 @@
 package model;
 
-import utils.Utility;
 import utils.Utility.*;
 
 // inherits name, startingLocation, startingWeapon

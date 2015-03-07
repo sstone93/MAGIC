@@ -30,35 +30,6 @@ public class Player implements Serializable{
     ArrayList<Object> activities = new ArrayList<Object>();
     ArrayList<Treasure>  treasures = new ArrayList<Treasure>();
     ArrayList<Object> discoveries = new ArrayList<Object>();
-
-    /**
-     * Used to correct object transmission
-     */
-    public Player clone (){
-    	Player p = new Player(this.getCharacter(), this.getID());
-    	p.victoryPoints = this.victoryPoints;
-    	p.gold = this.gold;
-        p.health = this.health;
-        p.fatigue = this.fatigue;
-        p.fame  = this.fame;
-        p.notoriety = this.notoriety;
-        p.finalScore    = this.finalScore;
-        p.order = this.order; // in which order does the player play
-        p.hidden = this.hidden;
-        p.dead = this.dead;
-        p.blocked = this.blocked;
-        p.character = this.character;
-        p.moves = this.moves;
-        p.target = this.target;
-        p.location = this.location;
-        p.location.occupants = this.location.occupants;
-        p.armour = this.armour;
-        p.weapons = this.weapons;
-        p.activities = this.activities; // the players moves for the day
-        p.treasures = this.treasures;
-        
-    	return p;
-    }
     
     public Player(Character character, int ID) {
         this.character = character;

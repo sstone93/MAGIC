@@ -5,11 +5,9 @@ import java.util.ArrayList;
 import networking.Message;
 import networking.NetworkClient;
 import model.Board;
-import model.Clearing;
 import model.ClientModel;
 import model.CombatMoves;
 import model.Player;
-import utils.Utility.TileName;
 import utils.Utility.*;
 import view.View;
 
@@ -85,7 +83,6 @@ public class ClientController extends Handler{
 		}else if(message instanceof Board){
 			model.setBoard((Board) message);
 			model.addMessage("New Board Recieved");
-			System.out.println((Board) message);
 		}else if(message instanceof Player){
 			model.setPlayer((Player) message);
 			model.addMessage("New Player Recieved");

@@ -7,7 +7,6 @@ import model.Berserker;
 import model.BlackKnight;
 import model.Board;
 import model.Captain;
-import model.Clearing;
 import model.CombatMoves;
 import model.Dwarf;
 import model.Elf;
@@ -321,7 +320,7 @@ public class ServerController extends Handler{
 
     			if (activities.get(moves) != null) {
 
-    				ArrayList<Player> canBlock = blockable(player);					// check if they can block another player
+    				/*ArrayList<Player> canBlock = blockable(player);					// check if they can block another player
 
     	    		if (currentDay != 1) {
     		    		for (int j = 0; j < canBlock.size(); j++) {
@@ -331,7 +330,7 @@ public class ServerController extends Handler{
     		    				network.send(canBlock.get(j).getID(), "You've been blocked! :( " );
     		    			}
     		    		}
-    	    		}
+    	    		}*/
 
 		    		switch((Actions) activities.get(moves)) {
 
@@ -435,7 +434,7 @@ public class ServerController extends Handler{
      * Sends up to date board to clients, along with their proper character
      */
     public void updateClients(){
-    	distributeBoard();
+    	network.broadCast(board);
     	distributeCharacters();
     }
 
@@ -727,19 +726,7 @@ public class ServerController extends Handler{
 	 */
 	public void distributeCharacters(){
 		for(int i=0;i<playerCount;i++){
-			Player t = players.get(0).clone();
-			network.send(players.get(0).getID(), t);
-			players.remove(0);
-			players.add(t);
-		}
-	}
-	
-	public void distributeBoard(){
-    	Board b = board.clone();		//DONE TO ALLEVIATE RANDOM TRANSMISSION ERROR.
-    	board = null;					//TODO NOT ACTUALLY OWRKING
-    	board = b;
-		for(int i=0;i<playerCount;i++){
-			network.send(players.get(i).getID(), b);
+			network.send(players.get(i).getID(), players.get(i));
 		}
 	}
 
