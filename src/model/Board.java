@@ -26,9 +26,9 @@ public class Board implements Serializable{
 	private static final long serialVersionUID = -4906643706682852990L;
 	public ArrayList<Tile> tiles = new ArrayList<Tile>();
 	public ArrayList<Garrison> garrisons = new ArrayList<Garrison>();
-	ArrayList<SmallTreasure> small = new ArrayList<SmallTreasure>();
-	ArrayList<Treasure> large = new ArrayList<Treasure>();
-	ArrayList<TreasureWithinTreasure> twit = new ArrayList<TreasureWithinTreasure>();
+	public ArrayList<SmallTreasure> small = new ArrayList<SmallTreasure>();
+	public ArrayList<Treasure> large = new ArrayList<Treasure>();
+	public ArrayList<TreasureWithinTreasure> twit = new ArrayList<TreasureWithinTreasure>();
 
 	public Board(ArrayList<Player> players){
 		setupBoard();
@@ -37,6 +37,24 @@ public class Board implements Serializable{
 		placePlayers(players);
 		setUpMapChits();
 	}
+	
+	/**
+	 * Special constructor to work with clone method
+	 * @param t
+	 * @param g
+	 */
+	public Board(ArrayList<Tile> t, ArrayList<Garrison> g){
+		this.tiles = t;
+		this.garrisons = g;
+		this.small = new ArrayList<SmallTreasure>();
+		this.large = new ArrayList<Treasure>();
+		this.twit = new ArrayList<TreasureWithinTreasure>();
+	}
+	
+    public Board clone (){
+    	Board b = new Board(tiles, garrisons);
+    	return b;
+    }
 	
 	public int convertTileName(TileName n){
 		for(int i=0; i<20; i++){
@@ -396,7 +414,11 @@ public class Board implements Serializable{
      * @param newClearing clearing being moved to
      * @return boolean based on if the action was valid or not
      */
-    public boolean move(int moves, Player player, Clearing newClearing) {
+    public boolean move(int moves, Player player, String newC) {
+    	
+    	//Convert newClearing into the actual clearing
+    	String[] temp = newC.split(" ");
+    	Clearing newClearing =  tiles.get(convertTileName(TileName.valueOf(temp[0]))).getClearing(Integer.parseInt(temp[1]));
     	
     	boolean moving = false;
     	//Steps to Move

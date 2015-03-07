@@ -336,7 +336,7 @@ public class ServerController extends Handler{
 		    		switch((Actions) activities.get(moves)) {
 
 		    		case MOVE: 
-		    			boolean move = board.move(moves, player, (Clearing)activities.get(moves+1)); moves = moves + 2; 
+		    			boolean move = board.move(moves, player, (String) activities.get(moves+1)); moves = moves + 2; 
 		    			network.broadCast(player.getCharacter().getName() + " is moving? : " + move);
 		    			break;
 		    		case HIDE: hide(player); moves = moves + 2; break;
@@ -435,7 +435,7 @@ public class ServerController extends Handler{
      * Sends up to date board to clients, along with their proper character
      */
     public void updateClients(){
-    	network.broadCast(board);
+    	distributeBoard();
     	distributeCharacters();
     }
 
@@ -731,6 +731,15 @@ public class ServerController extends Handler{
 			network.send(players.get(0).getID(), t);
 			players.remove(0);
 			players.add(t);
+		}
+	}
+	
+	public void distributeBoard(){
+    	Board b = board.clone();		//DONE TO ALLEVIATE RANDOM TRANSMISSION ERROR.
+    	board = null;					//TODO NOT ACTUALLY OWRKING
+    	board = b;
+		for(int i=0;i<playerCount;i++){
+			network.send(players.get(i).getID(), b);
 		}
 	}
 
