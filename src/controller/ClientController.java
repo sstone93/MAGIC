@@ -85,6 +85,7 @@ public class ClientController extends Handler{
 		}else if(message instanceof Board){
 			model.setBoard((Board) message);
 			model.addMessage("New Board Recieved");
+			System.out.println((Board) message);
 		}else if(message instanceof Player){
 			model.setPlayer((Player) message);
 			model.addMessage("New Player Recieved");
@@ -108,18 +109,8 @@ public class ClientController extends Handler{
 	 * Assumes locations will be ignored by server if not move action
 	 */
 	public void handlePlaysRecorded(Actions p1, String l1, Actions p2, String l2, Actions p3, String l3, Actions p4, String l4){
-		
-		String[] temp =l1.split(" ");
-		Clearing c1 =  model.getBoard().tiles.get(model.getBoard().convertTileName(TileName.valueOf(temp[0]))).getClearing(Integer.parseInt(temp[1]));
-		temp =l2.split(" ");
-		Clearing c2 =  model.getBoard().tiles.get(model.getBoard().convertTileName(TileName.valueOf(temp[0]))).getClearing(Integer.parseInt(temp[1]));
-		temp =l3.split(" ");
-		Clearing c3 =  model.getBoard().tiles.get(model.getBoard().convertTileName(TileName.valueOf(temp[0]))).getClearing(Integer.parseInt(temp[1]));
-		temp =l4.split(" ");
-		Clearing c4 =  model.getBoard().tiles.get(model.getBoard().convertTileName(TileName.valueOf(temp[0]))).getClearing(Integer.parseInt(temp[1]));
-
 		ArrayList<Object> mes = new ArrayList<Object>();
-		mes.add(p1);mes.add(c1);mes.add(p2);mes.add(c2);mes.add(p3);mes.add(c3);mes.add(p4);mes.add(c4);
+		mes.add(p1);mes.add(l1);mes.add(p2);mes.add(l2);mes.add(p3);mes.add(l3);mes.add(p4);mes.add(l4);
 		network.send(new Message(MessageType.ACTIVITIES, mes));
 		model.addMessage("Sent activities");
 		state = GameState.NULL;
