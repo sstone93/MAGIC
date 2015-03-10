@@ -96,6 +96,6 @@ public class NetworkClient extends NetworkEntity  implements Runnable{
 			thread = null;
 		}
 		System.out.println("Client: Loop Thread Destroyed. See ya.");
-		controller.handle(0, "NC CLOSED");		//due to random null pointer shit, dont actually use a valid port here
+		controller.handle(0, "NetworkClient has Closed!");		//due to random null pointer shit, dont actually use a valid port here
 	}
 }

@@ -58,10 +58,7 @@ public class ClientController extends Handler{
 		
 		if(message instanceof String){
 			String text = ((String) message );
-			if(text.equalsIgnoreCase("NC CLOSED")){
-				model.addMessage("Network Client Has Closed");	//the client seems to be able to figure that out for itself.
-				//TODO remove this message being sent or received on client and server
-			}else if(text.equalsIgnoreCase("SEND MOVES")){
+			if(text.equalsIgnoreCase("SEND MOVES")){
 				state = GameState.CHOOSE_PLAYS;
 				model.addMessage("Please Select Your Moves");
 			}else if(text.equalsIgnoreCase("SEND COMBAT")){
@@ -78,6 +75,7 @@ public class ClientController extends Handler{
 				model.addMessage("RE-START CHARACTER SELECT");
 			}else{
 				model.addMessage((String) message);
+				view.updateMessageBox();
 				needsUpdate = false; //needs to NOT trigger the update
 			}
 		}else if(message instanceof Board){
