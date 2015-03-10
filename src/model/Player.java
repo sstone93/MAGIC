@@ -20,6 +20,8 @@ public class Player implements Serializable{
     boolean hidden    = false;
     boolean dead      = false;
     boolean blocked   = false;
+    boolean sunlight  = false;
+    boolean finishedDaylight = false;
 
     Character character;
     CombatMoves moves;
@@ -51,9 +53,26 @@ public class Player implements Serializable{
     	return this.target;
     }
 
+    public void setSunlight(Boolean s){
+    	this.sunlight = s;
+    }
+    
+    public Boolean getSunlight(){
+    	return this.sunlight;
+    }
+    
+    public void setDaylight(Boolean s){
+    	this.finishedDaylight = s;
+    }
+    
+    public Boolean getDaylight(){
+    	return this.finishedDaylight;
+    }
+    
     public CombatMoves getMoves(){
     	return this.moves;
     }
+    
     
     public void setMoves(CombatMoves m){
     	this.moves = m;

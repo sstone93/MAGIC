@@ -20,9 +20,6 @@ import utils.Utility.Actions;
 public class ActivitiesPanel extends JPanel{
 	
 	private JComboBox play1Location;
-	private JComboBox play2Location;
-	private JComboBox play3Location;
-	private JComboBox play4Location;
 	private ClientController control;
 	public boolean state = false;
 	
@@ -42,18 +39,6 @@ public class ActivitiesPanel extends JPanel{
 		play1Location = new JComboBox();
 		play1Location.setBounds(10, 84, 111, 20);
 		add(play1Location);
-		
-		play2Location = new JComboBox();
-		play2Location.setBounds(131, 84, 111, 20);
-		add(play2Location);
-		
-		play3Location = new JComboBox();
-		play3Location.setBounds(262, 84, 111, 20);
-		add(play3Location);
-		
-		play4Location = new JComboBox();
-		play4Location.setBounds(393, 84, 111, 20);
-		add(play4Location);
 		
 		JComboBox play1 = new JComboBox();
 		play1.addActionListener(new ActionListener() {

@@ -396,7 +396,7 @@ public class Board implements Serializable{
      * @param newClearing clearing being moved to
      * @return boolean based on if the action was valid or not
      */
-    public boolean move(int moves, Player player, String newC) {
+    public boolean move(Player player, String newC) {
     	
     	//Convert newClearing into the actual clearing
     	String[] temp = newC.split(" ");

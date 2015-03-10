@@ -95,19 +95,13 @@ public class ClientController extends Handler{
 	 * Should send the selected plays to the server.
 	 * @param p1 the player's first play
 	 * @param l1 location where the player wants to move, in the form "<TileName> clearing <clearingNumber>"
-	 * @param p2 the player's second play
-	 * @param l2 location where the player wants to move, in the form "<TileName> clearing <clearingNumber>"
-	 * @param p3 the player's third play
-	 * @param l3 location where the player wants to move, in the form "<TileName> clearing <clearingNumber>"
-	 * @param p4 the player's fourth play
-	 * @param l4 location where the player wants to move, in the form "<TileName> clearing <clearingNumber>"
 	 * Assumes locations will be ignored by server if not move action
 	 */
-	public void handlePlaysRecorded(Actions p1, String l1, Actions p2, String l2, Actions p3, String l3, Actions p4, String l4){
+	public void handlePlaysRecorded(ActivityType t, PhaseType p, ArrayList<Object> data){
 		ArrayList<Object> mes = new ArrayList<Object>();
-		mes.add(p1);mes.add(l1);mes.add(p2);mes.add(l2);mes.add(p3);mes.add(l3);mes.add(p4);mes.add(l4);
+		mes.add(new Phase()
 		network.send(new Message(MessageType.ACTIVITIES, mes));
-		model.addMessage("Sent activities");
+		model.addMessage("Sent activity");
 		state = GameState.NULL;
 		view.updateNonBoardGUI(null);//sending null rather than the player object, null checks make this safe
 	}
@@ -129,31 +123,6 @@ public class ClientController extends Handler{
 		state = GameState.NULL;
 		view.updateNonBoardGUI(null);//sending null rather than the player object, null checks make this safe
 	}
-	
-	/**
-	 * Should parse the move and send it to the server
-	 * @param location where the player wants to move, in the form "<TileName> clearing <clearingNumber>"
-	 */
-	
-	/*public void handleMoveSelection(String location){
-		ArrayList<Object> mes = new ArrayList<Object>();
-		mes.add(location);
-		network.send(new Message(MessageType.ACTIVITIES, mes));
-		model.addMessage("Sent "+location);
-		this.view.update();
-	}*/
-	
-	/**
-	 * Should parse the weapon and send it to the server
-	 * @param weapon the weapon to alert, in the form "<WeaponName> <active>"
-	 */
-	/*public void handleAlertSelection(String weapon){
-		ArrayList<Object> mes = new ArrayList<Object>();
-		mes.add(weapon);
-		network.send(new Message(MessageType.ACTIVITIES, mes));
-		model.addMessage("Sent alert");
-		this.view.update();
-	}*/
 	
 	/**
 	 * Should verify that character is available and then set character

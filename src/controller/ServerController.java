@@ -37,7 +37,7 @@ public class ServerController extends Handler{
     int currentDay     = 0;
     int recievedCombat = 0;
 	GameState state = GameState.NULL;
-	int recievedMoves = 0;
+	int finishedPlayers = 0;
 
 	/**
 	 * Constructor for a ServerController
@@ -83,6 +83,9 @@ public class ServerController extends Handler{
 			Message m = (Message) message;
 			if( m.getType() == MessageType.ACTIVITIES){
 				if(state == GameState.CHOOSE_PLAYS){
+					
+					//MAIN HANDLER FOR INDIVIDUAL PHASE SUBMISSION.
+					
 					recievedMoves += 1;
 					System.out.println(ID);
 					
@@ -302,10 +305,8 @@ public class ServerController extends Handler{
     /**
      * Cycles through players and their moves for the day
      */
-    public void doTodaysActivities(Player player) {
-    	
-    	int moves = 0;
-    	
+    /*public void doTodaysActivities(Player player) {
+
     	System.out.println("Start "+player.getCharacter().getName()+" activities: " + player.getActivities().size());
     	
     	while (moves < player.getActivities().size()) {
@@ -330,7 +331,7 @@ public class ServerController extends Handler{
     		    				network.send(canBlock.get(j).getID(), "You've been blocked! :( " );
     		    			}
     		    		}
-    	    		}*/
+    	    		}
 
 		    		switch((Actions) activities.get(moves)) {
 
@@ -357,7 +358,7 @@ public class ServerController extends Handler{
     			moves=moves+2;
     		}
     	}
-    }
+    }*/
 
     /**
      * Ends the game, basically determines players scores and determines the winner
@@ -395,14 +396,34 @@ public class ServerController extends Handler{
         network.stop();
     }
 
+    private void setSunlightTrue(){
+    	for(int i=0; i<playerCount;i++){
+    		if(players.get(i).getCharacter().getName() != CharacterName.DWARF){
+    			players.get(i).setSunlight(true);
+    		}
+    	}
+    }
+    
     /**
      * Waits until all activities have been submitted (and tells the clients to send them)
      */
-    public void collectActivities(){
-    	state = GameState.CHOOSE_PLAYS;
+    public void startActivitiesHandler(){
+    	
+    	setSunlightTrue();		//sets the sunlight for all players back to true (minus the dwarf)
+    	
+    	//1. Send each player their notice for 2 basic moves
     	network.broadCast("SEND MOVES");
-    	recievedMoves = 0;
-    	while(recievedMoves < playerCount){
+    	
+    	//2. START HANDLER FOR MOVE SUBMISSIONS
+    		//- when an submitted move is deemed invalid, then return a notice to the player
+    		//- when a player submites a move, determine if it invalidates sunlight
+    		//- determine if they move on to sunlight or not
+    		//- determine if they move on to 
+    		//- when a character is done all actions, set their state to finished, and check to see if all players are done and if you need to move on.
+    	state = GameState.CHOOSE_PLAYS;
+    	finishedPlayers = 0;
+
+    	while(finishedPlayers < playerCount){
     		try {
 				Thread.sleep(20);
 			} catch (InterruptedException e) {
@@ -410,8 +431,10 @@ public class ServerController extends Handler{
 				e.printStackTrace();
 			}
     	}	//TODO HANDLE PLAYERS DROPPING OUT DURING THIS STEP
+    	
+    	//5. Finish phase collection and move on
     	state = GameState.NULL;
-    	System.out.println("FINISH COLLECTING activities");
+    	System.out.println("ALL PLAYERS FINISHED DAYLIGHT PHASE.");
     }
 
     public void collectCombat(){
@@ -447,29 +470,17 @@ public class ServerController extends Handler{
         network.broadCast("This is the start of Day " + currentDay + "!");
 
         updateClients();
-        collectActivities(); //asks player's for their activities and waits until it gets them all
-
-        orderPlayers();	//randomly orders the players
-
+        
+        startActivitiesHandler();
+        
         if (playerCount == 1) {
         	network.broadCast("There is only one player alive");
         	endGame();
         }
 
-        //Does the activities of all players
-        int nextMover = 0;
-        while (nextMover < playerCount) {
-            for (int i = 0; i < playerCount; i++) {
-                if (players.get(i).order == nextMover) {
-                	doTodaysActivities(players.get(i));
-                    nextMover++;
-                }
-            }
-        }
-
         updateClients();
         collectCombat(); //2 players, 1 attacker 1 defender
-
+/*
         //All players choose attackers
         nextMover = 0;
         while (nextMover < playerCount) {
@@ -482,7 +493,7 @@ public class ServerController extends Handler{
                 	nextMover++;
                 }
             }
-        }
+        }*/
 
         //Progresses to the next day or ends the game
 //        boolean thing = resetDay();
