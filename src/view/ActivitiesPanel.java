@@ -19,6 +19,7 @@ import model.Weapon;
 import controller.ClientController;
 import utils.Utility.Actions;
 import utils.Utility.Phases;
+import utils.Utility.SearchTables;
 
 @SuppressWarnings({ "rawtypes", "unchecked", "serial"})
 public class ActivitiesPanel extends JPanel{
