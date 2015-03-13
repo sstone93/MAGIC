@@ -10,6 +10,7 @@ public class HeavyTroll extends Monster {
 	private static final long serialVersionUID = 8706862594792035351L;
 
 	public HeavyTroll() {
+		name         = "Heavy Troll";
         weight       = ItemWeight.HEAVY;
         notoriety    = 5;
 		fame         = 5;

@@ -551,6 +551,47 @@ public class ServerController extends Handler{
     	}
     }
 
+    public void encounter(Player player, Monster monster) {
+    	if (player.isDead() == true) {
+    		network.send(player.getID(), "You are dead");
+    		return;
+    	}
+    	else if (monster.isDead() == true) {
+    		network.send(player.getID(), "That monster is dead");
+    		return;
+    	}
+    	
+    	state = GameState.CHOOSE_COMBATMOVES;
+    	recievedCombat = 0;
+    	network.send(player.getID(), "SEND COMBATMOVES");
+
+    	while(recievedCombat < 1){
+    		try {
+				Thread.sleep(20);
+			} catch (InterruptedException e) {
+				// Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+
+    	monster.setMoves();
+    	
+    	System.out.println("got combat moves");
+    	state = GameState.NULL;
+    	
+    	if (player.getMoves() == null) {
+    		network.send(player.getID(), "It messed up...");
+    		return;
+    	}
+    	else if (monster.getMoves() == null) {
+    		network.send(player.getID(), "It messed up...");
+    		return;
+    	}
+    	else {
+    		doFight(player, monster);
+    	}
+    }
+    
     /**
      *
      * @param attacker
@@ -573,6 +614,15 @@ public class ServerController extends Handler{
     		return;
     	}
 
+    	if (attacker.isDead() == true) {
+    		network.send(attacker.getID(), "You are dead.");
+    		return;
+    	}
+    	else if (defender.isDead() == true) {
+    		network.send(defender.getID(), "You are dead.");
+    		return;
+    	}
+    	
     	//System.out.println(attacker.getTarget().getCharacter().getName());
     	//System.out.println(defender.getTarget().getCharacter().getName());
     	
@@ -594,15 +644,8 @@ public class ServerController extends Handler{
     	System.out.println("got combat moves");
     	state = GameState.NULL;
     	
-    	if (attacker.isDead() == true) {
-    		network.send(attacker.getID(), "You are dead.");
-    		return;
-    	}
-    	else if (defender.isDead() == true) {
-    		network.send(defender.getID(), "You are dead.");
-    		return;
-    	}
-    	else if (attacker.getMoves() == null) {
+    	
+    	if (attacker.getMoves() == null) {
     		network.send(attacker.getID(), "It messed up...");
     		return;
     	}
@@ -614,6 +657,27 @@ public class ServerController extends Handler{
     		doFight(attacker, defender);
     	}
 	}
+    
+    public void doFight(Player player, Monster monster) {
+    	if (player.getActiveWeapon().getSpeed() < monster.getAttackSpeed()) {
+    		checkHit(monster, player);
+    	}
+    	else if (player.getActiveWeapon().getSpeed() > monster.getAttackSpeed()) {
+    		checkHit(player, monster);
+    	}
+    	
+    	else {
+    		if (player.getActiveWeapon().getLength() < monster.getAttackLength()) {
+    			checkHit(monster, player);
+    		}
+    		else if (player.getActiveWeapon().getLength() > monster.getAttackLength()) {
+    			checkHit(player, monster);
+    		}
+    		else {
+    			checkHit(monster, player);
+    		}
+    	}
+    }
     
 	public void doFight(Player attacker, Player defender) {
 		if (defender.getActiveWeapon().getSpeed() < attacker.getActiveWeapon().getSpeed()) {
@@ -636,9 +700,71 @@ public class ServerController extends Handler{
 		}
 	}
 
+	public void checkHit(Player player, Monster monster) {
+		if (player.isDead() == false && monster.isDead() == false) {
+			if ((monster.getAttackSpeed() - player.getMoves().getAttackFatigue()) <= (player.getCharacter().getSpeed() - monster.getMoves().getManeuverFatigue())) {
+				hit(player, monster);
+			}
+			else if (player.getMoves().getAttack() == Attacks.THRUST && monster.getMoves().getManeuver() == Maneuvers.CHARGE) {
+				hit(player, monster);
+			}
+			else if (player.getMoves().getAttack() == Attacks.SWING && monster.getMoves().getManeuver() == Maneuvers.DODGE) {
+				hit(player, monster);
+			}
+			else if (player.getMoves().getAttack() == Attacks.SMASH && monster.getMoves().getManeuver() == Maneuvers.DUCK) {
+				hit(player, monster);
+			}
+		}
+		if (player.isDead() == false && monster.isDead() == false) {
+			if ((player.getCharacter().getSpeed() - monster.getMoves().getAttackFatigue()) <= (monster.getAttackSpeed() - player.getMoves().getManeuverFatigue())) {
+				hit(monster, player);
+			}
+			else if (monster.getMoves().getAttack() == Attacks.THRUST && player.getMoves().getManeuver() == Maneuvers.CHARGE) {
+				hit(monster, player);
+			}
+			else if (monster.getMoves().getAttack() == Attacks.SWING && player.getMoves().getManeuver() == Maneuvers.DODGE) {
+				hit(monster, player);
+			}
+			else if (monster.getMoves().getAttack() == Attacks.SMASH && player.getMoves().getManeuver() == Maneuvers.DUCK) {
+				hit(monster, player);
+			}
+		}
+	}
+	
+	public void checkHit(Monster monster, Player player) {
+		if (player.isDead() == false && monster.isDead() == false) {
+			if ((player.getCharacter().getSpeed() - monster.getMoves().getAttackFatigue()) <= (monster.getAttackSpeed() - player.getMoves().getManeuverFatigue())) {
+				hit(monster, player);
+			}
+			else if (monster.getMoves().getAttack() == Attacks.THRUST && player.getMoves().getManeuver() == Maneuvers.CHARGE) {
+				hit(monster, player);
+			}
+			else if (monster.getMoves().getAttack() == Attacks.SWING && player.getMoves().getManeuver() == Maneuvers.DODGE) {
+				hit(monster, player);
+			}
+			else if (monster.getMoves().getAttack() == Attacks.SMASH && player.getMoves().getManeuver() == Maneuvers.DUCK) {
+				hit(monster, player);
+			}
+		}
+		if (player.isDead() == false && monster.isDead() == false) {
+			if ((monster.getAttackSpeed() - player.getMoves().getAttackFatigue()) <= (player.getCharacter().getSpeed() - monster.getMoves().getManeuverFatigue())) {
+				hit(player, monster);
+			}
+			else if (player.getMoves().getAttack() == Attacks.THRUST && monster.getMoves().getManeuver() == Maneuvers.CHARGE) {
+				hit(player, monster);
+			}
+			else if (player.getMoves().getAttack() == Attacks.SWING && monster.getMoves().getManeuver() == Maneuvers.DODGE) {
+				hit(player, monster);
+			}
+			else if (player.getMoves().getAttack() == Attacks.SMASH && monster.getMoves().getManeuver() == Maneuvers.DUCK) {
+				hit(player, monster);
+			}
+		}
+	}
+	
 	public void checkHit(Player attacker, Player defender) {
 		if (attacker.isDead() == false && defender.isDead() == false) {
-	    	if ((defender.getActiveWeapon().getSpeed() - attacker.getMoves().attackFatigue) <= (attacker.getCharacter().getSpeed() - defender.getMoves().maneuverFatigue)) {
+	    	if ((defender.getActiveWeapon().getSpeed() - attacker.getMoves().getAttackFatigue()) <= (attacker.getCharacter().getSpeed() - defender.getMoves().getManeuverFatigue())) {
 				hit(attacker, defender);
 			}
 			else if (attacker.getMoves().getAttack() == Attacks.THRUST && defender.getMoves().getManeuver() == Maneuvers.CHARGE) {
@@ -652,7 +778,7 @@ public class ServerController extends Handler{
 			}
 		}
 		if (defender.isDead() == false && attacker.isDead() == false) {
-			if ((attacker.getActiveWeapon().getSpeed() - defender.getMoves().attackFatigue) <= (defender.getCharacter().getSpeed() - attacker.getMoves().maneuverFatigue)) {
+			if ((attacker.getActiveWeapon().getSpeed() - defender.getMoves().getAttackFatigue()) <= (defender.getCharacter().getSpeed() - attacker.getMoves().getManeuverFatigue())) {
 				hit(defender, attacker);
 			}
 			else if (defender.getMoves().getAttack() == Attacks.THRUST && attacker.getMoves().getManeuver() == Maneuvers.CHARGE) {
@@ -666,6 +792,210 @@ public class ServerController extends Handler{
 			}
 		}
     }
+	
+	public void hit(Player player, Monster monster) {
+		ItemWeight level = player.getActiveWeapon().getWeight();
+
+		network.broadCast(player.getCharacter().getName() + " has hit " + monster.getName());
+
+		if (player.getMoves().getAttackFatigue() == 1) {
+			switch(level){
+            	case NEGLIGIBLE: level = ItemWeight.LIGHT; break;
+            	case LIGHT: level = ItemWeight.MEDIUM;break;
+            	case MEDIUM: level = ItemWeight.HEAVY;break;
+            	case HEAVY: level = ItemWeight.TREMENDOUS;break;
+            	default: break;
+			}
+		}
+		else if (player.getMoves().getAttackFatigue() == 2) {
+			switch(level){
+        		case NEGLIGIBLE: level = ItemWeight.MEDIUM;break;
+        		case LIGHT: level = ItemWeight.HEAVY;break;
+        		case MEDIUM: level = ItemWeight.TREMENDOUS;break;
+        		case HEAVY: level = ItemWeight.TREMENDOUS;break;
+        		default: break;
+			}
+		}
+		//TODO armor destruction
+		if (player.getMoves().getAttack() == Attacks.THRUST && monster.getMoves().getDefense() == Defenses.AHEAD) {
+			switch(level){
+        		case NEGLIGIBLE: level = ItemWeight.NEGLIGIBLE;break;
+        		case LIGHT: level = ItemWeight.NEGLIGIBLE;break;
+        		case MEDIUM: level = ItemWeight.LIGHT;break;
+        		case HEAVY: level = ItemWeight.MEDIUM;break;
+        		case TREMENDOUS: level = ItemWeight.HEAVY;break;
+        		default: break;
+			}
+		}
+		else if (player.getMoves().getAttack() == Attacks.SWING && monster.getMoves().getDefense() == Defenses.SIDE) {
+			switch(level){
+    			case NEGLIGIBLE: level = ItemWeight.NEGLIGIBLE;break;
+    			case LIGHT: level = ItemWeight.NEGLIGIBLE;break;
+    			case MEDIUM: level = ItemWeight.LIGHT;break;
+    			case HEAVY: level = ItemWeight.MEDIUM;break;
+    			case TREMENDOUS: level = ItemWeight.HEAVY;break;
+    			default: break;
+			}
+		}
+		else if (player.getMoves().getAttack() == Attacks.SMASH && monster.getMoves().getDefense() == Defenses.ABOVE) {
+			switch(level){
+    			case NEGLIGIBLE: level = ItemWeight.NEGLIGIBLE;break;
+    			case LIGHT: level = ItemWeight.NEGLIGIBLE;break;
+    			case MEDIUM: level = ItemWeight.LIGHT;break;
+    			case HEAVY: level = ItemWeight.MEDIUM;break;
+    			case TREMENDOUS: level = ItemWeight.HEAVY;break;
+    			default: break;
+			}
+		}
+		
+		if (level == ItemWeight.TREMENDOUS) {
+			deadMonster(player, monster);
+		}
+		else if (level == monster.getWeight()) {
+			deadMonster(player, monster);
+		}
+		else if (level == ItemWeight.HEAVY && monster.getWeight() == ItemWeight.LIGHT) {
+			deadMonster(player, monster);
+		}
+		else if (level == ItemWeight.HEAVY && monster.getWeight() == ItemWeight.MEDIUM) {
+			deadMonster(player, monster);
+		}
+		else if (level == ItemWeight.HEAVY && monster.getWeight() == ItemWeight.TREMENDOUS) {
+			monster.wound();
+			network.broadCast(monster.getName() + "has been wounded!");
+			if (monster.getHealth() == 4) {
+				deadMonster(player, monster);
+			}
+		}
+		else if (level == ItemWeight.MEDIUM && monster.getWeight() == ItemWeight.LIGHT) {
+			deadMonster(player, monster);
+		}
+		else if (level == ItemWeight.MEDIUM && monster.getWeight() == ItemWeight.HEAVY) {
+			monster.wound();
+			network.broadCast(monster.getName() + "has been wounded!");
+			if (monster.getHealth() == 3) {
+				deadMonster(player, monster);
+			}
+		}
+		else if (level == ItemWeight.MEDIUM && monster.getWeight() == ItemWeight.TREMENDOUS) {
+			monster.wound();
+			network.broadCast(monster.getName() + "has been wounded!");
+			if (monster.getHealth() == 4) {
+				deadMonster(player, monster);
+			}
+		}
+		else if (level == ItemWeight.LIGHT && monster.getWeight() == ItemWeight.TREMENDOUS) {
+			monster.wound();
+			network.broadCast(monster.getName() + "has been wounded!");
+			if (monster.getHealth() == 4) {
+				deadMonster(player, monster);
+			}
+		}
+		else if (level == ItemWeight.LIGHT && monster.getWeight() == ItemWeight.HEAVY) {
+			monster.wound();
+			network.broadCast(monster.getName() + "has been wounded!");
+			if (monster.getHealth() == 3) {
+				deadMonster(player, monster);
+			}
+		}
+		else if (level == ItemWeight.LIGHT && monster.getWeight() == ItemWeight.MEDIUM) {
+			monster.wound();
+			network.broadCast(monster.getName() + "has been wounded!");
+			if (monster.getHealth() == 2) {
+				deadMonster(player, monster);
+			}
+		}
+	}
+	
+	public void hit(Monster monster, Player player) {
+		ItemWeight level = monster.getWeight();
+
+		network.broadCast(monster.getName() + " has hit " + player.getCharacter().getName());
+
+		if (monster.getMoves().getAttackFatigue() == 1) {
+			switch(level){
+            	case NEGLIGIBLE: level = ItemWeight.LIGHT; break;
+            	case LIGHT: level = ItemWeight.MEDIUM;break;
+            	case MEDIUM: level = ItemWeight.HEAVY;break;
+            	case HEAVY: level = ItemWeight.TREMENDOUS;break;
+            	default: break;
+			}
+		}
+		else if (monster.getMoves().getAttackFatigue() == 2) {
+			switch(level){
+        		case NEGLIGIBLE: level = ItemWeight.MEDIUM;break;
+        		case LIGHT: level = ItemWeight.HEAVY;break;
+        		case MEDIUM: level = ItemWeight.TREMENDOUS;break;
+        		case HEAVY: level = ItemWeight.TREMENDOUS;break;
+        		default: break;
+			}
+		}
+		//TODO armor destruction
+		if (monster.getMoves().getAttack() == Attacks.THRUST && player.getMoves().getDefense() == Defenses.AHEAD) {
+			switch(level){
+        		case NEGLIGIBLE: level = ItemWeight.NEGLIGIBLE;break;
+        		case LIGHT: level = ItemWeight.NEGLIGIBLE;break;
+        		case MEDIUM: level = ItemWeight.LIGHT;break;
+        		case HEAVY: level = ItemWeight.MEDIUM;break;
+        		case TREMENDOUS: level = ItemWeight.HEAVY;break;
+        		default: break;
+			}
+		}
+		else if (monster.getMoves().getAttack() == Attacks.SWING && player.getMoves().getDefense() == Defenses.SIDE) {
+			switch(level){
+    			case NEGLIGIBLE: level = ItemWeight.NEGLIGIBLE;break;
+    			case LIGHT: level = ItemWeight.NEGLIGIBLE;break;
+    			case MEDIUM: level = ItemWeight.LIGHT;break;
+    			case HEAVY: level = ItemWeight.MEDIUM;break;
+    			case TREMENDOUS: level = ItemWeight.HEAVY;break;
+    			default: break;
+			}
+		}
+		else if (monster.getMoves().getAttack() == Attacks.SMASH && player.getMoves().getDefense() == Defenses.ABOVE) {
+			switch(level){
+    			case NEGLIGIBLE: level = ItemWeight.NEGLIGIBLE;break;
+    			case LIGHT: level = ItemWeight.NEGLIGIBLE;break;
+    			case MEDIUM: level = ItemWeight.LIGHT;break;
+    			case HEAVY: level = ItemWeight.MEDIUM;break;
+    			case TREMENDOUS: level = ItemWeight.HEAVY;break;
+    			default: break;
+			}
+		}
+		
+		if (level == ItemWeight.TREMENDOUS) {
+			deadPlayer(player, monster);
+		}
+		else if (level == ItemWeight.HEAVY) {
+			deadPlayer(player, monster);
+		}
+		else if (level == player.getCharacter().getWeight()) {
+			deadPlayer(player, monster);
+		}
+		else if (level == ItemWeight.MEDIUM && player.getCharacter().getWeight() == ItemWeight.LIGHT) {
+			deadPlayer(player, monster);
+		}
+		else if (level == ItemWeight.MEDIUM && player.getCharacter().getWeight() == ItemWeight.HEAVY) {
+			player.setHealth(player.getHealth() + 1);
+			network.broadCast(player.getCharacter().getName() + " has been wounded!");
+			if (player.getHealth() == 3) {
+				deadPlayer(player, monster);
+			}
+		}
+		else if (level == ItemWeight.LIGHT && player.getCharacter().getWeight() == ItemWeight.HEAVY) {
+			player.setHealth(player.getHealth() + 1);
+			network.broadCast(player.getCharacter().getName() + " has been wounded!");
+			if (player.getHealth() == 3) {
+				deadPlayer(player, monster);
+			}
+		}
+		else if (level == ItemWeight.LIGHT && player.getCharacter().getWeight() == ItemWeight.MEDIUM) {
+			player.setHealth(player.getHealth() + 1);
+			network.broadCast(player.getCharacter().getName() + " has been wounded!");
+			if (player.getHealth() == 2) {
+				deadPlayer(player, monster);
+			}
+		}
+	}
 	
 	public void hit(Player attacker, Player defender) {
 		ItemWeight level = attacker.getActiveWeapon().getWeight();
@@ -757,7 +1087,23 @@ public class ServerController extends Handler{
 		}
 	}
 	
+	public void deadPlayer(Player player, Monster monster) {
+		//TODO pile
+		player.kill();
+		network.send(player.getID(), "You are dead.");
+		network.broadCast(player.getCharacter().getName() + "has been killed!");
+	}
+	
+	public void deadMonster(Player player, Monster monster) {
+		//TODO pile
+		player.addFame(monster.getFame());
+		player.addNotoriety(monster.getNotoriety());
+		monster.kill();
+		network.broadCast(monster.getName() + "has been killed!");
+	}
+	
 	public void deadPlayer(Player attacker, Player defender) {
+		//TODO pile
 		attacker.addFame(10); // Arbitrary value
 		attacker.addGold(defender.getGold());
 		defender.removeGold(defender.getGold());
