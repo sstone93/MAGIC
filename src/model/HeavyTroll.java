@@ -11,9 +11,11 @@ public class HeavyTroll extends Monster {
 
 	public HeavyTroll() {
         weight       = ItemWeight.HEAVY;
-        notorietyPts = 5;
-        famePts      = 5;
-        armoured     = true;
+        notoriety    = 5;
+		fame         = 5;
+		armoured     = true;
+		attackLength = 4;
+		attackSpeed  = 4;
     }
 
 }

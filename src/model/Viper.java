@@ -12,9 +12,11 @@ public class Viper extends Monster {
 
 	public Viper() {
         weight       = ItemWeight.MEDIUM;
-        notorietyPts = 2;
-        famePts      = 1;
-        armoured     = true;
+        notoriety    = 2;
+		fame         = 1;
+		armoured     = true;
+		attackLength = 4;
+		attackSpeed  = 4;
     }
 
 }

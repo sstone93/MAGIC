@@ -12,9 +12,11 @@ public class Giant extends Monster {
 
 	public Giant() {
         weight       = ItemWeight.TREMENDOUS;
-        notorietyPts = 8;
-        famePts      = 8;
-        armoured     = false;
+        notoriety    = 8;
+		fame         = 8;
+		armoured     = false;
+		attackLength = 5;
+		attackSpeed  = 5;
     }
 
 }

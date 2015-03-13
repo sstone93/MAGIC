@@ -10,9 +10,11 @@ public class Wolf extends Monster {
 
 	public Wolf() {
 		weight       = ItemWeight.MEDIUM;
-		notorietyPts = 1;
-		famePts      = 0;
+		notoriety    = 1;
+		fame         = 0;
 		armoured     = false;
+		attackLength = 3;
+		attackSpeed  = 4;
 	}
 
 }

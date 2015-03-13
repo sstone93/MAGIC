@@ -11,9 +11,11 @@ public class HeavyDragon extends Monster {
 
 	public HeavyDragon() {
         weight       = ItemWeight.HEAVY;
-        notorietyPts = 5;
-        famePts      = 5;
-        armoured     = true;
+        notoriety    = 5;
+		fame         = 5;
+		armoured     = true;
+		attackLength = 4;
+		attackSpeed  = 4;
     }
 
 }

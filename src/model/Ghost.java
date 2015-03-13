@@ -11,9 +11,11 @@ public class Ghost extends Monster {
 	
 	public Ghost() {
 		weight       = ItemWeight.MEDIUM;
-		notorietyPts = 2;
-		famePts      = 0;
+		notoriety    = 2;
+		fame         = 0;
 		armoured     = false;
+		attackLength = 2;
+		attackSpeed  = 2;
 	}
 
 }

@@ -1,7 +1,6 @@
 package model;
 
 import java.io.Serializable;
-
 import utils.Utility.ItemWeight;
 
 public class Monster implements Serializable{
@@ -9,10 +8,15 @@ public class Monster implements Serializable{
 	private static final long serialVersionUID = -582083574086670219L;
 	Clearing   location;
 	ItemWeight weight;
-	int        notorietyPts;
-	int        famePts;
+	int        notoriety;
+	int        fame;
 	boolean    armoured;
-    // todo: put weight, in enum
+	int        attackLength;
+	int        attackSpeed;
+	int        health       = 0;
+	boolean    dead         = false;
+	CombatMoves moves;
+    // TODO put weight, in enum
     
     public Clearing getLocation() {
     	return location;
@@ -26,17 +30,48 @@ public class Monster implements Serializable{
     	return weight;
     }
     
-    public int getNotorietyPts() {
-    	return notorietyPts;
+    public int getNotoriety() {
+    	return notoriety;
     }
     
-    public int getFamePts() {
-    	return famePts;
+    public int getFame() {
+    	return fame;
     }
     
     public boolean isArmoured() {
     	return armoured;
     }
 
-
+    public int getAttackLength() {
+    	return attackLength;
+    }
+    
+    public int getAttackSpeed() {
+    	return attackSpeed;
+    }
+    
+    public int getHealth() {
+    	return health;
+    }
+    
+    public void wound() {
+    	health++;
+    }
+    
+    public boolean isDead() {
+    	return dead;
+    }
+    
+    public void kill() {
+    	dead = true;
+    }
+    
+    public CombatMoves getMoves() {
+    	return moves;
+    }
+    
+    // TODO randomize monster moves
+    public void setMoves() {
+    	
+    }
 }
