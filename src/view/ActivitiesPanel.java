@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -13,16 +14,18 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
 import model.Board;
+import model.Path;
+import model.Weapon;
 import controller.ClientController;
 import utils.Utility.Actions;
+import utils.Utility.Phases;
 
 @SuppressWarnings({ "rawtypes", "unchecked", "serial"})
 public class ActivitiesPanel extends JPanel{
 	
-	private JComboBox play1Location;
-	private JComboBox play2Location;
-	private JComboBox play3Location;
-	private JComboBox play4Location;
+	private JComboBox extraInfo;
+	private JComboBox phase;
+	private JComboBox option;
 	private ClientController control;
 	public boolean state = false;
 	
@@ -39,85 +42,74 @@ public class ActivitiesPanel extends JPanel{
 		lblNewLabel_1.setBounds(10, 11, 72, 14);
 		add(lblNewLabel_1);
 
-		play1Location = new JComboBox();
-		play1Location.setBounds(10, 84, 111, 20);
-		add(play1Location);
+		extraInfo = new JComboBox();
+		extraInfo.setBounds(389, 40, 125, 20);
+		add(extraInfo);
 		
-		play2Location = new JComboBox();
-		play2Location.setBounds(131, 84, 111, 20);
-		add(play2Location);
-		
-		play3Location = new JComboBox();
-		play3Location.setBounds(262, 84, 111, 20);
-		add(play3Location);
-		
-		play4Location = new JComboBox();
-		play4Location.setBounds(393, 84, 111, 20);
-		add(play4Location);
-		
-		JComboBox play1 = new JComboBox();
-		play1.addActionListener(new ActionListener() {
+		phase = new JComboBox();
+		phase.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if((Actions)play1.getSelectedItem() == Actions.MOVE) {
-					play1Location.setVisible(true);
+				//somehow get the actions they can perform in that phase.
+				Actions[] arr = {};
+				option.setModel(new DefaultComboBoxModel(arr));
+			}
+		});
+		phase.setBounds(10, 40, 125, 20);
+		add(phase);
+		
+		option = new JComboBox();
+		option.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				/*if((Actions)option.getSelectedItem() == Actions.MOVE) {
+					extraInfo.setVisible(true);
 				} else {
-					play1Location.setVisible(false);
+					extraInfo.setVisible(false);
+				}*/
+				switch((Actions)option.getSelectedItem()){
+				case MOVE:
+					ArrayList<Path> connections = control.model.getPlayer().getLocation().getConnections();
+					String [] arr = new String[connections.size()];
+					
+					for(int i = 0; i < connections.size(); i++){
+						arr[i] = control.model.getPlayer().getLocation().parent.getName().toString() + 
+								connections.get(i).getDestination(control.model.getPlayer().getLocation()).getClearingNumber();
+					}
+					extraInfo.setModel(new DefaultComboBoxModel(arr));
+					extraInfo.setVisible(true);
+					break;
+				case ALERT:
+					ArrayList<Weapon> weapons = control.model.getPlayer().getWeapons();
+					String [] arr2 = new String[weapons.size()];
+					for(int i = 0; i < weapons.size(); i++){
+						arr2[i] = weapons.get(i).getType().toString() + " " + weapons.get(i).isActive();
+					}
+					extraInfo.setModel(new DefaultComboBoxModel(arr2));
+					extraInfo.setVisible(true);
+					break;
+				case SEARCH:
+					extraInfo.setModel(new DefaultComboBoxModel(SearchTables.values()));
+					extraInfo.setVisible(true);
+					break;
+				case TRADE:
+					extraInfo.setVisible(false);
+					break;
+				case REST:
+					extraInfo.setVisible(false);
+					break;
+				case HIDE:
+					extraInfo.setVisible(false);
+					break;
 				}
 			}
 		});
-		play1.setModel(new DefaultComboBoxModel(Actions.values()));
-		play1.setBounds(10, 41, 93, 20);
-		add(play1);
+		//option.setModel(new DefaultComboBoxModel(Actions.values()));
+		option.setBounds(215, 40, 93, 20);
+		add(option);
 		
-		JComboBox play2 = new JComboBox();
-		play2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if((Actions)play2.getSelectedItem() == Actions.MOVE) {
-					play2Location.setVisible(true);
-				} else {
-					play2Location.setVisible(false);
-				}
-			}
-		});
-		play2.setModel(new DefaultComboBoxModel(Actions.values()));
-		play2.setBounds(131, 41, 93, 20);
-		add(play2);
-		
-		JComboBox play3 = new JComboBox();
-		play3.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if((Actions)play3.getSelectedItem() == Actions.MOVE) {
-					play3Location.setVisible(true);
-				} else {
-					play3Location.setVisible(false);
-				}
-			}
-		});
-		play3.setModel(new DefaultComboBoxModel(Actions.values()));
-		play3.setBounds(262, 41, 93, 20);
-		add(play3);
-		
-		JComboBox play4 = new JComboBox();
-		play4.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if((Actions)play4.getSelectedItem() == Actions.MOVE) {
-					play4Location.setVisible(true);
-				} else {
-					play4Location.setVisible(false);
-				}
-			}
-		});
-		play4.setModel(new DefaultComboBoxModel(Actions.values()));
-		play4.setBounds(393, 41, 93, 20);
-		add(play4);
-		
-		JButton btnRecord = new JButton("Record");
+		JButton btnRecord = new JButton("Send");
 		btnRecord.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				control.handlePlaysRecorded((Actions)play1.getSelectedItem(), (String)play1Location.getSelectedItem(), 
-						(Actions)play2.getSelectedItem(), (String)play2Location.getSelectedItem(), 
-						(Actions)play3.getSelectedItem(), (String)play3Location.getSelectedItem(), 
-						(Actions)play1.getSelectedItem(), (String)play4Location.getSelectedItem());
+				control.handlePlaySubmit((Phases)phase.getSelectedItem(), (Actions)option.getSelectedItem(), extraInfo.getSelectedItem());
 			}
 		});
 		
@@ -126,8 +118,8 @@ public class ActivitiesPanel extends JPanel{
 	}
 
 	public void update(){
-	
-		String[] clearings = new String[95];//had to hardcode the number for this interation
+		//TODO set the phases here?
+		/*String[] clearings = new String[95];//had to hardcode the number for this interation
 		Board b = control.model.getBoard();
 
 		int count = 0;
@@ -138,12 +130,10 @@ public class ActivitiesPanel extends JPanel{
 			}
 		}
 
-		play1Location.setModel(new DefaultComboBoxModel(clearings));
-		play2Location.setModel(new DefaultComboBoxModel(clearings));
-		play3Location.setModel(new DefaultComboBoxModel(clearings));
-		play4Location.setModel(new DefaultComboBoxModel(clearings));
+		extraInfo.setModel(new DefaultComboBoxModel(clearings));
+		phase.setModel(new DefaultComboBoxModel(clearings));
 		
-		state = true;
+		state = true;*/
 		
 	}
 }

@@ -111,6 +111,16 @@ public class ClientController extends Handler{
 		state = GameState.NULL;
 		view.updateNonBoardGUI(null);//sending null rather than the player object, null checks make this safe
 	}
+	
+	/**
+	 * This is where each play will be sent to the server
+	 * @param p the phase that the player is using
+	 * @param a the action that the player would like to take
+	 * @param extraInfo additional info needed (ex. the clearing to move to)
+	 */
+	public void handlePlaySubmit(Phases p, Actions a, Object extraInfo){
+		
+	}
 
 	/**
 	 * Should send the selected combat moves to the server

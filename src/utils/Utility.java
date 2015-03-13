@@ -90,6 +90,8 @@ public class Utility {
     	}
     }
 
+    public enum Phases {BASIC, SUNLIGHT, SPECIAL, TREASURE};
+    
     public enum ClearingType {CAVE, MOUNTAIN, WOODS}
     
     public enum TileType {VALLEY, MOUNTAINS, CAVES, WOODS}
@@ -152,7 +154,7 @@ public class Utility {
 
     public enum TreasureLocations{ HOARD, LAIR, ALTAR, SHRINE, POOL, VAULT, CAIRNS, STATUE}
 
-    public enum Actions {MOVE, HIDE, ALERT, REST, SEARCH, TRADE, FOLLOW}
+    public enum Actions {MOVE, HIDE, ALERT, REST, SEARCH, TRADE}
 
     public enum Attacks {THRUST, SWING, SMASH}
 

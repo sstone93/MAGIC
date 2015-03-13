@@ -343,7 +343,6 @@ public class ServerController extends Handler{
 		    		case REST: rest(player); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is resting!"); break;
 		    		case SEARCH: search(player); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is searching!"); break;
 		    		case TRADE: moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is trading!"); break;
-		    		case FOLLOW: moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is following!"); break;
 		    		}
 
     			}
