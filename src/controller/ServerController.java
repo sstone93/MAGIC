@@ -231,8 +231,12 @@ public class ServerController extends Handler{
 	 * @return A list of all players in the clearing (now unhidden)
 	 */
     public void search(Player player, SearchTables table) {	
-    	int roll = Utility.roll(6);
-		network.broadCast(player.getCharacter().getName() + " rolled " + roll + " for " + table );
+    	// TODO: check if they have a treasure that decreases the amount of die needed
+    	int roll1 = Utility.roll(6);
+    	int roll2 = Utility.roll(6);
+    	network.broadCast(player.getCharacter().getName() + " rolled " + roll1 + " and " + roll2 + " for " + table );
+    	int roll = Math.min(roll1, roll2);
+		network.broadCast(player.getCharacter().getName() + " is using " + roll + " for " + table);
 		
 		if (table == Utility.SearchTables.LOCATE) {
 			locate(player, roll);
