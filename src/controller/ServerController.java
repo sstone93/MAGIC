@@ -249,15 +249,23 @@ public class ServerController extends Handler{
     		network.send(player.getID(), "You have a choice to make my friend");
     		// TODO: They can choose to discover passageways or chits
     	}
-    	else if (roll == 2 || roll == 3) { // 2:  passages
-    		// TODO: I'm taking out clues from the 2 roll
-    		// TODO: need something with all the hidden paths, not every path
+    	else if (roll == 2 || roll == 3) { 
+    		// note: I'm taking out clues from the 2 roll
+    		boolean hidden = false;
     		ArrayList<Path> connections = player.getLocation().getConnections() ;
     		for (int i = 0; i < connections.size(); i++) { 
-    			player.addDiscovery(connections.get(i));
+    			if (connections.get(i).getType() == Utility.PathType.HIDDEN_PATH) {
+    				player.addDiscovery(connections.get(i));
+    				network.send(player.getID(), "You've discovered hidden passageways!");
+    				hidden = true;
+    			}
     		}
     		
-    		network.send(player.getID(), "You've discovered hidden passageways!");
+    		if (!hidden) {
+    			network.send(player.getID(), "There was no hidden passageways to discover in this clearing!");
+    		}
+    		
+    		
     		
     	}
     	else if (roll == 4) { // discover chits
