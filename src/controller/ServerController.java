@@ -14,6 +14,7 @@ import model.Monster;
 import model.Path;
 import model.Player;
 import model.Swordsman;
+import model.Treasure;
 import model.WhiteKnight;
 
 import java.util.ArrayList;
@@ -237,8 +238,21 @@ public class ServerController extends Handler{
 			locate(player, roll);
 		}
 		else if (table == Utility.SearchTables.LOOT) {
-			// TODO:  take treasure at roll number
 			// TODO: should they be rolling the equivalent of 2 dice? 
+			// TODO: check if they can actually loot (ie. check for if they've discovered treasure sites)?
+			
+			boolean gotTreasure = false;
+			
+			ArrayList<Treasure> treasures = player.getLocation().getTreasures();
+			if (roll <= treasures.size()) { 
+				player.addTreasure(treasures.get(roll));
+				network.send(player.getID(), "you've found " + treasures.get(roll).getType() + " !!");
+				gotTreasure = true;
+				player.getLocation().removeTreasure(treasures.get(roll));				
+			}
+			if (gotTreasure == false) {
+				network.send(player.getID(), "You didn't find any treasures this time");
+			}	
 		}
     	
     }

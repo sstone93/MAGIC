@@ -91,6 +91,10 @@ public class Clearing implements Serializable{
     public void addTreasures(ArrayList<Treasure> treasure) {
         this.treasures.addAll(treasure);
     }
+    
+    public void removeTreasure(Treasure treasure) {
+    	treasures.remove(treasure);
+    }
 
     public ArrayList<Treasure> getTreasures() {
         return treasures;
