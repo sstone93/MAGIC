@@ -11,8 +11,10 @@ import model.CombatMoves;
 import model.Dwarf;
 import model.Elf;
 import model.Monster;
+import model.Path;
 import model.Player;
 import model.Swordsman;
+import model.Treasure;
 import model.WhiteKnight;
 
 import java.util.ArrayList;
@@ -228,26 +230,68 @@ public class ServerController extends Handler{
 	 * @param The player doing the searching
 	 * @return A list of all players in the clearing (now unhidden)
 	 */
-    public ArrayList<Player> search(Player player) {
-    	ArrayList<Player> sameClearingPlayers = player.getLocation().getOccupants();
-    	for (int i = 0; i < sameClearingPlayers.size(); i++) {
-    		// do not unhide yourself
-    		if (sameClearingPlayers.get(i) != null && sameClearingPlayers.get(i).getID() != player.getID())
-    		    sameClearingPlayers.get(i).setHidden(false);
+    public void search(Player player, SearchTables table) {	
+    	// TODO: check if they have a treasure that decreases the amount of die needed
+    	int roll1 = Utility.roll(6);
+    	int roll2 = Utility.roll(6);
+    	network.broadCast(player.getCharacter().getName() + " rolled " + roll1 + " and " + roll2 + " for " + table );
+    	int roll = Math.min(roll1, roll2);
+		network.broadCast(player.getCharacter().getName() + " is using " + roll + " for " + table);
+		
+		if (table == Utility.SearchTables.LOCATE) {
+			locate(player, roll);
+		}
+		else if (table == Utility.SearchTables.LOOT) {
+			// TODO: should they be rolling the equivalent of 2 dice? 
+			// TODO: check if they can actually loot (ie. check for if they've discovered treasure sites)?
+			
+			boolean gotTreasure = false;
+			
+			ArrayList<Treasure> treasures = player.getLocation().getTreasures();
+			if (roll <= treasures.size()) { 
+				player.addTreasure(treasures.get(roll));
+				network.send(player.getID(), "you've found " + treasures.get(roll).getType() + " !!");
+				gotTreasure = true;
+				player.getLocation().removeTreasure(treasures.get(roll));				
+			}
+			if (gotTreasure == false) {
+				network.send(player.getID(), "You didn't find any treasures this time");
+			}	
+		}
+    	
+    }
+    
+    
+    public void locate(Player player, int roll) {
+    	if (roll == 1) {
+    		network.send(player.getID(), "You have a choice to make my friend");
+    		// TODO: They can choose to discover passageways or chits
     	}
-
-    	//TODO NICK: I disabled this for now, going to need search tables anyways
+    	else if (roll == 2 || roll == 3) { 
+    		// note: I'm taking out clues from the 2 roll
+    		boolean hidden = false;
+    		ArrayList<Path> connections = player.getLocation().getConnections() ;
+    		for (int i = 0; i < connections.size(); i++) { 
+    			if (connections.get(i).getType() == Utility.PathType.HIDDEN_PATH) {
+    				player.addDiscovery(connections.get(i));
+    				network.send(player.getID(), "You've discovered hidden passageways!");
+    				hidden = true;
+    			}
+    		}
+    		
+    		if (!hidden) {
+    			network.send(player.getID(), "There was no hidden passageways to discover in this clearing!");
+    		}
+    	}
+    	else if (roll == 4) { // discover chits
+    		// TODO: discover every site chit in the clearing you are searching
+    		network.send(player.getID(), "You've discovered chits!");
+    	}
+    	else if (roll == 5 || roll == 6) {
+    		// do nothing
+    		network.send(player.getID(), "You've discovered nothing") ;
+    	}
     	
-    	/*ArrayList<Treasure> clearingTreasures = player.getLocation().getTreasures();
-        for (int i = 0; i < clearingTreasures.length; i++) {
-            if (clearingTreasures[i] != null) {
-                player.addTreasure(clearingTreasures[i]);
-                network.send(player.getID(), "You've found a treasure! + " + clearingTreasures[i].getGold() + "gold");
-                player.getLocation().removeTreasure(clearingTreasures[i]);
-            }
-        }*/
-    	
-    	return sameClearingPlayers;
     }
 
     /**
@@ -341,7 +385,10 @@ public class ServerController extends Handler{
 		    		case HIDE: hide(player); moves = moves + 2; break;
 		    		case ALERT: alert(player); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is alerting their weapon!"); break;
 		    		case REST: rest(player); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is resting!"); break;
-		    		case SEARCH: search(player); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is searching!"); break;
+		    		case SEARCH: 
+		    			search(player, (SearchTables) activities.get(moves+1)); 
+		    			moves = moves + 2; 
+		    			break;
 		    		case TRADE: moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is trading!"); break;
 		    		case FOLLOW: moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is following!"); break;
 		    		}

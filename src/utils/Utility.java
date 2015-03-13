@@ -153,6 +153,8 @@ public class Utility {
     public enum TreasureLocations{ HOARD, LAIR, ALTAR, SHRINE, POOL, VAULT, CAIRNS, STATUE}
 
     public enum Actions {MOVE, HIDE, ALERT, REST, SEARCH, TRADE, FOLLOW}
+    
+    public enum SearchTables {LOCATE, LOOT} 
 
     public enum Attacks {THRUST, SWING, SMASH}
 
