@@ -264,9 +264,6 @@ public class ServerController extends Handler{
     		if (!hidden) {
     			network.send(player.getID(), "There was no hidden passageways to discover in this clearing!");
     		}
-    		
-    		
-    		
     	}
     	else if (roll == 4) { // discover chits
     		// TODO: discover every site chit in the clearing you are searching
