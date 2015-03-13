@@ -6,6 +6,7 @@ import utils.Utility.ItemWeight;
 public class Monster implements Serializable{
 
 	private static final long serialVersionUID = -582083574086670219L;
+	String     name;
 	Clearing   location;
 	ItemWeight weight;
 	int        notoriety;
@@ -18,6 +19,10 @@ public class Monster implements Serializable{
 	CombatMoves moves;
     // TODO put weight, in enum
     
+	public String getName() {
+		return name;
+	}
+	
     public Clearing getLocation() {
     	return location;
     }
