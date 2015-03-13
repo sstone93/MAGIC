@@ -20,6 +20,7 @@ public class Player implements Serializable{
     boolean hidden    = false;
     boolean dead      = false;
     boolean blocked   = false;
+    boolean goneInCave = false;
 
     Character character;
     CombatMoves moves;
@@ -270,5 +271,13 @@ public class Player implements Serializable{
 
     public ArrayList<Armour> getArmour() {
     	return armour;
+    }
+    
+    public boolean hasGoneInCave() {
+    	return goneInCave;
+    }
+    
+    public void setGoneInCave(boolean cave) {
+    	goneInCave = cave;
     }
 }

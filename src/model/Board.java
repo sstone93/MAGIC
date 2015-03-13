@@ -433,9 +433,11 @@ public class Board implements Serializable{
     						}
     					}
     				} 
-    			//handles moving to a cave
+    			// handles moving to a cave
     			}else if(newClearing.getType() == ClearingType.CAVE){
-
+    				// once 2 phases are done
+    				// did you enter a cave? (there's a boolean)
+    				// if no, you get sunlight phases
     				
     			//handles moving to woods
     			}else{
