@@ -240,21 +240,12 @@ public class ServerController extends Handler{
 	 * @return A list of all players in the clearing (now unhidden)
 	 */
     public void search(Player player, SearchTables table) {
-    	// TODO: check if they have a treasure that decreases the amount of die needed
-
-
-		// todo: check the deft gloves and
 
 		if (table == Utility.SearchTables.LOCATE) {
 			int roll = rollForTables(player, 2);
 			locate(player, roll);
 		}
 		else if (table == Utility.SearchTables.LOOT) {
-
-
-			// TODO: should they be rolling the equivalent of 2 dice?
-			// TODO: check if they can actually loot (ie. check for if they've discovered treasure sites)?
-
 			boolean reduceDie = checkRollOneDie(player, "loot");
 
 			int roll;
