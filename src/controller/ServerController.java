@@ -343,10 +343,8 @@ public class ServerController extends Handler{
         for (int i = 0; i < playerCount; i++) {
         	players.get(i).setFatigue(0);
         	players.get(i).setOrder(0);
-        }
-
-        for (int i = 0; i < addedPlayers; i++) {
         	players.get(i).setGoneInCave(false);
+        	players.get(i).setBlocked(false);
         }
         System.out.println("ResetDay end");
         return true;
