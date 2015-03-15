@@ -13,6 +13,7 @@ import model.Elf;
 import model.Monster;
 import model.Path;
 import model.Player;
+import model.SmallTreasure;
 import model.Swordsman;
 import model.Treasure;
 import model.WhiteKnight;
@@ -174,8 +175,16 @@ public class ServerController extends Handler{
 	 * @param player being hidden
 	 */
 	public void hide(Player player) { // assume it always works
-		int roll = Utility.roll(6);
-		network.broadCast(player.getCharacter().getName() + " rolled " + roll + " for hide");
+		
+		int roll; 
+		boolean oneDie = checkRollOneDie(player, "hide");
+		if (oneDie) {
+			network.send(player.getID(), "Congrats, you had the shoes of stealth which allows you to roll only 1 die!");
+			roll = rollForTables(player, 1);
+		}
+		else {
+			roll = rollForTables(player, 2);
+		}
 		
 		if (roll != 6) {
 			player.setHidden(true);
@@ -232,18 +241,30 @@ public class ServerController extends Handler{
 	 */
     public void search(Player player, SearchTables table) {	
     	// TODO: check if they have a treasure that decreases the amount of die needed
-    	int roll1 = Utility.roll(6);
-    	int roll2 = Utility.roll(6);
-    	network.broadCast(player.getCharacter().getName() + " rolled " + roll1 + " and " + roll2 + " for " + table );
-    	int roll = Math.min(roll1, roll2);
-		network.broadCast(player.getCharacter().getName() + " is using " + roll + " for " + table);
+    	
+		
+		// todo: check the deft gloves and 
 		
 		if (table == Utility.SearchTables.LOCATE) {
+			int roll = rollForTables(player, 2);
 			locate(player, roll);
 		}
 		else if (table == Utility.SearchTables.LOOT) {
+			
+			
 			// TODO: should they be rolling the equivalent of 2 dice? 
 			// TODO: check if they can actually loot (ie. check for if they've discovered treasure sites)?
+			
+			boolean reduceDie = checkRollOneDie(player, "loot");
+			
+			int roll;
+			if (reduceDie) {
+				network.send(player.getID(), "You have the deft gloves, which allows you to only roll one die! Congrats");
+				roll = rollForTables(player, 1);
+			}
+			else {
+				roll = rollForTables(player, 2);
+			}
 			
 			boolean gotTreasure = false;
 			
@@ -259,6 +280,40 @@ public class ServerController extends Handler{
 			}	
 		}
     	
+    }
+    
+    // rolls dice for the player
+    // returns the lowest of the two rolls if the player has to roll 2 die
+    // otherwise returns the first role done
+    public int rollForTables(Player player, int numberOfDie) {
+    	int roll = Utility.roll(6);
+    	if (numberOfDie == 2) {
+	    	int roll2 = Utility.roll(6);
+	    	network.broadCast(player.getCharacter().getName() + " rolled " + roll + " and " + roll2 );
+	    	roll = Math.min(roll, roll2);
+    	}
+		network.broadCast(player.getCharacter().getName() + " is using " + roll );
+		
+		return roll;
+    }
+    
+    // checks to see if the player has a treasure that allows them to roll only one die on the table
+    // returns true if they can
+    // returns false if they don't have a roll reducing treasure
+    public boolean checkRollOneDie(Player player, String table) {
+    	boolean onlyOne = false;
+    	
+    	ArrayList<Treasure> treasures = player.getTreasures();
+    			
+    	for(Treasure t: treasures) {
+			SmallTreasure temp = (SmallTreasure) t; 
+			if ( temp.getName() == SmallTreasureName.SHOES_OF_STEALTH && table == "hide")
+				onlyOne = true;
+			else if (temp.getName() == SmallTreasureName.DEFT_GLOVES && table == "loot") 
+				onlyOne = true;
+    	}
+    	
+    	return onlyOne;
     }
     
     
