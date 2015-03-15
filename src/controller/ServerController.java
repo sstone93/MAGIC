@@ -88,9 +88,9 @@ public class ServerController extends Handler{
 				if(state == GameState.CHOOSE_PLAYS){
 					recievedMoves += 1;
 					System.out.println(ID);
-					
-					
-					
+
+
+
 					findPlayer(ID).setActivities(m.getData());
 				}else{
 					network.send(ID, "NOT ACCEPTING ACTIVITIES ATM");
@@ -175,8 +175,8 @@ public class ServerController extends Handler{
 	 * @param player being hidden
 	 */
 	public void hide(Player player) { // assume it always works
-		
-		int roll; 
+
+		int roll;
 		boolean oneDie = checkRollOneDie(player, "hide");
 		if (oneDie) {
 			network.send(player.getID(), "Congrats, you had the shoes of stealth which allows you to roll only 1 die!");
@@ -185,7 +185,7 @@ public class ServerController extends Handler{
 		else {
 			roll = rollForTables(player, 2);
 		}
-		
+
 		if (roll != 6) {
 			player.setHidden(true);
 			network.broadCast( player.getCharacter().getName() + " is hidden!");
@@ -239,24 +239,24 @@ public class ServerController extends Handler{
 	 * @param The player doing the searching
 	 * @return A list of all players in the clearing (now unhidden)
 	 */
-    public void search(Player player, SearchTables table) {	
+    public void search(Player player, SearchTables table) {
     	// TODO: check if they have a treasure that decreases the amount of die needed
-    	
-		
-		// todo: check the deft gloves and 
-		
+
+
+		// todo: check the deft gloves and
+
 		if (table == Utility.SearchTables.LOCATE) {
 			int roll = rollForTables(player, 2);
 			locate(player, roll);
 		}
 		else if (table == Utility.SearchTables.LOOT) {
-			
-			
-			// TODO: should they be rolling the equivalent of 2 dice? 
+
+
+			// TODO: should they be rolling the equivalent of 2 dice?
 			// TODO: check if they can actually loot (ie. check for if they've discovered treasure sites)?
-			
+
 			boolean reduceDie = checkRollOneDie(player, "loot");
-			
+
 			int roll;
 			if (reduceDie) {
 				network.send(player.getID(), "You have the deft gloves, which allows you to only roll one die! Congrats");
@@ -265,23 +265,20 @@ public class ServerController extends Handler{
 			else {
 				roll = rollForTables(player, 2);
 			}
-			
-			boolean gotTreasure = false;
-			
+
 			ArrayList<Treasure> treasures = player.getLocation().getTreasures();
-			if (roll <= treasures.size()) { 
+			if (roll <= treasures.size()) {
 				player.addTreasure(treasures.get(roll));
 				network.send(player.getID(), "you've found " + treasures.get(roll).getType() + " !!");
-				gotTreasure = true;
-				player.getLocation().removeTreasure(treasures.get(roll));				
+				player.getLocation().removeTreasure(treasures.get(roll));
 			}
-			if (gotTreasure == false) {
+			else  {
 				network.send(player.getID(), "You didn't find any treasures this time");
-			}	
+			}
 		}
-    	
+
     }
-    
+
     // rolls dice for the player
     // returns the lowest of the two rolls if the player has to roll 2 die
     // otherwise returns the first role done
@@ -293,47 +290,47 @@ public class ServerController extends Handler{
 	    	roll = Math.min(roll, roll2);
     	}
 		network.broadCast(player.getCharacter().getName() + " is using " + roll );
-		
+
 		return roll;
     }
-    
+
     // checks to see if the player has a treasure that allows them to roll only one die on the table
     // returns true if they can
     // returns false if they don't have a roll reducing treasure
     public boolean checkRollOneDie(Player player, String table) {
     	boolean onlyOne = false;
-    	
+
     	ArrayList<Treasure> treasures = player.getTreasures();
-    			
+
     	for(Treasure t: treasures) {
-			SmallTreasure temp = (SmallTreasure) t; 
+			SmallTreasure temp = (SmallTreasure) t;
 			if ( temp.getName() == SmallTreasureName.SHOES_OF_STEALTH && table == "hide")
 				onlyOne = true;
-			else if (temp.getName() == SmallTreasureName.DEFT_GLOVES && table == "loot") 
+			else if (temp.getName() == SmallTreasureName.DEFT_GLOVES && table == "loot")
 				onlyOne = true;
     	}
-    	
+
     	return onlyOne;
     }
-    
-    
+
+
     public void locate(Player player, int roll) {
     	if (roll == 1) {
     		network.send(player.getID(), "You have a choice to make my friend");
     		// TODO: They can choose to discover passageways or chits
     	}
-    	else if (roll == 2 || roll == 3) { 
+    	else if (roll == 2 || roll == 3) {
     		// note: I'm taking out clues from the 2 roll
     		boolean hidden = false;
     		ArrayList<Path> connections = player.getLocation().getConnections() ;
-    		for (int i = 0; i < connections.size(); i++) { 
+    		for (int i = 0; i < connections.size(); i++) {
     			if (connections.get(i).getType() == Utility.PathType.HIDDEN_PATH) {
     				player.addDiscovery(connections.get(i));
     				network.send(player.getID(), "You've discovered hidden passageways!");
     				hidden = true;
     			}
     		}
-    		
+
     		if (!hidden) {
     			network.send(player.getID(), "There was no hidden passageways to discover in this clearing!");
     		}
@@ -346,7 +343,7 @@ public class ServerController extends Handler{
     		// do nothing
     		network.send(player.getID(), "You've discovered nothing") ;
     	}
-    	
+
     }
 
     /**
@@ -376,7 +373,7 @@ public class ServerController extends Handler{
         	players.get(i).setFatigue(0);
         	players.get(i).setOrder(0);
         }
-        
+
         for (int i = 0; i < addedPlayers; i++) {
         	players.get(i).setGoneInCave(false);
         }
@@ -406,11 +403,11 @@ public class ServerController extends Handler{
      * Cycles through players and their moves for the day
      */
     public void doTodaysActivities(Player player) {
-    	
+
     	int moves = 0;
-    	
+
     	System.out.println("Start "+player.getCharacter().getName()+" activities: " + player.getActivities().size());
-    	
+
     	while (moves < player.getActivities().size()) {
 
     		// For testing
@@ -437,16 +434,16 @@ public class ServerController extends Handler{
 
 		    		switch((Actions) activities.get(moves)) {
 
-		    		case MOVE: 
-		    			boolean move = board.move(moves, player, (String) activities.get(moves+1)); moves = moves + 2; 
+		    		case MOVE:
+		    			boolean move = board.move(moves, player, (String) activities.get(moves+1)); moves = moves + 2;
 		    			network.broadCast(player.getCharacter().getName() + " is moving? : " + move);
 		    			break;
 		    		case HIDE: hide(player); moves = moves + 2; break;
 		    		case ALERT: alert(player); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is alerting their weapon!"); break;
 		    		case REST: rest(player); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is resting!"); break;
-		    		case SEARCH: 
-		    			search(player, (SearchTables) activities.get(moves+1)); 
-		    			moves = moves + 2; 
+		    		case SEARCH:
+		    			search(player, (SearchTables) activities.get(moves+1));
+		    			moves = moves + 2;
 		    			break;
 		    		case TRADE: moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is trading!"); break;
 		    		case FOLLOW: moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is following!"); break;
@@ -582,7 +579,7 @@ public class ServerController extends Handler{
             for (int i = 0; i < playerCount; i++) {
                 if (players.get(i).order == nextMover) {
                 	if (players.get(i).getTarget() != null) {
-                		encounter(players.get(i), players.get(i).getTarget());	
+                		encounter(players.get(i), players.get(i).getTarget());
                 		//System.out.println("")
                 	}
                 	nextMover++;
@@ -619,7 +616,7 @@ public class ServerController extends Handler{
     		network.send(player.getID(), "That monster is dead");
     		return;
     	}
-    	
+
     	state = GameState.CHOOSE_COMBATMOVES;
     	recievedCombat = 0;
     	network.send(player.getID(), "SEND COMBATMOVES");
@@ -634,10 +631,10 @@ public class ServerController extends Handler{
     	}
 
     	monster.setMoves();
-    	
+
     	System.out.println("got combat moves");
     	state = GameState.NULL;
-    	
+
     	if (player.getMoves() == null) {
     		network.send(player.getID(), "It messed up...");
     		return;
@@ -650,7 +647,7 @@ public class ServerController extends Handler{
     		doFight(player, monster);
     	}
     }
-    
+
     /**
      *
      * @param attacker
@@ -663,7 +660,7 @@ public class ServerController extends Handler{
 			player.weapons[0].setActive(true);
 			return;
 		}*/
-    	
+
     	if (attacker == defender) {
     		network.send(attacker.getID(), "Stop attacking yourself!");
     		return;
@@ -681,10 +678,10 @@ public class ServerController extends Handler{
     		network.send(defender.getID(), "You are dead.");
     		return;
     	}
-    	
+
     	//System.out.println(attacker.getTarget().getCharacter().getName());
     	//System.out.println(defender.getTarget().getCharacter().getName());
-    	
+
     	//ask clients to send moves!
     	state = GameState.CHOOSE_COMBATMOVES;
     	recievedCombat = 0;
@@ -702,8 +699,8 @@ public class ServerController extends Handler{
 
     	System.out.println("got combat moves");
     	state = GameState.NULL;
-    	
-    	
+
+
     	if (attacker.getMoves() == null) {
     		network.send(attacker.getID(), "It messed up...");
     		return;
@@ -716,7 +713,7 @@ public class ServerController extends Handler{
     		doFight(attacker, defender);
     	}
 	}
-    
+
     public void doFight(Player player, Monster monster) {
     	if (player.getActiveWeapon().getSpeed() < monster.getAttackSpeed()) {
     		checkHit(monster, player);
@@ -724,7 +721,7 @@ public class ServerController extends Handler{
     	else if (player.getActiveWeapon().getSpeed() > monster.getAttackSpeed()) {
     		checkHit(player, monster);
     	}
-    	
+
     	else {
     		if (player.getActiveWeapon().getLength() < monster.getAttackLength()) {
     			checkHit(monster, player);
@@ -737,7 +734,7 @@ public class ServerController extends Handler{
     		}
     	}
     }
-    
+
 	public void doFight(Player attacker, Player defender) {
 		if (defender.getActiveWeapon().getSpeed() < attacker.getActiveWeapon().getSpeed()) {
 			checkHit(attacker, defender);
@@ -789,7 +786,7 @@ public class ServerController extends Handler{
 			}
 		}
 	}
-	
+
 	public void checkHit(Monster monster, Player player) {
 		if (player.isDead() == false && monster.isDead() == false) {
 			if ((player.getCharacter().getSpeed() - monster.getMoves().getAttackFatigue()) <= (monster.getAttackSpeed() - player.getMoves().getManeuverFatigue())) {
@@ -820,7 +817,7 @@ public class ServerController extends Handler{
 			}
 		}
 	}
-	
+
 	public void checkHit(Player attacker, Player defender) {
 		if (attacker.isDead() == false && defender.isDead() == false) {
 	    	if ((defender.getActiveWeapon().getSpeed() - attacker.getMoves().getAttackFatigue()) <= (attacker.getCharacter().getSpeed() - defender.getMoves().getManeuverFatigue())) {
@@ -851,7 +848,7 @@ public class ServerController extends Handler{
 			}
 		}
     }
-	
+
 	public void hit(Player player, Monster monster) {
 		ItemWeight level = player.getActiveWeapon().getWeight();
 
@@ -906,7 +903,7 @@ public class ServerController extends Handler{
     			default: break;
 			}
 		}
-		
+
 		if (level == ItemWeight.TREMENDOUS) {
 			deadMonster(player, monster);
 		}
@@ -965,7 +962,7 @@ public class ServerController extends Handler{
 			}
 		}
 	}
-	
+
 	public void hit(Monster monster, Player player) {
 		ItemWeight level = monster.getWeight();
 
@@ -1020,7 +1017,7 @@ public class ServerController extends Handler{
     			default: break;
 			}
 		}
-		
+
 		if (level == ItemWeight.TREMENDOUS) {
 			deadPlayer(player, monster);
 		}
@@ -1055,7 +1052,7 @@ public class ServerController extends Handler{
 			}
 		}
 	}
-	
+
 	public void hit(Player attacker, Player defender) {
 		ItemWeight level = attacker.getActiveWeapon().getWeight();
 
@@ -1145,14 +1142,14 @@ public class ServerController extends Handler{
 			}
 		}
 	}
-	
+
 	public void deadPlayer(Player player, Monster monster) {
 		//TODO pile
 		player.kill();
 		network.send(player.getID(), "You are dead.");
 		network.broadCast(player.getCharacter().getName() + "has been killed!");
 	}
-	
+
 	public void deadMonster(Player player, Monster monster) {
 		//TODO pile
 		player.addFame(monster.getFame());
@@ -1160,7 +1157,7 @@ public class ServerController extends Handler{
 		monster.kill();
 		network.broadCast(monster.getName() + "has been killed!");
 	}
-	
+
 	public void deadPlayer(Player attacker, Player defender) {
 		//TODO pile
 		attacker.addFame(10); // Arbitrary value
