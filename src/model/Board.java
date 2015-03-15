@@ -433,9 +433,11 @@ public class Board implements Serializable{
     						}
     					}
     				} 
-    			//handles moving to a cave
+    			// handles moving to a cave
     			}else if(newClearing.getType() == ClearingType.CAVE){
-
+    				move(player, newClearing);
+    				System.out.println(player.getCharacter().getName()+" SUCCEEDED move to "+newClearing.parent.getName().toString()+" "+newClearing.location);
+					moving = true;
     				
     			//handles moving to woods
     			}else{
