@@ -1,10 +1,34 @@
 package utils;
+import java.util.ArrayList;
 import java.util.Random;
+
+import model.Player;
+import model.SmallTreasure;
+import model.Treasure;
 
 public class Utility {
     public static int roll(int max) {
         Random r = new Random();
         return r.nextInt(max) + 1;
+    }
+    
+    // checks to see if the player has a treasure that allows them to roll only one die on the table
+    // returns true if they can
+    // returns false if they don't have a roll reducing treasure
+    public static boolean checkRollOneDie(Player player, String table) {
+    	boolean onlyOne = false;
+
+    	ArrayList<Treasure> treasures = player.getTreasures();
+
+    	for(Treasure t: treasures) {
+			SmallTreasure temp = (SmallTreasure) t;
+			if ( temp.getName() == SmallTreasureName.SHOES_OF_STEALTH && table == "hide")
+				onlyOne = true;
+			else if (temp.getName() == SmallTreasureName.DEFT_GLOVES && table == "loot")
+				onlyOne = true;
+    	}
+
+    	return onlyOne;
     }
 
     public static ItemWeight getItemWeight(String weight) {

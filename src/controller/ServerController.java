@@ -177,7 +177,7 @@ public class ServerController extends Handler{
 	public void hide(Player player) { // assume it always works
 
 		int roll;
-		boolean oneDie = checkRollOneDie(player, "hide");
+		boolean oneDie = Utility.checkRollOneDie(player, "hide");
 		if (oneDie) {
 			network.send(player.getID(), "Congrats, you had the shoes of stealth which allows you to roll only 1 die!");
 			roll = rollForTables(player, 1);
@@ -246,7 +246,7 @@ public class ServerController extends Handler{
 			locate(player, roll);
 		}
 		else if (table == Utility.SearchTables.LOOT) {
-			boolean reduceDie = checkRollOneDie(player, "loot");
+			boolean reduceDie = Utility.checkRollOneDie(player, "loot");
 
 			int roll;
 			if (reduceDie) {
@@ -284,26 +284,6 @@ public class ServerController extends Handler{
 
 		return roll;
     }
-
-    // checks to see if the player has a treasure that allows them to roll only one die on the table
-    // returns true if they can
-    // returns false if they don't have a roll reducing treasure
-    public boolean checkRollOneDie(Player player, String table) {
-    	boolean onlyOne = false;
-
-    	ArrayList<Treasure> treasures = player.getTreasures();
-
-    	for(Treasure t: treasures) {
-			SmallTreasure temp = (SmallTreasure) t;
-			if ( temp.getName() == SmallTreasureName.SHOES_OF_STEALTH && table == "hide")
-				onlyOne = true;
-			else if (temp.getName() == SmallTreasureName.DEFT_GLOVES && table == "loot")
-				onlyOne = true;
-    	}
-
-    	return onlyOne;
-    }
-
 
     public void locate(Player player, int roll) {
     	if (roll == 1) {
