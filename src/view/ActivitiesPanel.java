@@ -52,7 +52,29 @@ public class ActivitiesPanel extends JPanel{
 			public void actionPerformed(ActionEvent e) {
 				//somehow get the actions they can perform in that phase.
 				//TODO BASED ON THE SELECTED PHASE, GET THE LIST OF ACTIONS
-				Actions[] arr = {};
+				
+				Actions[] arr;
+				
+				switch((PhaseType)phase.getSelectedItem()){
+				case BASIC:
+					arr = Actions.values();
+					break;
+				case SPECIAL:
+					//TODO
+					arr = new Actions[0];
+					break;
+				case SUNLIGHT:
+					arr = Actions.values();
+					break;
+				case TREASURE:
+					arr = new Actions[0];
+					//TODO
+					break;
+				default:
+					arr = new Actions[0];
+					break;
+				}
+				
 				option.setModel(new DefaultComboBoxModel(arr));
 			}
 		});
@@ -73,7 +95,7 @@ public class ActivitiesPanel extends JPanel{
 					String [] arr = new String[connections.size()];
 					
 					for(int i = 0; i < connections.size(); i++){
-						arr[i] = control.model.getPlayer().getLocation().parent.getName().toString() + 
+						arr[i] = connections.get(i).getDestination(control.model.getPlayer().getLocation()).parent.getName().toString() +" "+ 
 								connections.get(i).getDestination(control.model.getPlayer().getLocation()).getClearingNumber();
 					}
 					extraInfo.setModel(new DefaultComboBoxModel(arr));

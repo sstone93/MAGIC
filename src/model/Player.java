@@ -347,7 +347,17 @@ public class Player implements Serializable{
 		Phase t = new Phase(data.getType());
 		//TODO
 		//THIS ASSUMES THAT PHASE EQUALITY MEANS JUST THE TYPES MATCH (which i think i did)
-		phases.remove(t);
+		
+		//TODO THIS IS A TESTING MEASURE, REMOVE ME PLEASE, SHOULD BE A SPECIFIC PHASE, NOT PHASE AT POSITION 0
+		phases.remove(0);
+		
+		//DETERMINES IF BASICS ARE DONE
+		finishedBasic = true;
+		for(int i=0; i<phases.size(); i++){
+			if(phases.get(i).getType() == PhaseType.BASIC){
+				finishedBasic = false;
+			}
+		}
 		
 		//if the player's turn is done
 		if(phases.size() == 0 && addedSunlight == true){

@@ -95,13 +95,17 @@ public class ServerController extends Handler{
 					Player p = findPlayer(ID);
 					
 					//1. is it valid? (blocked + move in their queue)
-					if(p.isBlocked() != false){
+					if(p.isBlocked() == false){
 						//do it
 						
-						//TODO
-						//case on the actiontype of the move
-						//if the action was not a move, reset player's last move
-						//TODO
+						//if it is a move, then dont reset last move
+						if(((Phase) m.getData().get(0)).getAction() == Actions.MOVE){
+							handleAction(p,(Phase)m.getData().get(0));
+						}else{
+							//if the action was not a move, reset player's last move
+							p.setLastMove(null);
+							handleAction(p,(Phase)m.getData().get(0));
+						}
 						
 						//subtract from queue
 						p.usePhase((Phase) m.getData().get(0));
@@ -110,6 +114,7 @@ public class ServerController extends Handler{
 						//see if that was their last action
 						if(p.getDaylight()){
 							finishedPlayers += 1;
+							network.send(ID, "NO PHASES LEFT");
 						}
 						//tell client it worked
 						network.send(ID, "ACTION SUCCEEDED");
@@ -398,6 +403,38 @@ public class ServerController extends Handler{
         //TODO reset natives
     }
 
+    public void handleAction(Player p, Phase a){
+    	switch(a.getAction()) {
+    	case MOVE:
+    		boolean move = board.move(p, a);
+    		network.broadCast(p.getCharacter().getName() + " is moving? : " + move);
+    		break;
+    	case HIDE: 
+    		hide(p);
+    		break;
+    	case ALERT:
+    		alert(p);
+    		network.broadCast(p.getCharacter().getName() + " is alerting their weapon!");
+    		break;
+    	case REST: 
+    		rest(p);
+    		network.broadCast(p.getCharacter().getName() + " is resting!");
+    		break;
+    	case SEARCH:
+    		search(p, (SearchTables) a.getExtraInfo());
+    		break;
+    	case TRADE:
+    		//TODO MAKE TRADING A THING
+    		network.broadCast(p.getCharacter().getName() + " is trading!");
+    		break;
+    	case PASS:
+    		network.broadCast(p.getCharacter().getName() + " is PASSING!");
+    		break;
+    	default:
+    		break;
+    	}
+    }
+    
     /**
      * Cycles through players and their moves for the day
      */

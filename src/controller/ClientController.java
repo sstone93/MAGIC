@@ -74,6 +74,9 @@ public class ClientController extends Handler{
 			}else if(text.equalsIgnoreCase("NOT ACCEPTING CHARACTER SELECT ATM")){
 				state = GameState.CHOOSE_CHARACTER;
 				model.addMessage("RE-START CHARACTER SELECT");
+			}else if(text.equalsIgnoreCase("NO PHASES LEFT")){
+				state = GameState.NULL;
+				model.addMessage("No phases remaining");
 			}else{
 				model.addMessage((String) message);
 				view.updateMessageBox();
@@ -106,7 +109,8 @@ public class ClientController extends Handler{
 		
 		network.send(new Message(MessageType.ACTIVITIES, mes));
 		model.addMessage("Sent activity");
-		state = GameState.NULL;
+		
+		//state = GameState.NULL;
 		view.updateNonBoardGUI(null);//sending null rather than the player object, null checks make this safe
 	}
 
