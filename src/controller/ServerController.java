@@ -13,7 +13,6 @@ import model.Elf;
 import model.Monster;
 import model.Path;
 import model.Player;
-import model.SmallTreasure;
 import model.Swordsman;
 import model.Treasure;
 import model.WhiteKnight;
@@ -415,7 +414,7 @@ public class ServerController extends Handler{
 		    			moves = moves + 2;
 		    			break;
 		    		case TRADE: moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is trading!"); break;
-		    		case FOLLOW: moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is following!"); break;
+		    		//case FOLLOW: moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is following!"); break;
 		    		}
 
     			}
