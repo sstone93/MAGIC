@@ -2,8 +2,10 @@ package model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+
 import utils.Utility;
 import utils.Utility.ItemWeight;
+import utils.Utility.PhaseType;
 
 public class Player implements Serializable{
 
@@ -17,21 +19,26 @@ public class Player implements Serializable{
     int notoriety     = 0;
     int finalScore    = 0;
     public int order; // in which order does the player play
+    
     boolean hidden    = false;
     boolean dead      = false;
     boolean blocked   = false;
     boolean goneInCave = false;
     boolean finishedDaylight = false;
+    boolean finishedBasic = false;
+    boolean addedSunlight = false;
 
     Character character;
     CombatMoves moves;
     Player target;
     Clearing location;
+    Clearing lastMove;
+    
     ArrayList<Armour> armour = new ArrayList<Armour>();
     ArrayList<Weapon> weapons = new ArrayList<Weapon>();
-    ArrayList<Object> activities = new ArrayList<Object>();
     ArrayList<Treasure>  treasures = new ArrayList<Treasure>();
     ArrayList<Object> discoveries = new ArrayList<Object>();
+    ArrayList<Phase> phases = new ArrayList<Phase>();
     
     public Player(Character character, int ID) {
         this.character = character;
@@ -40,6 +47,25 @@ public class Player implements Serializable{
         this.weapons = character.startingWeapons;
     }
 
+    public void calculatePhases(){
+    	
+    	//resets finisheddaylight and finished basic
+    	finishedDaylight = false;
+    	finishedBasic = false;
+    	addedSunlight = false;
+    	
+    	//adds basic phases
+    	phases.add(new Phase(PhaseType.BASIC));
+    	phases.add(new Phase(PhaseType.BASIC));
+    	
+    	//determines + adds character special phases
+    	//TODO CALCULATE SPECIAL PHASES
+    	
+    	//determines + adds treasure special phases
+    	//TODO CALCULATE TREASURE PHASES
+    	
+    }
+    
     public Weapon getActiveWeapon() {
     	for (int i = 0; i < weapons.size(); i++) {
     		if (this.weapons.get(i).isActive() == true) {
@@ -93,12 +119,6 @@ public class Player implements Serializable{
     		return false;
     	}
     }
-    
-    // replaces all the previous activities
-    public void addActivities(ArrayList<Object> newActivities) {
-    	activities = null;
-    	activities = newActivities;
-    }
 
     public void unAlertWeapons(){
 		for (int j = 0; j < weapons.size(); j++ ) {
@@ -108,12 +128,8 @@ public class Player implements Serializable{
 		}
     }
 
-    public ArrayList<Object> getActivities() {
-    	return activities;
-    }
-
-    public void setActivities(ArrayList<Object> o){
-    	activities = o;
+    public ArrayList<Phase> getPhases() {
+    	return phases;
     }
 
     public void setCharacter(Character character) {
@@ -262,6 +278,13 @@ public class Player implements Serializable{
         }
     }
 
+    public void checkAndAddSunlight(){
+    	if(this.getFinishedBasic() && this.addedSunlight == false){
+    		this.addedSunlight = true;
+        	phases.add(new Phase(PhaseType.SUNLIGHT));
+        	phases.add(new Phase(PhaseType.SUNLIGHT));
+    	}
+    }
 
     public void setFinalScore(int score) {
         finalScore = score;
@@ -283,6 +306,14 @@ public class Player implements Serializable{
     	return armour;
     }
     
+    public boolean getFinishedBasic() {
+    	return finishedBasic;
+    }
+    
+    public void setFinishedBasic(boolean b) {
+    	finishedBasic = b;
+    }
+    
     public boolean hasGoneInCave() {
     	return goneInCave;
     }
@@ -290,4 +321,20 @@ public class Player implements Serializable{
     public void setGoneInCave(boolean cave) {
     	goneInCave = cave;
     }
+
+	public void setLastMove(Clearing newClearing) {
+		lastMove = newClearing;
+	}
+	
+	public Clearing getLastMove(){
+		return lastMove;
+	}
+
+	public void usePhase(Phase data) {
+		Phase t = new Phase(data.getType());
+		//TODO
+		//THIS ASSUMES THAT PHASE EQUALITY MEANS JUST THE TYPES MATCH (which i think i did)
+		phases.remove(t);
+		
+	}
 }

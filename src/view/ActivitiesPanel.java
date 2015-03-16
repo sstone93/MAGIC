@@ -1,4 +1,3 @@
-
 package view;
 
 import java.awt.Color;
@@ -15,10 +14,11 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
 import model.Path;
+import model.Phase;
 import model.Weapon;
 import controller.ClientController;
 import utils.Utility.Actions;
-import utils.Utility.Phases;
+import utils.Utility.PhaseType;
 import utils.Utility.SearchTables;
 
 @SuppressWarnings({ "rawtypes", "unchecked", "serial"})
@@ -51,6 +51,7 @@ public class ActivitiesPanel extends JPanel{
 		phase.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//somehow get the actions they can perform in that phase.
+				//TODO BASED ON THE SELECTED PHASE, GET THE LIST OF ACTIONS
 				Actions[] arr = {};
 				option.setModel(new DefaultComboBoxModel(arr));
 			}
@@ -114,7 +115,7 @@ public class ActivitiesPanel extends JPanel{
 		JButton btnRecord = new JButton("Send");
 		btnRecord.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				control.handlePlaySubmit((Phases)phase.getSelectedItem(), (Actions)option.getSelectedItem(), extraInfo.getSelectedItem());
+				control.handlePlaySubmit((PhaseType)phase.getSelectedItem(), (Actions)option.getSelectedItem(), extraInfo.getSelectedItem());
 			}
 		});
 		
@@ -124,21 +125,11 @@ public class ActivitiesPanel extends JPanel{
 
 	public void update(){
 		//TODO set the phases here?
-		/*String[] clearings = new String[95];//had to hardcode the number for this interation
-		Board b = control.model.getBoard();
-
-		int count = 0;
-		for (int i = 0; i <b.tiles.size(); i++){
-			for (int j=0; j < b.tiles.get(i).getClearings().size(); j++){
-				clearings[count] = (b.tiles.get(i).getName().toString() + " " + b.tiles.get(i).getClearings().get(j).getClearingNumber());
-				count++;
-			}
+		ArrayList<Phase> phases = this.control.model.getPlayer().getPhases();
+		PhaseType[] p = new PhaseType[phases.size()];
+		for(int i=0; i<phases.size(); i++){
+			p[i] = (phases.get(i).getType());
 		}
-
-		extraInfo.setModel(new DefaultComboBoxModel(clearings));
-		phase.setModel(new DefaultComboBoxModel(clearings));
-		
-		state = true;*/
-		
+		option.setModel(new DefaultComboBoxModel(p));
 	}
 }

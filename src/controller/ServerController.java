@@ -12,6 +12,7 @@ import model.Dwarf;
 import model.Elf;
 import model.Monster;
 import model.Path;
+import model.Phase;
 import model.Player;
 import model.Swordsman;
 import model.Treasure;
@@ -87,12 +88,37 @@ public class ServerController extends Handler{
 				if(state == GameState.CHOOSE_PLAYS){
 					
 					//MAIN HANDLER FOR INDIVIDUAL PHASE SUBMISSION.
+
+		    		//- determine if they move on to 
+		    		//- when a character is done all actions, set their state to finished, and check to see if all players are done and if you need to move on.
 					
-					System.out.println(ID);
-
-
-
-					findPlayer(ID).setActivities(m.getData());
+					Player p = findPlayer(ID);
+					
+					//1. is it valid? (blocked + move in their queue)
+					if(p.isBlocked() != false){
+						//do it
+						
+						//TODO
+						//case on the actiontype of the move
+						//if the action was not a move, reset player's last move
+						//TODO
+						
+						
+						//subtract from queue
+						p.usePhase((Phase) m.getData().get(0));
+						//check to see if basics are over, if so add sunlight
+						p.checkAndAddSunlight();
+						//tell client it worked
+						network.send(ID, "ACTION SUCCEEDED");
+						//broadcast new board and player states
+						network.broadCast(board);
+						distributeCharacters();
+						
+					} else {
+						//return error to client
+						network.send(ID, "ACTION FAILED, YOU ARE BLOCKED");
+					}			
+					
 				}else{
 					network.send(ID, "NOT ACCEPTING ACTIVITIES ATM");
 				}
@@ -475,6 +501,13 @@ public class ServerController extends Handler{
     	}
     }
     
+    public void calculatePhases(){
+    	for(int i=0;i<playerCount;i++){
+			players.get(i).calculatePhases();
+		}
+    }
+    
+    
     /**
      * Waits until all activities have been submitted (and tells the clients to send them)
      */
@@ -482,18 +515,16 @@ public class ServerController extends Handler{
     	
     	setSunlightTrue();		//sets the sunlight for all players back to true (minus the dwarf)
     	
+    	calculatePhases();			//sets up all the players
+    	distributeCharacters();		//tell the client's their options
+    	
     	//1. Send each player their notice for 2 basic moves
     	network.broadCast("SEND MOVES");
     	
     	//2. START HANDLER FOR MOVE SUBMISSIONS
-    		//- when an submitted move is deemed invalid, then return a notice to the player
-    		//- when a player submites a move, determine if it invalidates sunlight
-    		//- determine if they move on to sunlight or not
-    		//- determine if they move on to 
-    		//- when a character is done all actions, set their state to finished, and check to see if all players are done and if you need to move on.
     	state = GameState.CHOOSE_PLAYS;
     	finishedPlayers = 0;
-
+    	
     	while(finishedPlayers < playerCount){
     		try {
 				Thread.sleep(20);

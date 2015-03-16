@@ -114,10 +114,8 @@ public class Utility {
     	}
     }
     
-    public enum PhaseType {BASIC, SUNLIGHT, SPECIAL}
-
-    public enum Phases {BASIC, SUNLIGHT, SPECIAL, TREASURE};
-    
+    public enum PhaseType {BASIC, SUNLIGHT, SPECIAL, TREASURE}
+ 
     public enum ClearingType {CAVE, MOUNTAIN, WOODS}
     
     public enum TileType {VALLEY, MOUNTAINS, CAVES, WOODS}

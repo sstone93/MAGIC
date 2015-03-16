@@ -7,6 +7,7 @@ import networking.NetworkClient;
 import model.Board;
 import model.ClientModel;
 import model.CombatMoves;
+import model.Phase;
 import model.Player;
 import utils.Utility.*;
 import view.View;
@@ -97,11 +98,11 @@ public class ClientController extends Handler{
 	 * @param a the action that the player would like to take
 	 * @param extraInfo additional info needed (ex. the clearing to move to)
 	 */
-	public void handlePlaySubmit(Phases p, Actions a, Object extraInfo){
+	public void handlePlaySubmit(PhaseType p, Actions a, Object extraInfo){
 		ArrayList<Object> mes = new ArrayList<Object>();
 		
 		//NEED TO CREATE NEW OBJECT AND ADD IT TO MESSAGE
-		//mes.add(new Phase());
+		mes.add(new Phase(p, a, extraInfo));
 		
 		network.send(new Message(MessageType.ACTIVITIES, mes));
 		model.addMessage("Sent activity");

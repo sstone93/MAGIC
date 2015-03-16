@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import utils.Utility.Actions;
 import utils.Utility.ClearingType;
 import utils.Utility.GarrisonName;
 import utils.Utility.LargeTreasureName;
@@ -399,10 +398,11 @@ public class Board implements Serializable{
     public boolean move(Player player, Phase p) {
     	
     	//Convert newClearing into the actual clearing
-    	String[] temp = newC.split(" ");
+    	String[] temp = ((String) p.getExtraInfo()).split(" ");
     	Clearing newClearing =  tiles.get(convertTileName(TileName.valueOf(temp[0]))).getClearing(Integer.parseInt(temp[1]));
     	
     	boolean moving = false;
+    	
     	//Steps to Move
     	//1. Is your clearing connected to the destination clearing?
     	//2. Are you able to use the path connecting the two clearings?
@@ -414,16 +414,20 @@ public class Board implements Serializable{
 
     	//1. Checks for clearings being connected.
     	Path route = (player.getLocation().routeTo(newClearing));
+    	
     	if (route!=null) {
     		//2. Handles special conditions based on path type
     		if (canUsePath(player, route)){
     			//3. ClearingType Restrictions
     			//handles moving to a mountain
     			if(newClearing.getType() == ClearingType.MOUNTAIN){
-    				if(player.lastMove().equals(newClearing)){
+    				if(player.getLastMove() != null && player.getLastMove().equals(newClearing)){
     					move(player, newClearing);
     					System.out.println(player.getCharacter().getName()+" SUCCEEDED move to "+newClearing.parent.getName().toString()+" "+newClearing.location);
     					moving = true;
+    				}else{
+    					//sets up the player to move to the mountain next move
+    					player.setLastMove(newClearing);
     				}
     			}
     		} 
@@ -438,8 +442,6 @@ public class Board implements Serializable{
     			System.out.println(player.getCharacter().getName()+" SUCCEEDED move to "+newClearing.parent.getName().toString()+" "+newClearing.location);
     			moving = true;
     		}
-    	}else{// THIS MEANS THE MOVE FAILED DUE TO NOT KNOWING
-    		System.out.println(player.getCharacter().getName()+" failed to move to "+newClearing.parent.getName().toString()+" "+newClearing.location+" (route type error)");
     	}else{	//THIS MEANS YOU FAILED TO MOVE CLEARINGS DUE TO A LACK OF PATH BETWEEN YOUR LOCATION AND THE DESTINATION
     		System.out.println(player.getCharacter().getName()+" failed to move to "+newClearing.parent.getName().toString()+" "+newClearing.location+" (no path)");
     	}
