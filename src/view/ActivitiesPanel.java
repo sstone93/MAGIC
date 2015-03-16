@@ -130,6 +130,6 @@ public class ActivitiesPanel extends JPanel{
 		for(int i=0; i<phases.size(); i++){
 			p[i] = (phases.get(i).getType());
 		}
-		option.setModel(new DefaultComboBoxModel(p));
+		phase.setModel(new DefaultComboBoxModel(p));
 	}
 }
