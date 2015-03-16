@@ -113,6 +113,8 @@ public class Utility {
 	    	default: return null;
     	}
     }
+    
+    public enum PhaseType {BASIC, SUNLIGHT, SPECIAL}
 
     public enum Phases {BASIC, SUNLIGHT, SPECIAL, TREASURE};
     
@@ -178,7 +180,7 @@ public class Utility {
 
     public enum TreasureLocations{ HOARD, LAIR, ALTAR, SHRINE, POOL, VAULT, CAIRNS, STATUE}
 
-    public enum Actions {MOVE, HIDE, ALERT, REST, SEARCH, TRADE}
+    public enum Actions {MOVE, HIDE, ALERT, REST, SEARCH, TRADE, PASS}
     
     public enum SearchTables {LOCATE, LOOT}
 

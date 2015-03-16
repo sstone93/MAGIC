@@ -1,3 +1,4 @@
+
 package view;
 
 import java.awt.Color;
@@ -13,7 +14,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
-import model.Board;
 import model.Path;
 import model.Weapon;
 import controller.ClientController;
@@ -99,6 +99,10 @@ public class ActivitiesPanel extends JPanel{
 					break;
 				case HIDE:
 					extraInfo.setVisible(false);
+					break;
+				case PASS:
+					break;
+				default:
 					break;
 				}
 			}

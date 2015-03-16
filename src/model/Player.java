@@ -21,6 +21,7 @@ public class Player implements Serializable{
     boolean dead      = false;
     boolean blocked   = false;
     boolean goneInCave = false;
+    boolean finishedDaylight = false;
 
     Character character;
     CombatMoves moves;
@@ -51,10 +52,19 @@ public class Player implements Serializable{
     public Player getTarget(){
     	return this.target;
     }
-
+    
+    public void setDaylight(Boolean s){
+    	this.finishedDaylight = s;
+    }
+    
+    public Boolean getDaylight(){
+    	return this.finishedDaylight;
+    }
+    
     public CombatMoves getMoves(){
     	return this.moves;
     }
+    
     
     public void setMoves(CombatMoves m){
     	this.moves = m;

@@ -396,7 +396,7 @@ public class Board implements Serializable{
      * @param newClearing clearing being moved to
      * @return boolean based on if the action was valid or not
      */
-    public boolean move(int moves, Player player, String newC) {
+    public boolean move(Player player, Phase p) {
     	
     	//Convert newClearing into the actual clearing
     	String[] temp = newC.split(" ");
@@ -411,7 +411,7 @@ public class Board implements Serializable{
     	//		-Cannot enter a cave on a turn where sunlight phase was used?
     	//4. Weight Restrictions
     	//5. Special Move Abilities !!! <Captain, Dwarf>
-    	
+
     	//1. Checks for clearings being connected.
     	Path route = (player.getLocation().routeTo(newClearing));
     	if (route!=null) {
@@ -420,41 +420,33 @@ public class Board implements Serializable{
     			//3. ClearingType Restrictions
     			//handles moving to a mountain
     			if(newClearing.getType() == ClearingType.MOUNTAIN){
-    				if(moves>=2){//meaning it is atleast the second action
-    					if(player.getActivities().get(moves-2) == Actions.MOVE){
-    						
-    						temp = ((String) player.getActivities().get(moves-1)).split(" ");
-    			    		Clearing lastClearing = tiles.get(convertTileName(TileName.valueOf(temp[0]))).getClearing(Integer.parseInt(temp[1]));
-    						
-    						if(lastClearing.equals(newClearing)){
-    							move(player, newClearing);
-    							System.out.println(player.getCharacter().getName()+" SUCCEEDED move to "+newClearing.parent.getName().toString()+" "+newClearing.location);
-    							moving = true;
-    						}
-    					}
-    				} 
-    			// handles moving to a cave
-    			}else if(newClearing.getType() == ClearingType.CAVE){
-    				move(player, newClearing);
-    				System.out.println(player.getCharacter().getName()+" SUCCEEDED move to "+newClearing.parent.getName().toString()+" "+newClearing.location);
-					moving = true;
-    				
-    			//handles moving to woods
-    			}else{
-    				move(player, newClearing);
-					System.out.println(player.getCharacter().getName()+" SUCCEEDED move to "+newClearing.parent.getName().toString()+" "+newClearing.location);
-					moving = true;
+    				if(player.lastMove().equals(newClearing)){
+    					move(player, newClearing);
+    					System.out.println(player.getCharacter().getName()+" SUCCEEDED move to "+newClearing.parent.getName().toString()+" "+newClearing.location);
+    					moving = true;
+    				}
     			}
-    		}else{// THIS MEANS THE MOVE FAILED DUE TO NOT KNOWING
-    			System.out.println(player.getCharacter().getName()+" failed to move to "+newClearing.parent.getName().toString()+" "+newClearing.location+" (route type error)");
+    		} 
+    		// handles moving to a cave
+    		else if(newClearing.getType() == ClearingType.CAVE){
+    			move(player, newClearing);
+    			System.out.println(player.getCharacter().getName()+" SUCCEEDED move to "+newClearing.parent.getName().toString()+" "+newClearing.location);
+    			moving = true;
+    			//handles moving to woods
+    		}else{
+    			move(player, newClearing);
+    			System.out.println(player.getCharacter().getName()+" SUCCEEDED move to "+newClearing.parent.getName().toString()+" "+newClearing.location);
+    			moving = true;
     		}
+    	}else{// THIS MEANS THE MOVE FAILED DUE TO NOT KNOWING
+    		System.out.println(player.getCharacter().getName()+" failed to move to "+newClearing.parent.getName().toString()+" "+newClearing.location+" (route type error)");
     	}else{	//THIS MEANS YOU FAILED TO MOVE CLEARINGS DUE TO A LACK OF PATH BETWEEN YOUR LOCATION AND THE DESTINATION
     		System.out.println(player.getCharacter().getName()+" failed to move to "+newClearing.parent.getName().toString()+" "+newClearing.location+" (no path)");
     	}
-    	
+
     	return moving;
     }
-	
+
 	@Override
 	public String toString(){
 		for(int i=0;i<tiles.size();i++){

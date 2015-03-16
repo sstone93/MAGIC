@@ -11,7 +11,6 @@ import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
 import model.Armour;
-import model.Chit;
 import model.Player;
 import model.Treasure;
 import model.Weapon;
@@ -215,7 +214,7 @@ public class CharacterInfoPanel extends JPanel{
 		
 		
 		//TODO I DESTROYED CHITS, WILL REPLACE THIS WITH SOMETHIGN ELSE
-		Chit[] chits = new Chit[0];
+		/*Chit[] chits = new Chit[0];
 		String chitsS = "";
 		if (chits != null) {
 			for(int i = 0; i < chits.length; i++){
@@ -223,8 +222,8 @@ public class CharacterInfoPanel extends JPanel{
 					chitsS += chits[i].getType() + " name - " + chits[i].getName() + "\n";
 				}
 			}
-		}
-		chitsText.setText(chitsS);
+		}*/
+		chitsText.setText("");
 	}
 	
 }
