@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import utils.Utility;
+import utils.Utility.ClearingType;
 import utils.Utility.ItemWeight;
 import utils.Utility.PhaseType;
 
@@ -23,6 +24,7 @@ public class Player implements Serializable{
     boolean hidden    = false;
     boolean dead      = false;
     boolean blocked   = false;
+    
     boolean goneInCave = false;
     boolean finishedDaylight = false;
     boolean finishedBasic = false;
@@ -53,6 +55,12 @@ public class Player implements Serializable{
     	finishedDaylight = false;
     	finishedBasic = false;
     	addedSunlight = false;
+    	goneInCave = false;
+    	
+    	//check if they are starting the day in a cave
+    	if(location.getType() == ClearingType.CAVE){
+    		goneInCave = true;
+    	}
     	
     	//adds basic phases
     	phases.add(new Phase(PhaseType.BASIC));
@@ -280,9 +288,14 @@ public class Player implements Serializable{
 
     public void checkAndAddSunlight(){
     	if(this.getFinishedBasic() && this.addedSunlight == false){
+    		
     		this.addedSunlight = true;
-        	phases.add(new Phase(PhaseType.SUNLIGHT));
-        	phases.add(new Phase(PhaseType.SUNLIGHT));
+    		
+    		//checks to see if you have gone in a cave today
+    		if(goneInCave == false){
+    			phases.add(new Phase(PhaseType.SUNLIGHT));
+            	phases.add(new Phase(PhaseType.SUNLIGHT));
+    		}
     	}
     }
 
@@ -335,6 +348,11 @@ public class Player implements Serializable{
 		//TODO
 		//THIS ASSUMES THAT PHASE EQUALITY MEANS JUST THE TYPES MATCH (which i think i did)
 		phases.remove(t);
+		
+		//if the player's turn is done
+		if(phases.size() == 0 && addedSunlight == true){
+			finishedDaylight = true;
+		}
 		
 	}
 }

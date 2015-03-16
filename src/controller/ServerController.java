@@ -103,11 +103,14 @@ public class ServerController extends Handler{
 						//if the action was not a move, reset player's last move
 						//TODO
 						
-						
 						//subtract from queue
 						p.usePhase((Phase) m.getData().get(0));
 						//check to see if basics are over, if so add sunlight
 						p.checkAndAddSunlight();
+						//see if that was their last action
+						if(p.getDaylight()){
+							finishedPlayers += 1;
+						}
 						//tell client it worked
 						network.send(ID, "ACTION SUCCEEDED");
 						//broadcast new board and player states
