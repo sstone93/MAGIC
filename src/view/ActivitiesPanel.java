@@ -76,6 +76,9 @@ public class ActivitiesPanel extends JPanel{
 				}
 				
 				option.setModel(new DefaultComboBoxModel(arr));
+				if(arr.length > 0){
+					phase.setSelectedIndex(0);
+				}
 			}
 		});
 		phase.setBounds(10, 40, 125, 20);
@@ -100,6 +103,9 @@ public class ActivitiesPanel extends JPanel{
 					}
 					extraInfo.setModel(new DefaultComboBoxModel(arr));
 					extraInfo.setVisible(true);
+					
+					extraInfo.setSelectedIndex(0);
+					
 					break;
 				case ALERT:
 					ArrayList<Weapon> weapons = control.model.getPlayer().getWeapons();
@@ -153,5 +159,9 @@ public class ActivitiesPanel extends JPanel{
 			p[i] = (phases.get(i).getType());
 		}
 		phase.setModel(new DefaultComboBoxModel(p));
+		if(phases.size() > 0){
+			phase.setSelectedIndex(0);
+		}
+			
 	}
 }

@@ -414,7 +414,7 @@ public class Board implements Serializable{
 
     	//1. Checks for clearings being connected.
     	Path route = (player.getLocation().routeTo(newClearing));
-    	
+    	System.out.println(route);
     	if (route!=null) {
     		//2. Handles special conditions based on path type
     		if (canUsePath(player, route)){
@@ -428,29 +428,28 @@ public class Board implements Serializable{
     				}else{
     					//sets up the player to move to the mountain next move
     					player.setLastMove(newClearing);
+    					System.out.println(player.getCharacter().getName()+" (Failed) BEGAN MOVE TO "+newClearing.parent.getName().toString()+" "+newClearing.location);
     				}
-    			}
-    		} 
-    		// handles moving to a cave
-    		else if(newClearing.getType() == ClearingType.CAVE){
-    			move(player, newClearing);
-    			player.setGoneInCave(true);
-    			System.out.println(player.getCharacter().getName()+" SUCCEEDED move to "+newClearing.parent.getName().toString()+" "+newClearing.location);
-    			moving = true;
+    			// handles moving to a cave
+    			}else if(newClearing.getType() == ClearingType.CAVE){
+    				move(player, newClearing);
+    				player.setGoneInCave(true);
+    				System.out.println(player.getCharacter().getName()+" SUCCEEDED move to "+newClearing.parent.getName().toString()+" "+newClearing.location);
+    				moving = true;
     			//handles moving to woods
-    		}else{
-    			move(player, newClearing);
-    			System.out.println(player.getCharacter().getName()+" SUCCEEDED move to "+newClearing.parent.getName().toString()+" "+newClearing.location);
-    			moving = true;
+    			}else{
+    				move(player, newClearing);
+    				System.out.println(player.getCharacter().getName()+" SUCCEEDED move to "+newClearing.parent.getName().toString()+" "+newClearing.location);
+    				moving = true;
+    			}
+    		}else{	//THIS MEANS YOU FAILED TO MOVE CLEARINGS DUE TO A LACK OF PATH BETWEEN YOUR LOCATION AND THE DESTINATION
+    			System.out.println(player.getCharacter().getName()+" failed to move to "+newClearing.parent.getName().toString()+" "+newClearing.location+" (no path)");
     		}
-    	}else{	//THIS MEANS YOU FAILED TO MOVE CLEARINGS DUE TO A LACK OF PATH BETWEEN YOUR LOCATION AND THE DESTINATION
-    		System.out.println(player.getCharacter().getName()+" failed to move to "+newClearing.parent.getName().toString()+" "+newClearing.location+" (no path)");
     	}
-
-    	return moving;
+		return moving;
     }
 
-	@Override
+    	@Override
 	public String toString(){
 		for(int i=0;i<tiles.size();i++){
 			System.out.println(tiles.get(i));
