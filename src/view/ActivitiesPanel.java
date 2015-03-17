@@ -56,28 +56,28 @@ public class ActivitiesPanel extends JPanel{
 				Actions[] arr;
 				
 				switch((PhaseType)phase.getSelectedItem()){
-				case BASIC:
-					arr = Actions.values();
-					break;
-				case SPECIAL:
-					//TODO
-					arr = new Actions[0];
-					break;
-				case SUNLIGHT:
-					arr = Actions.values();
-					break;
-				case TREASURE:
-					arr = new Actions[0];
-					//TODO
-					break;
-				default:
-					arr = new Actions[0];
-					break;
+					case BASIC:
+						arr = Actions.values();
+						break;
+					case SPECIAL:
+						//TODO
+						arr = new Actions[0];
+						break;
+					case SUNLIGHT:
+						arr = Actions.values();
+						break;
+					case TREASURE:
+						arr = new Actions[0];
+						//TODO
+						break;
+					default:
+						arr = new Actions[0];
+						break;
 				}
 				
 				option.setModel(new DefaultComboBoxModel(arr));
 				if(arr.length > 0){
-					phase.setSelectedIndex(0);
+					option.setSelectedIndex(0);
 				}
 			}
 		});
@@ -87,56 +87,48 @@ public class ActivitiesPanel extends JPanel{
 		option = new JComboBox();
 		option.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				/*if((Actions)option.getSelectedItem() == Actions.MOVE) {
-					extraInfo.setVisible(true);
-				} else {
-					extraInfo.setVisible(false);
-				}*/
+				Object[] arr = {};
+				
 				switch((Actions)option.getSelectedItem()){
-				case MOVE:
-					ArrayList<Path> connections = control.model.getPlayer().getLocation().getConnections();
-					String [] arr = new String[connections.size()];
-					
-					for(int i = 0; i < connections.size(); i++){
-						arr[i] = connections.get(i).getDestination(control.model.getPlayer().getLocation()).parent.getName().toString() +" "+ 
-								connections.get(i).getDestination(control.model.getPlayer().getLocation()).getClearingNumber();
-					}
-					extraInfo.setModel(new DefaultComboBoxModel(arr));
-					extraInfo.setVisible(true);
-					
+					case MOVE:
+						ArrayList<Path> connections = control.model.getPlayer().getLocation().getConnections();
+						arr = new String[connections.size()];
+						
+						for(int i = 0; i < connections.size(); i++){
+							arr[i] = connections.get(i).getDestination(control.model.getPlayer().getLocation()).parent.getName().toString() +" "+ 
+									connections.get(i).getDestination(control.model.getPlayer().getLocation()).getClearingNumber();
+						}
+						extraInfo.setVisible(true);
+						
+						break;
+					case ALERT:
+						ArrayList<Weapon> weapons = control.model.getPlayer().getWeapons();
+						arr = new String[weapons.size()];
+						for(int i = 0; i < weapons.size(); i++){
+							arr[i] = weapons.get(i).getType().toString() + " " + weapons.get(i).isActive();
+						}
+						extraInfo.setVisible(true);
+						break;
+					case SEARCH:
+						arr = SearchTables.values();
+						extraInfo.setVisible(true);
+						break;
+					case TRADE:
+					case REST:
+					case HIDE:
+					case PASS:
+						extraInfo.setVisible(false);
+						break;
+					default:
+						break;
+				}
+				extraInfo.setModel(new DefaultComboBoxModel(arr));
+				if(arr.length > 0){
 					extraInfo.setSelectedIndex(0);
-					
-					break;
-				case ALERT:
-					ArrayList<Weapon> weapons = control.model.getPlayer().getWeapons();
-					String [] arr2 = new String[weapons.size()];
-					for(int i = 0; i < weapons.size(); i++){
-						arr2[i] = weapons.get(i).getType().toString() + " " + weapons.get(i).isActive();
-					}
-					extraInfo.setModel(new DefaultComboBoxModel(arr2));
-					extraInfo.setVisible(true);
-					break;
-				case SEARCH:
-					extraInfo.setModel(new DefaultComboBoxModel(SearchTables.values()));
-					extraInfo.setVisible(true);
-					break;
-				case TRADE:
-					extraInfo.setVisible(false);
-					break;
-				case REST:
-					extraInfo.setVisible(false);
-					break;
-				case HIDE:
-					extraInfo.setVisible(false);
-					break;
-				case PASS:
-					break;
-				default:
-					break;
 				}
 			}
 		});
-		//option.setModel(new DefaultComboBoxModel(Actions.values()));
+		
 		option.setBounds(215, 40, 93, 20);
 		add(option);
 		
