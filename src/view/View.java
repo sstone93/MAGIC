@@ -11,7 +11,6 @@ import javax.swing.*;
 import javax.swing.border.*;
 
 import utils.Utility;
-import utils.Utility.CharacterName;
 import utils.Utility.*;
 import controller.ClientController;
 import model.Board;
@@ -120,58 +119,6 @@ public class View extends JFrame {
 		//creates a new targetpanel, exact same functionality as before, but in a seperate class to reduce clutter
 		targetPanel = new TargetPanel(control);
 		contentPane.add(targetPanel);
-		
-		//adds moves panel
-		/*movesPanel = new JPanel();
-		contentPane.add(movesPanel);
-		movesPanel.setVisible(false);
-		movesPanel.setBorder(new LineBorder(Color.GRAY));
-		movesPanel.setBounds(750, 500, 524, 192);
-		movesPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		JLabel lblSelectMoveLocation = new JLabel("Select Move Location");
-		lblSelectMoveLocation.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
-		movesPanel.add(lblSelectMoveLocation);
-		movesGroup = new ButtonGroup();
-		JButton btnSelectMoves = new JButton("Select");
-		btnSelectMoves.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				for(Enumeration<AbstractButton> buttons = movesGroup.getElements(); buttons.hasMoreElements();){
-					AbstractButton button = buttons.nextElement();
-					if (button.isSelected()) {
-						control.handleMoveSelection(button.getText());
-					}
-				}
-			}
-		});
-		movesPanel.add(btnSelectMoves);
-		*/
-		
-		//Alert panel
-		/*alertPanel = new JPanel();
-		alertPanel.setVisible(false);
-		alertPanel.setBorder(new LineBorder(Color.GRAY));
-		alertPanel.setBounds(750, 500, 524, 192);
-		contentPane.add(alertPanel);
-		alertPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		
-		JLabel lblAlert= new JLabel("Select Weapon to Alert");
-		lblAlert.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
-		movesPanel.add(lblAlert);
-		
-		alertGroup = new ButtonGroup();
-		
-		JButton btnSelectAlert = new JButton("Select");
-		btnSelectAlert.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				for(Enumeration<AbstractButton> buttons = movesGroup.getElements(); buttons.hasMoreElements();){
-					AbstractButton button = buttons.nextElement();
-					if (button.isSelected()) {
-						control.handleAlertSelection(button.getText());
-					}
-				}
-			}
-		});
-		alertPanel.add(btnSelectAlert);*/	
 	}
 	
 	private void makeBoard(){
@@ -226,10 +173,8 @@ public class View extends JFrame {
 			
 			Iterator it = iconPanels.entrySet().iterator();
 
-			//TODO 
 			//TODO Concurrent thread access, is the View thread and the Client control thread both calling update at the same time? possible.
 			//TODO CONTROL THIS!!!!
-			//TODO
 			
 			while (it.hasNext()) {
 				JPanel panel = (JPanel)((HashMap.Entry)it.next()).getValue();
@@ -242,10 +187,8 @@ public class View extends JFrame {
 			
 			it = clearingHoverOvers.entrySet().iterator();
 
-			//TODO 
 			//TODO Concurrent thread access, is the View thread and the Client control thread both calling update at the same time? possible.
 			//TODO CONTROL THIS!!!!
-			//TODO
 			
 			while (it.hasNext()) {
 				JPanel panel = (JPanel)((HashMap.Entry)it.next()).getValue();
@@ -411,38 +354,6 @@ public class View extends JFrame {
 			playsPanel.update();
 			makePanelVisible(playsPanel);
 			break;
-			/*case MOVE:
-						for(Enumeration<AbstractButton> buttons = movesGroup.getElements(); buttons.hasMoreElements();){
-							AbstractButton button = buttons.nextElement();
-							movesGroup.remove(button);
-							movesPanel.remove(button);
-						}
-
-						ArrayList<Path> connections = this.control.model.getPlayer().getLocation().getConnections();
-
-						for(int i = 0; i < connections.size(); i++){
-							String label = this.control.model.getPlayer().getLocation().parent.getName().toString() + " clearing " + connections.get(i).getDestination(this.control.model.getPlayer().getLocation()).getClearingNumber();
-							JRadioButton button = new JRadioButton(label);
-							movesGroup.add(button);
-							movesPanel.add(button, movesPanel.getComponents().length - 2);
-						}
-						makePanelVisible(movesPanel);
-						break;
-					case ALERT:
-						for(Enumeration<AbstractButton> buttons = alertGroup.getElements(); buttons.hasMoreElements();){
-							AbstractButton button = buttons.nextElement();
-							alertGroup.remove(button);
-							alertPanel.remove(button);
-						}
-						ArrayList<Weapon> weapons = this.control.model.getPlayer().getWeapons();
-						for(int i = 0; i < weapons.size(); i++){
-							String label = weapons.get(i).getType().toString() + " " + weapons.get(i).isActive();
-							JRadioButton button = new JRadioButton(label);
-							alertGroup.add(button);
-							alertPanel.add(button, alertPanel.getComponents().length - 2);
-						}
-						makePanelVisible(movesPanel);
-						break;*/
 		case CHOOSE_COMBATMOVES:
 			makePanelVisible(combatPanel);
 			break;
