@@ -258,6 +258,7 @@ public class View extends JFrame {
 			
 			for(int i = 0; i < charLbls.length; i++){
 				if(charLbls[i] != null){
+					System.out.println("Removing charLbl: " + i);
 					boardPanel.remove(charLbls[i]);
 				}
 			}
@@ -266,12 +267,12 @@ public class View extends JFrame {
 			
 			BufferedImage pic;
 			
+			int chars = 0;
 			//1. Iterates through every single tile in the board (always 20 TBH), (tile i)
 			for (int i = 0; i < b.tiles.size(); i++){
 				try {
 					ArrayList<Clearing> clearings = b.tiles.get(i).getClearings();
 					if (clearings != null) {//should never be null
-						int chars = 0;
 						//2. Gets all clearings on a given tile, then cycles through all of them, (clearing j)
 						for(int j = 0; j < clearings.size(); j++){
 							ArrayList<Player> occupants = clearings.get(j).getOccupants();
@@ -287,42 +288,7 @@ public class View extends JFrame {
 										charLbls[chars].setBounds(b.tiles.get(i).getX() + clearings.get(j).xOffset - 25,
 												b.tiles.get(i).getY() + clearings.get(j).yOffset - 25, 50, 50);
 										boardPanel.add(charLbls[chars], new Integer(5), 0);
-										
-										/*if (!iconPanels.containsKey(b.tiles.get(i))){
-											JPanel newPane = new JPanel();
-											newPane.setBounds(b.tiles.get(i).getX(), b.tiles.get(i).getY(), 200, 300);
-											newPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-											newPane.setVisible(false);
-											boardPanel.add(newPane, new Integer(10), 0);
-											iconPanels.put(b.tiles.get(i), newPane);
-										}
-										
-										JPanel panel = new JPanel();
-										panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-										panel.setSize(65, 75);
-										JLabel img = new JLabel(new ImageIcon(pic));
-										img.setSize(50, 50);
-										panel.add(img);
-										
-										JLabel lbl = new JLabel(Integer.toString(clearings.get(j).getClearingNumber()));
-										lbl.setSize(10, 15);
-										panel.add(lbl);
-										iconPanels.get(b.tiles.get(i)).add(panel);
-										
-										final int index = i;
-										
-										charLbls[chars].addMouseListener(new MouseAdapter() {
-											@Override
-											public void mouseEntered(MouseEvent e) {
-												iconPanels.get(b.tiles.get(index)).setVisible(true);
-											}
-										});
-										charLbls[chars].addMouseListener(new MouseAdapter() {
-											@Override
-											public void mouseExited(MouseEvent e) {
-												iconPanels.get(b.tiles.get(index)).setVisible(false);
-											}
-										});*/
+										System.out.println("Adding char label: " + chars);
 										
 										if (!clearingHoverOvers.containsKey(clearings.get(j))){
 											JPanel newPane = new JPanel();
