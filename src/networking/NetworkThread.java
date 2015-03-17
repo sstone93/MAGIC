@@ -49,9 +49,14 @@ public class NetworkThread extends Thread implements Serializable{
 			streamOut.reset();
 			streamOut.writeUnshared(o);
 			streamOut.flush();
-			System.out.println("Sent Message: "+o.getClass().toString());
+			if(o instanceof String){
+				System.out.println("	"+ID + ": Sent Message: "+ (String) o);
+			}else{
+				System.out.println("	"+ID + ": Sent Message: "+o.getClass().toString());
+			}
+			
 		} catch (IOException ioe) {
-			System.out.println("	"+ID + "ERROR sending Message: ");
+			System.out.println("	"+ID + ": ERROR sending Message: ");
 			parent.remove(ID);										//Parent properly handles killing off this thread
 		}
 	}

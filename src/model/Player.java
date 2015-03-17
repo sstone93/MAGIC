@@ -7,6 +7,7 @@ import utils.Utility;
 import utils.Utility.ClearingType;
 import utils.Utility.ItemWeight;
 import utils.Utility.PhaseType;
+import utils.Utility.CharacterName;
 
 public class Player implements Serializable{
 
@@ -290,13 +291,19 @@ public class Player implements Serializable{
     	if(this.getFinishedBasic() && this.addedSunlight == false){
     		
     		this.addedSunlight = true;
+    		System.out.println(this.character.getName()+ " tried to add sunlight");
     		
     		//checks to see if you have gone in a cave today
-    		if(goneInCave == false){
+    		if(goneInCave == false && this.character.getName() != CharacterName.DWARF) {
     			phases.add(new Phase(PhaseType.SUNLIGHT));
             	phases.add(new Phase(PhaseType.SUNLIGHT));
     		}
     	}
+		//if the player's turn is done	//TODO A SECOND CHECK, CAN REMOVE FIRST CHECK IN USE PHASE IF WE WNAT
+		if(phases.size() == 0 && addedSunlight == true){
+			finishedDaylight = true;
+			System.out.println(this.character.getName()+ " is finished daylight");
+		}
     }
 
     public void setFinalScore(int score) {
@@ -353,15 +360,18 @@ public class Player implements Serializable{
 		
 		//DETERMINES IF BASICS ARE DONE
 		finishedBasic = true;
+		
 		for(int i=0; i<phases.size(); i++){
 			if(phases.get(i).getType() == PhaseType.BASIC){
 				finishedBasic = false;
+				System.out.println(this.character.getName()+ " is done basic");
 			}
 		}
 		
 		//if the player's turn is done
 		if(phases.size() == 0 && addedSunlight == true){
 			finishedDaylight = true;
+			System.out.println(this.character.getName()+ " is finished daylight");
 		}
 		
 	}

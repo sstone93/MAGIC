@@ -109,18 +109,21 @@ public class ServerController extends Handler{
 						
 						//subtract from queue
 						p.usePhase((Phase) m.getData().get(0));
+						
+						//tell client it worked
+						network.send(ID, "ACTION SUCCEEDED");
+						
 						//check to see if basics are over, if so add sunlight
 						p.checkAndAddSunlight();
+						
+						//broadcast new board and player states
+						updateClients();	//PROBLEM IS WITH PLAYER DISTRIBUTION HERE
+						
 						//see if that was their last action
 						if(p.getDaylight()){
 							finishedPlayers += 1;
 							network.send(ID, "NO PHASES LEFT");
 						}
-						//tell client it worked
-						network.send(ID, "ACTION SUCCEEDED");
-						//broadcast new board and player states
-						network.broadCast(board);
-						distributeCharacters();
 						
 					} else {
 						//return error to client
@@ -577,12 +580,22 @@ public class ServerController extends Handler{
     	//5. Finish phase collection and move on
     	state = GameState.NULL;
     	System.out.println("ALL PLAYERS FINISHED DAYLIGHT PHASE.");
+    	/*try {
+			Thread.sleep(20);
+		} catch (InterruptedException e) {
+			// Auto-generated catch block
+			e.printStackTrace();
+		}*/
     }
 
     public void collectCombat(){
+    	
     	state = GameState.CHOOSE_COMBATTARGET;
+    	
     	recievedCombat = 0;
+    	
     	network.broadCast("SEND COMBAT");
+    	
     	while(recievedCombat < playerCount){
     		try {
 				Thread.sleep(20);
@@ -619,8 +632,7 @@ public class ServerController extends Handler{
         	network.broadCast("There is only one player alive");
         	endGame();
         }
-
-        updateClients();
+        
         collectCombat(); //2 players, 1 attacker 1 defender
 /*
         //All players choose attackers

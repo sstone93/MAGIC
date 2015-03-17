@@ -30,7 +30,7 @@ public class Clearing implements Serializable{
     	return this.connections;
     }
     public void addOccupant(Player p){
-    	System.out.println("adding player" + p);
+    	//System.out.println("adding player" + p);
     	occupants.add(p);
     }
     
@@ -39,7 +39,7 @@ public class Clearing implements Serializable{
      * @param p
      */
     public void removeOccupant(Player p){
-    	System.out.println("removing player" + p);
+    	//System.out.println("removing player" + p);
     	occupants.remove(p);
     }
     
