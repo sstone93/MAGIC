@@ -17,6 +17,7 @@ public class Monster implements Serializable{
 	int        attackSpeed;
 	int        health       = 0;
 	boolean    dead         = false;
+	boolean    prowling     = false;
 	CombatMoves moves;
     // TODO put weight, in enum
 
@@ -87,5 +88,13 @@ public class Monster implements Serializable{
     // TODO randomize monster moves
     public void setMoves() {
 
+    }
+    
+    public boolean isProwling() {
+    	return prowling;
+    }
+    
+    public void setProwling(boolean prowl) {
+    	prowling = prowl;
     }
 }
