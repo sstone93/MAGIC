@@ -619,11 +619,14 @@ public class ServerController extends Handler{
 
     	network.broadCast("Monster roll: " + roll);
     	// generate ghosts
+    	
+    	// the ones we have: 
+    	// ghost, giant, heavydragon, heavytroll, viper, wolf
 
     	if (roll == 1) {
     		// generate dragons, company
     	} else if (roll == 2) {
-    		// generate serpants, demons, woodfolk
+    		// generate serpents, demons, woodfolk
     	} else if (roll == 3) {
     		// generate wolves, ogres, goblins, octopus, patrol, soldiers
     	} else if (roll == 4) {
