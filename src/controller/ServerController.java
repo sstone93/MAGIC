@@ -316,7 +316,7 @@ public class ServerController extends Handler{
     	if (numberOfDie == 2) {
 	    	int roll2 = Utility.roll(6);
 	    	network.broadCast(player.getCharacter().getName() + " rolled " + roll + " and " + roll2 );
-	    	roll = Math.min(roll, roll2);
+	    	roll = Math.max(roll, roll2);
     	}
 		network.broadCast(player.getCharacter().getName() + " is using " + roll );
 
