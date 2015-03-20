@@ -631,20 +631,26 @@ public class ServerController extends Handler{
     	
   
     	if (roll == 1) { // dragons are on the prowl
+    		network.broadCast("Ghosts and Heavy Dragons are on the prowl!");
     		setProwlingMonsters(MonsterName.HEAVY_DRAGON);
     	} else if (roll == 2) {
+    		network.broadCast("Ghosts and Vipers are on the prowl!");
     		// serpents, demons, woodfolk
     		setProwlingMonsters(MonsterName.VIPER);
     	} else if (roll == 3) {
     		// wolves, ogres, goblins, octopus
+    		network.broadCast("Ghosts and Wolves are on the prowl!");
     		setProwlingMonsters(MonsterName.WOLF);
     	} else if (roll == 4) {
     		// giants, trolls, lancers
+    		network.broadCast("Ghosts, Heavy Trolls, and Giants are on the prowl!");
     		setProwlingMonsters(MonsterName.HEAVY_TROLL);
     		setProwlingMonsters(MonsterName.GIANT);
     	} else if (roll == 5) {
+    		network.broadCast("Ghosts are on the prowl!");
     		// spiders, imp, bashkars, rogues
     	} else if (roll == 6) {
+    		network.broadCast("Ghosts are on the prowl!");
     		// bats, visitor/mission chits flip, guard, order
     	}
     }
@@ -655,9 +661,24 @@ public class ServerController extends Handler{
     	
 		for (int i = 0; i < prowlingMonsters.size(); i++) {
 			prowlingMonsters.get(i).setProwling(true);
+			System.out.println(name + " is prowling? : " + prowlingMonsters.get(i).isProwling());
 		}
     }
-
+    
+    public void allowMonstersToProwl(){
+    	// checks to see who can prowl 
+    	ArrayList<Monster> prowlingMonsters = board.getProwlingMonsters();
+    	for (int i = 0; i < prowlingMonsters.size(); i++) {
+    		if (prowlingMonsters.get(i).getStartingLocation() != null) { // if they're on the board
+    			if (prowlingMonsters.get(i).isProwling()) {
+    				// then they can prowl
+    			} else {
+    				// they can block others if they're not already blocked
+    			}
+    		}
+    	}
+    	
+    }
     /**
      * Sends up to date board to clients, along with their proper character
      */
@@ -684,6 +705,8 @@ public class ServerController extends Handler{
         	network.broadCast("There is only one player alive");
         	endGame();
         }
+        
+        allowMonstersToProwl();
 
         collectCombat(); //2 players, 1 attacker 1 defender
 

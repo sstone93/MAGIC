@@ -344,6 +344,16 @@ public class Board implements Serializable{
 		}
 		return specificMonsters;
 	}
+	
+	public ArrayList<Monster> getProwlingMonsters() {
+		ArrayList<Monster> prowlingMonsters = new ArrayList<Monster>();
+		for (int i = 0; i < monsters.size(); i++) {
+			if (monsters.get(i).isProwling()) {
+				prowlingMonsters.add(monsters.get(i));
+			}
+		}
+		return prowlingMonsters;
+	}
 
 	public void placeChits(ArrayList<Object> a,int p1,int p2,int p3, int p4, int p5){
 
