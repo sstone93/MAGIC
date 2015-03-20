@@ -40,7 +40,6 @@ public class CharacterSelectPanel extends JPanel{
 		setBorder(new LineBorder(Color.GRAY));
 		setLayout(null);
 		
-		
 		starting = new JComboBox();
 		starting.setBounds(309, 40, 93, 20);
 		add(starting);
@@ -51,10 +50,10 @@ public class CharacterSelectPanel extends JPanel{
 			public void actionPerformed(ActionEvent e) {
 				starting.setModel(new DefaultComboBoxModel(
 						Utility.getCharacterStartingLocations((CharacterName)character.getSelectedItem())));
-				if(control.view != null)
-					control.view.getCharacterDetailsPanel().updatePic((CharacterName)character.getSelectedItem());
+						update();
 			}
 		});
+		
 		character.setSelectedIndex(0);
 		character.setBounds(137, 40, 93, 20);
 		add(character);
@@ -71,5 +70,9 @@ public class CharacterSelectPanel extends JPanel{
 		add(btnSelect);
 	}
 	
+	public void update(){
+		if(control.view != null)
+			control.view.getCharacterDetailsPanel().updatePic((CharacterName)character.getSelectedItem());
+	}
 	
 }

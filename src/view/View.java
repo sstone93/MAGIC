@@ -352,6 +352,7 @@ public class View extends JFrame {
 		//UPDATES THE INPUT PANEL BASED ON IT'S TYPE
 		switch(control.state){
 		case CHOOSE_CHARACTER:
+			characterSelectPanel.update();
 			makePanelVisible(characterSelectPanel);
 			scrollPanel.setViewportView(characterDetailsPanel);//this must be called AFTER makePanelVisible
 			break;
