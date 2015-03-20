@@ -10,7 +10,7 @@ public class HeavyDragon extends Monster {
 	private static final long serialVersionUID = -9074002135440697188L;
 
 	public HeavyDragon() {
-		name         = "Heavy Dragon";
+		name         = MonsterName.HEAVY_DRAGON;
         weight       = ItemWeight.HEAVY;
         notoriety    = 5;
 		fame         = 5;
