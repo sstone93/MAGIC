@@ -31,10 +31,11 @@ public class Board implements Serializable{
 	public ArrayList<TreasureWithinTreasure> twit = new ArrayList<TreasureWithinTreasure>();
 
 	public Board(ArrayList<Player> players){
-		setupBoard();
-		setupGarrisons();
-		placePlayers(players);
-		setUpMapChits();
+		setupBoard();		//creates all of the tiles and clearings. establishes all of the connections
+		setupGarrisons();	//instanciates the garrisons
+		setUpMapChits();	//places the warning chits, places the treasures, places the map chits, places the garrisons
+		placePlayers(players);	//places the players based on their starting location
+		System.out.println(this);
 	}
 	
 	public int convertTileName(TileName n){
@@ -137,20 +138,13 @@ public class Board implements Serializable{
 	}
 	
 	public void placeGarrisons(){
-		
-		//stink = inn
-		//smoke = house
-		//ruins = guard
-		//dank = chapel
-		//bones = 2 ghosts
-		
 		for(int i=0; i< tiles.size(); i++){
 			if(tiles.get(i).getType() == TileType.VALLEY){
 				if(tiles.get(i).getWarningChit().getName() == WarningChits.STINK){
-					this.garrisons.get(3).setLocation(tiles.get(i).getClearing(5));	//places the inn
+					this.garrisons.get(3).setLocation(tiles.get(i).getClearing(5));	//places the inn//setting the location, also places th edewlling on the tile
 				}
 				if(tiles.get(i).getWarningChit().getName() == WarningChits.BONES){
-					
+					//places two ghosts //TODO
 				}
 				if(tiles.get(i).getWarningChit().getName() == WarningChits.DANK){
 					this.garrisons.get(0).setLocation(tiles.get(i).getClearing(5)); //places the chapel
@@ -200,19 +194,24 @@ public class Board implements Serializable{
 		System.out.println("ending loop");
 	}
 	
-	public void createAndPlaceWarningChits(int p1, int p2, int p3, int p4, int p5){
+	public void createAndPlaceWarningChits(TileType type){
 		ArrayList<WarningChit> temp = new ArrayList<WarningChit>();
+		
 		for(WarningChits n : WarningChits.values()){
 			temp.add(new WarningChit(n));
 		}
+		
 		Collections.shuffle(temp);
 		
-		int[] temps = {p1, p2, p3, p4, p5};
-		
-		for(int i=0; i< temps.length; i++){
-			tiles.get(temps[i]).setWarningChit(temp.get(i));
+		for(int j=0; j<5; j++){
+			for(int i=0; i< tiles.size(); i++){
+				if(tiles.get(i).getType() == type && tiles.get(i).getWarningChit() == null){
+					tiles.get(i).setWarningChit(temp.get(j));
+					System.out.println("placed "+temp.get(j)+" on "+tiles.get(i).getName());
+					break;
+				}
+			}
 		}
-		
 	}
 	
 	private ArrayList<Treasure> createTreasureArray(int small, int large){
@@ -235,10 +234,10 @@ public class Board implements Serializable{
 		//Assigned to the 20 tiles (1 per tile)
 		
 		//5 OF THESE (VALLEY) BECOME DEWLLINGS + GHOST
-		createAndPlaceWarningChits(5,6,10,15,16);	//sets up Caves
-		createAndPlaceWarningChits(0,2,3,9,14);	//sets up Mountains
-		createAndPlaceWarningChits(7,12,13,18,19);	//sets up Woods
-		createAndPlaceWarningChits(1,4,8,11,17);//sets up valleys
+		createAndPlaceWarningChits(TileType.CAVES);	//sets up Caves
+		createAndPlaceWarningChits(TileType.MOUNTAINS);	//sets up Mountains
+		createAndPlaceWarningChits(TileType.WOODS);	//sets up Woods
+		createAndPlaceWarningChits(TileType.VALLEY);//sets up valleys
 		
 		//8 orange site chits
 		//10 red sound chits
@@ -330,6 +329,17 @@ public class Board implements Serializable{
 		}
 	}
 	
+	private Clearing matchClearing(Clearing c){
+		for(int i=0; i< tiles.size();i++){
+			for(int j=0; j< tiles.get(i).getClearings().size();j++){
+				if(tiles.get(i).getClearings().get(j).equals(c)){
+					return tiles.get(i).getClearings().get(j);
+				}
+			}
+		}
+		return null;
+	}
+	
 	public void placePlayers(ArrayList<Player> p){
 		
 		//cycle through lsit of characters
@@ -337,15 +347,20 @@ public class Board implements Serializable{
 		// note: you can grab the players characters startingLocation by doing player.getCharacter().getStartingLocation();
 		// which right now is a garrison name
 		//update the INN with all the new occupants
-		
+
 		for(int i=0; i < p.size(); i++){
-			p.get(i).setLocation(tiles.get(11).getClearing(5));
-			tiles.get(11).getClearing(5).addOccupant(p.get(i));
+
+			GarrisonName startLoc = p.get(i).getCharacter().getStartingLocation();
+			//System.out.println(startLoc);
+
+			for(int j=0; j< garrisons.size(); j++){
+				if(garrisons.get(j).getName() == startLoc){
+					p.get(i).setLocation(garrisons.get(j).getLocation());
+					garrisons.get(j).getLocation().addOccupant(p.get(i));
+					
+				}
+			}
 		}
-		
-		
-		
-		
 	}
 	
 	 // TODO: this is the function for monsters changing clearings

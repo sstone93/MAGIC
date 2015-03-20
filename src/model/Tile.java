@@ -190,7 +190,7 @@ public class Tile implements Serializable{
 			connect(6,3,PathType.HIDDEN_PATH);
 			connect(2,3,PathType.OPEN_ROAD);
 			connect(3,5,PathType.OPEN_ROAD);
-			this.type = TileType.WOODS;
+			this.type = TileType.MOUNTAINS;
 		} else if (name == TileName.EVILVALLEY){
 			int [ ] num = {1,2,4,5};
 			ClearingType [ ] t = {ClearingType.WOODS,ClearingType.WOODS,ClearingType.WOODS,ClearingType.WOODS};
