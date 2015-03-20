@@ -323,15 +323,15 @@ public class Board implements Serializable{
 		// ghost, giant, heavydragon, heavytroll, viper, wolf
 		// TODO: ghosts?
 		for (int i = 0; i < 5; i++) {
-			monsters.add(new HeavyDragon());
-			monsters.add(new Viper());
-			monsters.add(new Wolf());
+			monsters.add(new Monster(MonsterName.HEAVY_DRAGON));
+			monsters.add(new Monster(MonsterName.VIPER));
+			monsters.add(new Monster(MonsterName.WOLF));
 		}
 		for (int i = 0; i < 2; i++) {
-			monsters.add(new HeavyTroll());
-			monsters.add(new Giant());
+			monsters.add(new Monster(MonsterName.HEAVY_TROLL));
+			monsters.add(new Monster(MonsterName.GIANT));
 		}
-		monsters.add(new HeavyTroll());
+		monsters.add(new Monster(MonsterName.HEAVY_TROLL));
 
 	}
 	

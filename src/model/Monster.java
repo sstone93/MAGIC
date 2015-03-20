@@ -21,7 +21,6 @@ public class Monster implements Serializable{
 	boolean    dead         = false;
 	boolean    prowling     = false;
 	CombatMoves moves;
-    // TODO put weight, in enum
 
 	Monster(MonsterName name) {
 		this.name = name;
