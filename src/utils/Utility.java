@@ -104,6 +104,20 @@ public class Utility {
     	}
     }
 
+    public static GarrisonName[] getCharacterStartingLocations(CharacterName name) {
+    	switch(name){
+	    	case AMAZON: return new GarrisonName []{GarrisonName.INN};
+	    	case BERSERKER: return new GarrisonName []{GarrisonName.INN};
+	    	case BLACK_KNIGHT: return new GarrisonName []{GarrisonName.INN};
+	    	case CAPTAIN: return new GarrisonName []{GarrisonName.INN, GarrisonName.GUARD};
+	    	case DWARF: return new GarrisonName []{GarrisonName.INN, GarrisonName.GUARD};
+	    	case ELF: return new GarrisonName []{GarrisonName.INN};
+	    	case SWORDSMAN: return new GarrisonName []{GarrisonName.INN};
+	    	case WHITE_KNIGHT: return new GarrisonName []{GarrisonName.INN, GarrisonName.CHAPEL};
+	    	default: return null;
+    	}
+    }
+    
     public static String getGarrisonImage(GarrisonName name) {
     	switch(name){
 	    	case CHAPEL: return "/images/chapel.gif";

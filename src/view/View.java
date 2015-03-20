@@ -47,6 +47,7 @@ public class View extends JFrame {
 	private CombatPanel combatPanel;
 	private CharacterSelectPanel characterSelectPanel;
 	private TargetPanel targetPanel;
+	private CharacterDetailsPanel characterDetailsPanel;
 
 	public View(final ClientController control) {
 		
@@ -109,8 +110,12 @@ public class View extends JFrame {
 		blankPanel.add(lblNewLabel_1);
 		contentPane.add(blankPanel);
 		
-		//creates the character select panel and all its buttons
+		//creates the character details panel
+		characterDetailsPanel = new CharacterDetailsPanel(control);
+		
+		//creates the character select panel
 		characterSelectPanel = new CharacterSelectPanel(control);
+		contentPane.add(characterSelectPanel);
 		
 		//creates a new combatpanel and adds it
 		combatPanel = new CombatPanel(control);
@@ -347,8 +352,8 @@ public class View extends JFrame {
 		//UPDATES THE INPUT PANEL BASED ON IT'S TYPE
 		switch(control.state){
 		case CHOOSE_CHARACTER:
-			makePanelVisible(blankPanel);
-			scrollPanel.setViewportView(characterSelectPanel);//this must be called AFTER makePanelVisible
+			makePanelVisible(characterSelectPanel);
+			scrollPanel.setViewportView(characterDetailsPanel);//this must be called AFTER makePanelVisible
 			break;
 		case CHOOSE_PLAYS:
 			playsPanel.update();
@@ -380,6 +385,12 @@ public class View extends JFrame {
 			targetPanel.setVisible(false);
 		if(newPanel != blankPanel)
 			blankPanel.setVisible(false);
+		if(newPanel != characterSelectPanel)
+			characterSelectPanel.setVisible(false);
 		scrollPanel.setViewportView(boardPanel);
+	}
+	
+	public CharacterDetailsPanel getCharacterDetailsPanel() {
+		return characterDetailsPanel;
 	}
 }
