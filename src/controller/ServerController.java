@@ -661,20 +661,22 @@ public class ServerController extends Handler{
     	ArrayList<Monster> prowlingMonsters = board.getProwlingMonsters();
     	for (int i = 0; i < prowlingMonsters.size(); i++) {
     		if (prowlingMonsters.get(i).getStartingLocation() != null) { // if they're on the board
-    			System.out.println("PROWLING????? " );
     			Monster monster = prowlingMonsters.get(i);
     			if (monster.isProwling()) {
-    				System.out.println("THEY'RE MOVING FRIEND");
+    				System.out.println("MONSTER IS MOVING");
     				// then they can prowl
     				System.out.println("old location: " +  monster.getLocation());
     				monster.move();
-    				System.out.println(monster.getLocation() == null) ;
+    				monster.block(); // block occupants in new clearing 
+    				System.out.println("new location: " + monster.getLocation() ) ;
     				// TODO: for whatever reason it's not recognizing that the monster changed clearings
     				
     			} else {
     				// they can block others if they're not already blocked
-//    				monster.block();
-    				
+    				if (!monster.isBlocked()) {
+    					System.out.println("MONSTER BLOCKING");
+    					monster.block();
+    				} 				
     			}
     		}
     	}

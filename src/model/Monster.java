@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import utils.Utility;
 import utils.Utility.ItemWeight;
@@ -174,5 +175,16 @@ public class Monster implements Serializable{
 //    	this.location.removeOccupant(this);
     	Clearing newClearing = this.getLocation().getConnections().get(roll - 1).getDestination(location);
     	this.setLocation(newClearing);
+    }
+    
+    public void block() {
+    	ArrayList<Player> occupants = this.getLocation().getOccupants();
+    	for (int j = 0; j < occupants.size(); j++ ) {
+    		if (!occupants.get(j).isBlocked()) {
+    			occupants.get(j).setBlocked(true);
+    			System.out.println("MONSTER HAS BLOCKED : " + occupants.get(j).getCharacter().getName());
+    			break;
+    		}
+		}
     }
 }
