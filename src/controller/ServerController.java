@@ -407,7 +407,14 @@ public class ServerController extends Handler{
      */
     public void resetWeek() {
         resetDay();
-        //TODO return monsters to their place
+
+        for (int i = 0; i < board.monsters.size(); i++) {
+        	Monster currentMonster = board.monsters.get(i);
+        	currentMonster.setLocation(currentMonster.getStartingLocation());
+        	currentMonster.resetDead();
+        	currentMonster.setProwling(false);
+        	currentMonster.setBlocked(false);
+        }
     }
 
     public void handleAction(Player p, Phase a){
@@ -620,44 +627,68 @@ public class ServerController extends Handler{
     		board.monsters.get(i).setProwling(false);
     	}
     	
-    	
     	int roll = Utility.roll(6);
-    	network.broadCast("Monster roll: " + roll);
-    	
-    	// TODO: Add ghosts
-    	
+    	network.broadCast("Monster roll: " + roll);    	
     	// the ones we have: 
     	// ghost, giant, heavydragon, heavytroll, viper, wolf
     	
-  
+    	setProwlingMonsters(MonsterName.GHOST);
     	if (roll == 1) { // dragons are on the prowl
+    		network.broadCast("Ghosts and Heavy Dragons are on the prowl!");
     		setProwlingMonsters(MonsterName.HEAVY_DRAGON);
-    	} else if (roll == 2) {
-    		// serpents, demons, woodfolk
+    	} else if (roll == 2) { // serpents, demons, woodfolk
+    		network.broadCast("Ghosts and Vipers are on the prowl!");
     		setProwlingMonsters(MonsterName.VIPER);
-    	} else if (roll == 3) {
-    		// wolves, ogres, goblins, octopus
+    	} else if (roll == 3) { // wolves, ogres, goblins, octopus
+    		network.broadCast("Ghosts and Wolves are on the prowl!");
     		setProwlingMonsters(MonsterName.WOLF);
-    	} else if (roll == 4) {
-    		// giants, trolls, lancers
+    	} else if (roll == 4) { // giants, trolls, lancers
+    		network.broadCast("Ghosts, Heavy Trolls, and Giants are on the prowl!");
     		setProwlingMonsters(MonsterName.HEAVY_TROLL);
     		setProwlingMonsters(MonsterName.GIANT);
-    	} else if (roll == 5) {
-    		// spiders, imp, bashkars, rogues
-    	} else if (roll == 6) {
-    		// bats, visitor/mission chits flip, guard, order
+    	} else if (roll == 5) { // spiders, imp, bashkars, rogues
+    		network.broadCast("Ghosts are on the prowl!");
+    	} else if (roll == 6) { // bats, visitor/mission chits flip, guard, order
+    		network.broadCast("Ghosts are on the prowl!");
     	}
     }
     
     private void setProwlingMonsters(MonsterName name) {
     	ArrayList<Monster> prowlingMonsters = new ArrayList<Monster>();
     	prowlingMonsters = board.getMonsters(name);
-    	
+
 		for (int i = 0; i < prowlingMonsters.size(); i++) {
 			prowlingMonsters.get(i).setProwling(true);
 		}
     }
-
+    
+    public void allowMonstersToProwl(){
+    	System.out.println("ALLOWING STARTS NOW");
+    	// checks to see who can prowl 
+    	ArrayList<Monster> prowlingMonsters = board.getProwlingMonsters();
+    	for (int i = 0; i < prowlingMonsters.size(); i++) {
+    		if (prowlingMonsters.get(i).getStartingLocation() != null) { // if they're on the board
+    			Monster monster = prowlingMonsters.get(i);
+    			if (monster.isProwling()) {
+    				System.out.println("MONSTER IS MOVING");
+    				// then they can prowl
+    				System.out.println("old location: " +  monster.getLocation());
+    				monster.move();
+    				monster.block(); // block occupants in new clearing 
+    				System.out.println("new location: " + monster.getLocation() ) ;
+    				// TODO: for whatever reason it's not recognizing that the monster changed clearings
+    				
+    			} else {
+    				// they can block others if they're not already blocked
+    				if (!monster.isBlocked()) {
+    					System.out.println("MONSTER BLOCKING");
+    					monster.block();
+    				} 				
+    			}
+    		}
+    	}
+    	
+    }
     /**
      * Sends up to date board to clients, along with their proper character
      */
@@ -684,6 +715,8 @@ public class ServerController extends Handler{
         	network.broadCast("There is only one player alive");
         	endGame();
         }
+        
+        allowMonstersToProwl();
 
         collectCombat(); //2 players, 1 attacker 1 defender
 
