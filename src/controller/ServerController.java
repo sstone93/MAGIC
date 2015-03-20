@@ -86,18 +86,18 @@ public class ServerController extends Handler{
 			Message m = (Message) message;
 			if( m.getType() == MessageType.ACTIVITIES){
 				if(state == GameState.CHOOSE_PLAYS){
-					
+
 					//MAIN HANDLER FOR INDIVIDUAL PHASE SUBMISSION.
 
-		    		//- determine if they move on to 
+		    		//- determine if they move on to
 		    		//- when a character is done all actions, set their state to finished, and check to see if all players are done and if you need to move on.
-					
+
 					Player p = findPlayer(ID);
-					
+
 					//1. is it valid? (blocked + move in their queue)
 					if(p.isBlocked() == false){
 						//do it
-						
+
 						//if it is a move, then dont reset last move
 						if(((Phase) m.getData().get(0)).getAction() == Actions.MOVE){
 							handleAction(p,(Phase)m.getData().get(0));
@@ -106,30 +106,30 @@ public class ServerController extends Handler{
 							p.setLastMove(null);
 							handleAction(p,(Phase)m.getData().get(0));
 						}
-						
+
 						//subtract from queue
 						p.usePhase((Phase) m.getData().get(0));
-						
+
 						//tell client it worked
 						network.send(ID, "ACTION SUCCEEDED");
-						
+
 						//check to see if basics are over, if so add sunlight
 						p.checkAndAddSunlight();
-						
+
 						//broadcast new board and player states
 						updateClients();	//PROBLEM IS WITH PLAYER DISTRIBUTION HERE
-						
+
 						//see if that was their last action
 						if(p.getDaylight()){
 							finishedPlayers += 1;
 							network.send(ID, "NO PHASES LEFT");
 						}
-						
+
 					} else {
 						//return error to client
 						network.send(ID, "ACTION FAILED, YOU ARE BLOCKED");
-					}			
-					
+					}
+
 				}else{
 					network.send(ID, "NOT ACCEPTING ACTIVITIES ATM");
 				}
@@ -360,7 +360,12 @@ public class ServerController extends Handler{
      * @param p The player
      */
     public void alert(Player p) {
-    	p.getActiveWeapon().setActive(!p.getActiveWeapon().isActive());
+    	if (p.getActiveWeapon().getType() != Utility.WeaponName.FIST) {
+    		p.getActiveWeapon().setActive(!p.getActiveWeapon().isActive());
+    	}
+    	else {
+    		p.getWeapons().get(0).setActive(true);
+    	}
     }
 
     /**
@@ -412,14 +417,14 @@ public class ServerController extends Handler{
     		boolean move = board.move(p, a);
     		network.broadCast(p.getCharacter().getName() + " is moving? : " + move);
     		break;
-    	case HIDE: 
+    	case HIDE:
     		hide(p);
     		break;
     	case ALERT:
     		alert(p);
     		network.broadCast(p.getCharacter().getName() + " is alerting their weapon!");
     		break;
-    	case REST: 
+    	case REST:
     		rest(p);
     		network.broadCast(p.getCharacter().getName() + " is resting!");
     		break;
@@ -437,7 +442,7 @@ public class ServerController extends Handler{
     		break;
     	}
     }
-    
+
     /**
      * Cycles through players and their moves for the day
      */
@@ -543,31 +548,31 @@ public class ServerController extends Handler{
     		}
     	}
     }
-    
+
     public void calculatePhases(){
     	for(int i=0;i<playerCount;i++){
 			players.get(i).calculatePhases();
 		}
     }
-    
-    
+
+
     /**
      * Waits until all activities have been submitted (and tells the clients to send them)
      */
     public void startActivitiesHandler(){
-    	
+
     	setSunlightTrue();		//sets the sunlight for all players back to true (minus the dwarf)
-    	
+
     	calculatePhases();			//sets up all the players
     	distributeCharacters();		//tell the client's their options
-    	
+
     	//1. Send each player their notice for 2 basic moves
     	network.broadCast("SEND MOVES");
-    	
+
     	//2. START HANDLER FOR MOVE SUBMISSIONS
     	state = GameState.CHOOSE_PLAYS;
     	finishedPlayers = 0;
-    	
+
     	while(finishedPlayers < playerCount){
     		try {
 				Thread.sleep(20);
@@ -576,7 +581,7 @@ public class ServerController extends Handler{
 				e.printStackTrace();
 			}
     	}	//TODO HANDLE PLAYERS DROPPING OUT DURING THIS STEP
-    	
+
     	//5. Finish phase collection and move on
     	state = GameState.NULL;
     	System.out.println("ALL PLAYERS FINISHED DAYLIGHT PHASE.");
@@ -589,13 +594,13 @@ public class ServerController extends Handler{
     }
 
     public void collectCombat(){
-    	
+
     	state = GameState.CHOOSE_COMBATTARGET;
-    	
+
     	recievedCombat = 0;
-    	
+
     	network.broadCast("SEND COMBAT");
-    	
+
     	while(recievedCombat < playerCount){
     		try {
 				Thread.sleep(20);
@@ -606,6 +611,52 @@ public class ServerController extends Handler{
     	}	//TODO HANDLE PLAYERS DROPPING OUT DURING THIS STEP
     	state = GameState.NULL;
     	System.out.println("FINISH COLLECTING COMBATTARGET");
+    }
+
+    // sets specific monsters (based on the monster roll) to prowling
+    public void rollForMonsters() {
+    	
+    	// set all the monsters to dormant
+    	for (int i = 0; i < board.monsters.size(); i++) {
+    		board.monsters.get(i).setProwling(false);
+    	}
+    	
+    	
+    	int roll = Utility.roll(6);
+    	network.broadCast("Monster roll: " + roll);
+    	
+    	// TODO: Add ghosts
+    	
+    	// the ones we have: 
+    	// ghost, giant, heavydragon, heavytroll, viper, wolf
+    	
+  
+    	if (roll == 1) { // dragons are on the prowl
+    		setProwlingMonsters(MonsterName.HEAVY_DRAGON);
+    	} else if (roll == 2) {
+    		// serpents, demons, woodfolk
+    		setProwlingMonsters(MonsterName.VIPER);
+    	} else if (roll == 3) {
+    		// wolves, ogres, goblins, octopus
+    		setProwlingMonsters(MonsterName.WOLF);
+    	} else if (roll == 4) {
+    		// giants, trolls, lancers
+    		setProwlingMonsters(MonsterName.HEAVY_TROLL);
+    		setProwlingMonsters(MonsterName.GIANT);
+    	} else if (roll == 5) {
+    		// spiders, imp, bashkars, rogues
+    	} else if (roll == 6) {
+    		// bats, visitor/mission chits flip, guard, order
+    	}
+    }
+    
+    private void setProwlingMonsters(MonsterName name) {
+    	ArrayList<Monster> prowlingMonsters = new ArrayList<Monster>();
+    	prowlingMonsters = board.getMonsters(name);
+    	
+		for (int i = 0; i < prowlingMonsters.size(); i++) {
+			prowlingMonsters.get(i).setProwling(true);
+		}
     }
 
     /**
@@ -625,30 +676,26 @@ public class ServerController extends Handler{
         network.broadCast("This is the start of Day " + currentDay + "!");
 
         updateClients();
-        
+
+        rollForMonsters();
+
         startActivitiesHandler();
-        
+
         if (playerCount == 1) {
         	network.broadCast("There is only one player alive");
         	endGame();
         }
-        
-        collectCombat(); //2 players, 1 attacker 1 defender
-/*
-        //All players choose attackers
-        nextMover = 0;
-        while (nextMover < playerCount) {
-            for (int i = 0; i < playerCount; i++) {
-                if (players.get(i).order == nextMover) {
-                	if (players.get(i).getTarget() != null) {
-                		encounter(players.get(i), players.get(i).getTarget());
-                		//System.out.println("")
-                	}
-                	nextMover++;
-                }
-            }
-        }*/
 
+        collectCombat(); //2 players, 1 attacker 1 defender
+
+        //All players choose attackers
+        for (int i = 0; i < players.size(); i++) {
+        	if (players.get(i).getTarget() != null) {
+        		encounter(players.get(i), players.get(i).getTarget());
+        		System.out.println("Finished encounter");
+        	}
+        }
+        
         //Progresses to the next day or ends the game
         boolean thing = resetDay();
         if(thing == true){ //if it is not the 28th day....
@@ -670,43 +717,61 @@ public class ServerController extends Handler{
     }
 
     public void encounter(Player player, Monster monster) {
-    	if (player.isDead() == true) {
-    		network.send(player.getID(), "You are dead");
-    		return;
-    	}
-    	else if (monster.isDead() == true) {
-    		network.send(player.getID(), "That monster is dead");
-    		return;
-    	}
 
-    	state = GameState.CHOOSE_COMBATMOVES;
-    	recievedCombat = 0;
-    	network.send(player.getID(), "SEND COMBATMOVES");
-
-    	while(recievedCombat < 1){
-    		try {
-				Thread.sleep(20);
-			} catch (InterruptedException e) {
-				// Auto-generated catch block
-				e.printStackTrace();
-			}
-    	}
-
-    	monster.setMoves();
-
-    	System.out.println("got combat moves");
-    	state = GameState.NULL;
-
-    	if (player.getMoves() == null) {
-    		network.send(player.getID(), "It messed up...");
-    		return;
-    	}
-    	else if (monster.getMoves() == null) {
-    		network.send(player.getID(), "It messed up...");
-    		return;
-    	}
-    	else {
-    		doFight(player, monster);
+    	int unhurtRounds = 0;
+    	
+    	while (unhurtRounds < 2) {
+    	
+	    	if (player.isDead() == true) {
+	    		network.send(player.getID(), "You are dead");
+	    		return;
+	    	}
+	    	else if (monster.isDead() == true) {
+	    		network.send(player.getID(), "That monster is dead");
+	    		return;
+	    	}
+	
+	    	int playerHurt = player.getHealth();
+	    	int monsterHurt = monster.getHealth();
+	    	
+	    	state = GameState.CHOOSE_COMBATMOVES;
+	    	recievedCombat = 0;
+	    	network.send(player.getID(), "SEND COMBATMOVES");
+	
+	    	while(recievedCombat < 1){
+	    		try {
+					Thread.sleep(20);
+				} catch (InterruptedException e) {
+					// Auto-generated catch block
+					e.printStackTrace();
+				}
+	    	}
+	
+	    	monster.setMoves();
+	
+	    	System.out.println("got combat moves");
+	    	state = GameState.NULL;
+	
+	    	if (player.getMoves() == null) {
+	    		network.send(player.getID(), "It messed up...");
+	    		return;
+	    	}
+	    	else if (monster.getMoves() == null) {
+	    		network.send(player.getID(), "It messed up...");
+	    		return;
+	    	}
+	    	else {
+	    		player.setFatigue(player.getFatigue() + player.getMoves().getAttackFatigue() + player.getMoves().getManeuverFatigue());
+        		network.send(player.getID(), player);
+	    		doFight(player, monster);
+	    	}
+	    	
+	    	if (playerHurt == player.getHealth() && monsterHurt == monster.getHealth()) {
+        		unhurtRounds++;
+        	}
+        	else {
+        		unhurtRounds = 0;
+        	}
     	}
     }
 
@@ -722,7 +787,7 @@ public class ServerController extends Handler{
 			player.weapons[0].setActive(true);
 			return;
 		}*/
-
+    	
     	if (attacker == defender) {
     		network.send(attacker.getID(), "Stop attacking yourself!");
     		return;
@@ -732,47 +797,65 @@ public class ServerController extends Handler{
     		return;
     	}
 
-    	if (attacker.isDead() == true) {
-    		network.send(attacker.getID(), "You are dead.");
-    		return;
-    	}
-    	else if (defender.isDead() == true) {
-    		network.send(defender.getID(), "You are dead.");
-    		return;
-    	}
+    	int unhurtRounds = 0;
+    	
+    	while (unhurtRounds < 2) {
+    		if (attacker.isDead() == true) {
+        		network.send(attacker.getID(), "You are dead.");
+        		return;
+        	}
+        	else if (defender.isDead() == true) {
+        		network.send(defender.getID(), "You are dead.");
+        		return;
+        	}
 
-    	//System.out.println(attacker.getTarget().getCharacter().getName());
-    	//System.out.println(defender.getTarget().getCharacter().getName());
+    		int attackerHurt = attacker.getHealth();
+    		int defenderHurt = defender.getHealth();
+    		
+        	//System.out.println(attacker.getTarget().getCharacter().getName());
+        	//System.out.println(defender.getTarget().getCharacter().getName());
+        	
+        	//ask clients to send moves!
+        	state = GameState.CHOOSE_COMBATMOVES;
+        	recievedCombat = 0;
+        	network.send(attacker.getID(), "SEND COMBATMOVES");
+        	network.send(defender.getID(), "SEND COMBATMOVES");
 
-    	//ask clients to send moves!
-    	state = GameState.CHOOSE_COMBATMOVES;
-    	recievedCombat = 0;
-    	network.send(attacker.getID(), "SEND COMBATMOVES");
-    	network.send(defender.getID(), "SEND COMBATMOVES");
+        	while(recievedCombat < 2){
+        		try {
+    				Thread.sleep(20);
+    			} catch (InterruptedException e) {
+    				// Auto-generated catch block
+    				e.printStackTrace();
+    			}
+        	}
 
-    	while(recievedCombat < 2){
-    		try {
-				Thread.sleep(20);
-			} catch (InterruptedException e) {
-				// Auto-generated catch block
-				e.printStackTrace();
-			}
-    	}
-
-    	System.out.println("got combat moves");
-    	state = GameState.NULL;
+        	System.out.println("got combat moves");
+        	state = GameState.NULL;
 
 
-    	if (attacker.getMoves() == null) {
-    		network.send(attacker.getID(), "It messed up...");
-    		return;
-    	}
-    	else if (defender.getMoves() == null) {
-    		network.send(defender.getID(), "It messed up...");
-    		return;
-    	}
-    	else {
-    		doFight(attacker, defender);
+        	if (attacker.getMoves() == null) {
+        		network.send(attacker.getID(), "It messed up...");
+        		return;
+        	}
+        	else if (defender.getMoves() == null) {
+        		network.send(defender.getID(), "It messed up...");
+        		return;
+        	}
+        	else {
+        		attacker.setFatigue(attacker.getFatigue() + attacker.getMoves().getAttackFatigue() + attacker.getMoves().getManeuverFatigue());
+        		defender.setFatigue(defender.getFatigue() + defender.getMoves().getAttackFatigue() + defender.getMoves().getManeuverFatigue());
+        		network.send(attacker.getID(), attacker);
+        		network.send(defender.getID(), defender);
+        		doFight(attacker, defender);
+        	}
+        	
+        	if (attackerHurt == attacker.getHealth() && defenderHurt == defender.getHealth()) {
+        		unhurtRounds++;
+        	}
+        	else {
+        		unhurtRounds = 0;
+        	}
     	}
 	}
 
@@ -798,6 +881,19 @@ public class ServerController extends Handler{
     }
 
 	public void doFight(Player attacker, Player defender) {
+		if (attacker.getMoves().getManeuver() == Maneuvers.RUN) {
+			network.broadCast(attacker.getCharacter().getName() + "has run away!");
+			attacker.setFatigue(attacker.getFatigue() + 2);
+			network.send(attacker.getID(), attacker);
+			return;
+		}
+		else if (defender.getMoves().getManeuver() == Maneuvers.RUN) {
+			network.broadCast(defender.getCharacter().getName() + "has run away!");
+			defender.setFatigue(defender.getFatigue() + 2);
+			network.send(defender.getID(), defender);
+			return;
+		}
+		
 		if (defender.getActiveWeapon().getSpeed() < attacker.getActiveWeapon().getSpeed()) {
 			checkHit(attacker, defender);
 		}

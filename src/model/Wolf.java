@@ -9,7 +9,7 @@ public class Wolf extends Monster {
 	private static final long serialVersionUID = -3565210120367313469L;
 
 	public Wolf() {
-		name         = "Wolf";
+		name         = MonsterName.WOLF;
 		weight       = ItemWeight.MEDIUM;
 		notoriety    = 1;
 		fame         = 0;

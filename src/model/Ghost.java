@@ -10,7 +10,7 @@ public class Ghost extends Monster {
 	private static final long serialVersionUID = 2169292630927906598L;
 	
 	public Ghost() {
-		name         = "Ghost";
+		name         = MonsterName.GHOST;
 		weight       = ItemWeight.MEDIUM;
 		notoriety    = 2;
 		fame         = 0;

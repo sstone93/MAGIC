@@ -7,6 +7,7 @@ import java.util.Collections;
 import utils.Utility.ClearingType;
 import utils.Utility.GarrisonName;
 import utils.Utility.LargeTreasureName;
+import utils.Utility.MonsterName;
 import utils.Utility.PathType;
 import utils.Utility.SmallTreasureName;
 import utils.Utility.SoundChits;
@@ -17,27 +18,28 @@ import utils.Utility.TreasureWithinTreasureName;
 import utils.Utility.WarningChits;
 
 /**
- * 
+ *
  * @author Nick
  *
  */
 public class Board implements Serializable{
-	
+
 	private static final long serialVersionUID = -4906643706682852990L;
 	public ArrayList<Tile> tiles = new ArrayList<Tile>();
 	public ArrayList<Garrison> garrisons = new ArrayList<Garrison>();
 	public ArrayList<SmallTreasure> small = new ArrayList<SmallTreasure>();
 	public ArrayList<Treasure> large = new ArrayList<Treasure>();
 	public ArrayList<TreasureWithinTreasure> twit = new ArrayList<TreasureWithinTreasure>();
+	public ArrayList<Monster> monsters = new ArrayList<Monster>();
 
 	public Board(ArrayList<Player> players){
 		setupBoard();		//creates all of the tiles and clearings. establishes all of the connections
 		setupGarrisons();	//instanciates the garrisons
 		setUpMapChits();	//places the warning chits, places the treasures, places the map chits, places the garrisons
 		placePlayers(players);	//places the players based on their starting location
-		System.out.println(this);
+		initializeMonsters();
 	}
-	
+
 	public int convertTileName(TileName n){
 		for(int i=0; i<20; i++){
 			if(tiles.get(i).getName() == n){
@@ -46,18 +48,18 @@ public class Board implements Serializable{
 		}
 		return -1;
 	}
-	
+
 	/**
 	 * Creates the board based on the images provided by JP
 	 */
 	private void setupBoard(){
 		/*Style is as follows:
-		
+
 		- Create a new tile, providing it's name, add it to the array
 			-this will automatically cause all clearings on that tile to connect to eachother as they should.
 		-call the connect method to connect 2 tiles together manually (this is how you de-manualize board building)
 		*/
-		
+
 		//CREATE ALL THE TILES (THIS IS SETUP INTERNAL CLEARINGS AUTOMATICALLY)
 		tiles.add(new Tile(TileName.CLIFF, 400, 82));
 		tiles.add(new Tile(TileName.EVILVALLEY, 253, 167));
@@ -79,44 +81,44 @@ public class Board implements Serializable{
 		tiles.add(new Tile(TileName.AWFULVALLEY, 547, 847));
 		tiles.add(new Tile(TileName.PINEWOODS, 106, 762));
 		tiles.add(new Tile(TileName.LINDENWOODS, 400, 932));
-		
+
 		//MANUALLY SET TILE CONNECTIONS (DOES BOTH ENDS IN 1 CONNECT)
 		connect(tiles.get(0), tiles.get(1), 1, 2);		//cliff and evil valley
-		connect(tiles.get(0), tiles.get(2), 2, 3);		//cliff and ledges		
+		connect(tiles.get(0), tiles.get(2), 2, 3);		//cliff and ledges
 		connect(tiles.get(1), tiles.get(5), 5, 6);		//evil valley and high pass
 		connect(tiles.get(1), tiles.get(6), 4, 2);		//evil valley and borderlands
-		connect(tiles.get(1), tiles.get(2), 4, 2);		//evil valley and ledges		
+		connect(tiles.get(1), tiles.get(2), 4, 2);		//evil valley and ledges
 		connect(tiles.get(2), tiles.get(6), 4, 4);		//ledges and borderlands
-		connect(tiles.get(2), tiles.get(7), 5, 2);		//ledges and oakwoods		
-		connect(tiles.get(3), tiles.get(8), 2, 1);		//crag and deep woods		
+		connect(tiles.get(2), tiles.get(7), 5, 2);		//ledges and oakwoods
+		connect(tiles.get(3), tiles.get(8), 2, 1);		//crag and deep woods
 		connect(tiles.get(4), tiles.get(8), 5, 2);		//dark valley and deep woods
-		connect(tiles.get(4), tiles.get(9), 1, 1);		//dark valley and curst valley		
+		connect(tiles.get(4), tiles.get(9), 1, 1);		//dark valley and curst valley
 		connect(tiles.get(5), tiles.get(10), 3, 5);		//highpass and cavern
-		connect(tiles.get(5), tiles.get(6), 2, 1);		//highpass and borderlands		
+		connect(tiles.get(5), tiles.get(6), 2, 1);		//highpass and borderlands
 		connect(tiles.get(6), tiles.get(10), 5, 2);		//borderlands and cavern
 		connect(tiles.get(6), tiles.get(11), 1, 5);		//borderlands and badvalley
-		connect(tiles.get(6), tiles.get(7), 2, 2);		//borderlands and oakwoods		
+		connect(tiles.get(6), tiles.get(7), 2, 2);		//borderlands and oakwoods
 		connect(tiles.get(7), tiles.get(11), 5, 1);		//oakvwoods and bad valley
 		connect(tiles.get(7), tiles.get(12), 5, 5);		//oakwoods and maple woods
 		connect(tiles.get(7), tiles.get(8), 4, 1);		//oakwoods and deepwoods
 		connect(tiles.get(8), tiles.get(12), 5, 5);		//deepwoods and maple woods
-		connect(tiles.get(8), tiles.get(9), 2, 2);		//deepwoods and curst valley		
-		connect(tiles.get(9), tiles.get(13), 4, 5);		//curst valley and nut woods		
-		connect(tiles.get(10), tiles.get(11), 1, 4);	//cavern and bad valley		
+		connect(tiles.get(8), tiles.get(9), 2, 2);		//deepwoods and curst valley
+		connect(tiles.get(9), tiles.get(13), 4, 5);		//curst valley and nut woods
+		connect(tiles.get(10), tiles.get(11), 1, 4);	//cavern and bad valley
 		connect(tiles.get(11), tiles.get(14), 4, 5);	//bad valley and mountain
-		connect(tiles.get(11), tiles.get(15), 2, 2);	//bad valley and caves		
+		connect(tiles.get(11), tiles.get(15), 2, 2);	//bad valley and caves
 		connect(tiles.get(12), tiles.get(15), 4, 5);	//maple woods and caves
 		connect(tiles.get(12), tiles.get(16), 2, 5);	//maple woods and ruins
-		connect(tiles.get(12), tiles.get(13), 2, 5);	//maple woods and nut woods		
+		connect(tiles.get(12), tiles.get(13), 2, 5);	//maple woods and nut woods
 		connect(tiles.get(13), tiles.get(16), 4, 1);	//nut woods and ruins
 		connect(tiles.get(13), tiles.get(17), 2, 5);	//nut woods and awful valley
-		connect(tiles.get(14), tiles.get(18), 2, 4);	//mountain and pine woods		
+		connect(tiles.get(14), tiles.get(18), 2, 4);	//mountain and pine woods
 		connect(tiles.get(15), tiles.get(18), 1, 5);	//caves and pine woods
 		connect(tiles.get(16), tiles.get(19), 2, 4);	//ruins and linden woods
 		connect(tiles.get(16), tiles.get(17), 2, 1);	//ruins and awful valley
-		connect(tiles.get(17), tiles.get(19), 2, 5);	//awful valley and linden woods	
+		connect(tiles.get(17), tiles.get(19), 2, 5);	//awful valley and linden woods
 	}
-	
+
 	/**
 	 * This functions connects 2 tiles together via the supplied clearing numbers
 	 * @param t1 the first tile being connected
@@ -136,7 +138,7 @@ public class Board implements Serializable{
 		this.garrisons.add(new Garrison(GarrisonName.HOUSE));
 		this.garrisons.add(new Garrison(GarrisonName.INN));
 	}
-	
+
 	public void placeGarrisons(){
 		for(int i=0; i< tiles.size(); i++){
 			if(tiles.get(i).getType() == TileType.VALLEY){
@@ -158,7 +160,7 @@ public class Board implements Serializable{
 			}
 		}
 	}
-	
+
 	public void instanciateTreasures(){
 		//instanciate the small treasures
 		for (SmallTreasureName n : SmallTreasureName.values()) {
@@ -179,22 +181,23 @@ public class Board implements Serializable{
 		twit.add(new TreasureWithinTreasure(TreasureWithinTreasureName.CRYPT_OF_THE_KNIGHT, createTreasureArray(0,1)));
 		twit.add(new TreasureWithinTreasure(TreasureWithinTreasureName.ENCHANTED_MEADOW, createTreasureArray(0,0)));
 		twit.add(new TreasureWithinTreasure(TreasureWithinTreasureName.MOULDY_SKELETON, createTreasureArray(0,0)));
-		
+
 		Collections.shuffle(small);
 		Collections.shuffle(large);
 		Collections.shuffle(twit);
-		
+
 		System.out.println("Starting loop");
-		
+
 		while(!twit.isEmpty()){
 			large.add(twit.get(0));
 			twit.remove(0);
 		}
-		
+
 		System.out.println("ending loop");
 	}
 	
 	public void createAndPlaceWarningChits(TileType type){
+
 		ArrayList<WarningChit> temp = new ArrayList<WarningChit>();
 		
 		for(WarningChits n : WarningChits.values()){
@@ -213,10 +216,10 @@ public class Board implements Serializable{
 			}
 		}
 	}
-	
+
 	private ArrayList<Treasure> createTreasureArray(int small, int large){
 		ArrayList<Treasure> t = new ArrayList<Treasure>();
-		
+
 		for(int i=0; i<small;i++){
 			t.add(this.small.get(0));
 			this.small.remove(0);
@@ -228,7 +231,7 @@ public class Board implements Serializable{
 
 		return t;
 	}
-	
+
 	public void setUpMapChits(){
 		//20 yellow warning chits, divide into 4 groups of 5 by letter
 		//Assigned to the 20 tiles (1 per tile)
@@ -245,9 +248,9 @@ public class Board implements Serializable{
 		for (SoundChits n : SoundChits.values()) {
 			  mc.add(new MapChit(n));
 		}
-	
+
 		instanciateTreasures();
-		
+
 		//2. now we merge tne twts and large treasures together
 		mc.add(new TreasureSite(TreasureLocations.ALTAR, createTreasureArray(0,4)));
 		mc.add(new TreasureSite(TreasureLocations.CAIRNS, createTreasureArray(6,1)));
@@ -257,20 +260,20 @@ public class Board implements Serializable{
 		mc.add(new TreasureSite(TreasureLocations.SHRINE, createTreasureArray(2,2)));
 		mc.add(new TreasureSite(TreasureLocations.STATUE, createTreasureArray(2,1)));
 		mc.add(new TreasureSite(TreasureLocations.VAULT, createTreasureArray(0,5)));
-				
+
 		//dwellings (company, woodfolk, patrol, lancers, bashkars)
 		//all 5 take 2 small treasures
-				
+
 		//visitors
 		//scholar = 3 small
-		
+
 		//garrisons (chapel, house, inn, guard(house)
 		//all 4 take 2 small treasures each
 		garrisons.get(0).setTreasures(createTreasureArray(2,0));
 		garrisons.get(1).setTreasures(createTreasureArray(2,0));
 		garrisons.get(2).setTreasures(createTreasureArray(2,0));
 		garrisons.get(3).setTreasures(createTreasureArray(2,0));
-		
+
 		//mix the sound and treasure site chits
 		Collections.shuffle(mc);
 
@@ -284,7 +287,7 @@ public class Board implements Serializable{
 		mc.get(0); mc.get(1); mc.get(2); mc.get(3); mc.get(4);
 		mc.remove(0);mc.remove(0);mc.remove(0);mc.remove(0);mc.remove(0);
 		LostCastle lostcastle = new LostCastle(c2);
-		
+
 		//8 left, 2 groups of 4
 		//add lost city to 1 of the groups of 4 (now 5)
 		ArrayList<Object> caves = new ArrayList<Object>();
@@ -295,10 +298,10 @@ public class Board implements Serializable{
 		caves.add(lostcity);
 		Collections.shuffle(caves);
 		//1 placed in each caves tile
-		
+
 		//puts the chits into the caves tiles
 		placeChits(caves, 5,6,10,15,16);
-		
+
 		//add lost castle to the other group
 		ArrayList<Object> mountains = new ArrayList<Object>();
 		mountains.add(mc.get(0));mc.remove(0);
@@ -308,16 +311,42 @@ public class Board implements Serializable{
 		mountains.add(lostcastle);
 		Collections.shuffle(mountains);
 		//put one into each mountain tile
-		
+
 		//puts the chits into the caves tiles
 		placeChits(mountains, 0,2,3,9,14);
-		
+
 		//reveal all of the VALLEY map chits (after character selection stuff done)
 		placeGarrisons();
 	}
 	
+	public void initializeMonsters() {
+		// ghost, giant, heavydragon, heavytroll, viper, wolf
+		// TODO: ghosts?
+		for (int i = 0; i < 5; i++) {
+			monsters.add(new HeavyDragon());
+			monsters.add(new Viper());
+			monsters.add(new Wolf());
+		}
+		for (int i = 0; i < 2; i++) {
+			monsters.add(new HeavyTroll());
+			monsters.add(new Giant());
+		}
+		monsters.add(new HeavyTroll());
+
+	}
+	
+	public ArrayList<Monster> getMonsters(MonsterName name) {
+		ArrayList<Monster> specificMonsters = new ArrayList<Monster>();
+		for (int i = 0; i < monsters.size(); i++) {
+			if (monsters.get(i).getName() == name) {
+				specificMonsters.add(monsters.get(i));
+			}
+		}
+		return specificMonsters;
+	}
+
 	public void placeChits(ArrayList<Object> a,int p1,int p2,int p3, int p4, int p5){
-		
+
 		int[] temps = {p1, p2, p3, p4, p5};
 		for(int i=0; i<5; i++){
 			if(a.get(0) instanceof LostPlace){
@@ -339,9 +368,9 @@ public class Board implements Serializable{
 		}
 		return null;
 	}
-	
+
 	public void placePlayers(ArrayList<Player> p){
-		
+
 		//cycle through lsit of characters
 		//set their current location as the INN
 		// note: you can grab the players characters startingLocation by doing player.getCharacter().getStartingLocation();
@@ -362,14 +391,14 @@ public class Board implements Serializable{
 			}
 		}
 	}
-	
+
 	 // TODO: this is the function for monsters changing clearings
     //public boolean move(Monster monster, Clearing newClearing) {
     	//boolean canChange =  (monster.getLocation().canChangeClearing(newClearing));
     	//block(monster); // see if it can block any players
     	//return canChange;
    // }
-    
+
     //private boolean weightRestrictions(){
     	 //  ItemWeight highestWeight = Utility.ItemWeight.NEGLIGIBLE;
 
@@ -392,13 +421,13 @@ public class Board implements Serializable{
 	  //  if (check) {
 	    //	highestWeight = currentWeight;
 	  //  }
-    	
+
     	// discard anything that player can't carry
         //player.removeWeaponsWithHigherWeight(highestWeight);
         //player.removeArmourWithHigherWeight(highestWeight);
-    	
+
     //}
-    
+
     private boolean canUsePath(Player player, Path route){
     	//TODO ANYTHING SPECIAL
     	switch(route.type){
@@ -420,14 +449,14 @@ public class Board implements Serializable{
 			return false;
     	}
     }
-    
+
     //TODO IS IT A DIFFERENT INSTANCEOF CLEARING THAN THE BOARD HAS?
     public void move(Player player, Clearing newClearing){
     	player.getLocation().removeOccupant(player);
 		player.setLocation(newClearing);
 		newClearing.addOccupant(player);
     }
-    
+
     /**
      * Moves the player to the new clearing if possible, if not, they forfeit the phase
      * @param player being moved
@@ -435,13 +464,13 @@ public class Board implements Serializable{
      * @return boolean based on if the action was valid or not
      */
     public boolean move(Player player, Phase p) {
-    	
+
     	//Convert newClearing into the actual clearing
     	String[] temp = ((String) p.getExtraInfo()).split(" ");
     	Clearing newClearing =  tiles.get(convertTileName(TileName.valueOf(temp[0]))).getClearing(Integer.parseInt(temp[1]));
-    	
+
     	boolean moving = false;
-    	
+
     	//Steps to Move
     	//1. Is your clearing connected to the destination clearing?
     	//2. Are you able to use the path connecting the two clearings?
@@ -495,5 +524,5 @@ public class Board implements Serializable{
 		}
 		return "";
 	}
-	
+
 }
