@@ -20,6 +20,7 @@ import javax.swing.border.LineBorder;
 import utils.Utility;
 import utils.Utility.Actions;
 import utils.Utility.CharacterName;
+import utils.Utility.GarrisonName;
 import utils.Utility.PhaseType;
 import controller.ClientController;
 
@@ -61,7 +62,8 @@ public class CharacterSelectPanel extends JPanel{
 		JButton btnSelect = new JButton("Select");
 		btnSelect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				control.handleCharacterSelection((CharacterName)character.getSelectedItem());
+				control.handleCharacterSelection((CharacterName)character.getSelectedItem(), 
+						(GarrisonName)starting.getSelectedItem());
 			}
 		});
 		
