@@ -1031,7 +1031,22 @@ public class ServerController extends Handler{
     }
 
 	public void hit(Player player, Monster monster) {
-		ItemWeight level = player.getActiveWeapon().getWeight();
+		ItemWeight level;
+		if (player.getActiveWeapon().isRanged() == true) {
+			int roll = Utility.roll(6);
+			if (roll == 1) {
+				level = ItemWeight.HEAVY;
+			}
+			else if (roll == 2) {
+				level = ItemWeight.MEDIUM;
+			}
+			else {
+				level = ItemWeight.LIGHT;
+			}
+		}
+		else {
+			level = player.getActiveWeapon().getWeight();	
+		}
 
 		network.broadCast(player.getCharacter().getName() + " has hit " + monster.getName());
 
@@ -1233,7 +1248,22 @@ public class ServerController extends Handler{
 	}
 
 	public void hit(Player attacker, Player defender) {
-		ItemWeight level = attacker.getActiveWeapon().getWeight();
+		ItemWeight level;
+		if (attacker.getActiveWeapon().isRanged() == true) {
+			int roll = Utility.roll(6);
+			if (roll == 1) {
+				level = ItemWeight.HEAVY;
+			}
+			else if (roll == 2) {
+				level = ItemWeight.MEDIUM;
+			}
+			else {
+				level = ItemWeight.LIGHT;
+			}
+		}
+		else {
+			level = attacker.getActiveWeapon().getWeight();	
+		}
 
 		network.broadCast(attacker.getCharacter().getName() + " has hit " + defender.getCharacter().getName());
 
