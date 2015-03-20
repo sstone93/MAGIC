@@ -183,7 +183,7 @@ public class Utility {
 
     public enum Attacks {THRUST, SWING, SMASH}
 
-    public enum Maneuvers {CHARGE, DODGE, DUCK}
+    public enum Maneuvers {CHARGE, DODGE, DUCK, RUN}
 
     public enum Defenses {AHEAD, SIDE, ABOVE}
 

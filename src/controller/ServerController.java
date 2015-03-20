@@ -881,7 +881,19 @@ public class ServerController extends Handler{
     }
 
 	public void doFight(Player attacker, Player defender) {
-		//System.out.println("Test");
+		if (attacker.getMoves().getManeuver() == Maneuvers.RUN) {
+			network.broadCast(attacker.getCharacter().getName() + "has run away!");
+			attacker.setFatigue(attacker.getFatigue() + 2);
+			network.send(attacker.getID(), attacker);
+			return;
+		}
+		else if (defender.getMoves().getManeuver() == Maneuvers.RUN) {
+			network.broadCast(defender.getCharacter().getName() + "has run away!");
+			defender.setFatigue(defender.getFatigue() + 2);
+			network.send(defender.getID(), defender);
+			return;
+		}
+		
 		if (defender.getActiveWeapon().getSpeed() < attacker.getActiveWeapon().getSpeed()) {
 			checkHit(attacker, defender);
 		}
