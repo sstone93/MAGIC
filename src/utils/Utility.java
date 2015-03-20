@@ -1,10 +1,6 @@
 package utils;
-import java.util.ArrayList;
 import java.util.Random;
-
 import model.Player;
-import model.SmallTreasure;
-import model.Treasure;
 
 public class Utility {
 	
@@ -23,17 +19,13 @@ public class Utility {
     // returns true if they can
     // returns false if they don't have a roll reducing treasure
     public static boolean checkRollOneDie(Player player, String table) {
+
     	boolean onlyOne = false;
 
-    	ArrayList<Treasure> treasures = player.getTreasures();
-
-    	for(Treasure t: treasures) {
-			SmallTreasure temp = (SmallTreasure) t;
-			if ( temp.getName() == SmallTreasureName.SHOES_OF_STEALTH.toString() && table == "hide")
-				onlyOne = true;
-			else if (temp.getName() == SmallTreasureName.DEFT_GLOVES.toString() && table == "loot")
-				onlyOne = true;
-    	}
+    	if (player.hasTreasure(SmallTreasureName.SHOES_OF_STEALTH.toString()) && table == "hide")
+    		onlyOne = true;
+    	else if (player.hasTreasure(SmallTreasureName.DEFT_GLOVES.toString()) && table == "loot")
+    		onlyOne = true;
 
     	return onlyOne;
     }

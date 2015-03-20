@@ -4,10 +4,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import utils.Utility;
+import utils.Utility.Actions;
 import utils.Utility.ClearingType;
 import utils.Utility.ItemWeight;
+import utils.Utility.LargeTreasureName;
 import utils.Utility.PhaseType;
 import utils.Utility.CharacterName;
+import utils.Utility.SmallTreasureName;
 
 public class Player implements Serializable{
 
@@ -71,8 +74,37 @@ public class Player implements Serializable{
     	//TODO CALCULATE SPECIAL PHASES
     	
     	//determines + adds treasure special phases
-    	//TODO CALCULATE TREASURE PHASES
+    	//cloak of mists = hide
+    	if(this.hasTreasure(SmallTreasureName.CLOAK_OF_MIST.toString()))
+    		phases.add(new Phase(PhaseType.TREASURE, Actions.HIDE));
+    	//magic spectacles = search
+    	if(this.hasTreasure(SmallTreasureName.MAGIC_SPECTACLES.toString()))
+    		phases.add(new Phase(PhaseType.TREASURE, Actions.SEARCH));
+    	//regent of jewels = trade
+    	if(this.hasTreasure(LargeTreasureName.REGENT_OF_JEWELS.toString()))
+    		phases.add(new Phase(PhaseType.TREASURE, Actions.TRADE));
+    	//7=league boots = move
+    	if(this.hasTreasure(SmallTreasureName.LEAGUE_BOOTS_7.toString()))
+    		phases.add(new Phase(PhaseType.TREASURE, Actions.MOVE));
     	
+    	//shielded lantern = anything (ONCE PER DAY, MUST BE IN CAVE)
+    	//ancient telescope = peer (must be in mountain clering, specify other mountain clearing you are peering)
+    	
+    	
+    	//7=league boots = move, + tremendous strength??, + open vault and crypt of the knight
+    	//ALL GLOVE AND BOOT RESTRICTIONS //TODO
+    	//shoes of stealth = light strength restriction??
+    	//handy gloves = medium strength restriction?
+    	
+    }
+    
+    public boolean hasTreasure(String name){
+    	for(Treasure t: treasures){
+    		if( t.getName().equalsIgnoreCase(name)){
+    			return true;
+    		}
+    	}
+    	return false;
     }
     
     public Weapon getActiveWeapon() {

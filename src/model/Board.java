@@ -386,7 +386,9 @@ public class Board implements Serializable{
 				if(garrisons.get(j).getName() == startLoc){
 					p.get(i).setLocation(garrisons.get(j).getLocation());
 					garrisons.get(j).getLocation().addOccupant(p.get(i));
-					
+					//TODO ADDING TREASURES TO PLAYERS OFF THE START
+					p.get(i).addTreasure(new SmallTreasure(SmallTreasureName.LEAGUE_BOOTS_7));
+					p.get(i).addTreasure(new SmallTreasure(SmallTreasureName.CLOAK_OF_MIST));
 				}
 			}
 		}
