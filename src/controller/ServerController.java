@@ -624,27 +624,39 @@ public class ServerController extends Handler{
     	
     	int roll = Utility.roll(6);
     	network.broadCast("Monster roll: " + roll);
-    	// generate ghosts
+    	
+    	// TODO: Add ghosts
     	
     	// the ones we have: 
     	// ghost, giant, heavydragon, heavytroll, viper, wolf
-
+    	
   
-    	if (roll == 1) {
-    		// generate dragons, company
-    		
+    	if (roll == 1) { // dragons are on the prowl
+    		setProwlingMonsters(MonsterName.HEAVY_DRAGON);
     	} else if (roll == 2) {
-    		// generate serpents, demons, woodfolk
+    		// serpents, demons, woodfolk
+    		setProwlingMonsters(MonsterName.VIPER);
     	} else if (roll == 3) {
-    		// generate wolves, ogres, goblins, octopus, patrol, soldiers
+    		// wolves, ogres, goblins, octopus
+    		setProwlingMonsters(MonsterName.WOLF);
     	} else if (roll == 4) {
-    		// generate giants, trolls, lancers
+    		// giants, trolls, lancers
+    		setProwlingMonsters(MonsterName.HEAVY_TROLL);
+    		setProwlingMonsters(MonsterName.GIANT);
     	} else if (roll == 5) {
-    		// generate spiders, imp, bashkars, rogues
+    		// spiders, imp, bashkars, rogues
     	} else if (roll == 6) {
-    		// generate bats, visitor/mission chits flip, guard, order
+    		// bats, visitor/mission chits flip, guard, order
     	}
-
+    }
+    
+    private void setProwlingMonsters(MonsterName name) {
+    	ArrayList<Monster> prowlingMonsters = new ArrayList<Monster>();
+    	prowlingMonsters = board.getMonsters(name);
+    	
+		for (int i = 0; i < prowlingMonsters.size(); i++) {
+			prowlingMonsters.get(i).setProwling(true);
+		}
     }
 
     /**

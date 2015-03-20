@@ -7,6 +7,7 @@ import java.util.Collections;
 import utils.Utility.ClearingType;
 import utils.Utility.GarrisonName;
 import utils.Utility.LargeTreasureName;
+import utils.Utility.MonsterName;
 import utils.Utility.PathType;
 import utils.Utility.SmallTreasureName;
 import utils.Utility.SoundChits;
@@ -333,6 +334,17 @@ public class Board implements Serializable{
 			monsters.add(new Giant());
 		}
 		monsters.add(new HeavyTroll());
+
+	}
+	
+	public ArrayList<Monster> getMonsters(MonsterName name) {
+		ArrayList<Monster> specificMonsters = new ArrayList<Monster>();
+		for (int i = 0; i < monsters.size(); i++) {
+			if (monsters.get(i).getName() == name) {
+				specificMonsters.add(monsters.get(i));
+			}
+		}
+		return specificMonsters;
 	}
 
 	public void placeChits(ArrayList<Object> a,int p1,int p2,int p3, int p4, int p5){
