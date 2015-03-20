@@ -731,47 +731,63 @@ public class ServerController extends Handler{
     		return;
     	}
 
-    	if (attacker.isDead() == true) {
-    		network.send(attacker.getID(), "You are dead.");
-    		return;
-    	}
-    	else if (defender.isDead() == true) {
-    		network.send(defender.getID(), "You are dead.");
-    		return;
-    	}
-
-    	//System.out.println(attacker.getTarget().getCharacter().getName());
-    	//System.out.println(defender.getTarget().getCharacter().getName());
+    	int unhurtRounds = 0;
     	
-    	//ask clients to send moves!
-    	state = GameState.CHOOSE_COMBATMOVES;
-    	recievedCombat = 0;
-    	network.send(attacker.getID(), "SEND COMBATMOVES");
-    	network.send(defender.getID(), "SEND COMBATMOVES");
+    	while (unhurtRounds < 2) {
+    		if (attacker.isDead() == true) {
+        		network.send(attacker.getID(), "You are dead.");
+        		return;
+        	}
+        	else if (defender.isDead() == true) {
+        		network.send(defender.getID(), "You are dead.");
+        		return;
+        	}
 
-    	while(recievedCombat < 2){
-    		try {
-				Thread.sleep(20);
-			} catch (InterruptedException e) {
-				// Auto-generated catch block
-				e.printStackTrace();
-			}
-    	}
+    		int attackerHurt = attacker.getHealth();
+    		int defenderHurt = defender.getHealth();
+    		
+        	//System.out.println(attacker.getTarget().getCharacter().getName());
+        	//System.out.println(defender.getTarget().getCharacter().getName());
+        	
+        	//ask clients to send moves!
+        	state = GameState.CHOOSE_COMBATMOVES;
+        	recievedCombat = 0;
+        	network.send(attacker.getID(), "SEND COMBATMOVES");
+        	network.send(defender.getID(), "SEND COMBATMOVES");
 
-    	System.out.println("got combat moves");
-    	state = GameState.NULL;
+        	while(recievedCombat < 2){
+        		try {
+    				Thread.sleep(20);
+    			} catch (InterruptedException e) {
+    				// Auto-generated catch block
+    				e.printStackTrace();
+    			}
+        	}
+
+        	System.out.println("got combat moves");
+        	state = GameState.NULL;
 
 
-    	if (attacker.getMoves() == null) {
-    		network.send(attacker.getID(), "It messed up...");
-    		return;
-    	}
-    	else if (defender.getMoves() == null) {
-    		network.send(defender.getID(), "It messed up...");
-    		return;
-    	}
-    	else {
-    		doFight(attacker, defender);
+        	if (attacker.getMoves() == null) {
+        		network.send(attacker.getID(), "It messed up...");
+        		return;
+        	}
+        	else if (defender.getMoves() == null) {
+        		network.send(defender.getID(), "It messed up...");
+        		return;
+        	}
+        	else {
+        		attacker.setFatigue(attacker.getFatigue() + attacker.getMoves().getAttackFatigue() + attacker.getMoves().getManeuverFatigue());
+        		defender.setFatigue(defender.getFatigue() + defender.getMoves().getAttackFatigue() + defender.getMoves().getManeuverFatigue());
+        		doFight(attacker, defender);
+        	}
+        	
+        	if (attackerHurt == attacker.getHealth() && defenderHurt == defender.getHealth()) {
+        		unhurtRounds++;
+        	}
+        	else {
+        		unhurtRounds = 0;
+        	}
     	}
 	}
 
@@ -797,7 +813,7 @@ public class ServerController extends Handler{
     }
 
 	public void doFight(Player attacker, Player defender) {
-		System.out.println("Test");
+		//System.out.println("Test");
 		if (defender.getActiveWeapon().getSpeed() < attacker.getActiveWeapon().getSpeed()) {
 			checkHit(attacker, defender);
 		}
