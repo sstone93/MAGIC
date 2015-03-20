@@ -468,14 +468,14 @@ public class Board implements Serializable{
     	//TODO ANYTHING SPECIAL
     	switch(route.type){
 		case HIDDEN_PATH:
-			if(!player.knowsPath(route)){
+			if(player.knowsPath(route)){
 				return true;
 			}
 			return false;
 		case OPEN_ROAD:
 			return true;
 		case SECRET_PASSAGEWAY:
-			if(!player.knowsPath(route)){
+			if(player.knowsPath(route)){
 				return true;
 			}
 			return false;

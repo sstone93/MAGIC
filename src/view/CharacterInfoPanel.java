@@ -151,7 +151,7 @@ public class CharacterInfoPanel extends JPanel{
 		weaponsText.setBounds(224, 167, 177, 142);
 		add(weaponsText);
 		
-		JLabel lblChits = new JLabel("Chits");
+		JLabel lblChits = new JLabel("Discoveries");
 		lblChits.setBounds(224, 317, 65, 14);
 		add(lblChits);
 		
@@ -212,18 +212,11 @@ public class CharacterInfoPanel extends JPanel{
 		}
 		weaponsText.setText(weaponsS);
 		
-		
-		//TODO I DESTROYED CHITS, WILL REPLACE THIS WITH SOMETHIGN ELSE
-		/*Chit[] chits = new Chit[0];
-		String chitsS = "";
-		if (chits != null) {
-			for(int i = 0; i < chits.length; i++){
-				if (chits[i] != null) {
-					chitsS += chits[i].getType() + " name - " + chits[i].getName() + "\n";
-				}
-			}
-		}*/
-		chitsText.setText("");
+		String discoveries = "";
+		for(int i = 0; i < p.getDiscoveries().size(); i++){
+			discoveries += p.getDiscoveries().get(i).toString()+"\n";
+		}
+		chitsText.setText(discoveries);
 	}
 	
 }

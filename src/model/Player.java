@@ -146,7 +146,8 @@ public class Player implements Serializable{
     }
     
     public void addDiscovery(Object o){
-    	this.discoveries.add(o);
+    	if(!discoveries.contains(o))//if they do not already know it
+    		this.discoveries.add(o);
     }
     
     public ArrayList<Object> getDiscoveries(){
