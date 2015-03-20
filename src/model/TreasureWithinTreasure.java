@@ -16,7 +16,7 @@ public class TreasureWithinTreasure extends Treasure{
 	private ArrayList<Armour> armour = new ArrayList<Armour>();
 	
 	public TreasureWithinTreasure(TreasureWithinTreasureName n, ArrayList<Treasure> t){
-		super(Utility.randomInRange(40,50));
+		super(Utility.randomInRange(40,50), n.toString());
 		this.name = n;
 		this.treasures = t;
 		setUpTreasure();
@@ -49,10 +49,6 @@ public class TreasureWithinTreasure extends Treasure{
 		default:
 			break;
 	}
-	}
-	
-	public TreasureWithinTreasureName getName(){
-		return this.name;
 	}
 	
 	public ArrayList<Treasure> getTreasures(){

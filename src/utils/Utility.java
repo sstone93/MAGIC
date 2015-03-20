@@ -29,9 +29,9 @@ public class Utility {
 
     	for(Treasure t: treasures) {
 			SmallTreasure temp = (SmallTreasure) t;
-			if ( temp.getName() == SmallTreasureName.SHOES_OF_STEALTH && table == "hide")
+			if ( temp.getName() == SmallTreasureName.SHOES_OF_STEALTH.toString() && table == "hide")
 				onlyOne = true;
-			else if (temp.getName() == SmallTreasureName.DEFT_GLOVES && table == "loot")
+			else if (temp.getName() == SmallTreasureName.DEFT_GLOVES.toString() && table == "loot")
 				onlyOne = true;
     	}
 
