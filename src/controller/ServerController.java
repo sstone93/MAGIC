@@ -634,21 +634,15 @@ public class ServerController extends Handler{
         }
         
         collectCombat(); //2 players, 1 attacker 1 defender
-/*
-        //All players choose attackers
-        nextMover = 0;
-        while (nextMover < playerCount) {
-            for (int i = 0; i < playerCount; i++) {
-                if (players.get(i).order == nextMover) {
-                	if (players.get(i).getTarget() != null) {
-                		encounter(players.get(i), players.get(i).getTarget());
-                		//System.out.println("")
-                	}
-                	nextMover++;
-                }
-            }
-        }*/
 
+        //All players choose attackers
+        for (int i = 0; i < players.size(); i++) {
+        	if (players.get(i).getTarget() != null) {
+        		encounter(players.get(i), players.get(i).getTarget());
+        		System.out.println("Finished encounter");
+        	}
+        }
+        
         //Progresses to the next day or ends the game
         boolean thing = resetDay();
         if(thing == true){ //if it is not the 28th day....
@@ -722,7 +716,7 @@ public class ServerController extends Handler{
 			player.weapons[0].setActive(true);
 			return;
 		}*/
-
+    	
     	if (attacker == defender) {
     		network.send(attacker.getID(), "Stop attacking yourself!");
     		return;
@@ -743,7 +737,7 @@ public class ServerController extends Handler{
 
     	//System.out.println(attacker.getTarget().getCharacter().getName());
     	//System.out.println(defender.getTarget().getCharacter().getName());
-
+    	
     	//ask clients to send moves!
     	state = GameState.CHOOSE_COMBATMOVES;
     	recievedCombat = 0;
@@ -798,6 +792,7 @@ public class ServerController extends Handler{
     }
 
 	public void doFight(Player attacker, Player defender) {
+		System.out.println("Test");
 		if (defender.getActiveWeapon().getSpeed() < attacker.getActiveWeapon().getSpeed()) {
 			checkHit(attacker, defender);
 		}

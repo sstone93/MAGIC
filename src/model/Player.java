@@ -81,7 +81,7 @@ public class Player implements Serializable{
     			return this.weapons.get(i);
     		}
     	}
-    	return null;
+    	return new Weapon(Utility.WeaponName.FIST);
     }
     
     public Player getTarget(){
