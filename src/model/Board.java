@@ -34,10 +34,11 @@ public class Board implements Serializable{
 
 	public Board(ArrayList<Player> players){
 		setupBoard();		//creates all of the tiles and clearings. establishes all of the connections
+		initializeMonsters();
 		setupGarrisons();	//instanciates the garrisons
 		setUpMapChits();	//places the warning chits, places the treasures, places the map chits, places the garrisons
 		placePlayers(players);	//places the players based on their starting location
-		initializeMonsters();
+		
 	}
 
 	public int convertTileName(TileName n){
@@ -146,7 +147,14 @@ public class Board implements Serializable{
 					this.garrisons.get(3).setLocation(tiles.get(i).getClearing(5));	//places the inn//setting the location, also places th edewlling on the tile
 				}
 				if(tiles.get(i).getWarningChit().getName() == WarningChits.BONES){
-					//places two ghosts //TODO
+					//places two ghosts 
+					ArrayList<Monster> ghosts = getMonsters(MonsterName.GHOST);
+					ghosts.get(0).setLocation(tiles.get(i).getClearing(5));
+					ghosts.get(1).setLocation(tiles.get(i).getClearing(5));
+					
+					ghosts.get(0).setStartingLocation(tiles.get(i).getClearing(5));
+					ghosts.get(1).setStartingLocation(tiles.get(i).getClearing(5));
+					
 				}
 				if(tiles.get(i).getWarningChit().getName() == WarningChits.DANK){
 					this.garrisons.get(0).setLocation(tiles.get(i).getClearing(5)); //places the chapel
@@ -319,9 +327,9 @@ public class Board implements Serializable{
 		placeGarrisons();
 	}
 	
+	
+	// adds monsters to the board
 	public void initializeMonsters() {
-		// ghost, giant, heavydragon, heavytroll, viper, wolf
-		// TODO: ghosts?
 		for (int i = 0; i < 5; i++) {
 			monsters.add(new Monster(MonsterName.HEAVY_DRAGON));
 			monsters.add(new Monster(MonsterName.VIPER));
@@ -330,6 +338,7 @@ public class Board implements Serializable{
 		for (int i = 0; i < 2; i++) {
 			monsters.add(new Monster(MonsterName.HEAVY_TROLL));
 			monsters.add(new Monster(MonsterName.GIANT));
+			monsters.add(new Monster(MonsterName.GHOST));
 		}
 		monsters.add(new Monster(MonsterName.HEAVY_TROLL));
 
@@ -343,6 +352,16 @@ public class Board implements Serializable{
 			}
 		}
 		return specificMonsters;
+	}
+	
+	public ArrayList<Monster> getProwlingMonsters() {
+		ArrayList<Monster> prowlingMonsters = new ArrayList<Monster>();
+		for (int i = 0; i < monsters.size(); i++) {
+			if (monsters.get(i).isProwling()) {
+				prowlingMonsters.add(monsters.get(i));
+			}
+		}
+		return prowlingMonsters;
 	}
 
 	public void placeChits(ArrayList<Object> a,int p1,int p2,int p3, int p4, int p5){
