@@ -11,6 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
+import utils.Config;
 import controller.ServerController;
 
 @SuppressWarnings("serial")
@@ -27,16 +28,23 @@ public class ServerView extends JFrame implements ActionListener{
 		stop.setSelected(false);
 		stop.setBackground(Color.white);
 		stop.setEnabled(true);
+		
 		try {
 			stop.setIcon(new ImageIcon(ImageIO.read(this.getClass().getResource("/images/stop.png"))));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		stop.addActionListener(this);  
 		this.add(stop); 
 		setResizable(false);
-		setSize(new Dimension(100, 140));
+		
+		if(!Config.CHEAT_MODE){
+			setSize(new Dimension(100, 140));
+		}else{
+			setSize(new Dimension(500, 300));
+		}
 	}
 
 	//STAHPS THE SERVER

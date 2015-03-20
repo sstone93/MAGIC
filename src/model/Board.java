@@ -33,13 +33,39 @@ public class Board implements Serializable{
 	public ArrayList<Monster> monsters = new ArrayList<Monster>();
 
 	public Board(ArrayList<Player> players){
-		setupBoard();		//creates all of the tiles and clearings. establishes all of the connections
-		initializeMonsters();
-		setupGarrisons();	//instanciates the garrisons
-		setUpMapChits();	//places the warning chits, places the treasures, places the map chits, places the garrisons
+		setupBoard();			//creates all of the tiles and clearings. establishes all of the connections
+		placeWarningChits();	//creates and places all the warning chits
+		initializeMonsters();	
+		instanciateGarrisons();	//instanciates the garrisons and populates them with weapons and armour
+		instanciateTreasures();	//instanciates all treasures
+		
+		setUpMapChits();	//places the treasures, places the map chits, places the garrisons
+		placeGarrisons();	//reveal all of the VALLEY map chits (after character selection stuff done)
 		placePlayers(players);	//places the players based on their starting location
 		
 	}
+	
+	public Board(ArrayList<Player> players, ArrayList<Object> manualInputs){
+		
+		//TODO USE MANUALINPUTS TO SET THE SOUND AND WARNING CHITS
+		//TODO ASDASDASDA
+		
+		setupBoard();		//creates all of the tiles and clearings. establishes all of the connections
+		
+		//placeWarningChits();//TODO GIVE IT MANUALY SELECTED WARNING CHITS
+		
+		initializeMonsters();
+		instanciateGarrisons();	//instanciates the garrisons
+		instanciateTreasures();
+		
+		//TODO FIX THESE MANUALLY?
+		//setUpMapChits();	//places the warning chits, places the treasures, places the map chits, places the garrisons
+		
+		placeGarrisons();	//reveal all of the VALLEY map chits (after character selection stuff done)
+		placePlayers(players);	//places the players based on their starting location
+		
+	}
+
 
 	public int convertTileName(TileName n){
 		for(int i=0; i<20; i++){
@@ -54,13 +80,6 @@ public class Board implements Serializable{
 	 * Creates the board based on the images provided by JP
 	 */
 	private void setupBoard(){
-		/*Style is as follows:
-
-		- Create a new tile, providing it's name, add it to the array
-			-this will automatically cause all clearings on that tile to connect to eachother as they should.
-		-call the connect method to connect 2 tiles together manually (this is how you de-manualize board building)
-		*/
-
 		//CREATE ALL THE TILES (THIS IS SETUP INTERNAL CLEARINGS AUTOMATICALLY)
 		tiles.add(new Tile(TileName.CLIFF, 400, 82));
 		tiles.add(new Tile(TileName.EVILVALLEY, 253, 167));
@@ -133,7 +152,10 @@ public class Board implements Serializable{
 		t2.getClearing(c2).addConnection(temp);
 	}
 
-	public void setupGarrisons(){
+	/**
+	 * Instanciates and sets up the garrisons, DOES NOT PLACE THEM
+	 */
+	public void instanciateGarrisons(){
 		this.garrisons.add(new Garrison(GarrisonName.CHAPEL));
 		this.garrisons.add(new Garrison(GarrisonName.GUARD));
 		this.garrisons.add(new Garrison(GarrisonName.HOUSE));
@@ -193,15 +215,11 @@ public class Board implements Serializable{
 		Collections.shuffle(small);
 		Collections.shuffle(large);
 		Collections.shuffle(twit);
-
-		System.out.println("Starting loop");
-
+		
 		while(!twit.isEmpty()){
 			large.add(twit.get(0));
 			twit.remove(0);
 		}
-
-		System.out.println("ending loop");
 	}
 	
 	public void createAndPlaceWarningChits(TileType type){
@@ -240,15 +258,18 @@ public class Board implements Serializable{
 		return t;
 	}
 
-	public void setUpMapChits(){
+	private void placeWarningChits(){
 		//20 yellow warning chits, divide into 4 groups of 5 by letter
 		//Assigned to the 20 tiles (1 per tile)
-		
 		//5 OF THESE (VALLEY) BECOME DEWLLINGS + GHOST
 		createAndPlaceWarningChits(TileType.CAVES);	//sets up Caves
 		createAndPlaceWarningChits(TileType.MOUNTAINS);	//sets up Mountains
 		createAndPlaceWarningChits(TileType.WOODS);	//sets up Woods
 		createAndPlaceWarningChits(TileType.VALLEY);//sets up valleys
+	}
+	
+	
+	public void setUpMapChits(){
 		
 		//8 orange site chits
 		//10 red sound chits
@@ -257,9 +278,6 @@ public class Board implements Serializable{
 			  mc.add(new MapChit(n));
 		}
 
-		instanciateTreasures();
-
-		//2. now we merge tne twts and large treasures together
 		mc.add(new TreasureSite(TreasureLocations.ALTAR, createTreasureArray(0,4)));
 		mc.add(new TreasureSite(TreasureLocations.CAIRNS, createTreasureArray(6,1)));
 		mc.add(new TreasureSite(TreasureLocations.HOARD, createTreasureArray(4,5)));
@@ -322,9 +340,6 @@ public class Board implements Serializable{
 
 		//puts the chits into the caves tiles
 		placeChits(mountains, 0,2,3,9,14);
-
-		//reveal all of the VALLEY map chits (after character selection stuff done)
-		placeGarrisons();
 	}
 	
 	

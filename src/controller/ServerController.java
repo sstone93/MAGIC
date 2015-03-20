@@ -41,6 +41,7 @@ public class ServerController extends Handler{
     int recievedCombat = 0;
 	GameState state = GameState.NULL;
 	int finishedPlayers = 0;
+	int nextRoll = -1;
 
 	/**
 	 * Constructor for a ServerController
@@ -64,6 +65,14 @@ public class ServerController extends Handler{
 		return null;
 	}
 
+	public int roll(int max){
+		if(Config.CHEAT_MODE && this.nextRoll != -1){
+			return this.nextRoll;
+		}else{
+			return Utility.roll(max);
+		}
+	}
+	
 	/**
 	 * This is the method that handles incoming messages from the networking components
 	 * @param ID The ID of the client sending the message
@@ -312,9 +321,9 @@ public class ServerController extends Handler{
     // returns the lowest of the two rolls if the player has to roll 2 die
     // otherwise returns the first role done
     public int rollForTables(Player player, int numberOfDie) {
-    	int roll = Utility.roll(6);
+    	int roll = roll(6);
     	if (numberOfDie == 2) {
-	    	int roll2 = Utility.roll(6);
+	    	int roll2 = roll(6);
 	    	network.broadCast(player.getCharacter().getName() + " rolled " + roll + " and " + roll2 );
 	    	roll = Math.max(roll, roll2);
     	}
@@ -627,7 +636,7 @@ public class ServerController extends Handler{
     		board.monsters.get(i).setProwling(false);
     	}
     	
-    	int roll = Utility.roll(6);
+    	int roll = roll(6);
     	network.broadCast("Monster roll: " + roll);    	
     	// the ones we have: 
     	// ghost, giant, heavydragon, heavytroll, viper, wolf
@@ -1066,7 +1075,7 @@ public class ServerController extends Handler{
 	public void hit(Player player, Monster monster) {
 		ItemWeight level;
 		if (player.getActiveWeapon().isRanged() == true) {
-			int roll = Utility.roll(6);
+			int roll = roll(6);
 			if (roll == 1) {
 				level = ItemWeight.HEAVY;
 			}
@@ -1283,7 +1292,7 @@ public class ServerController extends Handler{
 	public void hit(Player attacker, Player defender) {
 		ItemWeight level;
 		if (attacker.getActiveWeapon().isRanged() == true) {
-			int roll = Utility.roll(6);
+			int roll = roll(6);
 			if (roll == 1) {
 				level = ItemWeight.HEAVY;
 			}
