@@ -408,7 +408,6 @@ public class ServerController extends Handler{
     public void resetWeek() {
         resetDay();
         //TODO return monsters to their place
-        //TODO reset natives
     }
 
     public void handleAction(Player p, Phase a){
@@ -781,13 +780,6 @@ public class ServerController extends Handler{
      * @param defender
      */
     public void encounter(Player attacker, Player defender) {
-    	//TODO Weapons active
-		// Check if weapon is active
-		/*if (player.weapons[0].isActive() == false) {
-			player.weapons[0].setActive(true);
-			return;
-		}*/
-    	
     	if (attacker == defender) {
     		network.send(attacker.getID(), "Stop attacking yourself!");
     		return;
@@ -860,6 +852,13 @@ public class ServerController extends Handler{
 	}
 
     public void doFight(Player player, Monster monster) {
+    	if (player.getMoves().getManeuver() == Maneuvers.RUN) {
+			network.broadCast(player.getCharacter().getName() + "has run away!");
+			player.setFatigue(player.getFatigue() + 2);
+			network.send(player.getID(), player);
+			return;
+		}
+    	
     	if (player.getActiveWeapon().getSpeed() < monster.getAttackSpeed()) {
     		checkHit(monster, player);
     	}
@@ -1030,7 +1029,6 @@ public class ServerController extends Handler{
         		default: break;
 			}
 		}
-		//TODO armor destruction
 		if (player.getMoves().getAttack() == Attacks.THRUST && monster.getMoves().getDefense() == Defenses.AHEAD) {
 			switch(level){
         		case NEGLIGIBLE: level = ItemWeight.NEGLIGIBLE;break;
@@ -1144,7 +1142,6 @@ public class ServerController extends Handler{
         		default: break;
 			}
 		}
-		//TODO armor destruction
 		if (monster.getMoves().getAttack() == Attacks.THRUST && player.getMoves().getDefense() == Defenses.AHEAD) {
 			switch(level){
         		case NEGLIGIBLE: level = ItemWeight.NEGLIGIBLE;break;
@@ -1234,7 +1231,6 @@ public class ServerController extends Handler{
         		default: break;
 			}
 		}
-		//TODO armor destruction
 		if (attacker.getMoves().getAttack() == Attacks.THRUST && defender.getMoves().getDefense() == Defenses.AHEAD) {
 			switch(level){
         		case NEGLIGIBLE: level = ItemWeight.NEGLIGIBLE;break;
