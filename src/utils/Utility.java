@@ -7,9 +7,16 @@ import model.SmallTreasure;
 import model.Treasure;
 
 public class Utility {
+	
+	
     public static int roll(int max) {
         Random r = new Random();
         return r.nextInt(max) + 1;
+    }
+    
+    public static int randomInRange(int min, int max) {
+        Random r = new Random();
+        return r.nextInt(max-min) + min;
     }
 
     // checks to see if the player has a treasure that allows them to roll only one die on the table

@@ -298,7 +298,7 @@ public class ServerController extends Handler{
 			ArrayList<Treasure> treasures = player.getLocation().getTreasures();
 			if (roll <= treasures.size()) {
 				player.addTreasure(treasures.get(roll));
-				network.send(player.getID(), "you've found " + treasures.get(roll).getType() + " !!");
+				network.send(player.getID(), "you've found <PLACEHOLDER, FIX ME LATER> !!");
 				player.getLocation().removeTreasure(treasures.get(roll));
 			}
 			else  {

@@ -1,6 +1,8 @@
 package model;
 
 import java.util.ArrayList;
+
+import utils.Utility;
 import utils.Utility.ArmourName;
 import utils.Utility.TreasureWithinTreasureName;
 import utils.Utility.WeaponName;
@@ -14,7 +16,7 @@ public class TreasureWithinTreasure extends Treasure{
 	private ArrayList<Armour> armour = new ArrayList<Armour>();
 	
 	public TreasureWithinTreasure(TreasureWithinTreasureName n, ArrayList<Treasure> t){
-		super(10);
+		super(Utility.randomInRange(40,50));
 		this.name = n;
 		this.treasures = t;
 		setUpTreasure();

@@ -1,5 +1,6 @@
 package model;
 
+import utils.Utility;
 import utils.Utility.LargeTreasureName;
 
 public class LargeTreasure extends Treasure{
@@ -8,7 +9,7 @@ public class LargeTreasure extends Treasure{
 	private LargeTreasureName name;
 	
 	public LargeTreasure(LargeTreasureName n){
-		super(40);
+		super(Utility.randomInRange(40,50));
 		this.name = n;
 	}
 	
