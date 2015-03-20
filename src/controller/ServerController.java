@@ -407,7 +407,14 @@ public class ServerController extends Handler{
      */
     public void resetWeek() {
         resetDay();
-        //TODO return monsters to their place
+
+        for (int i = 0; i < board.monsters.size(); i++) {
+        	Monster currentMonster = board.monsters.get(i);
+        	currentMonster.setLocation(currentMonster.getStartingLocation());
+        	currentMonster.resetDead();
+        	currentMonster.setProwling(false);
+        	currentMonster.setBlocked(false);
+        }
     }
 
     public void handleAction(Player p, Phase a){

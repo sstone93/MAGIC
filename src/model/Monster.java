@@ -140,6 +140,10 @@ public class Monster implements Serializable{
     public boolean isDead() {
     	return dead;
     }
+    
+    public void resetDead() {
+    	dead = false;
+    }
 
     public void kill() {
     	dead = true;
@@ -182,6 +186,7 @@ public class Monster implements Serializable{
     	for (int j = 0; j < occupants.size(); j++ ) {
     		if (!occupants.get(j).isBlocked()) {
     			occupants.get(j).setBlocked(true);
+    			this.setBlocked(true);
     			System.out.println("MONSTER HAS BLOCKED : " + occupants.get(j).getCharacter().getName());
     			break;
     		}
