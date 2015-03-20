@@ -761,6 +761,10 @@ public class ServerController extends Handler{
 	    	}
 	    	else {
 	    		player.setFatigue(player.getFatigue() + player.getMoves().getAttackFatigue() + player.getMoves().getManeuverFatigue());
+	    		if (player.getFatigue() >= 10) {
+	    			player.getActiveWeapon().setActive(!player.getActiveWeapon().isActive());
+	    			network.send(player.getID(), "You are overfatigued!");
+	    		}
         		network.send(player.getID(), player);
 	    		doFight(player, monster);
 	    	}
@@ -837,6 +841,14 @@ public class ServerController extends Handler{
         	else {
         		attacker.setFatigue(attacker.getFatigue() + attacker.getMoves().getAttackFatigue() + attacker.getMoves().getManeuverFatigue());
         		defender.setFatigue(defender.getFatigue() + defender.getMoves().getAttackFatigue() + defender.getMoves().getManeuverFatigue());
+        		if (attacker.getFatigue() >= 10) {
+	    			attacker.getActiveWeapon().setActive(!attacker.getActiveWeapon().isActive());
+	    			network.send(attacker.getID(), "You are overfatigued!");
+	    		}
+        		if (defender.getFatigue() >= 10) {
+	    			defender.getActiveWeapon().setActive(!defender.getActiveWeapon().isActive());
+	    			network.send(defender.getID(), "You are overfatigued!");
+	    		}
         		network.send(attacker.getID(), attacker);
         		network.send(defender.getID(), defender);
         		doFight(attacker, defender);
@@ -852,9 +864,13 @@ public class ServerController extends Handler{
 	}
 
     public void doFight(Player player, Monster monster) {
-    	if (player.getMoves().getManeuver() == Maneuvers.RUN) {
-			network.broadCast(player.getCharacter().getName() + "has run away!");
+    	if (player.getMoves().getManeuver() == Maneuvers.RUN && player.getFatigue() <= 10) {
+			network.broadCast(player.getCharacter().getName() + " has run away!");
 			player.setFatigue(player.getFatigue() + 2);
+			if (player.getFatigue() >= 10) {
+    			player.getActiveWeapon().setActive(!player.getActiveWeapon().isActive());
+    			network.send(player.getID(), "You are overfatigued!");
+    		}
 			network.send(player.getID(), player);
 			return;
 		}
@@ -880,15 +896,23 @@ public class ServerController extends Handler{
     }
 
 	public void doFight(Player attacker, Player defender) {
-		if (attacker.getMoves().getManeuver() == Maneuvers.RUN) {
-			network.broadCast(attacker.getCharacter().getName() + "has run away!");
+		if (attacker.getMoves().getManeuver() == Maneuvers.RUN && attacker.getFatigue() <= 10) {
+			network.broadCast(attacker.getCharacter().getName() + " has run away!");
 			attacker.setFatigue(attacker.getFatigue() + 2);
+			if (attacker.getFatigue() >= 10) {
+    			attacker.getActiveWeapon().setActive(!attacker.getActiveWeapon().isActive());
+    			network.send(attacker.getID(), "You are overfatigued!");
+    		}
 			network.send(attacker.getID(), attacker);
 			return;
 		}
-		else if (defender.getMoves().getManeuver() == Maneuvers.RUN) {
-			network.broadCast(defender.getCharacter().getName() + "has run away!");
+		else if (defender.getMoves().getManeuver() == Maneuvers.RUN && defender.getFatigue() <= 10) {
+			network.broadCast(defender.getCharacter().getName() + " has run away!");
 			defender.setFatigue(defender.getFatigue() + 2);
+			if (defender.getFatigue() >= 10) {
+    			defender.getActiveWeapon().setActive(!defender.getActiveWeapon().isActive());
+    			network.send(defender.getID(), "You are overfatigued!");
+    		}
 			network.send(defender.getID(), defender);
 			return;
 		}
