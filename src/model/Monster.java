@@ -2,6 +2,7 @@ package model;
 
 import java.io.Serializable;
 
+import utils.Utility;
 import utils.Utility.ItemWeight;
 import utils.Utility.MonsterName;
 
@@ -166,5 +167,12 @@ public class Monster implements Serializable{
     
     public void setBlocked(boolean block) {
     	blocked = block;
+    }
+    
+    public void move() {
+    	int roll = Utility.roll(this.getLocation().getConnections().size());
+//    	this.location.removeOccupant(this);
+    	Clearing newClearing = this.getLocation().getConnections().get(roll - 1).getDestination(location);
+    	this.setLocation(newClearing);
     }
 }
