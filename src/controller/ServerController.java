@@ -360,7 +360,12 @@ public class ServerController extends Handler{
      * @param p The player
      */
     public void alert(Player p) {
-    	p.getActiveWeapon().setActive(!p.getActiveWeapon().isActive());
+    	if (p.getActiveWeapon().getType() != Utility.WeaponName.FIST) {
+    		p.getActiveWeapon().setActive(!p.getActiveWeapon().isActive());
+    	}
+    	else {
+    		p.getWeapons().get(0).setActive(true);
+    	}
     }
 
     /**

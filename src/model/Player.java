@@ -321,7 +321,7 @@ public class Player implements Serializable{
     public ArrayList<Treasure> getTreasures(){
     	return treasures;
     }
-
+    
     public ArrayList<Armour> getArmour() {
     	return armour;
     }
