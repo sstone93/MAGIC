@@ -11,7 +11,7 @@ public class Utility {
         Random r = new Random();
         return r.nextInt(max) + 1;
     }
-    
+
     // checks to see if the player has a treasure that allows them to roll only one die on the table
     // returns true if they can
     // returns false if they don't have a roll reducing treasure
@@ -89,7 +89,7 @@ public class Utility {
 	    	default: return null;
     	}
     }
-    
+
     public static String getCharacterImage(CharacterName name) {
     	switch(name){
 	    	case AMAZON: return "/images/amazon.gif";
@@ -113,19 +113,18 @@ public class Utility {
 	    	default: return null;
     	}
     }
-     
     public enum PhaseType {BASIC, SUNLIGHT, SPECIAL, TREASURE}
- 
+
     public enum ClearingType {CAVE, MOUNTAIN, WOODS}
-    
+
     public enum TileType {VALLEY, MOUNTAINS, CAVES, WOODS}
-    
+
     public enum PathType {TUNNEL, OPEN_ROAD, HIDDEN_PATH, SECRET_PASSAGEWAY}
-    
+
     public enum WarningChits {SMOKE, DANK, RUINS, STINK, BONES}
 
     public enum SoundChits {HOWL_4, HOWL_5, FLUTTER_1, FLUTTER_2, PATTER_2, PATTER_5, ROAR_4, ROAR_6, SLITHER_3, SLITHER_6}
-    
+
     public enum MessageType {COMBAT_TARGET, COMBAT_MOVES, CHARACTER_SELECT, ACTIVITIES, BOARD, PLAYER}
 
     public enum ItemWeight {NEGLIGIBLE, LIGHT, MEDIUM, HEAVY, TREMENDOUS}
@@ -159,7 +158,7 @@ public class Utility {
     	RAIDER, ARCHER, SWORDSMAN, ASSASSIN}
 
     public enum TreasureType{SMALL, LARGE, TREASURE_WITHIN_TREASURE}
-    
+
     public enum TreasureWithinTreasureName {CHEST, CRYPT_OF_THE_KNIGHT, ENCHANTED_MEADOW, MOULDY_SKELETON,
     	REMAINS_OF_THIEF, TOADSTOOL_CIRCLE}
 
@@ -179,7 +178,7 @@ public class Utility {
     public enum TreasureLocations{ HOARD, LAIR, ALTAR, SHRINE, POOL, VAULT, CAIRNS, STATUE}
 
     public enum Actions {MOVE, HIDE, ALERT, REST, SEARCH, TRADE, PASS}
-    
+
     public enum SearchTables {LOCATE, LOOT}
 
     public enum Attacks {THRUST, SWING, SMASH}

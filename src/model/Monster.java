@@ -1,12 +1,14 @@
 package model;
 
 import java.io.Serializable;
+
 import utils.Utility.ItemWeight;
+import utils.Utility.MonsterName;
 
 public class Monster implements Serializable{
 
 	private static final long serialVersionUID = -582083574086670219L;
-	String     name;
+	MonsterName     name;
 	Clearing   location;
     Clearing   startingLocation;
 	ItemWeight weight;
@@ -21,7 +23,7 @@ public class Monster implements Serializable{
 	CombatMoves moves;
     // TODO put weight, in enum
 
-	public String getName() {
+	public MonsterName getName() {
 		return name;
 	}
 
