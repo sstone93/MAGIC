@@ -191,7 +191,7 @@ public class CharacterInfoPanel extends JPanel{
 		if (treasures != null) {
 			for(int i = 0; i < treasures.size(); i++){
 				if ( treasures.get(i) != null) {
-					treasuresS += Integer.toString(treasures.get(i).getGold()) + "\n";//TODO HOPEFULLY I DIDNT BREAK THIS
+					treasuresS += treasures.get(i).getName() + "\n";
 				}
 			}
 		}

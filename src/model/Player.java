@@ -383,12 +383,16 @@ public class Player implements Serializable{
 	}
 
 	public void usePhase(Phase data) {
-		Phase t = new Phase(data.getType());
-		//TODO
-		//THIS ASSUMES THAT PHASE EQUALITY MEANS JUST THE TYPES MATCH (which i think i did)
 		
+		//TODO THIS ASSUMES THAT PHASE EQUALITY MEANS JUST THE TYPES MATCH (which i think i did)
+	
 		//TODO THIS IS A TESTING MEASURE, REMOVE ME PLEASE, SHOULD BE A SPECIFIC PHASE, NOT PHASE AT POSITION 0
-		phases.remove(0);
+		for(Phase p : phases){
+			if(p.equals(data)){
+				phases.remove(p);
+				break;
+			}
+		}
 		
 		//DETERMINES IF BASICS ARE DONE
 		finishedBasic = true;

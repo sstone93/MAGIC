@@ -17,9 +17,10 @@ public class Phase implements Serializable {
 		type = t;
 	}
 
-	public Phase(PhaseType t, Actions action) {
+	public Phase(PhaseType t, Actions a) {
 		// TODO Handles special phases?
 		type = t;
+		action = a;
 	}
 	
 	public Phase(PhaseType t, Actions a, Object o) {
@@ -42,6 +43,9 @@ public class Phase implements Serializable {
 	
     public boolean equals(Phase p) {
     	if(this.type == p.type){
+    		if(this.action != null && p.action != this.action){
+    			return false;
+    		}
     		return true;
     	}else{
     		return false;
