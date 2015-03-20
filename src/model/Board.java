@@ -211,10 +211,12 @@ public class Board implements Serializable{
 	public void setUpMapChits(){
 		//20 yellow warning chits, divide into 4 groups of 5 by letter
 		//Assigned to the 20 tiles (1 per tile)
+		
 		//5 OF THESE (VALLEY) BECOME DEWLLINGS + GHOST
 		createAndPlaceWarningChits(5,6,10,15,16);	//sets up Caves
 		createAndPlaceWarningChits(0,2,3,9,14);	//sets up Mountains
 		createAndPlaceWarningChits(7,12,13,18,19);	//sets up Woods
+		createAndPlaceWarningChits(1,4,8,11,17);//sets up valleys
 		
 		//8 orange site chits
 		//10 red sound chits
