@@ -321,7 +321,18 @@ public class Board implements Serializable{
 	}
 	
 	public void initializeMonsters() {
-		// TODO: add the different monsters to the game
+		// ghost, giant, heavydragon, heavytroll, viper, wolf
+		// TODO: ghosts?
+		for (int i = 0; i < 5; i++) {
+			monsters.add(new HeavyDragon());
+			monsters.add(new Viper());
+			monsters.add(new Wolf());
+		}
+		for (int i = 0; i < 2; i++) {
+			monsters.add(new HeavyTroll());
+			monsters.add(new Giant());
+		}
+		monsters.add(new HeavyTroll());
 	}
 
 	public void placeChits(ArrayList<Object> a,int p1,int p2,int p3, int p4, int p5){
