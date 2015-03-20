@@ -160,31 +160,35 @@ public class ServerController extends Handler{
 			}
 			if( m.getType() == MessageType.CHARACTER_SELECT){
 				if(state == GameState.CHOOSE_CHARACTER){
+					Player temp;
 					switch((CharacterName) m.getData().get(0)){
-
-					case AMAZON: players.add(new Player(new Amazon(), ID)); break;
-					case BERSERKER:players.add(new Player(new Berserker() , ID));
+					case AMAZON: temp = new Player(new Amazon(), ID); 
 					break;
-					case BLACK_KNIGHT:players.add(new Player(new BlackKnight(), ID));
+					case BERSERKER: temp = new Player(new Berserker() , ID);
 					break;
-					case CAPTAIN:players.add(new Player(new Captain(), ID));
+					case BLACK_KNIGHT: temp = new Player(new BlackKnight(), ID);
 					break;
-					case DWARF:players.add(new Player(new Dwarf(), ID));
+					case CAPTAIN: temp = new Player(new Captain(), ID);
 					break;
-					case ELF:players.add(new Player(new Elf(), ID));
+					case DWARF: temp = new Player(new Dwarf(), ID);
 					break;
-					case SWORDSMAN:players.add(new Player(new Swordsman(), ID));
+					case ELF: temp = new Player(new Elf(), ID);
 					break;
-					case WHITE_KNIGHT:players.add(new Player(new WhiteKnight(), ID));
+					case SWORDSMAN: temp = new Player(new Swordsman(), ID);
 					break;
-					default:;
+					case WHITE_KNIGHT: temp = new Player(new WhiteKnight(), ID);
 					break;
-
+					default:
+						 temp = null;
+					break;
 					}
+					
 					this.addedPlayers += 1;
-
-					System.out.println((CharacterName) m.getData().get(0));
-					System.out.println(addedPlayers);
+					temp.getCharacter().setStartingLocation((GarrisonName) m.getData().get(1)); //sets the starting location
+					players.add(temp);
+					System.out.println("Added ");
+					//System.out.println((CharacterName) m.getData().get(0));
+					//System.out.println(addedPlayers);
 
 				}else{
 					network.send(ID, "NOT ACCEPTING CHARACTER SELECT ATM");
