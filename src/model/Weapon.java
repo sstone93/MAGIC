@@ -52,6 +52,12 @@ public class Weapon implements Serializable{
     	   this.speed = 6;
     	   this.weight = ItemWeight.HEAVY;
        }
+       else if (type == WeaponName.FIST) {
+    	   this.ranged = false;
+    	   this.length = 1;
+    	   this.speed = 1;
+    	   this.weight = ItemWeight.NEGLIGIBLE;
+       }
        else {
     	   this.ranged = false;
     	   this.length = 1;

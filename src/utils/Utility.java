@@ -7,11 +7,18 @@ import model.SmallTreasure;
 import model.Treasure;
 
 public class Utility {
+	
+	
     public static int roll(int max) {
         Random r = new Random();
         return r.nextInt(max) + 1;
     }
     
+    public static int randomInRange(int min, int max) {
+        Random r = new Random();
+        return r.nextInt(max-min) + min;
+    }
+
     // checks to see if the player has a treasure that allows them to roll only one die on the table
     // returns true if they can
     // returns false if they don't have a roll reducing treasure
@@ -22,9 +29,9 @@ public class Utility {
 
     	for(Treasure t: treasures) {
 			SmallTreasure temp = (SmallTreasure) t;
-			if ( temp.getName() == SmallTreasureName.SHOES_OF_STEALTH && table == "hide")
+			if ( temp.getName() == SmallTreasureName.SHOES_OF_STEALTH.toString() && table == "hide")
 				onlyOne = true;
-			else if (temp.getName() == SmallTreasureName.DEFT_GLOVES && table == "loot")
+			else if (temp.getName() == SmallTreasureName.DEFT_GLOVES.toString() && table == "loot")
 				onlyOne = true;
     	}
 
@@ -89,7 +96,7 @@ public class Utility {
 	    	default: return null;
     	}
     }
-    
+
     public static String getCharacterImage(CharacterName name) {
     	switch(name){
 	    	case AMAZON: return "/images/amazon.gif";
@@ -127,19 +134,18 @@ public class Utility {
 	    	default: return null;
     	}
     }
-    
     public enum PhaseType {BASIC, SUNLIGHT, SPECIAL, TREASURE}
- 
+
     public enum ClearingType {CAVE, MOUNTAIN, WOODS}
-    
+
     public enum TileType {VALLEY, MOUNTAINS, CAVES, WOODS}
-    
+
     public enum PathType {TUNNEL, OPEN_ROAD, HIDDEN_PATH, SECRET_PASSAGEWAY}
-    
+
     public enum WarningChits {SMOKE, DANK, RUINS, STINK, BONES}
 
     public enum SoundChits {HOWL_4, HOWL_5, FLUTTER_1, FLUTTER_2, PATTER_2, PATTER_5, ROAR_4, ROAR_6, SLITHER_3, SLITHER_6}
-    
+
     public enum MessageType {COMBAT_TARGET, COMBAT_MOVES, CHARACTER_SELECT, ACTIVITIES, BOARD, PLAYER}
 
     public enum ItemWeight {NEGLIGIBLE, LIGHT, MEDIUM, HEAVY, TREMENDOUS}
@@ -153,7 +159,7 @@ public class Utility {
 
     public enum WeaponName {MEDIUM_BOW, LIGHT_BOW, CROSSBOW, SPEAR, STAFF, GREAT_SWORD, BANE_SWORD, BROADSWORD,
     	DEVIL_SWORD, TRUESTEEL_SWORD, MORNING_STAR, GREAT_AXE, THRUSTING_SWORD, LIVING_SWORD, SHORT_SWORD,
-    	AXE, MACE, DAGGER, TOOTH_AND_CLAW}
+    	AXE, MACE, DAGGER, TOOTH_AND_CLAW, FIST}
 
     public enum ArmourName {SUIT_OF_ARMOR, BREASTPLATE, HELMET, SHIELD, TREMENDOUS_ARMOR, SILVER_BREASTPLATE,
     	GOLD_HELMET, JADE_SHIELD}
@@ -173,7 +179,7 @@ public class Utility {
     	RAIDER, ARCHER, SWORDSMAN, ASSASSIN}
 
     public enum TreasureType{SMALL, LARGE, TREASURE_WITHIN_TREASURE}
-    
+
     public enum TreasureWithinTreasureName {CHEST, CRYPT_OF_THE_KNIGHT, ENCHANTED_MEADOW, MOULDY_SKELETON,
     	REMAINS_OF_THIEF, TOADSTOOL_CIRCLE}
 
@@ -193,12 +199,12 @@ public class Utility {
     public enum TreasureLocations{ HOARD, LAIR, ALTAR, SHRINE, POOL, VAULT, CAIRNS, STATUE}
 
     public enum Actions {MOVE, HIDE, ALERT, REST, SEARCH, TRADE, PASS}
-    
+
     public enum SearchTables {LOCATE, LOOT}
 
     public enum Attacks {THRUST, SWING, SMASH}
 
-    public enum Maneuvers {CHARGE, DODGE, DUCK}
+    public enum Maneuvers {CHARGE, DODGE, DUCK, RUN}
 
     public enum Defenses {AHEAD, SIDE, ABOVE}
 
