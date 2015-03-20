@@ -669,43 +669,61 @@ public class ServerController extends Handler{
     }
 
     public void encounter(Player player, Monster monster) {
-    	if (player.isDead() == true) {
-    		network.send(player.getID(), "You are dead");
-    		return;
-    	}
-    	else if (monster.isDead() == true) {
-    		network.send(player.getID(), "That monster is dead");
-    		return;
-    	}
 
-    	state = GameState.CHOOSE_COMBATMOVES;
-    	recievedCombat = 0;
-    	network.send(player.getID(), "SEND COMBATMOVES");
-
-    	while(recievedCombat < 1){
-    		try {
-				Thread.sleep(20);
-			} catch (InterruptedException e) {
-				// Auto-generated catch block
-				e.printStackTrace();
-			}
-    	}
-
-    	monster.setMoves();
-
-    	System.out.println("got combat moves");
-    	state = GameState.NULL;
-
-    	if (player.getMoves() == null) {
-    		network.send(player.getID(), "It messed up...");
-    		return;
-    	}
-    	else if (monster.getMoves() == null) {
-    		network.send(player.getID(), "It messed up...");
-    		return;
-    	}
-    	else {
-    		doFight(player, monster);
+    	int unhurtRounds = 0;
+    	
+    	while (unhurtRounds < 2) {
+    	
+	    	if (player.isDead() == true) {
+	    		network.send(player.getID(), "You are dead");
+	    		return;
+	    	}
+	    	else if (monster.isDead() == true) {
+	    		network.send(player.getID(), "That monster is dead");
+	    		return;
+	    	}
+	
+	    	int playerHurt = player.getHealth();
+	    	int monsterHurt = monster.getHealth();
+	    	
+	    	state = GameState.CHOOSE_COMBATMOVES;
+	    	recievedCombat = 0;
+	    	network.send(player.getID(), "SEND COMBATMOVES");
+	
+	    	while(recievedCombat < 1){
+	    		try {
+					Thread.sleep(20);
+				} catch (InterruptedException e) {
+					// Auto-generated catch block
+					e.printStackTrace();
+				}
+	    	}
+	
+	    	monster.setMoves();
+	
+	    	System.out.println("got combat moves");
+	    	state = GameState.NULL;
+	
+	    	if (player.getMoves() == null) {
+	    		network.send(player.getID(), "It messed up...");
+	    		return;
+	    	}
+	    	else if (monster.getMoves() == null) {
+	    		network.send(player.getID(), "It messed up...");
+	    		return;
+	    	}
+	    	else {
+	    		player.setFatigue(player.getFatigue() + player.getMoves().getAttackFatigue() + player.getMoves().getManeuverFatigue());
+        		network.send(player.getID(), player);
+	    		doFight(player, monster);
+	    	}
+	    	
+	    	if (playerHurt == player.getHealth() && monsterHurt == monster.getHealth()) {
+        		unhurtRounds++;
+        	}
+        	else {
+        		unhurtRounds = 0;
+        	}
     	}
     }
 
@@ -779,6 +797,8 @@ public class ServerController extends Handler{
         	else {
         		attacker.setFatigue(attacker.getFatigue() + attacker.getMoves().getAttackFatigue() + attacker.getMoves().getManeuverFatigue());
         		defender.setFatigue(defender.getFatigue() + defender.getMoves().getAttackFatigue() + defender.getMoves().getManeuverFatigue());
+        		network.send(attacker.getID(), attacker);
+        		network.send(defender.getID(), defender);
         		doFight(attacker, defender);
         	}
         	
