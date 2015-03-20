@@ -392,7 +392,7 @@ public class Board implements Serializable{
 		}
 	}
 	
-	private Clearing matchClearing(Clearing c){
+	/*private Clearing matchClearing(Clearing c){
 		for(int i=0; i< tiles.size();i++){
 			for(int j=0; j< tiles.get(i).getClearings().size();j++){
 				if(tiles.get(i).getClearings().get(j).equals(c)){
@@ -401,7 +401,7 @@ public class Board implements Serializable{
 			}
 		}
 		return null;
-	}
+	}*/
 
 	public void placePlayers(ArrayList<Player> p){
 
