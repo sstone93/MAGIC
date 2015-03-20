@@ -11,6 +11,7 @@ import utils.Utility.PathType;
 import utils.Utility.SmallTreasureName;
 import utils.Utility.SoundChits;
 import utils.Utility.TileName;
+import utils.Utility.TileType;
 import utils.Utility.TreasureLocations;
 import utils.Utility.TreasureWithinTreasureName;
 import utils.Utility.WarningChits;
@@ -32,7 +33,6 @@ public class Board implements Serializable{
 	public Board(ArrayList<Player> players){
 		setupBoard();
 		setupGarrisons();
-		placeGarrisons();
 		placePlayers(players);
 		setUpMapChits();
 	}
@@ -137,10 +137,32 @@ public class Board implements Serializable{
 	}
 	
 	public void placeGarrisons(){
-		this.garrisons.get(0).setLocation(tiles.get(17).getClearing(5));
-		this.garrisons.get(1).setLocation(tiles.get(4).getClearing(5));
-		this.garrisons.get(2).setLocation(tiles.get(9).getClearing(5));
-		this.garrisons.get(3).setLocation(tiles.get(11).getClearing(5));
+		
+		//stink = inn
+		//smoke = house
+		//ruins = guard
+		//dank = chapel
+		//bones = 2 ghosts
+		
+		for(int i=0; i< tiles.size(); i++){
+			if(tiles.get(i).getType() == TileType.VALLEY){
+				if(tiles.get(i).getWarningChit().getName() == WarningChits.STINK){
+					this.garrisons.get(3).setLocation(tiles.get(i).getClearing(5));	//places the inn
+				}
+				if(tiles.get(i).getWarningChit().getName() == WarningChits.BONES){
+					
+				}
+				if(tiles.get(i).getWarningChit().getName() == WarningChits.DANK){
+					this.garrisons.get(0).setLocation(tiles.get(i).getClearing(5)); //places the chapel
+				}
+				if(tiles.get(i).getWarningChit().getName() == WarningChits.SMOKE){
+					this.garrisons.get(2).setLocation(tiles.get(i).getClearing(5)); // places the house
+				}
+				if(tiles.get(i).getWarningChit().getName() == WarningChits.RUINS){
+					this.garrisons.get(1).setLocation(tiles.get(i).getClearing(5)); //places the guardhouse
+				}	
+			}
+		}
 	}
 	
 	public void instanciateTreasures(){
@@ -292,7 +314,7 @@ public class Board implements Serializable{
 		placeChits(mountains, 0,2,3,9,14);
 		
 		//reveal all of the VALLEY map chits (after character selection stuff done)
-		//this is done already!
+		placeGarrisons();
 	}
 	
 	public void placeChits(ArrayList<Object> a,int p1,int p2,int p3, int p4, int p5){

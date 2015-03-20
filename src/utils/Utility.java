@@ -113,7 +113,7 @@ public class Utility {
 	    	default: return null;
     	}
     }
-    
+     
     public enum PhaseType {BASIC, SUNLIGHT, SPECIAL, TREASURE}
  
     public enum ClearingType {CAVE, MOUNTAIN, WOODS}
