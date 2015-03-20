@@ -136,12 +136,12 @@ public class ClientController extends Handler{
 	 * Should verify that character is available and then set character
 	 * @param name the name of the selected character
 	 */
-	public void handleCharacterSelection(CharacterName name){
+	public void handleCharacterSelection(CharacterName name, GarrisonName starting){
 		ArrayList<Object> mes = new ArrayList<Object>();
 		mes.add(name);
 		
 		//TODO MAKE THIS ATTACHED TO THE UI, SO THE USER CAN CHOOSE THE STARTING LOCATIION
-		mes.add(GarrisonName.INN);
+		mes.add(starting);
 		
 		network.send(new Message(MessageType.CHARACTER_SELECT, mes));
 		model.addMessage("Sent character select");
