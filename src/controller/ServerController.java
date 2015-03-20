@@ -35,7 +35,6 @@ public class ServerController extends Handler{
 	public Board board;		//THIS IS THE MODEL
 	public NetworkServer network;
 	ArrayList<Player> players = new ArrayList<Player>();
-	ArrayList<Monster> monsters = new ArrayList<Monster>();
 	int addedPlayers = 0;
     int playerCount    = Config.MAX_CLIENTS;
     int currentDay     = 0;
@@ -614,17 +613,26 @@ public class ServerController extends Handler{
     	System.out.println("FINISH COLLECTING COMBATTARGET");
     }
 
+    // sets specific monsters (based on the monster roll) to prowling
     public void rollForMonsters() {
+    	
+    	// set all the monsters to dormant
+    	for (int i = 0; i < board.monsters.size(); i++) {
+    		board.monsters.get(i).setProwling(false);
+    	}
+    	
+    	
     	int roll = Utility.roll(6);
-
     	network.broadCast("Monster roll: " + roll);
     	// generate ghosts
     	
     	// the ones we have: 
     	// ghost, giant, heavydragon, heavytroll, viper, wolf
 
+  
     	if (roll == 1) {
     		// generate dragons, company
+    		
     	} else if (roll == 2) {
     		// generate serpents, demons, woodfolk
     	} else if (roll == 3) {
