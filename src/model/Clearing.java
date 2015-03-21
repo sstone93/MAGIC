@@ -17,6 +17,7 @@ public class Clearing implements Serializable{
     ArrayList<Path> connections = new ArrayList<Path>();
     ArrayList<Treasure> treasures = new ArrayList<Treasure>();
     ArrayList<Player> occupants = new ArrayList<Player>();
+    ArrayList<Monster> monsters = new ArrayList<Monster>();
     
     Clearing(int location, Tile parent, ClearingType t, int x, int y) {
         this.location = location;
@@ -34,6 +35,10 @@ public class Clearing implements Serializable{
     	occupants.add(p);
     }
     
+    public void addMonster(Monster m) {
+    	monsters.add(m);
+    }
+    
     /**
      * 
      * @param p
@@ -41,6 +46,14 @@ public class Clearing implements Serializable{
     public void removeOccupant(Player p){
     	//System.out.println("removing player" + p);
     	occupants.remove(p);
+    }
+    
+    /**
+     * 
+     * @param m
+     */
+    public void removeMonster(Monster m) {
+    	monsters.remove(m);
     }
     
     /**

@@ -177,6 +177,10 @@ public class Board implements Serializable{
 					ghosts.get(0).setStartingLocation(tiles.get(i).getClearing(5));
 					ghosts.get(1).setStartingLocation(tiles.get(i).getClearing(5));
 					
+					// add ghosts to the tile
+					tiles.get(i).getClearing(5).addMonster(ghosts.get(0));
+					tiles.get(i).getClearing(5).addMonster(ghosts.get(1));
+					
 				}
 				if(tiles.get(i).getWarningChit().getName() == WarningChits.DANK){
 					this.garrisons.get(0).setLocation(tiles.get(i).getClearing(5)); //places the chapel

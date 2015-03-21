@@ -176,10 +176,11 @@ public class Monster implements Serializable{
     
     public void move() {
     	int roll = Utility.roll(this.getLocation().getConnections().size());
-//    	this.location.removeOccupant(this);
+    	this.location.removeMonster(this);
     	Clearing newClearing = this.getLocation().getConnections().get(roll - 1).getDestination(location);
     	this.setLocation(newClearing);
-    }
+    	newClearing.addMonster(this);
+    } 
     
     public void block() {
     	ArrayList<Player> occupants = this.getLocation().getOccupants();
