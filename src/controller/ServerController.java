@@ -42,7 +42,7 @@ public class ServerController extends Handler{
     int recievedCombat = 0;
 	GameState state = GameState.NULL;
 	int finishedPlayers = 0;
-	int nextRoll = -1;
+	public int nextRoll = 0;
 
 	/**
 	 * Constructor for a ServerController
@@ -67,7 +67,7 @@ public class ServerController extends Handler{
 	}
 
 	public int roll(int max){
-		if(Config.CHEAT_MODE && this.nextRoll != -1){
+		if(Config.CHEAT_MODE && this.nextRoll != 0){
 			return this.nextRoll;
 		}else{
 			return Utility.roll(max);
