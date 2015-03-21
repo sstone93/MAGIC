@@ -7,6 +7,7 @@ import model.Berserker;
 import model.BlackKnight;
 import model.Board;
 import model.Captain;
+import model.Clearing;
 import model.CombatMoves;
 import model.Dwarf;
 import model.Elf;
@@ -72,7 +73,7 @@ public class ServerController extends Handler{
 			return Utility.roll(max);
 		}
 	}
-	
+
 	/**
 	 * This is the method that handles incoming messages from the networking components
 	 * @param ID The ID of the client sending the message
@@ -171,7 +172,7 @@ public class ServerController extends Handler{
 				if(state == GameState.CHOOSE_CHARACTER){
 					Player temp;
 					switch((CharacterName) m.getData().get(0)){
-					case AMAZON: temp = new Player(new Amazon(), ID); 
+					case AMAZON: temp = new Player(new Amazon(), ID);
 					break;
 					case BERSERKER: temp = new Player(new Berserker() , ID);
 					break;
@@ -191,7 +192,7 @@ public class ServerController extends Handler{
 						 temp = null;
 					break;
 					}
-					
+
 					this.addedPlayers += 1;
 					temp.getCharacter().setStartingLocation((GarrisonName) m.getData().get(1)); //sets the starting location
 					players.add(temp);
@@ -591,7 +592,17 @@ public class ServerController extends Handler{
     	state = GameState.CHOOSE_PLAYS;
     	finishedPlayers = 0;
 
+    	int currentlyFinished = 0;
+
+
+
     	while(finishedPlayers < playerCount){
+    		if ((currentlyFinished + 1 ) == finishedPlayers) {
+        		currentlyFinished = currentlyFinished + 1;
+        		// when a players turn ends, allow monsters to prowl
+        		// TODO: not sure if we actually want to put this here with the way our system is designed
+        		allowMonstersToProwl();
+        	}
     		try {
 				Thread.sleep(20);
 			} catch (InterruptedException e) {
@@ -633,17 +644,17 @@ public class ServerController extends Handler{
 
     // sets specific monsters (based on the monster roll) to prowling
     public void rollForMonsters() {
-    	
+
     	// set all the monsters to dormant
     	for (int i = 0; i < board.monsters.size(); i++) {
     		board.monsters.get(i).setProwling(false);
     	}
-    	
+
     	int roll = roll(6);
-    	network.broadCast("Monster roll: " + roll);    	
-    	// the ones we have: 
+    	network.broadCast("Monster roll: " + roll);
+    	// the ones we have:
     	// ghost, giant, heavydragon, heavytroll, viper, wolf
-    	
+
     	setProwlingMonsters(MonsterName.GHOST);
     	if (roll == 1) { // dragons are on the prowl
     		network.broadCast("Ghosts and Heavy Dragons are on the prowl!");
@@ -664,7 +675,7 @@ public class ServerController extends Handler{
     		network.broadCast("Ghosts are on the prowl!");
     	}
     }
-    
+
     private void setProwlingMonsters(MonsterName name) {
     	ArrayList<Monster> prowlingMonsters = new ArrayList<Monster>();
     	prowlingMonsters = board.getMonsters(name);
@@ -673,33 +684,30 @@ public class ServerController extends Handler{
 			prowlingMonsters.get(i).setProwling(true);
 		}
     }
-    
+
     public void allowMonstersToProwl(){
     	System.out.println("ALLOWING STARTS NOW");
-    	// checks to see who can prowl 
+    	// checks to see who can prowl
     	ArrayList<Monster> prowlingMonsters = board.getProwlingMonsters();
     	for (int i = 0; i < prowlingMonsters.size(); i++) {
     		if (prowlingMonsters.get(i).getStartingLocation() != null) { // if they're on the board
-    			Monster monster = prowlingMonsters.get(i);
+    			
+    			Monster monster = null;
+    			monster = prowlingMonsters.get(i);
     			if (monster.isProwling()) {
     				System.out.println("MONSTER IS MOVING");
     				// then they can prowl
-    				System.out.println("old location: " +  monster.getLocation());
     				monster.move();
-    				monster.block(); // block occupants in new clearing 
-    				System.out.println("new location: " + monster.getLocation() ) ;
-    				// TODO: for whatever reason it's not recognizing that the monster changed clearings
-    				
+    				monster.block(); // block occupants in new clearing
     			} else {
     				// they can block others if they're not already blocked
     				if (!monster.isBlocked()) {
     					System.out.println("MONSTER BLOCKING");
     					monster.block();
-    				} 				
+    				}
     			}
     		}
     	}
-    	
     }
     /**
      * Sends up to date board to clients, along with their proper character
@@ -727,8 +735,8 @@ public class ServerController extends Handler{
         	network.broadCast("There is only one player alive");
         	endGame();
         }
-        
-        allowMonstersToProwl();
+
+        // allowMonstersToProwl();
 
         collectCombat(); //2 players, 1 attacker 1 defender
 
@@ -739,7 +747,7 @@ public class ServerController extends Handler{
         		System.out.println("Finished encounter");
         	}
         }
-        
+
         //Progresses to the next day or ends the game
         boolean thing = resetDay();
         if(thing == true){ //if it is not the 28th day....
@@ -763,9 +771,9 @@ public class ServerController extends Handler{
     public void encounter(Player player, Monster monster) {
 
     	int unhurtRounds = 0;
-    	
+
     	while (unhurtRounds < 2) {
-    	
+
 	    	if (player.isDead() == true) {
 	    		network.send(player.getID(), "You are dead");
 	    		return;
@@ -774,14 +782,14 @@ public class ServerController extends Handler{
 	    		network.send(player.getID(), "That monster is dead");
 	    		return;
 	    	}
-	
+
 	    	int playerHurt = player.getHealth();
 	    	int monsterHurt = monster.getHealth();
-	    	
+
 	    	state = GameState.CHOOSE_COMBATMOVES;
 	    	recievedCombat = 0;
 	    	network.send(player.getID(), "SEND COMBATMOVES");
-	
+
 	    	while(recievedCombat < 1){
 	    		try {
 					Thread.sleep(20);
@@ -790,12 +798,12 @@ public class ServerController extends Handler{
 					e.printStackTrace();
 				}
 	    	}
-	
+
 	    	monster.setMoves();
-	
+
 	    	System.out.println("got combat moves");
 	    	state = GameState.NULL;
-	
+
 	    	if (player.getMoves() == null) {
 	    		network.send(player.getID(), "It messed up...");
 	    		return;
@@ -813,7 +821,7 @@ public class ServerController extends Handler{
         		network.send(player.getID(), player);
 	    		doFight(player, monster);
 	    	}
-	    	
+
 	    	if (playerHurt == player.getHealth() && monsterHurt == monster.getHealth()) {
         		unhurtRounds++;
         	}
@@ -839,7 +847,7 @@ public class ServerController extends Handler{
     	}
 
     	int unhurtRounds = 0;
-    	
+
     	while (unhurtRounds < 2) {
     		if (attacker.isDead() == true) {
         		network.send(attacker.getID(), "You are dead.");
@@ -852,10 +860,10 @@ public class ServerController extends Handler{
 
     		int attackerHurt = attacker.getHealth();
     		int defenderHurt = defender.getHealth();
-    		
+
         	//System.out.println(attacker.getTarget().getCharacter().getName());
         	//System.out.println(defender.getTarget().getCharacter().getName());
-        	
+
         	//ask clients to send moves!
         	state = GameState.CHOOSE_COMBATMOVES;
         	recievedCombat = 0;
@@ -898,7 +906,7 @@ public class ServerController extends Handler{
         		network.send(defender.getID(), defender);
         		doFight(attacker, defender);
         	}
-        	
+
         	if (attackerHurt == attacker.getHealth() && defenderHurt == defender.getHealth()) {
         		unhurtRounds++;
         	}
@@ -919,7 +927,7 @@ public class ServerController extends Handler{
 			network.send(player.getID(), player);
 			return;
 		}
-    	
+
     	if (player.getActiveWeapon().getSpeed() < monster.getAttackSpeed()) {
     		checkHit(monster, player);
     	}
@@ -961,7 +969,7 @@ public class ServerController extends Handler{
 			network.send(defender.getID(), defender);
 			return;
 		}
-		
+
 		if (defender.getActiveWeapon().getSpeed() < attacker.getActiveWeapon().getSpeed()) {
 			checkHit(attacker, defender);
 		}
@@ -1090,7 +1098,7 @@ public class ServerController extends Handler{
 			}
 		}
 		else {
-			level = player.getActiveWeapon().getWeight();	
+			level = player.getActiveWeapon().getWeight();
 		}
 
 		network.broadCast(player.getCharacter().getName() + " has hit " + monster.getName());
@@ -1307,7 +1315,7 @@ public class ServerController extends Handler{
 			}
 		}
 		else {
-			level = attacker.getActiveWeapon().getWeight();	
+			level = attacker.getActiveWeapon().getWeight();
 		}
 
 		network.broadCast(attacker.getCharacter().getName() + " has hit " + defender.getCharacter().getName());
