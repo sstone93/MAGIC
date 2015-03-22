@@ -102,6 +102,20 @@ public class Utility {
 	    	default: return null;
     	}
     }
+    
+    public static String getCharacterDetailImage(CharacterName name) {
+    	switch(name){
+	    	case AMAZON: return "/images/amazonDetail.jpg";
+	    	case BERSERKER: return "/images/berserkerDetail.jpg";
+	    	case BLACK_KNIGHT: return "/images/black_knightDetail.jpg";
+	    	case CAPTAIN: return "/images/captainDetail.jpg";
+	    	case DWARF: return "/images/dwarfDetail.jpg";
+	    	case ELF: return "/images/elfDetail.jpg";
+	    	case SWORDSMAN: return "/images/swordsmanDetail.jpg";
+	    	case WHITE_KNIGHT: return "/images/white_knightDetail.jpg";
+	    	default: return null;
+    	}
+    }
 
     public static GarrisonName[] getCharacterStartingLocations(CharacterName name) {
     	switch(name){
