@@ -10,6 +10,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import utils.Utility;
 import utils.Utility.CharacterName;
 import controller.ClientController;
 
@@ -20,38 +21,19 @@ public class CharacterDetailsPanel extends JPanel{
 	public CharacterDetailsPanel(ClientController c){
 		this.control = c;
 		
-		setPreferredSize(new Dimension(800, 1200));
+		setPreferredSize(new Dimension(800, 480));
 		setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		picture = new JLabel();
 
-		picture.setSize(360, 284);
+		picture.setSize(610, 480);
 		add(picture);
-		/*for(CharacterName n: CharacterName.values()){
-			createClassButton(n);
-		}*/
 	}
-	
-	/*private void createClassButton(CharacterName n){
-		try{
-			BufferedImage pic;
-			pic = ImageIO.read(this.getClass().getResource("/images/"+n.toString().toLowerCase()+"Detail.jpg"));
-			JButton btn = new JButton(new ImageIcon(pic));
-			btn.setSize(360, 284);
-			btn.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					control.handleCharacterSelection(n);
-				}
-			});
-			add(btn);
-		} catch (IOException e){	
-		}
-	}*/
 	
 	public void updatePic(CharacterName n){
 		try{
 			BufferedImage pic;
-			pic = ImageIO.read(this.getClass().getResource("/images/"+n.toString().toLowerCase()+"Detail.jpg"));
+			pic = ImageIO.read(this.getClass().getResource(Utility.getCharacterDetailImage(n)));
 			picture.setIcon(new ImageIcon(pic));
 		} catch (IOException e){	
 		}

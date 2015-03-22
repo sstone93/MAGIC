@@ -1,27 +1,19 @@
 package view;
 
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
+
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
 import utils.Utility;
-import utils.Utility.Actions;
 import utils.Utility.CharacterName;
 import utils.Utility.GarrisonName;
-import utils.Utility.PhaseType;
 import controller.ClientController;
 
 @SuppressWarnings("serial")

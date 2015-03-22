@@ -86,16 +86,16 @@ public class View extends JFrame {
 		contentPane.add(textDisplay);
 		textDisplay.setEditable(false);
 		
-		//adds the scroll bar
+		//adds the scroll bars
 		scrollPanel = new JScrollPane();
-		scrollPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollPanel.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollPanel.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scrollPanel.setBounds(0, 0, 819, 500);
 		contentPane.add(scrollPanel);
 		
 		//adds the board panel
 		boardPanel = new JLayeredPane();
-		boardPanel.setPreferredSize(new Dimension(800, 1018));
+		boardPanel.setPreferredSize(new Dimension(1100, 1318));
 		scrollPanel.setViewportView(boardPanel);
 		boardPanel.setLayout(null);
 		
@@ -206,7 +206,6 @@ public class View extends JFrame {
 			
 			for(int i = 0; i < charLbls.length; i++){
 				if(charLbls[i] != null){
-					System.out.println("Removing charLbl: " + i);
 					boardPanel.remove(charLbls[i]);
 				}
 			}
@@ -230,34 +229,44 @@ public class View extends JFrame {
 									if (occupants.get(k) != null){
 										
 										CharacterName character = occupants.get(k).getCharacter().getName();
-										System.out.println("	adding Character " + character.toString() + " to " + b.tiles.get(i).getName().toString());
 										pic = ImageIO.read(this.getClass().getResource(Utility.getCharacterImage(character)));
 										charLbls[chars] = new JLabel(new ImageIcon(pic));
 										charLbls[chars].setBounds(b.tiles.get(i).getX() + clearings.get(j).xOffset - 25,
 												b.tiles.get(i).getY() + clearings.get(j).yOffset - 25, 50, 50);
 										boardPanel.add(charLbls[chars], new Integer(5), 0);
-										System.out.println("Adding char label: " + chars);
 										
 										if (!clearingHoverOvers.containsKey(clearings.get(j))){
 											JPanel newPane = new JPanel();
 											newPane.setBounds(b.tiles.get(i).getX() + clearings.get(j).xOffset,
 													b.tiles.get(i).getY() + clearings.get(j).yOffset, 200, 300);
 											newPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+											newPane.setBorder(new LineBorder(Color.GRAY));
 											newPane.setVisible(false);
+											
+											JLabel lbl = new JLabel(clearings.get(j).parent.getName() + " " + clearings.get(j).location, 
+													SwingConstants.CENTER);
+											lbl.setPreferredSize(new Dimension(200, 20));
+											lbl.setAlignmentX(CENTER_ALIGNMENT);
+											lbl.setFont(new Font("Trebuchet MS", Font.BOLD, 18));
+											newPane.add(lbl);
+											
 											boardPanel.add(newPane, new Integer(10), 0);
 											clearingHoverOvers.put(clearings.get(j), newPane);
 										}
 										
 										JPanel panel = new JPanel();
 										panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-										panel.setSize(65, 75);
+										panel.setPreferredSize(new Dimension(90, 75));
+										
 										JLabel img = new JLabel(new ImageIcon(pic));
 										img.setSize(50, 50);
 										panel.add(img);
 										
-										JLabel lbl = new JLabel(Integer.toString(clearings.get(j).getClearingNumber()));
-										lbl.setSize(10, 15);
+										JLabel lbl = new JLabel(character.toString(), SwingConstants.CENTER);
+										lbl.setPreferredSize(new Dimension(90, 15));
+										lbl.setAlignmentY(CENTER_ALIGNMENT);
 										panel.add(lbl);
+										
 										clearingHoverOvers.get(clearings.get(j)).add(panel);
 										
 										final int index = j;
@@ -294,21 +303,32 @@ public class View extends JFrame {
 						JPanel newPane = new JPanel();
 						newPane.setBounds(clearing.parent.getX() + clearing.xOffset, clearing.parent.getY() + clearing.yOffset, 200, 300);
 						newPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+						newPane.setBorder(new LineBorder(Color.GRAY));
 						newPane.setVisible(false);
+						
+						JLabel lbl = new JLabel(clearing.parent.getName() + " " + clearing.location, SwingConstants.CENTER);
+						lbl.setPreferredSize(new Dimension(200, 20));
+						lbl.setFont(new Font("Trebuchet MS", Font.BOLD, 18));
+						lbl.setAlignmentX(CENTER_ALIGNMENT);
+						newPane.add(lbl);
+						
 						boardPanel.add(newPane, new Integer(10), 0);
 						clearingHoverOvers.put(clearing, newPane);
 					}
 					
 					JPanel panel = new JPanel();
 					panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-					panel.setSize(65, 75);
+					panel.setPreferredSize(new Dimension(90, 75));
+					
 					JLabel img = new JLabel(new ImageIcon(pic));
 					img.setSize(50, 50);
 					panel.add(img);
 					
-					JLabel lbl = new JLabel(Integer.toString(b.garrisons.get(i).getLocation().getClearingNumber()));
-					lbl.setSize(10, 15);
+					JLabel lbl = new JLabel(name.toString(), SwingConstants.CENTER);
+					lbl.setPreferredSize(new Dimension(90, 15));
+					lbl.setAlignmentY(CENTER_ALIGNMENT);
 					panel.add(lbl);
+					
 					clearingHoverOvers.get(clearing).add(panel);
 					
 					MouseListener[] listeners = garrisonLbls[i].getMouseListeners();
@@ -334,12 +354,18 @@ public class View extends JFrame {
 					
 				}
 			}
+			
 		}
 		
 		//UPDATES THE PLAYER PANEL
 		Player p = control.model.getPlayer();
 		if (p != null){
 			characterInfoPanel.update(p);
+			scrollPanel.getVerticalScrollBar().setValue(p.getLocation().yOffset + 
+					p.getLocation().parent.getY() - 250);
+			scrollPanel.getHorizontalScrollBar().setValue(p.getLocation().xOffset + 
+					p.getLocation().parent.getX() - 400);
+			
 		}
 		updateNonBoardGUI(p);
 	}
