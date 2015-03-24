@@ -10,12 +10,14 @@ import model.Captain;
 import model.CombatMoves;
 import model.Dwarf;
 import model.Elf;
+import model.MapChit;
 import model.Monster;
 import model.Path;
 import model.Phase;
 import model.Player;
 import model.Swordsman;
 import model.Treasure;
+import model.WarningChit;
 import model.WhiteKnight;
 
 import java.util.ArrayList;
@@ -42,6 +44,7 @@ public class ServerController extends Handler{
 	GameState state = GameState.NULL;
 	int finishedPlayers = 0;
 	public int nextRoll = 0;
+	private int monsterRoll;
 
 	/**
 	 * Constructor for a ServerController
@@ -368,13 +371,68 @@ public class ServerController extends Handler{
     	}
     	else if (roll == 4) { // discover chits
     		// TODO: discover every site chit in the clearing you are searching
-    		network.send(player.getID(), "You've discovered chits!");
+
+//    		You secretly look at the map chits in the tile you are searching.
+//    		You discover every Site chit in the clearing you are searching and cross it off your Discoveries list.
+//    		Henceforward, you can LOOT this Site chit whenever you are in its clearing.
+
+    		MapChit mapChit = player.getLocation().parent.getMapChit();
+
+    		if (mapChit != null) {
+    			player.addDiscovery(mapChit);
+    			network.send(player.getID(), "You've discovered " + mapChit + "!");
+    			discoverMonstersWithSiteChits(mapChit);
+    		} else {
+    			network.send(player.getID(), "No map chits to discover!");
+    		}
+
+
+
+
     	}
     	else if (roll == 5 || roll == 6) {
     		// do nothing
     		network.send(player.getID(), "You've discovered nothing") ;
     	}
 
+    }
+
+    // TODO: I think this is correct behaviour, not entirely sure
+    private void discoverMonstersWithSiteChits(MapChit mapChit) {
+    	System.out.println("!!! map chit name: " + mapChit.getName());
+    	SoundChits name = mapChit.getName();
+    	if (name == SoundChits.ROAR_4 || name == SoundChits.ROAR_6) {
+    		// take out dragons if they're active for the day
+    	}
+    	else if (name == SoundChits.SLITHER_3 || name == SoundChits.SLITHER_6) {
+    		// dragons / vipers
+    	}
+    	else if (name == SoundChits.HOWL_4 || name == SoundChits.HOWL_5) {
+
+    		// wolves
+    	}
+    	else if (name == SoundChits.PATTER_2 || name == SoundChits.PATTER_5 ) {
+    		// wolves
+    	}
+
+    }
+
+    private void findMonstersAfterTurnEnd(Player player) {
+    	WarningChit warning = player.getLocation().parent.getWarningChit();
+    	MapChit     mapChit = player.getLocation().parent.getMapChit();
+
+    	if (warning.getName() == WarningChits.RUINS) { // M warning letter
+    		if (mapChit.getName() == SoundChits.FLUTTER_1 && monsterRoll == 1) {
+    			// flying dragons
+    		}
+//    		else if (mapChit.getName() == SoundChits.FLUTTER_6 && monsterRoll == 6) {
+//    			// flying dragons
+//    		}
+    		else if (mapChit.getName() == SoundChits.ROAR_4 && monsterRoll == 4) {
+				// giants
+			}
+    			
+    	}
     }
 
     /**
@@ -603,8 +661,6 @@ public class ServerController extends Handler{
 
     	int currentlyFinished = 0;
 
-
-
     	while(finishedPlayers < playerCount){
     		if ((currentlyFinished + 1 ) == finishedPlayers) {
         		currentlyFinished = currentlyFinished + 1;
@@ -661,6 +717,7 @@ public class ServerController extends Handler{
 
     	int roll = roll(6);
     	network.broadCast("Monster roll: " + roll);
+    	monsterRoll = roll;
     	// the ones we have:
     	// ghost, giant, heavydragon, heavytroll, viper, wolf
 
@@ -695,26 +752,24 @@ public class ServerController extends Handler{
     }
 
     public void allowMonstersToProwl(){
-    	System.out.println("ALLOWING STARTS NOW");
+    	System.out.println("ALLOWING MONSTERS TO PROWL STARTS NOW");
     	// checks to see who can prowl
     	ArrayList<Monster> prowlingMonsters = board.getProwlingMonsters();
     	for (int i = 0; i < prowlingMonsters.size(); i++) {
     		if (prowlingMonsters.get(i).getStartingLocation() != null) { // if they're on the board
-    			
+
     			Monster monster = null;
     			monster = prowlingMonsters.get(i);
+
     			if (monster.isProwling()) {
     				System.out.println("MONSTER IS MOVING");
     				// then they can prowl
     				monster.move();
-    				monster.block(); // block occupants in new clearing
-    			} else {
-    				// they can block others if they're not already blocked
-    				if (!monster.isBlocked()) {
-    					System.out.println("MONSTER BLOCKING");
-    					monster.block();
-    				}
     			}
+    			if (!monster.isBlocked()) { // they can block others if they're not already blocked
+					System.out.println("MONSTER BLOCKING");
+					monster.block();
+				}
     		}
     	}
     }
