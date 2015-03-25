@@ -16,6 +16,7 @@ import model.Path;
 import model.Phase;
 import model.Player;
 import model.Swordsman;
+import model.Tile;
 import model.Treasure;
 import model.WarningChit;
 import model.WhiteKnight;
@@ -352,11 +353,16 @@ public class ServerController extends Handler{
     public void locate(Player player, int roll) {
     	if (roll == 1) {
     		ArrayList<Path> connections = player.getLocation().getConnections() ;
+    		boolean foundHidden = false;
     		for (int i = 0; i < connections.size(); i++) {
-    			if (connections.get(i).getType() == Utility.PathType.SECRET_PASSAGEWAY) {
+    			if (connections.get(i).getType() == Utility.PathType.SECRET_PASSAGEWAY || connections.get(i).getType() == Utility.PathType.HIDDEN_PATH) {
     				player.addDiscovery(connections.get(i));
     				network.send(player.getID(), "You've discovered secret passageways!");
+    				foundHidden = true;
     			}
+    		}
+    		if (!foundHidden) {
+    			network.send(player.getID(), "No paths to discover!");
     		}
     	}
     	else if (roll == 2 || roll == 3) {
@@ -381,14 +387,10 @@ public class ServerController extends Handler{
     		if (mapChit != null) {
     			player.addDiscovery(mapChit);
     			network.send(player.getID(), "You've discovered " + mapChit + "!");
-    			discoverMonstersWithSiteChits(mapChit);
+    			discoverMonstersWithSiteChits(player, mapChit);
     		} else {
     			network.send(player.getID(), "No map chits to discover!");
     		}
-
-
-
-
     	}
     	else if (roll == 5 || roll == 6) {
     		// do nothing
@@ -398,23 +400,58 @@ public class ServerController extends Handler{
     }
 
     // TODO: I think this is correct behaviour, not entirely sure
-    private void discoverMonstersWithSiteChits(MapChit mapChit) {
+    // TODO; needs to take into account other things then just the monster roll
+    private void discoverMonstersWithSiteChits(Player player, MapChit mapChit) {
     	System.out.println("!!! map chit name: " + mapChit.getName());
     	SoundChits name = mapChit.getName();
-    	if (name == SoundChits.ROAR_4 || name == SoundChits.ROAR_6) {
-    		// take out dragons if they're active for the day
+    	WarningChit warningChit = player.getLocation().parent.getWarningChit();
+    	
+    	System.out.println("warning chit name: " + warningChit.getName());
+    	
+    	ArrayList<Monster> prowling = board.getProwlingMonsters();
+    	MonsterName monsterName = null;
+    	
+    	if (monsterRoll == 1) {
+			monsterName = MonsterName.HEAVY_DRAGON;
     	}
-    	else if (name == SoundChits.SLITHER_3 || name == SoundChits.SLITHER_6) {
-    		// dragons / vipers
+    	else if (monsterRoll == 2) {
+    		monsterName = MonsterName.VIPER;
     	}
-    	else if (name == SoundChits.HOWL_4 || name == SoundChits.HOWL_5) {
-
-    		// wolves
+    	else if (monsterRoll == 3) {
+    		if (warningChit.getName() == WarningChits.BONES) {
+    			monsterName = MonsterName.WOLF;
+    		}
     	}
-    	else if (name == SoundChits.PATTER_2 || name == SoundChits.PATTER_5 ) {
-    		// wolves
+    	else if (monsterRoll == 4) {
+    		if (warningChit.getName() == WarningChits.RUINS) {
+    			monsterName = MonsterName.GIANT;
+    		} else if (warningChit.getName() == WarningChits.DANK) {
+    			monsterName = MonsterName.HEAVY_TROLL;
+    		}
     	}
-
+    	else if (monsterRoll == 5) {
+    		// spiders
+    	}
+    	else if (monsterRoll == 6) {
+    		// bats
+    	}
+    	System.out.println("mosnter name: " + monsterName);
+    	
+    	board.placeMonstersAtStartingLocation(monsterName, player.getLocation());
+    	
+    	System.out.println(player.getLocation().getMonsters());
+    	ArrayList<Monster> monstersInClearing = player.getLocation().getMonsters();
+    	for (int i = 0; i < monstersInClearing.size(); i++) {
+    		System.out.println(monstersInClearing.get(i).getName() + " in clearing!!!!");
+    	}
+    }
+    
+    private void printBoard() {
+    	ArrayList<Tile> tiles = board.tiles;
+    	for (int i = 0; i < tiles.size(); i++) {
+    		Tile tile = tiles.get(i);
+    		System.out.println("tile : " + tile.getName() + " with warning chit: " + tile.getWarningChit() + " map chit: " + tile.getMapChit());
+    	}
     }
 
     private void findMonstersAfterTurnEnd(Player player) {
@@ -788,7 +825,7 @@ public class ServerController extends Handler{
 
         currentDay++;
         network.broadCast("This is the start of Day " + currentDay + "!");
-
+        printBoard();
         updateClients();
 
         rollForMonsters();
