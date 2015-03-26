@@ -405,39 +405,108 @@ public class ServerController extends Handler{
     	System.out.println("!!! map chit name: " + mapChit.getName());
     	SoundChits name = mapChit.getName();
     	WarningChit warningChit = player.getLocation().parent.getWarningChit();
+    	TileType type = player.getLocation().parent.getType();
     	
     	System.out.println("warning chit name: " + warningChit.getName());
     	
-    	ArrayList<Monster> prowling = board.getProwlingMonsters();
     	MonsterName monsterName = null;
     	
-    	if (monsterRoll == 1) {
-			monsterName = MonsterName.HEAVY_DRAGON;
-    	}
-    	else if (monsterRoll == 2) {
-    		monsterName = MonsterName.VIPER;
-    	}
-    	else if (monsterRoll == 3) {
-    		if (warningChit.getName() == WarningChits.BONES) {
-    			monsterName = MonsterName.WOLF;
+    	if (type == TileType.WOODS) {
+    		if (warningChit != null) {
+    			if (warningChit.getName() == WarningChits.DANK) {
+    				monsterName = MonsterName.VIPER;
+    			}
+    			else if (warningChit.getName() == WarningChits.RUINS) {
+    				monsterName = MonsterName.WOLF;
+    			}
     		}
     	}
-    	else if (monsterRoll == 4) {
-    		if (warningChit.getName() == WarningChits.RUINS) {
-    			monsterName = MonsterName.GIANT;
-    		} else if (warningChit.getName() == WarningChits.DANK) {
-    			monsterName = MonsterName.HEAVY_TROLL;
-    		}
+    	else if (type == TileType.MOUNTAINS) {
+	    	if (monsterRoll == 1) {
+	    		if (mapChit.getName() == SoundChits.SLITHER_3 || mapChit.getName() == SoundChits.SLITHER_6) {
+	    			monsterName = MonsterName.HEAVY_DRAGON;
+	    		}
+	    		else if (mapChit.getName() == SoundChits.FLUTTER_1 || mapChit.getName() == SoundChits.FLUTTER_2) {
+	    			monsterName = MonsterName.HEAVY_DRAGON;
+	    		}
+	    		else if (warningChit.getName() == WarningChits.SMOKE) {
+	    			monsterName = MonsterName.HEAVY_DRAGON;
+	    		}
+	    	}
+	    	else if (monsterRoll == 2) {
+	    		if (mapChit.getName() == SoundChits.SLITHER_3 || mapChit.getName() == SoundChits.SLITHER_6) {
+	    			monsterName = MonsterName.VIPER;
+	    		}
+	    	}
+	    	else if (monsterRoll == 4) {
+	    		if (warningChit.getName() == WarningChits.BONES || warningChit.getName() == WarningChits.STINK   ) {
+	    			monsterName = MonsterName.GIANT;
+	    		}
+	    		 else if (mapChit.getName() == SoundChits.ROAR_4 || mapChit.getName() == SoundChits.ROAR_6) {
+	    			monsterName = MonsterName.HEAVY_TROLL;
+	    		}
+	    	}
+	    	else if (monsterRoll == 5) {
+	    		// spiders
+	    	}
+	    	else if (monsterRoll == 6) {
+	    		// bats
+	    	}
     	}
-    	else if (monsterRoll == 5) {
-    		// spiders
-    	}
-    	else if (monsterRoll == 6) {
-    		// bats
+    	else if (type == TileType.CAVES) {
+	    	if (monsterRoll == 1) {
+	    		if (mapChit.getName() == SoundChits.SLITHER_3 || mapChit.getName() == SoundChits.SLITHER_6) {
+	    			monsterName = MonsterName.HEAVY_DRAGON;
+	    		}
+	    		else if (mapChit.getName() == SoundChits.ROAR_4 || mapChit.getName() == SoundChits.ROAR_6) {
+	    			monsterName = MonsterName.HEAVY_DRAGON;
+	    		}
+	    		else if (mapChit.getName() == SoundChits.FLUTTER_1 || mapChit.getName() == SoundChits.FLUTTER_2) {
+	    			monsterName = MonsterName.HEAVY_DRAGON;
+	    		}
+	    		else if (warningChit.getName() == WarningChits.SMOKE) {
+	    			monsterName = MonsterName.HEAVY_DRAGON;
+	    		}
+	    	}
+	    	else if (monsterRoll == 2) {
+	    		if (mapChit.getName() == SoundChits.SLITHER_3 || mapChit.getName() == SoundChits.SLITHER_6) {
+	    			monsterName = MonsterName.VIPER;
+	    		}
+	    		else if (warningChit.getName() == WarningChits.DANK) {
+	    			monsterName = MonsterName.VIPER;
+	    		}
+	    	}
+	    	else if (monsterRoll == 3) {
+	    		if (warningChit.getName() == WarningChits.RUINS ) {
+	    			// goblins, but replaced with trolls
+	    			monsterName = MonsterName.HEAVY_TROLL;
+	    		}
+	    		else if (mapChit.getName() == SoundChits.HOWL_4 || mapChit.getName() == SoundChits.HOWL_5 ) {
+	    			monsterName = MonsterName.HEAVY_TROLL; // replaced goblins with trolls
+	    		}
+	    		else if (mapChit.getName() == SoundChits.PATTER_2 || mapChit.getName() == SoundChits.PATTER_5 ) {
+	    			monsterName = MonsterName.HEAVY_TROLL; // replaced goblins with trolls
+	    		}
+	    	}
+	    	else if (monsterRoll == 4) {
+	    		if (warningChit.getName() == WarningChits.BONES || warningChit.getName() == WarningChits.STINK   ) {
+	    			monsterName = MonsterName.HEAVY_TROLL;
+	    		}
+	    		 else if (mapChit.getName() == SoundChits.ROAR_4 || mapChit.getName() == SoundChits.ROAR_6) {
+	    			monsterName = MonsterName.HEAVY_TROLL;
+	    		}
+	    	}
+	    	else if (monsterRoll == 5) {
+	    		// spiders
+	    	}
+	    	else if (monsterRoll == 6) {
+	    		// bats
+	    	}
     	}
     	System.out.println("mosnter name: " + monsterName);
-    	
-    	board.placeMonstersAtStartingLocation(monsterName, player.getLocation());
+    	if (monsterName != null) {
+    		board.placeMonstersAtStartingLocation(monsterName, player.getLocation());
+    	}
     	
     	System.out.println(player.getLocation().getMonsters());
     	ArrayList<Monster> monstersInClearing = player.getLocation().getMonsters();
