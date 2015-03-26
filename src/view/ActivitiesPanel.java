@@ -67,10 +67,12 @@ public class ActivitiesPanel extends JPanel{
 						arr = Actions.values();
 						break;
 					case TREASURE:
-						arr = new Actions[1];
-						arr[0] = control.model.getPlayer().getPhases().get(phase.getSelectedIndex()).getAction();
-						//System.out.println(phase.getSelectedIndex());
-						//TODO
+						ArrayList<Actions> actions = control.model.getPlayer().getTreasureActions();
+						arr = new Actions[actions.size() + 1];
+						for(int i = 0; i < actions.size(); i++){
+							arr[i] = actions.get(i);
+						}
+						arr[actions.size()] = Actions.PASS;
 						break;
 					default:
 						arr = new Actions[0];
