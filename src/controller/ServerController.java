@@ -523,24 +523,6 @@ public class ServerController extends Handler{
     	}
     }
 
-    private void findMonstersAfterTurnEnd(Player player) {
-    	WarningChit warning = player.getLocation().parent.getWarningChit();
-    	MapChit     mapChit = player.getLocation().parent.getMapChit();
-
-    	if (warning.getName() == WarningChits.RUINS) { // M warning letter
-    		if (mapChit.getName() == SoundChits.FLUTTER_1 && monsterRoll == 1) {
-    			// flying dragons
-    		}
-//    		else if (mapChit.getName() == SoundChits.FLUTTER_6 && monsterRoll == 6) {
-//    			// flying dragons
-//    		}
-    		else if (mapChit.getName() == SoundChits.ROAR_4 && monsterRoll == 4) {
-				// giants
-			}
-    			
-    	}
-    }
-
     /**
      * Sets a player's weapon to the opposite state of what it is currently
      * @param p The player
