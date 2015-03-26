@@ -355,7 +355,7 @@ public class ServerController extends Handler{
     		ArrayList<Path> connections = player.getLocation().getConnections() ;
     		boolean foundHidden = false;
     		for (int i = 0; i < connections.size(); i++) {
-    			if (connections.get(i).getType() == Utility.PathType.SECRET_PASSAGEWAY || connections.get(i).getType() == Utility.PathType.HIDDEN_PATH) {
+    			if (connections.get(i).getType() == Utility.PathType.SECRET_PASSAGEWAY) {
     				player.addDiscovery(connections.get(i));
     				network.send(player.getID(), "You've discovered secret passageways!");
     				foundHidden = true;
