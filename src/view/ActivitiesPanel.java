@@ -60,8 +60,9 @@ public class ActivitiesPanel extends JPanel{
 						arr = Actions.values();
 						break;
 					case SPECIAL:
-						//TODO
-						arr = new Actions[0];
+						arr = new Actions[2];
+						arr[0] = control.model.getPlayer().getPhases().get(phase.getSelectedIndex()).getAction();
+						arr[1] = Actions.PASS;
 						break;
 					case SUNLIGHT:
 						arr = Actions.values();
