@@ -412,4 +412,15 @@ public class Player implements Serializable{
 		}
 		
 	}
+	
+	//returns a list of all the actions associated with the treasures the player has
+	public ArrayList<Actions> getTreasureActions(){
+		ArrayList<Actions> arr = new ArrayList<Actions>();
+		for(int i = 0; i < phases.size(); i++){
+			if(phases.get(i).getType() == PhaseType.TREASURE){
+				arr.add(phases.get(i).getAction());
+			}
+		}
+		return arr;
+	}
 }
