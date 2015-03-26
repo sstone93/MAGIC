@@ -64,6 +64,10 @@ public class Clearing implements Serializable{
     	return this.occupants;
     }
     
+    public ArrayList<Monster> getMonsters() {
+    	return this.monsters;
+    }
+    
     /**
      * This method adds a new connection to this clearing
      * @param toAdd The clearing being added to this one as a connection

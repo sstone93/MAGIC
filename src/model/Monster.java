@@ -180,6 +180,7 @@ public class Monster implements Serializable{
     	Clearing newClearing = this.getLocation().getConnections().get(roll - 1).getDestination(location);
     	this.setLocation(newClearing);
     	newClearing.addMonster(this);
+    	this.blocked = false;
     } 
     
     public void block() {
