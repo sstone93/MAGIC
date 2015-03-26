@@ -15,6 +15,7 @@ import utils.Utility.*;
 import controller.ClientController;
 import model.Board;
 import model.Clearing;
+import model.Monster;
 import model.Player;
 import model.Tile;
 
@@ -42,6 +43,7 @@ public class View extends JFrame {
 	private JLabel [] tileLbls;
 	private JLabel [] garrisonLbls;
 	private JLabel [] charLbls;
+	private ArrayList<JLabel> monsterLbls;
 	
 	private CharacterInfoPanel characterInfoPanel;
 	private ActivitiesPanel playsPanel;
@@ -137,6 +139,7 @@ public class View extends JFrame {
 			tileLbls = new JLabel[b.tiles.size()];
 			garrisonLbls = new JLabel[b.garrisons.size()];
 			charLbls = new JLabel[control.model.getNumPlayers()];
+			monsterLbls = new ArrayList<JLabel>();
 			
 			BufferedImage pic;
 			for (int i = 0; i < b.tiles.size(); i++){
@@ -217,6 +220,12 @@ public class View extends JFrame {
 			
 			charLbls = new JLabel[control.model.getNumPlayers()];
 			
+			for(int i = 0; i < monsterLbls.size(); i++){
+				boardPanel.remove(monsterLbls.get(i));
+			}
+			
+			monsterLbls.clear();
+			
 			BufferedImage pic;
 			
 			int chars = 0;
@@ -224,74 +233,130 @@ public class View extends JFrame {
 			for (int i = 0; i < b.tiles.size(); i++){
 				try {
 					ArrayList<Clearing> clearings = b.tiles.get(i).getClearings();
-					if (clearings != null) {//should never be null
-						//2. Gets all clearings on a given tile, then cycles through all of them, (clearing j)
-						for(int j = 0; j < clearings.size(); j++){
-							ArrayList<Player> occupants = clearings.get(j).getOccupants();
-							if(occupants != null){
-								//3. Gets all Occupants of a clearing, and cycles through them. (occupant k)
-								for(int k = 0; k < occupants.size(); k++){
-									if (occupants.get(k) != null){
-										
-										CharacterName character = occupants.get(k).getCharacter().getName();
-										pic = ImageIO.read(this.getClass().getResource(Utility.getCharacterImage(character)));
-										charLbls[chars] = new JLabel(new ImageIcon(pic));
-										charLbls[chars].setBounds(b.tiles.get(i).getX() + clearings.get(j).xOffset - 25,
-												b.tiles.get(i).getY() + clearings.get(j).yOffset - 25, 50, 50);
-										boardPanel.add(charLbls[chars], new Integer(5), 0);
-										
-										if (!clearingHoverOvers.containsKey(clearings.get(j))){
-											JPanel newPane = new JPanel();
-											newPane.setBounds(b.tiles.get(i).getX() + clearings.get(j).xOffset,
-													b.tiles.get(i).getY() + clearings.get(j).yOffset, 200, 300);
-											newPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-											newPane.setBorder(new LineBorder(Color.GRAY));
-											newPane.setVisible(false);
-											
-											JLabel lbl = new JLabel(clearings.get(j).parent.getName() + " " + clearings.get(j).location, 
-													SwingConstants.CENTER);
-											lbl.setPreferredSize(new Dimension(200, 20));
-											lbl.setAlignmentX(CENTER_ALIGNMENT);
-											lbl.setFont(new Font("Trebuchet MS", Font.BOLD, 18));
-											newPane.add(lbl);
-											
-											boardPanel.add(newPane, new Integer(10), 0);
-											clearingHoverOvers.put(clearings.get(j), newPane);
-										}
-										
-										JPanel panel = new JPanel();
-										panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-										panel.setPreferredSize(new Dimension(90, 75));
-										
-										JLabel img = new JLabel(new ImageIcon(pic));
-										img.setSize(50, 50);
-										panel.add(img);
-										
-										JLabel lbl = new JLabel(character.toString(), SwingConstants.CENTER);
-										lbl.setPreferredSize(new Dimension(90, 15));
-										lbl.setAlignmentY(CENTER_ALIGNMENT);
-										panel.add(lbl);
-										
-										clearingHoverOvers.get(clearings.get(j)).add(panel);
-										
-										final int index = j;
-										
-										charLbls[chars].addMouseListener(new MouseAdapter() {
-											@Override
-											public void mouseEntered(MouseEvent e) {
-												clearingHoverOvers.get(clearings.get(index)).setVisible(true);
-											}
-										});
-										charLbls[chars].addMouseListener(new MouseAdapter() {
-											@Override
-											public void mouseExited(MouseEvent e) {
-												clearingHoverOvers.get(clearings.get(index)).setVisible(false);
-											}
-										});
-										chars++;
-									}
-								}
+					//2. Gets all clearings on a given tile, then cycles through all of them, (clearing j)
+					for(int j = 0; j < clearings.size(); j++){
+						ArrayList<Player> occupants = clearings.get(j).getOccupants();
+						//3. Gets all Occupants of a clearing, and cycles through them. (occupant k)
+						for(int k = 0; k < occupants.size(); k++){
+							CharacterName character = occupants.get(k).getCharacter().getName();
+							pic = ImageIO.read(this.getClass().getResource(Utility.getCharacterImage(character)));
+							charLbls[chars] = new JLabel(new ImageIcon(pic));
+							charLbls[chars].setBounds(b.tiles.get(i).getX() + clearings.get(j).xOffset - 25,
+									b.tiles.get(i).getY() + clearings.get(j).yOffset - 25, 50, 50);
+							boardPanel.add(charLbls[chars], new Integer(5), 0);
+								
+							if (!clearingHoverOvers.containsKey(clearings.get(j))){
+								JPanel newPane = new JPanel();
+								newPane.setBounds(b.tiles.get(i).getX() + clearings.get(j).xOffset,
+										b.tiles.get(i).getY() + clearings.get(j).yOffset, 200, 300);
+								newPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+								newPane.setBorder(new LineBorder(Color.GRAY));
+								newPane.setVisible(false);
+								
+								JLabel lbl = new JLabel(clearings.get(j).parent.getName() + " " + clearings.get(j).location, 
+										SwingConstants.CENTER);
+								lbl.setPreferredSize(new Dimension(200, 20));
+								lbl.setAlignmentX(CENTER_ALIGNMENT);
+								lbl.setFont(new Font("Trebuchet MS", Font.BOLD, 18));
+								newPane.add(lbl);
+								
+								boardPanel.add(newPane, new Integer(10), 0);
+								clearingHoverOvers.put(clearings.get(j), newPane);
 							}
+							
+							JPanel panel = new JPanel();
+							panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+							panel.setPreferredSize(new Dimension(90, 75));
+							
+							JLabel img = new JLabel(new ImageIcon(pic));
+							img.setSize(50, 50);
+							panel.add(img);
+								
+							JLabel lbl = new JLabel(character.toString(), SwingConstants.CENTER);
+							lbl.setPreferredSize(new Dimension(90, 15));
+							lbl.setAlignmentY(CENTER_ALIGNMENT);
+							panel.add(lbl);
+							
+							clearingHoverOvers.get(clearings.get(j)).add(panel);
+							
+							final int index = j;
+							
+							charLbls[chars].addMouseListener(new MouseAdapter() {
+								@Override
+								public void mouseEntered(MouseEvent e) {
+									clearingHoverOvers.get(clearings.get(index)).setVisible(true);
+								}
+							});
+							charLbls[chars].addMouseListener(new MouseAdapter() {
+								@Override
+								public void mouseExited(MouseEvent e) {
+									clearingHoverOvers.get(clearings.get(index)).setVisible(false);
+								}
+							});
+							chars++;
+						}
+					
+						//4.go through the monsters in the clearing, monster k
+						ArrayList<Monster> monsters = clearings.get(j).getMonsters();
+						for(int k = 0; k < monsters.size(); k++){
+							MonsterName monster = monsters.get(k).getName();
+							System.out.println(monster);
+							pic = ImageIO.read(this.getClass().getResource(Utility.getMonsterImage(monster)));
+							JLabel l = new JLabel(new ImageIcon(pic));
+							l.setBounds(b.tiles.get(i).getX() + clearings.get(j).xOffset - 25,
+									b.tiles.get(i).getY() + clearings.get(j).yOffset - 25, 50, 50);
+							boardPanel.add(l, new Integer(5), 0);
+								
+							if (!clearingHoverOvers.containsKey(clearings.get(j))){
+								JPanel newPane = new JPanel();
+								newPane.setBounds(b.tiles.get(i).getX() + clearings.get(j).xOffset,
+										b.tiles.get(i).getY() + clearings.get(j).yOffset, 200, 300);
+								newPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+								newPane.setBorder(new LineBorder(Color.GRAY));
+								newPane.setVisible(false);
+								
+								JLabel lbl = new JLabel(clearings.get(j).parent.getName() + " " + clearings.get(j).location, 
+										SwingConstants.CENTER);
+								lbl.setPreferredSize(new Dimension(200, 20));
+								lbl.setAlignmentX(CENTER_ALIGNMENT);
+								lbl.setFont(new Font("Trebuchet MS", Font.BOLD, 18));
+								newPane.add(lbl);
+								
+								boardPanel.add(newPane, new Integer(10), 0);
+								clearingHoverOvers.put(clearings.get(j), newPane);
+							}
+							
+							JPanel panel = new JPanel();
+							panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+							panel.setPreferredSize(new Dimension(90, 75));
+							
+							JLabel img = new JLabel(new ImageIcon(pic));
+							img.setSize(50, 50);
+							panel.add(img);
+							
+							JLabel lbl = new JLabel(monster.toString(), SwingConstants.CENTER);
+							lbl.setPreferredSize(new Dimension(90, 15));
+							lbl.setAlignmentY(CENTER_ALIGNMENT);
+							panel.add(lbl);
+							
+							clearingHoverOvers.get(clearings.get(j)).add(panel);
+							
+							final int index = j;
+							
+							l.addMouseListener(new MouseAdapter() {
+								@Override
+								public void mouseEntered(MouseEvent e) {
+									clearingHoverOvers.get(clearings.get(index)).setVisible(true);
+								}
+							});
+							l.addMouseListener(new MouseAdapter() {
+								@Override
+								public void mouseExited(MouseEvent e) {
+									clearingHoverOvers.get(clearings.get(index)).setVisible(false);
+								}
+							});
+							
+							monsterLbls.add(l);
 						}
 					}
 				} catch (IOException e){

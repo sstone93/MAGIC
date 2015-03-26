@@ -144,6 +144,18 @@ public class Utility {
 	    	default: return null;
     	}
     }
+    
+    public static String getMonsterImage (MonsterName name){
+    	switch(name){
+    		case GHOST: return "/images/ghost.gif";
+    		case GIANT: return "/images/giant.gif";
+    		case HEAVY_DRAGON: return "/images/dragon.gif";
+    		case HEAVY_TROLL: return "/images/troll.gif";
+    		case VIPER: return "/images/serpent.gif";
+    		case WOLF: return "/images/wolf.gif";
+    		default: return null;
+    	}
+    }
     public enum PhaseType {BASIC, SUNLIGHT, SPECIAL, TREASURE}
 
     public enum LostName {LOST_CTY, LOST_CASTLE};
