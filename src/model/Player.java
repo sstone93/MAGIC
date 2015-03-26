@@ -72,7 +72,15 @@ public class Player implements Serializable{
     	
     	//determines + adds character special phases
     	//TODO CALCULATE SPECIAL PHASES
-    	
+    	if(this.getCharacter().getName() == CharacterName.AMAZON)
+    		phases.add(new Phase(PhaseType.SPECIAL, Actions.MOVE));
+        if(this.getCharacter().getName() == CharacterName.BERSERKER)
+        	phases.add(new Phase(PhaseType.SPECIAL, Actions.REST));
+        if(this.getCharacter().getName() == CharacterName.ELF)
+        	phases.add(new Phase(PhaseType.SPECIAL, Actions.HIDE));
+        if(this.getCharacter().getName() == CharacterName.WHITE_KNIGHT)
+        	phases.add(new Phase(PhaseType.SPECIAL, Actions.REST));
+        
     	//determines + adds treasure special phases
     	//cloak of mists = hide
     	if(this.hasTreasure(SmallTreasureName.CLOAK_OF_MIST.toString()))

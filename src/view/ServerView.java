@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -23,6 +25,8 @@ public class ServerView extends JFrame implements ActionListener{
 	JButton select = new JButton("SELECT");
 	JComboBox rolls = new JComboBox();
 	ServerController control;
+	
+	ChitButtonGrid buttons;
 
 	public ServerView(ServerController c) {
 		
@@ -48,7 +52,7 @@ public class ServerView extends JFrame implements ActionListener{
 		if(!Config.CHEAT_MODE){
 			setSize(new Dimension(100, 140));
 		}else{
-			setSize(new Dimension(500, 130));
+			setSize(new Dimension(1000, 1000));
 		
 			rolls.setBounds(110,0,140,20);
 			add(rolls);
@@ -66,6 +70,23 @@ public class ServerView extends JFrame implements ActionListener{
 
 			select.setBounds(110,30,130,20);
 			add(select);	
+			
+			buttons = new ChitButtonGrid(control); 
+			buttons.setLocation(0, 130);
+			add(buttons);
+			buttons.setVisible(true);
+			
+			
+			//Causes netowrk shutdown by clicking the close button on the window
+			this.addWindowListener( new WindowAdapter() {
+	            @Override
+	            public void windowClosing(WindowEvent we) {
+	                System.out.println("Window Was Closed: Triggering Shutdown");
+	                control.network.stop();
+	                System.exit(0);
+	            }
+	        } );
+			
 			
 		}
 	}

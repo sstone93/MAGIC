@@ -26,8 +26,12 @@ public class Utility {
     		onlyOne = true;
     	else if (player.hasTreasure(SmallTreasureName.DEFT_GLOVES.toString()) && table == "loot")
     		onlyOne = true;
-
+    	else if (player.getCharacter().getName() == CharacterName.ELF && table == "missile")
+    		onlyOne = true;
+    	else if (player.getCharacter().getName() == CharacterName.DWARF &&( table == "hide" || table == "locate"))
+    		onlyOne = true;
     	return onlyOne;
+    	
     }
 
     public static ItemWeight getItemWeight(String weight) {
@@ -142,6 +146,8 @@ public class Utility {
     }
     public enum PhaseType {BASIC, SUNLIGHT, SPECIAL, TREASURE}
 
+    public enum LostName {LOST_CTY, LOST_CASTLE};
+    
     public enum ClearingType {CAVE, MOUNTAIN, WOODS}
 
     public enum TileType {VALLEY, MOUNTAINS, CAVES, WOODS}

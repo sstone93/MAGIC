@@ -293,7 +293,17 @@ public class ServerController extends Handler{
     public void search(Player player, SearchTables table) {
 
 		if (table == Utility.SearchTables.LOCATE) {
-			int roll = rollForTables(player, 2);
+			boolean reduceDie = Utility.checkRollOneDie(player, "locate");
+
+			int roll;
+			if (reduceDie) {
+				network.send(player.getID(), "You have something which allows you to only roll one die! Congrats");
+				roll = rollForTables(player, 1);
+			}
+			else {
+				roll = rollForTables(player, 2);
+			}
+			
 			locate(player, roll);
 		}
 		else if (table == Utility.SearchTables.LOOT) {
@@ -301,7 +311,7 @@ public class ServerController extends Handler{
 
 			int roll;
 			if (reduceDie) {
-				network.send(player.getID(), "You have the deft gloves, which allows you to only roll one die! Congrats");
+				network.send(player.getID(), "You have something, which allows you to only roll one die! Congrats");
 				roll = rollForTables(player, 1);
 			}
 			else {
@@ -1084,9 +1094,30 @@ public class ServerController extends Handler{
 
 	public void hit(Player player, Monster monster) {
 		ItemWeight level;
+		
 		if (player.getActiveWeapon().isRanged() == true) {
-			int roll = roll(6);
+			
+			int roll;
+			boolean oneDie = Utility.checkRollOneDie(player, "missile");
+			if (oneDie) {
+				network.send(player.getID(), "Congrats, you are an elf so you only roll one die!");
+				roll = rollForTables(player, 1);
+			}
+			else {
+				roll = rollForTables(player, 2);
+			}
+
+			if(player.getCharacter().getName() == CharacterName.AMAZON || 
+					player.getCharacter().getName() == CharacterName.BLACK_KNIGHT ||
+							player.getCharacter().getName() == CharacterName.CAPTAIN){
+				if(roll != 1){
+					network.send(player.getID(), "Congrats, the 'AIM' special subtracted one from your roll!");
+					roll --;	//SUBTACT 1 FOR THE "AIM" ABILITY
+				}
+			}
+			
 			if (roll == 1) {
+				
 				level = ItemWeight.HEAVY;
 			}
 			else if (roll == 2) {
@@ -1300,9 +1331,32 @@ public class ServerController extends Handler{
 	}
 
 	public void hit(Player attacker, Player defender) {
+		
 		ItemWeight level;
+		
 		if (attacker.getActiveWeapon().isRanged() == true) {
-			int roll = roll(6);
+			
+			int roll;
+			
+			boolean oneDie = Utility.checkRollOneDie(attacker, "missile");
+			
+			if (oneDie) {
+				network.send(attacker.getID(), "Congrats, something means you only roll one die!");
+				roll = rollForTables(attacker, 1);
+			}
+			else {
+				roll = rollForTables(attacker, 2);
+			}
+			
+			if(attacker.getCharacter().getName() == CharacterName.AMAZON || 
+					attacker.getCharacter().getName() == CharacterName.BLACK_KNIGHT ||
+					attacker.getCharacter().getName() == CharacterName.CAPTAIN){
+				if(roll != 1){
+					network.send(attacker.getID(), "Congrats, the 'AIM' special subtracted one from your roll!");
+					roll --;	//SUBTACT 1 FOR THE "AIM" ABILITY
+				}
+			}
+			
 			if (roll == 1) {
 				level = ItemWeight.HEAVY;
 			}

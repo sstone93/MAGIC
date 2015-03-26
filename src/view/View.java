@@ -33,6 +33,7 @@ public class View extends JFrame {
 	private JPanel contentPane;
 	private JLayeredPane boardPanel;
 	private JScrollPane scrollPanel;
+	//private JScrollPane upgradedText;
 	private JTextArea textDisplay;
 	private JPanel	blankPanel;
 
@@ -81,10 +82,14 @@ public class View extends JFrame {
 		
 		//adds the text box
 		textDisplay = new JTextArea();
+		//upgradedText =  new JScrollPane (textDisplay, 
+				  // JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		textDisplay.setBounds(0, 500, 750, 192);
 		textDisplay.setLineWrap(true);
+		//contentPane.add(upgradedText);
 		contentPane.add(textDisplay);
 		textDisplay.setEditable(false);
+		//upgradedText.setVisible(true);
 		
 		//adds the scroll bars
 		scrollPanel = new JScrollPane();
