@@ -243,6 +243,7 @@ public class ServerController extends Handler{
 
 		if (roll != 6) {
 			player.setHidden(true);
+			player.setBlocked(false);
 			network.broadCast( player.getCharacter().getName() + " is hidden!");
 		}
 		else {
