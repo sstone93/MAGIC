@@ -528,14 +528,19 @@ public class ServerController extends Handler{
     		board.placeMonstersAtStartingLocation(monsterName, player.getLocation());
     		network.broadCast("player has summoned " + monsterName + "!"  );
     	}
-
     	System.out.println(player.getLocation().getMonsters());
     	ArrayList<Monster> monstersInClearing = player.getLocation().getMonsters();
-    	for (int i = 0; i < monstersInClearing.size(); i++) {
-    		System.out.println(monstersInClearing.get(i).getName() + " in clearing!!!!");
-    	}
+    	if (!player.isBlocked() && !player.isHidden())
+	    	for (int i = 0; i < monstersInClearing.size(); i++) {
+	    		if (!monstersInClearing.get(i).isBlocked()) {
+	    			monstersInClearing.get(i).setBlocked(true);
+	    			player.setBlocked(true);
+	    			network.send(player.getID(), "You've been blocked by " + monstersInClearing.get(i).getName());
+	    			break;
+	    	}
     }
-
+    }
+    
     private void printBoard() {
     	ArrayList<Tile> tiles = board.tiles;
     	for (int i = 0; i < tiles.size(); i++) {
