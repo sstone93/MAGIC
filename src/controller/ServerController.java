@@ -111,7 +111,7 @@ public class ServerController extends Handler{
 					if(p.isBlocked() == false){
 						//do it
 
-						//if it is a move, then dont reset last move
+						//if it is a move, then don't reset last move
 						if(((Phase) m.getData().get(0)).getAction() == Actions.MOVE){
 							handleAction(p,(Phase)m.getData().get(0));
 						}else{
@@ -229,7 +229,7 @@ public class ServerController extends Handler{
 	 * Sets a player's state as hidden
 	 * @param player being hidden
 	 */
-	public void hide(Player player) { // assume it always works
+	public void hide(Player player) {
 
 		int roll;
 		boolean oneDie = Utility.checkRollOneDie(player, "hide");
@@ -337,7 +337,7 @@ public class ServerController extends Handler{
 
     // rolls dice for the player
     // returns the lowest of the two rolls if the player has to roll 2 die
-    // otherwise returns the first role done
+    // otherwise returns the first roll done
     public int rollForTables(Player player, int numberOfDie) {
     	int roll = roll(6);
     	if (numberOfDie == 2) {
@@ -400,7 +400,7 @@ public class ServerController extends Handler{
     }
 
     // TODO: I think this is correct behaviour, not entirely sure
-    // TODO; needs to take into account other things then just the monster roll
+    // TODO; needs to take into account other things than just the monster roll
     private void discoverMonstersWithSiteChits(Player player, MapChit mapChit) {
     	System.out.println("!!! map chit name: " + mapChit.getName());
     	SoundChits name = mapChit.getName();
@@ -550,10 +550,9 @@ public class ServerController extends Handler{
 
         //TODO face up map chits (except lost city and lost castle) are turned face down
 
-        // reset their fatigue and order
+        // reset their fatigue
         for (int i = 0; i < playerCount; i++) {
         	players.get(i).setFatigue(0);
-        	players.get(i).setOrder(0);
         	players.get(i).setGoneInCave(false);
         	players.get(i).setBlocked(false);
         }
@@ -883,11 +882,6 @@ public class ServerController extends Handler{
 
         startActivitiesHandler();
 
-        if (playerCount == 1) {
-        	network.broadCast("There is only one player alive");
-        	endGame();
-        }
-
         // allowMonstersToProwl();
 
         collectCombat(); //2 players, 1 attacker 1 defender
@@ -920,17 +914,6 @@ public class ServerController extends Handler{
         } else {
         	endGame();
         }
-    }
-
-    /**
-     * Randomly orders the players
-     */
-    public void orderPlayers(){
-    	Collections.shuffle(players);
-    	for (int j = 0; j < playerCount; j++) {
-    		players.get(j).order = j;
-    		network.broadCast(players.get(j).getCharacter().getName() + " is in position # " + (players.get(j).getOrder() + 1));
-    	}
     }
 
     public void encounter(Player player, Monster monster) {

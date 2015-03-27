@@ -23,7 +23,6 @@ public class Player implements Serializable{
     int fame          = 0;
     int notoriety     = 0;
     int finalScore    = 0;
-    public int order; // in which order does the player play
     
     boolean hidden    = false;
     boolean dead      = false;
@@ -36,7 +35,6 @@ public class Player implements Serializable{
 
     Character character;
     CombatMoves moves;
-    //Player target;
     Clearing location;
     Clearing lastMove;
     
@@ -221,14 +219,6 @@ public class Player implements Serializable{
         }
         this.gold -= gold;
         return true;
-    }
-
-    public void setOrder(int order) {
-        this.order = order;
-    }
-
-    public int getOrder() {
-        return order;
     }
 
     public boolean isHidden() {
