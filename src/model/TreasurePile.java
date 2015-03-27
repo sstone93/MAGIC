@@ -51,7 +51,7 @@ public class TreasurePile extends MapChit implements Serializable{
 			}
 		}
 		System.out.println("			Contains Treasures: "+t);
-		a = "";
+		String a = "";
 		for(int i=0;i<this.armour.size();i++){					//prints armour it contains
 			if(armour.get(i) != null){
 				t+=armour.get(i)+", ";
@@ -59,7 +59,7 @@ public class TreasurePile extends MapChit implements Serializable{
 			}
 		}
 		System.out.println("			Contains Armour: "+a);
-		w = "";
+		String w = "";
 		for(int i=0;i<this.weapons.size();i++){					//prints weapons it contains
 			if(weapons.get(i) != null){
 				t+=weapons.get(i)+", ";
