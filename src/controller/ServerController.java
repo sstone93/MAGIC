@@ -307,7 +307,7 @@ public class ServerController extends Handler{
 			else {
 				roll = rollForTables(player, 2);
 			}
-			
+
 			locate(player, roll);
 		}
 		else if (table == Utility.SearchTables.LOOT) {
@@ -399,51 +399,60 @@ public class ServerController extends Handler{
 
     }
 
-    // TODO: I think this is correct behaviour, not entirely sure
-    // TODO; needs to take into account other things than just the monster roll
     private void discoverMonstersWithSiteChits(Player player, MapChit mapChit) {
+    	// of note: map chits and warning chits can only summon monsters once a day 
     	System.out.println("!!! map chit name: " + mapChit.getName());
     	SoundChits name = mapChit.getName();
     	WarningChit warningChit = player.getLocation().parent.getWarningChit();
     	TileType type = player.getLocation().parent.getType();
-    	
+
     	System.out.println("warning chit name: " + warningChit.getName());
     	
+    	System.out.println("tile type: " + type);
+
     	MonsterName monsterName = null;
-    	
+
     	if (type == TileType.WOODS) {
-    		if (warningChit != null) {
+    		if (warningChit != null && !warningChit.hasSummoned()) {
     			if (warningChit.getName() == WarningChits.DANK) {
     				monsterName = MonsterName.VIPER;
+    				warningChit.setSummoned(true);
     			}
     			else if (warningChit.getName() == WarningChits.RUINS) {
     				monsterName = MonsterName.WOLF;
+    				warningChit.setSummoned(true);
     			}
     		}
     	}
     	else if (type == TileType.MOUNTAINS) {
 	    	if (monsterRoll == 1) {
-	    		if (mapChit.getName() == SoundChits.SLITHER_3 || mapChit.getName() == SoundChits.SLITHER_6) {
+	    		if ((mapChit.getName() == SoundChits.SLITHER_3 || mapChit.getName() == SoundChits.SLITHER_6) && !mapChit.hasSummoned()) {
 	    			monsterName = MonsterName.HEAVY_DRAGON;
+	    			mapChit.setSummoned(true);
 	    		}
-	    		else if (mapChit.getName() == SoundChits.FLUTTER_1 || mapChit.getName() == SoundChits.FLUTTER_2) {
+	    		else if ((mapChit.getName() == SoundChits.FLUTTER_1 || mapChit.getName() == SoundChits.FLUTTER_2) && !mapChit.hasSummoned()) {
 	    			monsterName = MonsterName.HEAVY_DRAGON;
+	    			mapChit.setSummoned(true);
 	    		}
-	    		else if (warningChit.getName() == WarningChits.SMOKE) {
+	    		else if (warningChit.getName() == WarningChits.SMOKE && !warningChit.hasSummoned() ) {
 	    			monsterName = MonsterName.HEAVY_DRAGON;
+	    			warningChit.setSummoned(true);
 	    		}
 	    	}
 	    	else if (monsterRoll == 2) {
-	    		if (mapChit.getName() == SoundChits.SLITHER_3 || mapChit.getName() == SoundChits.SLITHER_6) {
+	    		if ((mapChit.getName() == SoundChits.SLITHER_3 || mapChit.getName() == SoundChits.SLITHER_6) && !mapChit.hasSummoned()) {
 	    			monsterName = MonsterName.VIPER;
+	    			mapChit.setSummoned(true);
 	    		}
 	    	}
 	    	else if (monsterRoll == 4) {
-	    		if (warningChit.getName() == WarningChits.BONES || warningChit.getName() == WarningChits.STINK   ) {
+	    		if ((warningChit.getName() == WarningChits.BONES || warningChit.getName() == WarningChits.STINK ) && !warningChit.hasSummoned()) {
 	    			monsterName = MonsterName.GIANT;
+	    			warningChit.setSummoned(true);
 	    		}
-	    		 else if (mapChit.getName() == SoundChits.ROAR_4 || mapChit.getName() == SoundChits.ROAR_6) {
+	    		 else if ((mapChit.getName() == SoundChits.ROAR_4 || mapChit.getName() == SoundChits.ROAR_6) && !mapChit.hasSummoned()) {
 	    			monsterName = MonsterName.HEAVY_TROLL;
+	    			mapChit.setSummoned(true);
 	    		}
 	    	}
 	    	else if (monsterRoll == 5) {
@@ -455,45 +464,56 @@ public class ServerController extends Handler{
     	}
     	else if (type == TileType.CAVES) {
 	    	if (monsterRoll == 1) {
-	    		if (mapChit.getName() == SoundChits.SLITHER_3 || mapChit.getName() == SoundChits.SLITHER_6) {
+	    		if ((mapChit.getName() == SoundChits.SLITHER_3 || mapChit.getName() == SoundChits.SLITHER_6) && !mapChit.hasSummoned()) {
 	    			monsterName = MonsterName.HEAVY_DRAGON;
+	    			mapChit.setSummoned(true);
 	    		}
-	    		else if (mapChit.getName() == SoundChits.ROAR_4 || mapChit.getName() == SoundChits.ROAR_6) {
+	    		else if ((mapChit.getName() == SoundChits.ROAR_4 || mapChit.getName() == SoundChits.ROAR_6) && !mapChit.hasSummoned()) {
 	    			monsterName = MonsterName.HEAVY_DRAGON;
+	    			mapChit.setSummoned(true);
 	    		}
-	    		else if (mapChit.getName() == SoundChits.FLUTTER_1 || mapChit.getName() == SoundChits.FLUTTER_2) {
+	    		else if ((mapChit.getName() == SoundChits.FLUTTER_1 || mapChit.getName() == SoundChits.FLUTTER_2) && !mapChit.hasSummoned()) {
 	    			monsterName = MonsterName.HEAVY_DRAGON;
+	    			mapChit.setSummoned(true);
 	    		}
-	    		else if (warningChit.getName() == WarningChits.SMOKE) {
+	    		else if (warningChit.getName() == WarningChits.SMOKE && !warningChit.hasSummoned()) {
 	    			monsterName = MonsterName.HEAVY_DRAGON;
+	    			warningChit.setSummoned(true);
 	    		}
 	    	}
 	    	else if (monsterRoll == 2) {
-	    		if (mapChit.getName() == SoundChits.SLITHER_3 || mapChit.getName() == SoundChits.SLITHER_6) {
+	    		if ((mapChit.getName() == SoundChits.SLITHER_3 || mapChit.getName() == SoundChits.SLITHER_6) && !mapChit.hasSummoned()) {
 	    			monsterName = MonsterName.VIPER;
+	    			mapChit.setSummoned(true);
 	    		}
-	    		else if (warningChit.getName() == WarningChits.DANK) {
+	    		else if (warningChit.getName() == WarningChits.DANK && !warningChit.hasSummoned()) {
 	    			monsterName = MonsterName.VIPER;
+	    			warningChit.setSummoned(true);
 	    		}
 	    	}
 	    	else if (monsterRoll == 3) {
-	    		if (warningChit.getName() == WarningChits.RUINS ) {
+	    		if (warningChit.getName() == WarningChits.RUINS && !warningChit.hasSummoned() ) {
 	    			// goblins, but replaced with trolls
 	    			monsterName = MonsterName.HEAVY_TROLL;
+	    			warningChit.setSummoned(true);
 	    		}
-	    		else if (mapChit.getName() == SoundChits.HOWL_4 || mapChit.getName() == SoundChits.HOWL_5 ) {
+	    		else if ((mapChit.getName() == SoundChits.HOWL_4 || mapChit.getName() == SoundChits.HOWL_5) && !mapChit.hasSummoned() ) {
 	    			monsterName = MonsterName.HEAVY_TROLL; // replaced goblins with trolls
+	    			mapChit.setSummoned(true);
 	    		}
-	    		else if (mapChit.getName() == SoundChits.PATTER_2 || mapChit.getName() == SoundChits.PATTER_5 ) {
+	    		else if ((mapChit.getName() == SoundChits.PATTER_2 || mapChit.getName() == SoundChits.PATTER_5) && !mapChit.hasSummoned() ) {
 	    			monsterName = MonsterName.HEAVY_TROLL; // replaced goblins with trolls
+	    			mapChit.setSummoned(true);
 	    		}
 	    	}
 	    	else if (monsterRoll == 4) {
-	    		if (warningChit.getName() == WarningChits.BONES || warningChit.getName() == WarningChits.STINK   ) {
+	    		if ((warningChit.getName() == WarningChits.BONES || warningChit.getName() == WarningChits.STINK ) && !warningChit.hasSummoned()) {
 	    			monsterName = MonsterName.HEAVY_TROLL;
+	    			warningChit.setSummoned(true);
 	    		}
-	    		 else if (mapChit.getName() == SoundChits.ROAR_4 || mapChit.getName() == SoundChits.ROAR_6) {
+	    		 else if ((mapChit.getName() == SoundChits.ROAR_4 || mapChit.getName() == SoundChits.ROAR_6) && !mapChit.hasSummoned()) {
 	    			monsterName = MonsterName.HEAVY_TROLL;
+	    			mapChit.setSummoned(true);
 	    		}
 	    	}
 	    	else if (monsterRoll == 5) {
@@ -503,23 +523,24 @@ public class ServerController extends Handler{
 	    		// bats
 	    	}
     	}
-    	System.out.println("mosnter name: " + monsterName);
+    	System.out.println("monster name: " + monsterName);
     	if (monsterName != null) {
     		board.placeMonstersAtStartingLocation(monsterName, player.getLocation());
+    		network.broadCast("player has summoned " + monsterName + "!"  );
     	}
-    	
+
     	System.out.println(player.getLocation().getMonsters());
     	ArrayList<Monster> monstersInClearing = player.getLocation().getMonsters();
     	for (int i = 0; i < monstersInClearing.size(); i++) {
     		System.out.println(monstersInClearing.get(i).getName() + " in clearing!!!!");
     	}
     }
-    
+
     private void printBoard() {
     	ArrayList<Tile> tiles = board.tiles;
     	for (int i = 0; i < tiles.size(); i++) {
     		Tile tile = tiles.get(i);
-    		System.out.println("tile : " + tile.getName() + " with warning chit: " + tile.getWarningChit() + " map chit: " + tile.getMapChit());
+    		System.out.println("tile and type : " + tile.getName() + ", " + tile.getType() + " with warning chit: " + tile.getWarningChit() + " map chit: " + tile.getMapChit());
     	}
     }
 
@@ -578,6 +599,7 @@ public class ServerController extends Handler{
         for (int i = 0; i < board.monsters.size(); i++) {
         	Monster currentMonster = board.monsters.get(i);
         	currentMonster.setLocation(currentMonster.getStartingLocation());
+        	// TODO: add monsters to their starting location (if it's not null)
         	currentMonster.resetDead();
         	currentMonster.setProwling(false);
         	currentMonster.setBlocked(false);
@@ -772,6 +794,13 @@ public class ServerController extends Handler{
 			// Auto-generated catch block
 			e.printStackTrace();
 		}*/
+    }
+
+    // gets the player that just finished
+    private void getFinishedPlayer() {
+    	for (int i = 0; i < players.size(); i++) {
+    		// check if they're done
+    	}
     }
 
     public void collectCombat(){
@@ -1233,9 +1262,9 @@ public class ServerController extends Handler{
 
 	public void hit(Player player, Monster monster) {
 		ItemWeight level;
-		
+
 		if (player.getActiveWeapon().isRanged() == true) {
-			
+
 			int roll;
 			boolean oneDie = Utility.checkRollOneDie(player, "missile");
 			if (oneDie) {
@@ -1246,7 +1275,7 @@ public class ServerController extends Handler{
 				roll = rollForTables(player, 2);
 			}
 
-			if(player.getCharacter().getName() == CharacterName.AMAZON || 
+			if(player.getCharacter().getName() == CharacterName.AMAZON ||
 					player.getCharacter().getName() == CharacterName.BLACK_KNIGHT ||
 							player.getCharacter().getName() == CharacterName.CAPTAIN){
 				if(roll != 1){
@@ -1254,9 +1283,9 @@ public class ServerController extends Handler{
 					roll --;	//SUBTACT 1 FOR THE "AIM" ABILITY
 				}
 			}
-			
+
 			if (roll == 1) {
-				
+
 				level = ItemWeight.HEAVY;
 			}
 			else if (roll == 2) {
@@ -1470,15 +1499,15 @@ public class ServerController extends Handler{
 	}
 
 	public void hit(Player attacker, Player defender) {
-		
+
 		ItemWeight level;
-		
+
 		if (attacker.getActiveWeapon().isRanged() == true) {
-			
+
 			int roll;
-			
+
 			boolean oneDie = Utility.checkRollOneDie(attacker, "missile");
-			
+
 			if (oneDie) {
 				network.send(attacker.getID(), "Congrats, something means you only roll one die!");
 				roll = rollForTables(attacker, 1);
@@ -1486,8 +1515,8 @@ public class ServerController extends Handler{
 			else {
 				roll = rollForTables(attacker, 2);
 			}
-			
-			if(attacker.getCharacter().getName() == CharacterName.AMAZON || 
+
+			if(attacker.getCharacter().getName() == CharacterName.AMAZON ||
 					attacker.getCharacter().getName() == CharacterName.BLACK_KNIGHT ||
 					attacker.getCharacter().getName() == CharacterName.CAPTAIN){
 				if(roll != 1){
@@ -1495,7 +1524,7 @@ public class ServerController extends Handler{
 					roll --;	//SUBTACT 1 FOR THE "AIM" ABILITY
 				}
 			}
-			
+
 			if (roll == 1) {
 				level = ItemWeight.HEAVY;
 			}
