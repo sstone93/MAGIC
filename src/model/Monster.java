@@ -75,6 +75,22 @@ public class Monster implements Serializable{
 			this.attackLength = 3;
 			this.attackSpeed  = 4;
 		}
+		else if (name == MonsterName.HEAVY_SPIDER) {
+			this.weight       = ItemWeight.MEDIUM;
+			this.notoriety    = 3;
+			this.fame         = 3;
+			this.armoured     = false; 
+			this.attackLength = 4;
+			this.attackSpeed  = 3; 
+		}
+		else if (name == MonsterName.GIANT_BAT) {
+			this.weight       = ItemWeight.HEAVY;
+			this.notoriety    = 3;
+			this.fame         = 3;
+			this.armoured     = false; 
+			this.attackLength = 3;
+			this.attackSpeed  = 2; 
+		}
 		else {
 			this.weight       = ItemWeight.NEGLIGIBLE;
 			this.notoriety    = 0;
