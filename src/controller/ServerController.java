@@ -676,13 +676,27 @@ public class ServerController extends Handler{
             player.removeWeaponsWithHigherWeight(player.getCharacter().getWeight());
 
             int basicScore     = 0;
-            int fameScore      = players.get(i).getFame() / 10;
-            int notorietyScore = players.get(i).getNotoriety() / 20;
-            int goldScore      = players.get(i).getGold() / 30;
+            int fameScore      = players.get(i).getFame();
+            int notorietyScore = players.get(i).getNotoriety();
+            int goldScore      = players.get(i).getGold();
+            
+            for (int j = 0; j < players.get(i).getTreasures().size(); j++) {
+            	if (players.get(i).getTreasures().get(j) != null) {
+            		notorietyScore += players.get(i).getTreasures().get(j).getNotoriety();
+            		fameScore += players.get(i).getTreasures().get(j).getFame();
+            		goldScore += players.get(i).getTreasures().get(j).getGold();
+            	}
+            }
 
+            fameScore = fameScore / 10;
+            notorietyScore = notorietyScore / 20;
+            goldScore = goldScore / 30;
+            
             basicScore = fameScore + notorietyScore + goldScore;
             player.setFinalScore(basicScore);
 
+            network.send(player.getID(), player.getFinalScore() + " is your score!");
+            
             if (basicScore > winner.getFinalScore()) {
                 winner = player;
             }
@@ -847,7 +861,7 @@ public class ServerController extends Handler{
     	for (int i = 0; i < players.size(); i ++) {
     		ArrayList<MapChit> mapChit = players.get(i).getLocation().parent.getMapChit();
     		//TODO: take out map chit parameter 
-	    	discoverMonstersWithSiteChits(players.get(i), mapChit); 
+	    	//discoverMonstersWithSiteChits(players.get(i), mapChit); 
 	    	
 	    	ArrayList<Clearing> clearings = players.get(i).getLocation().parent.getClearings();
 	    	
