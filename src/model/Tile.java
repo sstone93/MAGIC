@@ -20,9 +20,8 @@ public class Tile implements Serializable{
 	private TileName name;
 	private int x;
 	private int y;
-	private MapChit sound;
+	private ArrayList<MapChit> sound = new ArrayList<MapChit>();
 	private WarningChit warning;
-	private LostPlace lost;
 	private TileType type;
 	
 	public boolean equals(Tile t){
@@ -44,14 +43,6 @@ public class Tile implements Serializable{
 		setUpTile();			//this will set up the clearings on this tile.
 	}
 	
-	public void setLostPlace(LostPlace l){
-		this.lost = l;
-	}
-	
-	public LostPlace getLostPlace(){
-		return this.lost;
-	}
-	
 	public TileType getType(){
 		return this.type;
 	}
@@ -64,12 +55,12 @@ public class Tile implements Serializable{
 		return this.warning;
 	}
 	
-	public void setMapChit(MapChit s){
-		this.sound = s;
+	public ArrayList<MapChit> getMapChit(){
+		return this.sound;
 	}
 	
-	public MapChit getMapChit(){
-		return this.sound;
+	public void addMapChit(MapChit m){
+		sound.add(m);
 	}
 	
 	/**
@@ -371,9 +362,6 @@ public class Tile implements Serializable{
 		}
 		if(sound != null){
 			System.out.println("	has MapChit: " + sound.toString());
-		}
-		if(lost != null){
-			System.out.println("	has LostPlace: " + lost.toString());	
 		}
 		for(int i=0;i<clearings.size();i++){			//iterates over clearings on tile
 			System.out.println("	"+clearings.get(i));

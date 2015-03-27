@@ -275,27 +275,25 @@ public class Board implements Serializable{
 	
 	public void setUpMapChits(){
 		
-		//8 orange site chits
-		//10 red sound chits
 		ArrayList<MapChit> mc = new ArrayList<MapChit>();
+	
+		//8 orange site chits
+		mc.add(new SiteChit(TreasureLocations.ALTAR, 1));
+		mc.add(new SiteChit(TreasureLocations.CAIRNS, 5));
+		mc.add(new SiteChit(TreasureLocations.HOARD, 6));
+		mc.add(new SiteChit(TreasureLocations.LAIR, 3));
+		mc.add(new SiteChit(TreasureLocations.POOL, 6));
+		mc.add(new SiteChit(TreasureLocations.SHRINE, 4));
+		mc.add(new SiteChit(TreasureLocations.STATUE, 2));
+		mc.add(new SiteChit(TreasureLocations.VAULT, 3));
+		
+		//10 red sound chits
 		for (SoundChits n : SoundChits.values()) {
 			  mc.add(new MapChit(n));
 		}
 
-		mc.add(new TreasureSite(TreasureLocations.ALTAR, createTreasureArray(0,4)));
-		mc.add(new TreasureSite(TreasureLocations.CAIRNS, createTreasureArray(6,1)));
-		mc.add(new TreasureSite(TreasureLocations.HOARD, createTreasureArray(4,5)));
-		mc.add(new TreasureSite(TreasureLocations.LAIR, createTreasureArray(4,3)));
-		mc.add(new TreasureSite(TreasureLocations.POOL, createTreasureArray(6,3)));
-		mc.add(new TreasureSite(TreasureLocations.SHRINE, createTreasureArray(2,2)));
-		mc.add(new TreasureSite(TreasureLocations.STATUE, createTreasureArray(2,1)));
-		mc.add(new TreasureSite(TreasureLocations.VAULT, createTreasureArray(0,5)));
-
-		//dwellings (company, woodfolk, patrol, lancers, bashkars)
-		//all 5 take 2 small treasures
-
-		//visitors
-		//scholar = 3 small
+		//mix the sound and treasure site chits
+		Collections.shuffle(mc);
 
 		//garrisons (chapel, house, inn, guard(house)
 		//all 4 take 2 small treasures each
@@ -303,10 +301,7 @@ public class Board implements Serializable{
 		garrisons.get(1).setTreasures(createTreasureArray(2,0));
 		garrisons.get(2).setTreasures(createTreasureArray(2,0));
 		garrisons.get(3).setTreasures(createTreasureArray(2,0));
-
-		//mix the sound and treasure site chits
-		Collections.shuffle(mc);
-
+		
 		//5 given to the lost city
 		ArrayList<MapChit> c1 = new ArrayList<MapChit>();
 		mc.get(0); mc.get(1); mc.get(2); mc.get(3); mc.get(4);
@@ -330,7 +325,7 @@ public class Board implements Serializable{
 		//1 placed in each caves tile
 
 		//puts the chits into the caves tiles
-		placeChits(caves, 5,6,10,15,16);
+		placeChits(caves, getAllTiles(TileType.CAVES));
 
 		//add lost castle to the other group
 		ArrayList<Object> mountains = new ArrayList<Object>();
@@ -343,9 +338,23 @@ public class Board implements Serializable{
 		//put one into each mountain tile
 
 		//puts the chits into the caves tiles
-		placeChits(mountains, 0,2,3,9,14);
+		placeChits(mountains, getAllTiles(TileType.MOUNTAINS));
 	}
 	
+	public int[] getAllTiles(TileType t){
+		int[] indices= new int[5];
+		int next =0;
+		
+		for(int i=0; i<tiles.size();i++){
+			if(tiles.get(i).getType() == t){
+				indices[next] = i;
+				next++;
+			}
+		}
+		
+		return indices;
+		
+	}
 	
 	// adds monsters to the board
 	public void initializeMonsters() {
@@ -475,16 +484,58 @@ public class Board implements Serializable{
 		}
 	}
 
-	public void placeChits(ArrayList<Object> a,int p1,int p2,int p3, int p4, int p5){
-
-		int[] temps = {p1, p2, p3, p4, p5};
-		for(int i=0; i<5; i++){
-			if(a.get(0) instanceof LostPlace){
-				tiles.get(temps[i]).setLostPlace((LostPlace) a.get(0));
-			}else{
-				tiles.get(temps[i]).setMapChit((MapChit)a.get(0));
+	public void placeChits(ArrayList<Object> a, int[] temps){
+		for(int i=0; i<temps.length; i++){
+			if(a.get(0) instanceof LostPlace){//lost
+				//System.out.println("CITY/SADAS");
+				for(MapChit m : ((LostPlace) a.get(0)).getChits()){
+					System.out.println("Asda");
+					placeMapChit(m, temps[i]);
+				}
+			}else{//sounds
+				placeMapChit((MapChit)a.get(0), temps[i]);
 			}
 			a.remove(0);
+		}
+		
+	}
+	
+	private void placeMapChit(MapChit m, int i){
+		if(m instanceof SiteChit){//sites
+			tiles.get(i).addMapChit(m);
+			System.out.println("placed "+ ((SiteChit)m).getLocation()+" on "+tiles.get(i).getName()+" "+((SiteChit)m).getNumber());
+			switch(((SiteChit)m).getLocation()){
+			
+			case ALTAR:
+				tiles.get(i).getClearing(((SiteChit)m).getNumber()).setSite(new TreasureSite(TreasureLocations.ALTAR, createTreasureArray(0,4)));
+				break;
+			case CAIRNS:
+				tiles.get(i).getClearing(((SiteChit)m).getNumber()).setSite(new TreasureSite(TreasureLocations.CAIRNS, createTreasureArray(6,1)));
+				break;
+			case HOARD:
+				tiles.get(i).getClearing(((SiteChit)m).getNumber()).setSite(new TreasureSite(TreasureLocations.HOARD, createTreasureArray(4,5)));
+				break;
+			case LAIR:
+				tiles.get(i).getClearing(((SiteChit)m).getNumber()).setSite(new TreasureSite(TreasureLocations.LAIR, createTreasureArray(4,3)));
+				break;
+			case POOL:
+				tiles.get(i).getClearing(((SiteChit)m).getNumber()).setSite(new TreasureSite(TreasureLocations.POOL, createTreasureArray(6,3)));
+				break;
+			case SHRINE:
+				tiles.get(i).getClearing(((SiteChit)m).getNumber()).setSite(new TreasureSite(TreasureLocations.SHRINE, createTreasureArray(2,2)));
+				break;
+			case STATUE:
+				tiles.get(i).getClearing(((SiteChit)m).getNumber()).setSite(new TreasureSite(TreasureLocations.STATUE, createTreasureArray(2,1)));
+				break;
+			case VAULT:
+				tiles.get(i).getClearing(((SiteChit)m).getNumber()).setSite(new TreasureSite(TreasureLocations.VAULT, createTreasureArray(0,5)));
+				break;
+			default:
+				break;
+			}
+			//System.out.println("placed "+ ((SiteChit)m).getLocation()+" on "+tiles.get(i).getName()+" "+((SiteChit)m).getNumber());
+		}else{//sounds
+			tiles.get(i).addMapChit(m);
 		}
 	}
 	
@@ -517,8 +568,8 @@ public class Board implements Serializable{
 					p.get(i).setLocation(garrisons.get(j).getLocation());
 					garrisons.get(j).getLocation().addOccupant(p.get(i));
 					//TODO ADDING TREASURES TO PLAYERS OFF THE START
-					p.get(i).addTreasure(new SmallTreasure(SmallTreasureName.LEAGUE_BOOTS_7));
-					p.get(i).addTreasure(new SmallTreasure(SmallTreasureName.CLOAK_OF_MIST));
+					//p.get(i).addTreasure(new SmallTreasure(SmallTreasureName.LEAGUE_BOOTS_7));
+					//p.get(i).addTreasure(new SmallTreasure(SmallTreasureName.CLOAK_OF_MIST));
 				}
 			}
 		}

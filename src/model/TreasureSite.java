@@ -2,30 +2,34 @@ package model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-
-import utils.Utility.SoundChits;
 import utils.Utility.TreasureLocations;
 
-public class TreasureSite extends MapChit implements Serializable{
+public class TreasureSite implements Serializable{
 	
 	private static final long serialVersionUID = -3725905807462747523L;
-	private TreasureLocations name;
+	public TreasureLocations name;
 	private ArrayList<MapChit> sounds = new ArrayList<MapChit>();
 	private ArrayList<Treasure> treasures = new ArrayList<Treasure>();
 	
 	public TreasureSite(TreasureLocations name){
-		super(SoundChits.FLUTTER_1);
 		this.name = name;
 	}
 	
 	public TreasureSite(TreasureLocations name, ArrayList<Treasure> t){
-		super(SoundChits.FLUTTER_1);
 		this.name = name;
 		this.treasures = t;
 	}
 	
 	public void setTreasures(ArrayList<Treasure> t){
 		this.treasures = t;
+	}
+	
+	public ArrayList<Treasure> getTreasures(){
+		return treasures;
+	}
+	
+	public void takeTreasure(Treasure t){
+		this.treasures.remove(t);
 	}
 
 	public String toString(){

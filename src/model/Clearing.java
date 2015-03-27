@@ -14,6 +14,8 @@ public class Clearing implements Serializable{
     ClearingType type;
     public int xOffset;
     public int yOffset;
+    TreasureSite site = null;
+    
     ArrayList<Path> connections = new ArrayList<Path>();
     ArrayList<Treasure> treasures = new ArrayList<Treasure>();
     ArrayList<Player> occupants = new ArrayList<Player>();
@@ -37,6 +39,14 @@ public class Clearing implements Serializable{
     
     public void addMonster(Monster m) {
     	monsters.add(m);
+    }
+    
+    public TreasureSite getSite(){
+    	return this.site;
+    }
+    
+    public void setSite(TreasureSite s){
+    	site = s;
     }
     
     /**

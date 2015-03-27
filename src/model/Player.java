@@ -169,6 +169,18 @@ public class Player implements Serializable{
     		return false;
     	}
     }
+    
+    public boolean knowsSite(TreasureSite s){
+    	boolean state = false;
+    	for(Object o : discoveries){
+    		if(o instanceof SiteChit){
+    			if(((SiteChit) o).equals(s.name)){
+    				state = true;
+    			}
+    		}
+    	}
+    	return state;
+    }
 
     public void unAlertWeapons(){
 		for (int j = 0; j < weapons.size(); j++ ) {

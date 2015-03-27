@@ -12,5 +12,7 @@ public class LostPlace implements Serializable{
 		this.chits = ch;
 	}
 	
-	
+	public ArrayList<MapChit> getChits(){
+		return this.chits;
+	}
 }
