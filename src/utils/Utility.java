@@ -156,6 +156,79 @@ public class Utility {
     		default: return null;
     	}
     }
+    
+    public static String getSoundImage(SoundChits name){
+    	switch(name){
+    		case HOWL_4: return "/images/howl4.jpg";
+    		case HOWL_5: return "/images/howl5.jpg";
+    		case FLUTTER_1: return "/images/flutter1.jpg";
+    		case FLUTTER_2: return "/images/flutter2.jpg";
+    		case PATTER_2: return "/images/patter2.jpg";
+    		case PATTER_5: return "/images/patter5.jpg";
+    		case ROAR_4: return "/images/roar4.jpg";
+    		case ROAR_6: return "images/roar6.jpg";
+    		case SLITHER_3: return "images/slither3.jpg";
+    		case SLITHER_6: return "images/slither6.jpg";
+    		default: return null;
+    	}
+    }
+    
+    public static String getSiteImage(TreasureLocations name){
+    	switch(name){
+    		case HOARD: return "/images/hoard.jpg";
+    		case LAIR: return "/images/lair.jpg";
+    		case ALTAR: return "/images/altar.jpg";
+    		case SHRINE: return "/images/shrine.jpg";
+    		case POOL: return "/images/pool.jpg";
+    		case VAULT: return "/images/vault.jpg";
+    		case CAIRNS: return "/images/cairns.jpg";
+    		case STATUE: return "/images/statue.jpg";
+    		default: return null;
+    	}
+    }
+    
+    public static String getWarningImage(WarningChits name, TileType type){
+    	String img = "";
+    	
+    	switch(name){
+	    	case SMOKE:
+	    		img += "/images/smoke";
+	    		break;
+	    	case DANK:
+	    		img += "/images/dank";
+	    		break;
+	    	case RUINS:
+	    		img += "/images/ruins";
+	    		break;
+	    	case STINK:
+	    		img += "/images/stink";
+	    		break;
+	    	case BONES:
+	    		img += "/images/bones";
+	    		break;
+	    	default:
+	    		return null;
+    	}
+    	
+    	switch(type){
+    		case VALLEY:
+    			img += "v.jpg";
+    			break;
+    		case MOUNTAINS:
+    			img += "m.jpg";
+    			break;
+    		case CAVES:
+    			img += "c.jpg";
+    			break;
+    		case WOODS:
+    			img += "w.jpg";
+    			break;
+    		default:
+    			return null;
+    	}
+    	return img;
+    }
+    
     public enum PhaseType {BASIC, SUNLIGHT, SPECIAL, TREASURE}
 
     public enum LostName {LOST_CTY, LOST_CASTLE};
