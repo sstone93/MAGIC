@@ -895,7 +895,9 @@ public class ServerController extends Handler{
         //All players choose attackers
         for (int i = 0; i < players.size(); i++) {
         	if (players.get(i).getTarget() != null) {
-        		encounter(players.get(i), players.get(i).getTarget());
+        		for (int j = 0; j < players.get(i).getTarget().size(); j++) {
+        			encounter(players.get(i), players.get(i).getTarget().get(j));
+        		}
         		System.out.println("Finished encounter");
         	}
         }

@@ -36,10 +36,11 @@ public class Player implements Serializable{
 
     Character character;
     CombatMoves moves;
-    Player target;
+    //Player target;
     Clearing location;
     Clearing lastMove;
     
+    ArrayList<Player> target = new ArrayList<Player>();
     ArrayList<Armour> armour = new ArrayList<Armour>();
     ArrayList<Weapon> weapons = new ArrayList<Weapon>();
     ArrayList<Treasure>  treasures = new ArrayList<Treasure>();
@@ -124,7 +125,7 @@ public class Player implements Serializable{
     	return new Weapon(Utility.WeaponName.FIST);
     }
     
-    public Player getTarget(){
+    public ArrayList<Player> getTarget(){
     	return this.target;
     }
     
@@ -146,7 +147,7 @@ public class Player implements Serializable{
     }
     
     public void setTarget(Player p){
-    	this.target = p;
+    	this.target.add(p);
     }
     
     public int getID(){
