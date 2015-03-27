@@ -903,7 +903,18 @@ public class ServerController extends Handler{
         //Progresses to the next day or ends the game
         boolean thing = resetDay();
         if(thing == true){ //if it is not the 28th day....
-        	startDay();
+        	int alivePlayers = 0;
+        	for (int i = 0; i < players.size(); i++) {
+        		if (players.get(i).isDead() == false) {
+        			alivePlayers++;
+        		}
+        	}
+        	if (alivePlayers > 1) {
+        		startDay();
+        	}
+        	else {
+        		endGame();
+        	}
         } else {
         	endGame();
         }
