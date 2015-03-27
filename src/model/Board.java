@@ -304,13 +304,15 @@ public class Board implements Serializable{
 		
 		//5 given to the lost city
 		ArrayList<MapChit> c1 = new ArrayList<MapChit>();
-		mc.get(0); mc.get(1); mc.get(2); mc.get(3); mc.get(4);
-		mc.remove(0);mc.remove(0);mc.remove(0);mc.remove(0);mc.remove(0);
+		for(int i =0; i<5;i++){
+			c1.add(mc.get(0));mc.remove(0);
+		}
 		LostCity lostcity = new LostCity(c1);
 		//5 given to the lost castle
 		ArrayList<MapChit> c2 = new ArrayList<MapChit>();
-		mc.get(0); mc.get(1); mc.get(2); mc.get(3); mc.get(4);
-		mc.remove(0);mc.remove(0);mc.remove(0);mc.remove(0);mc.remove(0);
+		for(int i =0; i<5;i++){
+			c2.add(mc.get(0));mc.remove(0);
+		}
 		LostCastle lostcastle = new LostCastle(c2);
 
 		//8 left, 2 groups of 4
@@ -489,7 +491,7 @@ public class Board implements Serializable{
 			if(a.get(0) instanceof LostPlace){//lost
 				//System.out.println("CITY/SADAS");
 				for(MapChit m : ((LostPlace) a.get(0)).getChits()){
-					System.out.println("Asda");
+					//System.out.println("Asda");
 					placeMapChit(m, temps[i]);
 				}
 			}else{//sounds
@@ -503,7 +505,7 @@ public class Board implements Serializable{
 	private void placeMapChit(MapChit m, int i){
 		if(m instanceof SiteChit){//sites
 			tiles.get(i).addMapChit(m);
-			System.out.println("placed "+ ((SiteChit)m).getLocation()+" on "+tiles.get(i).getName()+" "+((SiteChit)m).getNumber());
+			//System.out.println("placed "+ ((SiteChit)m).getLocation()+" on "+tiles.get(i).getName()+" "+((SiteChit)m).getNumber());
 			switch(((SiteChit)m).getLocation()){
 			
 			case ALTAR:
