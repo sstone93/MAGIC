@@ -148,6 +148,10 @@ public class Player implements Serializable{
     	this.target.add(p);
     }
     
+    public void removeTarget() {
+    	this.target = null;
+    }
+    
     public int getID(){
 		return ID;
     }

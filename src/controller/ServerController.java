@@ -914,6 +914,7 @@ public class ServerController extends Handler{
         		}
         		System.out.println("Finished encounter");
         	}
+        	players.get(i).removeTarget();
         }
 
         //Progresses to the next day or ends the game
