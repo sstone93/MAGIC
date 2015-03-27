@@ -577,6 +577,16 @@ public class ServerController extends Handler{
         	players.get(i).setGoneInCave(false);
         	players.get(i).setBlocked(false);
         }
+        
+        // reset map chits and warning chits so they can summon monsters
+        for (int i = 0; i < board.tiles.size(); i++) {
+        	board.tiles.get(i).getWarningChit().setSummoned(false);
+        	MapChit mapChit = board.tiles.get(i).getMapChit();
+        	if (mapChit != null) {
+        		mapChit.setSummoned(false);
+        	}
+        }
+        
         System.out.println("ResetDay end");
         return true;
     }
