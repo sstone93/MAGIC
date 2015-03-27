@@ -611,7 +611,7 @@ public class Board implements Serializable{
 
     //}
 
-    private boolean canUsePath(Player player, Path route){
+    public boolean canUsePath(Player player, Path route){
     	//TODO ANYTHING SPECIAL
     	switch(route.type){
 		case HIDDEN_PATH:

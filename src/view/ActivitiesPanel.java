@@ -97,11 +97,20 @@ public class ActivitiesPanel extends JPanel{
 				switch((Actions)option.getSelectedItem()){
 					case MOVE:
 						ArrayList<Path> connections = control.model.getPlayer().getLocation().getConnections();
-						arr = new String[connections.size()];
+						ArrayList<Path> finalConnections = new ArrayList<Path>();
 						
-						for(int i = 0; i < connections.size(); i++){
-							arr[i] = connections.get(i).getDestination(control.model.getPlayer().getLocation()).parent.getName().toString() +" "+ 
-									connections.get(i).getDestination(control.model.getPlayer().getLocation()).getClearingNumber();
+						for(Path p : connections){
+							if(control.model.getBoard().canUsePath(control.model.getPlayer(), p)){
+								finalConnections.add(p);
+							}
+						}
+						
+						arr = new String[finalConnections.size()];
+						
+						for(int i = 0; i < finalConnections.size(); i++){
+							//if(player)
+							arr[i] = finalConnections.get(i).getDestination(control.model.getPlayer().getLocation()).parent.getName().toString() +" "+ 
+									finalConnections.get(i).getDestination(control.model.getPlayer().getLocation()).getClearingNumber();
 						}
 						extraInfo.setVisible(true);
 						
