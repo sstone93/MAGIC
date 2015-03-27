@@ -52,7 +52,7 @@ public class ServerView extends JFrame implements ActionListener{
 		if(!Config.CHEAT_MODE){
 			setSize(new Dimension(100, 140));
 		}else{
-			setSize(new Dimension(900, 900));
+			setSize(new Dimension(800, 650));
 		
 			rolls.setBounds(110,0,140,20);
 			add(rolls);
@@ -72,7 +72,7 @@ public class ServerView extends JFrame implements ActionListener{
 			add(select);	
 			
 			buttons = new ChitButtonGrid(control); 
-			buttons.setLocation(0, 130);
+			buttons.setLocation(50, 180);
 			add(buttons);
 			buttons.setVisible(true);
 			
@@ -85,9 +85,7 @@ public class ServerView extends JFrame implements ActionListener{
 	                control.network.stop();
 	                System.exit(0);
 	            }
-	        } );
-			
-			
+	        } );	
 		}
 	}
 
