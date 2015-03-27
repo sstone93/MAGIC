@@ -23,7 +23,6 @@ public class Player implements Serializable{
     int fame          = 0;
     int notoriety     = 0;
     int finalScore    = 0;
-    public int order; // in which order does the player play
     
     boolean hidden    = false;
     boolean dead      = false;
@@ -36,10 +35,10 @@ public class Player implements Serializable{
 
     Character character;
     CombatMoves moves;
-    Player target;
     Clearing location;
     Clearing lastMove;
     
+    ArrayList<Player> target = new ArrayList<Player>();
     ArrayList<Armour> armour = new ArrayList<Armour>();
     ArrayList<Weapon> weapons = new ArrayList<Weapon>();
     ArrayList<Treasure>  treasures = new ArrayList<Treasure>();
@@ -124,7 +123,7 @@ public class Player implements Serializable{
     	return new Weapon(Utility.WeaponName.FIST);
     }
     
-    public Player getTarget(){
+    public ArrayList<Player> getTarget(){
     	return this.target;
     }
     
@@ -146,7 +145,7 @@ public class Player implements Serializable{
     }
     
     public void setTarget(Player p){
-    	this.target = p;
+    	this.target.add(p);
     }
     
     public int getID(){
@@ -232,14 +231,6 @@ public class Player implements Serializable{
         }
         this.gold -= gold;
         return true;
-    }
-
-    public void setOrder(int order) {
-        this.order = order;
-    }
-
-    public int getOrder() {
-        return order;
     }
 
     public boolean isHidden() {

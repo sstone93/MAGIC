@@ -7,6 +7,7 @@ import model.Berserker;
 import model.BlackKnight;
 import model.Board;
 import model.Captain;
+import model.Clearing;
 import model.CombatMoves;
 import model.Dwarf;
 import model.Elf;
@@ -112,7 +113,7 @@ public class ServerController extends Handler{
 					if(p.isBlocked() == false){
 						//do it
 
-						//if it is a move, then dont reset last move
+						//if it is a move, then don't reset last move
 						if(((Phase) m.getData().get(0)).getAction() == Actions.MOVE){
 							handleAction(p,(Phase)m.getData().get(0));
 						}else{
@@ -230,7 +231,7 @@ public class ServerController extends Handler{
 	 * Sets a player's state as hidden
 	 * @param player being hidden
 	 */
-	public void hide(Player player) { // assume it always works
+	public void hide(Player player) {
 
 		int roll;
 		boolean oneDie = Utility.checkRollOneDie(player, "hide");
@@ -244,6 +245,7 @@ public class ServerController extends Handler{
 
 		if (roll != 6) {
 			player.setHidden(true);
+			player.setBlocked(false);
 			network.broadCast( player.getCharacter().getName() + " is hidden!");
 		}
 		else {
@@ -308,7 +310,7 @@ public class ServerController extends Handler{
 			else {
 				roll = rollForTables(player, 2);
 			}
-			
+
 			locate(player, roll);
 		}
 		else if (table == Utility.SearchTables.LOOT) {
@@ -344,7 +346,7 @@ public class ServerController extends Handler{
 
     // rolls dice for the player
     // returns the lowest of the two rolls if the player has to roll 2 die
-    // otherwise returns the first role done
+    // otherwise returns the first roll done
     public int rollForTables(Player player, int numberOfDie) {
     	int roll = roll(6);
     	if (numberOfDie == 2) {
@@ -385,9 +387,9 @@ public class ServerController extends Handler{
     	else if (roll == 4) { // discover chits
     		// TODO: discover every site chit in the clearing you are searching
 
-//    		You secretly look at the map chits in the tile you are searching.
-//    		You discover every Site chit in the clearing you are searching and cross it off your Discoveries list.
-//    		Henceforward, you can LOOT this Site chit whenever you are in its clearing.
+    		//    		You secretly look at the map chits in the tile you are searching.
+    		//    		You discover every Site chit in the clearing you are searching and cross it off your Discoveries list.
+    		//    		Henceforward, you can LOOT this Site chit whenever you are in its clearing.
 
     		ArrayList<MapChit> mapChit = player.getLocation().parent.getMapChit();
 
@@ -420,7 +422,7 @@ public class ServerController extends Handler{
     		TileType type = player.getLocation().parent.getType();
 
     		System.out.println("warning chit name: " + warningChit.getName());
-
+    		System.out.println("tile type: " + type);
     		MonsterName monsterName = null;
 
     		if (type == TileType.WOODS) {
@@ -515,28 +517,38 @@ public class ServerController extends Handler{
     				// bats
     			}
     		}
-    		System.out.println("mosnter name: " + monsterName);
-    		if (monsterName != null) {
-    			board.placeMonstersAtStartingLocation(monsterName, player.getLocation());
-    		}
 
     		System.out.println(player.getLocation().getMonsters());
     		ArrayList<Monster> monstersInClearing = player.getLocation().getMonsters();
+
     		for (int i = 0; i < monstersInClearing.size(); i++) {
     			System.out.println(monstersInClearing.get(i).getName() + " in clearing!!!!");
     		}
 
+    		System.out.println("monster name: " + monsterName);
 
+    		if (monsterName != null) {
+    			board.placeMonstersAtStartingLocation(monsterName, player.getLocation());
+    			network.broadCast("player has summoned " + monsterName + "!"  );
+    		}
 
+    		if (!player.isBlocked() && !player.isHidden())
+    			for (int i = 0; i < monstersInClearing.size(); i++) {
+    				if (!monstersInClearing.get(i).isBlocked()) {
+    					monstersInClearing.get(i).setBlocked(true);
+    					player.setBlocked(true);
+    					network.send(player.getID(), "You've been blocked by " + monstersInClearing.get(i).getName());
+    					break;
+    				}
+    			}
     	}
-
     }
 
     private void printBoard() {
     	ArrayList<Tile> tiles = board.tiles;
     	for (int i = 0; i < tiles.size(); i++) {
     		Tile tile = tiles.get(i);
-    		System.out.println("tile : " + tile.getName() + " with warning chit: " + tile.getWarningChit() + " map chit: " + tile.getMapChit());
+    		System.out.println("tile and type : " + tile.getName() + ", " + tile.getType() + " with warning chit: " + tile.getWarningChit() + " map chit: " + tile.getMapChit());
     	}
     }
 
@@ -559,21 +571,31 @@ public class ServerController extends Handler{
      */
     public boolean resetDay() {
     	System.out.println("ResetDay start");
-        if (currentDay == 28) {
-            return false;
-        }
+    	if (currentDay == 28) {
+    		return false;
+    	}
 
-        unAlertWeapons();
+    	unAlertWeapons();
 
         //TODO face up map chits (except lost city and lost castle) are turned face down
 
-        // reset their fatigue and order
+        // reset their fatigue
         for (int i = 0; i < playerCount; i++) {
         	players.get(i).setFatigue(0);
-        	players.get(i).setOrder(0);
         	players.get(i).setGoneInCave(false);
         	players.get(i).setBlocked(false);
         }
+        
+        // reset map chits and warning chits so they can summon monsters
+        for (int i = 0; i < board.tiles.size(); i++) {
+        	board.tiles.get(i).getWarningChit().setSummoned(false);
+        	for(MapChit m : board.tiles.get(i).getMapChit()){
+        		if (m != null) {
+            		m.setSummoned(false);
+            	}
+        	}
+        }
+        
         System.out.println("ResetDay end");
         return true;
     }
@@ -633,68 +655,6 @@ public class ServerController extends Handler{
     		break;
     	}
     }
-
-    /**
-     * Cycles through players and their moves for the day
-     */
-    /*public void doTodaysActivities(Player player) {
->>>>>>> refs/remotes/origin/activities-reform
-
-    	System.out.println("Start "+player.getCharacter().getName()+" activities: " + player.getActivities().size());
-
-    	while (moves < player.getActivities().size()) {
-
-    		// For testing
-    		System.out.println("	moves: " + moves + " activities: " + player.getActivities().size());
-
-    		ArrayList<Object> activities = player.getActivities();
-
-    		if (!player.isBlocked()) {	//assuming the player is not being blocked by another
-    			// format: [MOVE, clearing]
-
-    			if (activities.get(moves) != null) {
-
-    				/*ArrayList<Player> canBlock = blockable(player);					// check if they can block another player
-
-    	    		if (currentDay != 1) {
-    		    		for (int j = 0; j < canBlock.size(); j++) {
-    		    			if (canBlock.get(j) != null) {
-    		    				canBlock.get(j).setBlocked(true);
-    		    				System.out.println("blocking player!"); // For testing
-    		    				network.send(canBlock.get(j).getID(), "You've been blocked! :( " );
-    		    			}
-    		    		}
-    	    		}
-
-		    		switch((Actions) activities.get(moves)) {
-
-		    		case MOVE:
-		    			boolean move = board.move(moves, player, (String) activities.get(moves+1)); moves = moves + 2;
-		    			network.broadCast(player.getCharacter().getName() + " is moving? : " + move);
-		    			break;
-		    		case HIDE: hide(player); moves = moves + 2; break;
-		    		case ALERT: alert(player); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is alerting their weapon!"); break;
-		    		case REST: rest(player); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is resting!"); break;
-		    		case SEARCH:
-		    			search(player, (SearchTables) activities.get(moves+1));
-		    			moves = moves + 2;
-		    			break;
-		    		case TRADE: moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is trading!"); break;
-		    		//case FOLLOW: moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is following!"); break;
-		    		}
-
-    			}
-    		}
-    		else if (activities.get(moves) == Utility.Actions.HIDE) {
-    			player.setBlocked(false);
-    			hide(player);
-    			moves=moves+2;
-    		}
-    		else {
-    			moves=moves+2;
-    		}
-    	}
-    }*/
 
     /**
      * Ends the game, basically determines players scores and determines the winner
@@ -764,15 +724,7 @@ public class ServerController extends Handler{
     	state = GameState.CHOOSE_PLAYS;
     	finishedPlayers = 0;
 
-    	int currentlyFinished = 0;
-
     	while(finishedPlayers < playerCount){
-    		if ((currentlyFinished + 1 ) == finishedPlayers) {
-        		currentlyFinished = currentlyFinished + 1;
-        		// when a players turn ends, allow monsters to prowl
-        		// TODO: not sure if we actually want to put this here with the way our system is designed
-        		allowMonstersToProwl();
-        	}
     		try {
 				Thread.sleep(20);
 			} catch (InterruptedException e) {
@@ -790,6 +742,13 @@ public class ServerController extends Handler{
 			// Auto-generated catch block
 			e.printStackTrace();
 		}*/
+    }
+
+    // gets the player that just finished
+    private void getFinishedPlayer() {
+    	for (int i = 0; i < players.size(); i++) {
+    		// check if they're done
+    	}
     }
 
     public void collectCombat(){
@@ -857,7 +816,7 @@ public class ServerController extends Handler{
     }
 
     public void allowMonstersToProwl(){
-    	System.out.println("ALLOWING MONSTERS TO PROWL STARTS NOW");
+    	network.broadCast("MONSTERS PROWLING STARTS NOW");
     	// checks to see who can prowl
     	ArrayList<Monster> prowlingMonsters = board.getProwlingMonsters();
     	for (int i = 0; i < prowlingMonsters.size(); i++) {
@@ -876,6 +835,35 @@ public class ServerController extends Handler{
 					monster.block();
 				}
     		}
+    	}
+    }
+    
+    /*
+     * players turn over the tiles in their clearing, and monsters are appropriately summoned
+     * the monsters that are in the same tile as the player are "summoned" to their clearing and block the player (if they're unhidden)
+     * 
+     */
+    private void summonMonstersToTile() {    	
+    	for (int i = 0; i < players.size(); i ++) {
+    		ArrayList<MapChit> mapChit = players.get(i).getLocation().parent.getMapChit();
+    		//TODO: take out map chit parameter 
+	    	discoverMonstersWithSiteChits(players.get(i), mapChit); 
+	    	
+	    	ArrayList<Clearing> clearings = players.get(i).getLocation().parent.getClearings();
+	    	
+	    	for (int j = 0; j < clearings.size(); j++) {
+	    		if (!clearings.get(j).equals(players.get(i).getLocation())) {
+	    			ArrayList<Monster> monsters = clearings.get(j).getMonsters();
+	    			for (int k = 0; k < monsters.size(); k++) {
+	    				if (monsters.get(k).isBlocked() == false) {
+	    					clearings.get(j).removeMonster(monsters.get(k));
+	    					monsters.get(k).setBlocked(false);
+	    					players.get(i).getLocation().addMonster(monsters.get(k));
+	    					monsters.get(k).block();
+	    				}
+	    			}
+	    		}
+	    	}
     	}
     }
     /**
@@ -899,20 +887,17 @@ public class ServerController extends Handler{
         rollForMonsters();
 
         startActivitiesHandler();
-
-        if (playerCount == 1) {
-        	network.broadCast("There is only one player alive");
-        	endGame();
-        }
-
-        // allowMonstersToProwl();
+        allowMonstersToProwl();
+        summonMonstersToTile();
 
         collectCombat(); //2 players, 1 attacker 1 defender
 
         //All players choose attackers
         for (int i = 0; i < players.size(); i++) {
         	if (players.get(i).getTarget() != null) {
-        		encounter(players.get(i), players.get(i).getTarget());
+        		for (int j = 0; j < players.get(i).getTarget().size(); j++) {
+        			encounter(players.get(i), players.get(i).getTarget().get(j));
+        		}
         		System.out.println("Finished encounter");
         	}
         }
@@ -920,21 +905,21 @@ public class ServerController extends Handler{
         //Progresses to the next day or ends the game
         boolean thing = resetDay();
         if(thing == true){ //if it is not the 28th day....
-        	startDay();
+        	int alivePlayers = 0;
+        	for (int i = 0; i < players.size(); i++) {
+        		if (players.get(i).isDead() == false) {
+        			alivePlayers++;
+        		}
+        	}
+        	if (alivePlayers > 1) {
+        		startDay();
+        	}
+        	else {
+        		endGame();
+        	}
         } else {
         	endGame();
         }
-    }
-
-    /**
-     * Randomly orders the players
-     */
-    public void orderPlayers(){
-    	Collections.shuffle(players);
-    	for (int j = 0; j < playerCount; j++) {
-    		players.get(j).order = j;
-    		network.broadCast(players.get(j).getCharacter().getName() + " is in position # " + (players.get(j).getOrder() + 1));
-    	}
     }
 
     public void encounter(Player player, Monster monster) {
@@ -1254,9 +1239,9 @@ public class ServerController extends Handler{
 
 	public void hit(Player player, Monster monster) {
 		ItemWeight level;
-		
+
 		if (player.getActiveWeapon().isRanged() == true) {
-			
+
 			int roll;
 			boolean oneDie = Utility.checkRollOneDie(player, "missile");
 			if (oneDie) {
@@ -1267,7 +1252,7 @@ public class ServerController extends Handler{
 				roll = rollForTables(player, 2);
 			}
 
-			if(player.getCharacter().getName() == CharacterName.AMAZON || 
+			if(player.getCharacter().getName() == CharacterName.AMAZON ||
 					player.getCharacter().getName() == CharacterName.BLACK_KNIGHT ||
 							player.getCharacter().getName() == CharacterName.CAPTAIN){
 				if(roll != 1){
@@ -1275,9 +1260,9 @@ public class ServerController extends Handler{
 					roll --;	//SUBTACT 1 FOR THE "AIM" ABILITY
 				}
 			}
-			
+
 			if (roll == 1) {
-				
+
 				level = ItemWeight.HEAVY;
 			}
 			else if (roll == 2) {
@@ -1491,15 +1476,15 @@ public class ServerController extends Handler{
 	}
 
 	public void hit(Player attacker, Player defender) {
-		
+
 		ItemWeight level;
-		
+
 		if (attacker.getActiveWeapon().isRanged() == true) {
-			
+
 			int roll;
-			
+
 			boolean oneDie = Utility.checkRollOneDie(attacker, "missile");
-			
+
 			if (oneDie) {
 				network.send(attacker.getID(), "Congrats, something means you only roll one die!");
 				roll = rollForTables(attacker, 1);
@@ -1507,8 +1492,8 @@ public class ServerController extends Handler{
 			else {
 				roll = rollForTables(attacker, 2);
 			}
-			
-			if(attacker.getCharacter().getName() == CharacterName.AMAZON || 
+
+			if(attacker.getCharacter().getName() == CharacterName.AMAZON ||
 					attacker.getCharacter().getName() == CharacterName.BLACK_KNIGHT ||
 					attacker.getCharacter().getName() == CharacterName.CAPTAIN){
 				if(roll != 1){
@@ -1516,7 +1501,7 @@ public class ServerController extends Handler{
 					roll --;	//SUBTACT 1 FOR THE "AIM" ABILITY
 				}
 			}
-			
+
 			if (roll == 1) {
 				level = ItemWeight.HEAVY;
 			}

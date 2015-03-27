@@ -1,6 +1,5 @@
 package view;
 
-import java.awt.Dimension;
 import java.awt.GridLayout;
 
 import javax.swing.ButtonGroup;
@@ -34,7 +33,7 @@ public class ChitButtonGrid  extends JPanel{
 	public ChitButtonGrid(ServerController c){
 		this.control = c;
 		
-		setSize(800,800);
+		setSize(700,400);
 		setLayout(new GridLayout(22,20,0,0));
 		
 		//adds all the buttons to the right button group
@@ -60,14 +59,11 @@ public class ChitButtonGrid  extends JPanel{
 				add(allButtons[j][i]);
 				//allButtons[i][j].setVisible(true);
 				//allButtons[i][j].setEnabled(true);
-			}
-			
-		}
-		
-		
-		
+			}	
+		}		
 	}
 	
 	public void update(){
+		
 	}
 }
