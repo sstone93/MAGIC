@@ -60,6 +60,8 @@ public class Player implements Serializable{
     	addedSunlight = false;
     	goneInCave = false;
     	
+    	phases = new ArrayList<Phase>();
+    	
     	//check if they are starting the day in a cave
     	if(location.getType() == ClearingType.CAVE){
     		goneInCave = true;
