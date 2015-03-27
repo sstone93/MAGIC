@@ -7,6 +7,7 @@ import model.Berserker;
 import model.BlackKnight;
 import model.Board;
 import model.Captain;
+import model.Clearing;
 import model.CombatMoves;
 import model.Dwarf;
 import model.Elf;
@@ -834,6 +835,35 @@ public class ServerController extends Handler{
     		}
     	}
     }
+    
+    /*
+     * players turn over the tiles in their clearing, and monsters are appropriately summoned
+     * the monsters that are in the same tile as the player are "summoned" to their clearing and block the player (if they're unhidden)
+     * 
+     */
+    private void summonMonstersToTile() {    	
+    	for (int i = 0; i < players.size(); i ++) {
+    		MapChit mapChit = players.get(i).getLocation().parent.getMapChit();
+    		//TODO: take out map chit parameter 
+	    	discoverMonstersWithSiteChits(players.get(i), mapChit); 
+	    	
+	    	ArrayList<Clearing> clearings = players.get(i).getLocation().parent.getClearings();
+	    	
+	    	for (int j = 0; j < clearings.size(); j++) {
+	    		if (!clearings.get(j).equals(players.get(i).getLocation())) {
+	    			ArrayList<Monster> monsters = clearings.get(j).getMonsters();
+	    			for (int k = 0; k < monsters.size(); k++) {
+	    				if (monsters.get(k).isBlocked() == false) {
+	    					clearings.get(j).removeMonster(monsters.get(k));
+	    					monsters.get(k).setBlocked(false);
+	    					players.get(i).getLocation().addMonster(monsters.get(k));
+	    					monsters.get(k).block();
+	    				}
+	    			}
+	    		}
+	    	}
+    	}
+    }
     /**
      * Sends up to date board to clients, along with their proper character
      */
@@ -856,7 +886,7 @@ public class ServerController extends Handler{
 
         startActivitiesHandler();
         allowMonstersToProwl();
-//        summonMonstersToTile();
+        summonMonstersToTile();
 
         collectCombat(); //2 players, 1 attacker 1 defender
 
