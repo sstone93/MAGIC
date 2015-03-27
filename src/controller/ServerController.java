@@ -615,7 +615,6 @@ public class ServerController extends Handler{
         for (int i = 0; i < board.monsters.size(); i++) {
         	Monster currentMonster = board.monsters.get(i);
         	currentMonster.setLocation(currentMonster.getStartingLocation());
-        	// TODO: add monsters to their starting location (if it's not null)
         	currentMonster.resetDead();
         	currentMonster.setProwling(false);
         	currentMonster.setBlocked(false);
@@ -653,68 +652,6 @@ public class ServerController extends Handler{
     		break;
     	}
     }
-
-    /**
-     * Cycles through players and their moves for the day
-     */
-    /*public void doTodaysActivities(Player player) {
->>>>>>> refs/remotes/origin/activities-reform
-
-    	System.out.println("Start "+player.getCharacter().getName()+" activities: " + player.getActivities().size());
-
-    	while (moves < player.getActivities().size()) {
-
-    		// For testing
-    		System.out.println("	moves: " + moves + " activities: " + player.getActivities().size());
-
-    		ArrayList<Object> activities = player.getActivities();
-
-    		if (!player.isBlocked()) {	//assuming the player is not being blocked by another
-    			// format: [MOVE, clearing]
-
-    			if (activities.get(moves) != null) {
-
-    				/*ArrayList<Player> canBlock = blockable(player);					// check if they can block another player
-
-    	    		if (currentDay != 1) {
-    		    		for (int j = 0; j < canBlock.size(); j++) {
-    		    			if (canBlock.get(j) != null) {
-    		    				canBlock.get(j).setBlocked(true);
-    		    				System.out.println("blocking player!"); // For testing
-    		    				network.send(canBlock.get(j).getID(), "You've been blocked! :( " );
-    		    			}
-    		    		}
-    	    		}
-
-		    		switch((Actions) activities.get(moves)) {
-
-		    		case MOVE:
-		    			boolean move = board.move(moves, player, (String) activities.get(moves+1)); moves = moves + 2;
-		    			network.broadCast(player.getCharacter().getName() + " is moving? : " + move);
-		    			break;
-		    		case HIDE: hide(player); moves = moves + 2; break;
-		    		case ALERT: alert(player); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is alerting their weapon!"); break;
-		    		case REST: rest(player); moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is resting!"); break;
-		    		case SEARCH:
-		    			search(player, (SearchTables) activities.get(moves+1));
-		    			moves = moves + 2;
-		    			break;
-		    		case TRADE: moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is trading!"); break;
-		    		//case FOLLOW: moves = moves + 2; network.broadCast(player.getCharacter().getName() + " is following!"); break;
-		    		}
-
-    			}
-    		}
-    		else if (activities.get(moves) == Utility.Actions.HIDE) {
-    			player.setBlocked(false);
-    			hide(player);
-    			moves=moves+2;
-    		}
-    		else {
-    			moves=moves+2;
-    		}
-    	}
-    }*/
 
     /**
      * Ends the game, basically determines players scores and determines the winner
@@ -784,15 +721,7 @@ public class ServerController extends Handler{
     	state = GameState.CHOOSE_PLAYS;
     	finishedPlayers = 0;
 
-    	int currentlyFinished = 0;
-
     	while(finishedPlayers < playerCount){
-    		if ((currentlyFinished + 1 ) == finishedPlayers) {
-        		currentlyFinished = currentlyFinished + 1;
-        		// when a players turn ends, allow monsters to prowl
-        		// TODO: not sure if we actually want to put this here with the way our system is designed
-        		allowMonstersToProwl();
-        	}
     		try {
 				Thread.sleep(20);
 			} catch (InterruptedException e) {
@@ -884,7 +813,7 @@ public class ServerController extends Handler{
     }
 
     public void allowMonstersToProwl(){
-    	System.out.println("ALLOWING MONSTERS TO PROWL STARTS NOW");
+    	network.broadCast("MONSTERS PROWLING STARTS NOW");
     	// checks to see who can prowl
     	ArrayList<Monster> prowlingMonsters = board.getProwlingMonsters();
     	for (int i = 0; i < prowlingMonsters.size(); i++) {
@@ -926,8 +855,8 @@ public class ServerController extends Handler{
         rollForMonsters();
 
         startActivitiesHandler();
-
-        // allowMonstersToProwl();
+        allowMonstersToProwl();
+//        summonMonstersToTile();
 
         collectCombat(); //2 players, 1 attacker 1 defender
 
