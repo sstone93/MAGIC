@@ -287,7 +287,7 @@ public class ServerController extends Handler{
     	ArrayList<Player> blockablePlayers = monster.getLocation().getOccupants();
     	for (int i = 0; i < blockablePlayers.size(); i++) {
     		if (!blockablePlayers.get(i).isHidden()) {
-    			players.get(i).setBlocked(true);
+    			block(players.get(i));
     		}
     	}
     }
@@ -410,6 +410,13 @@ public class ServerController extends Handler{
 
     }
 
+    private void block(Player p){
+    	p.setBlocked(true);
+    	finishedPlayers +=1;
+    }
+    
+    
+    
     // TODO: I think this is correct behaviour, not entirely sure
     // TODO; needs to take into account other things then just the monster roll
     private void discoverMonstersWithSiteChits(Player player, ArrayList<MapChit> mapC) {
@@ -536,7 +543,7 @@ public class ServerController extends Handler{
     			for (int i = 0; i < monstersInClearing.size(); i++) {
     				if (!monstersInClearing.get(i).isBlocked()) {
     					monstersInClearing.get(i).setBlocked(true);
-    					player.setBlocked(true);
+    					block(player);
     					network.send(player.getID(), "You've been blocked by " + monstersInClearing.get(i).getName());
     					break;
     				}

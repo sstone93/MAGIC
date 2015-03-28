@@ -15,9 +15,11 @@ import utils.Utility.*;
 import controller.ClientController;
 import model.Board;
 import model.Clearing;
+import model.MapChit;
 import model.Monster;
 import model.Player;
 import model.Tile;
+import model.WarningChit;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -38,12 +40,12 @@ public class View extends JFrame {
 	private JTextArea textDisplay;
 	private JPanel	blankPanel;
 
-	private HashMap<Tile, JPanel> iconPanels = new HashMap<Tile, JPanel>();
+	private HashMap<Tile, JPanel> tileHoverOvers = new HashMap<Tile, JPanel>();
 	private HashMap<Clearing, JPanel> clearingHoverOvers = new HashMap<Clearing, JPanel>();
 	private JLabel [] tileLbls;
 	private JLabel [] garrisonLbls;
 	private JLabel [] charLbls;
-	private ArrayList<JLabel> monsterLbls;
+	private ArrayList<JLabel> labels;
 	
 	private CharacterInfoPanel characterInfoPanel;
 	private ActivitiesPanel playsPanel;
@@ -139,7 +141,7 @@ public class View extends JFrame {
 			tileLbls = new JLabel[b.tiles.size()];
 			garrisonLbls = new JLabel[b.garrisons.size()];
 			charLbls = new JLabel[control.model.getNumPlayers()];
-			monsterLbls = new ArrayList<JLabel>();
+			labels = new ArrayList<JLabel>();
 			
 			BufferedImage pic;
 			for (int i = 0; i < b.tiles.size(); i++){
@@ -184,7 +186,7 @@ public class View extends JFrame {
 				makeBoard();
 			}
 			
-			Iterator it = iconPanels.entrySet().iterator();
+			Iterator it = tileHoverOvers.entrySet().iterator();
 
 			//TODO Concurrent thread access, is the View thread and the Client control thread both calling update at the same time? possible.
 			//TODO CONTROL THIS!!!!
@@ -196,7 +198,7 @@ public class View extends JFrame {
 				}
 			}
 
-			iconPanels.clear();
+			tileHoverOvers.clear();
 			
 			it = clearingHoverOvers.entrySet().iterator();
 
@@ -220,11 +222,11 @@ public class View extends JFrame {
 			
 			charLbls = new JLabel[control.model.getNumPlayers()];
 			
-			for(int i = 0; i < monsterLbls.size(); i++){
-				boardPanel.remove(monsterLbls.get(i));
+			for(int i = 0; i < labels.size(); i++){
+				boardPanel.remove(labels.get(i));
 			}
 			
-			monsterLbls.clear();
+			labels.clear();
 			
 			BufferedImage pic;
 			
@@ -300,7 +302,6 @@ public class View extends JFrame {
 						ArrayList<Monster> monsters = clearings.get(j).getMonsters();
 						for(int k = 0; k < monsters.size(); k++){
 							MonsterName monster = monsters.get(k).getName();
-							System.out.println(monster);
 							pic = ImageIO.read(this.getClass().getResource(Utility.getMonsterImage(monster)));
 							JLabel l = new JLabel(new ImageIcon(pic));
 							l.setBounds(b.tiles.get(i).getX() + clearings.get(j).xOffset - 25,
@@ -356,7 +357,139 @@ public class View extends JFrame {
 								}
 							});
 							
-							monsterLbls.add(l);
+							labels.add(l);
+						}
+					}
+					if(control.model.getPlayer() != null){
+						ArrayList<MapChit> mapChits = b.tiles.get(i).getMapChit();
+						for(int j = 0; j < mapChits.size(); j++){
+							String lblString;
+							if(control.model.getPlayer().knowsSound(mapChits.get(j))){
+								pic = ImageIO.read(this.getClass().getResource(Utility.getSoundImage(mapChits.get(j).getName())));
+								lblString = mapChits.get(j).getName().toString();
+							}
+							else {
+								pic = ImageIO.read(this.getClass().getResource("/images/facedownsound.jpg"));
+								lblString = "Sound Chit";
+							}
+							
+							JLabel l = new JLabel(new ImageIcon(pic));
+							l.setBounds(b.tiles.get(i).getX() - 25, b.tiles.get(i).getY() - 25, 50, 50);
+							boardPanel.add(l, new Integer(5), 0);
+								
+							if (!tileHoverOvers.containsKey(b.tiles.get(i))){
+								JPanel newPane = new JPanel();
+								newPane.setBounds(b.tiles.get(i).getX(), b.tiles.get(i).getY(), 200, 300);
+								newPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+								newPane.setBorder(new LineBorder(Color.GRAY));
+								newPane.setVisible(false);
+								
+								JLabel lbl = new JLabel(b.tiles.get(i).getName().toString(), SwingConstants.CENTER);
+								lbl.setPreferredSize(new Dimension(200, 20));
+								lbl.setAlignmentX(CENTER_ALIGNMENT);
+								lbl.setFont(new Font("Trebuchet MS", Font.BOLD, 18));
+								newPane.add(lbl);
+								
+								boardPanel.add(newPane, new Integer(10), 0);
+								tileHoverOvers.put(b.tiles.get(i), newPane);
+							}
+							
+							JPanel panel = new JPanel();
+							panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+							panel.setPreferredSize(new Dimension(90, 75));
+							
+							JLabel img = new JLabel(new ImageIcon(pic));
+							img.setSize(50, 50);
+							panel.add(img);
+							
+							JLabel lbl = new JLabel(lblString, SwingConstants.CENTER);
+							lbl.setPreferredSize(new Dimension(90, 15));
+							lbl.setAlignmentY(CENTER_ALIGNMENT);
+							panel.add(lbl);
+							
+							tileHoverOvers.get(b.tiles.get(i)).add(panel);
+							
+							final int index = i;
+							
+							l.addMouseListener(new MouseAdapter() {
+								@Override
+								public void mouseEntered(MouseEvent e) {
+									tileHoverOvers.get(b.tiles.get(index)).setVisible(true);
+								}
+							});
+							l.addMouseListener(new MouseAdapter() {
+								@Override
+								public void mouseExited(MouseEvent e) {
+									tileHoverOvers.get(b.tiles.get(index)).setVisible(false);
+								}
+							});
+							
+							labels.add(l);
+						}
+						WarningChit warningChit = b.tiles.get(i).getWarningChit();
+						if(warningChit != null){
+							String lblString;
+							if(control.model.getPlayer().knowsWarning(warningChit)){
+								pic = ImageIO.read(this.getClass().getResource(Utility.getWarningImage(warningChit.getName(), b.tiles.get(i).getType())));
+								lblString = warningChit.getName().toString();
+							}
+							else {
+								pic = ImageIO.read(this.getClass().getResource("/images/facedownwarning.jpg"));
+								lblString = "Warning Chit";
+							}
+							
+							JLabel l = new JLabel(new ImageIcon(pic));
+							l.setBounds(b.tiles.get(i).getX() - 25, b.tiles.get(i).getY() - 25, 50, 50);
+							boardPanel.add(l, new Integer(5), 0);
+								
+							if (!tileHoverOvers.containsKey(b.tiles.get(i))){
+								JPanel newPane = new JPanel();
+								newPane.setBounds(b.tiles.get(i).getX(), b.tiles.get(i).getY(), 200, 300);
+								newPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+								newPane.setBorder(new LineBorder(Color.GRAY));
+								newPane.setVisible(false);
+								
+								JLabel lbl = new JLabel(b.tiles.get(i).getName().toString(), SwingConstants.CENTER);
+								lbl.setPreferredSize(new Dimension(200, 20));
+								lbl.setAlignmentX(CENTER_ALIGNMENT);
+								lbl.setFont(new Font("Trebuchet MS", Font.BOLD, 18));
+								newPane.add(lbl);
+								
+								boardPanel.add(newPane, new Integer(10), 0);
+								tileHoverOvers.put(b.tiles.get(i), newPane);
+							}
+							
+							JPanel panel = new JPanel();
+							panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+							panel.setPreferredSize(new Dimension(90, 75));
+							
+							JLabel img = new JLabel(new ImageIcon(pic));
+							img.setSize(50, 50);
+							panel.add(img);
+							
+							JLabel lbl = new JLabel(lblString, SwingConstants.CENTER);
+							lbl.setPreferredSize(new Dimension(90, 15));
+							lbl.setAlignmentY(CENTER_ALIGNMENT);
+							panel.add(lbl);
+							
+							tileHoverOvers.get(b.tiles.get(i)).add(panel);
+							
+							final int index = i;
+							
+							l.addMouseListener(new MouseAdapter() {
+								@Override
+								public void mouseEntered(MouseEvent e) {
+									tileHoverOvers.get(b.tiles.get(index)).setVisible(true);
+								}
+							});
+							l.addMouseListener(new MouseAdapter() {
+								@Override
+								public void mouseExited(MouseEvent e) {
+									tileHoverOvers.get(b.tiles.get(index)).setVisible(false);
+								}
+							});
+							
+							labels.add(l);
 						}
 					}
 				} catch (IOException e){
