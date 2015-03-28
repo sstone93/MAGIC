@@ -186,6 +186,28 @@ public class Player implements Serializable{
     	}
     	return state;
     }
+    
+    public boolean knowsSound(MapChit c){
+    	for(Object o : discoveries){
+    		if(o instanceof MapChit){
+    			if(((MapChit) o).getName() == c.getName()){
+    				return true;
+    			}
+    		}
+    	}
+    	return false;
+    }
+    
+    public boolean knowsWarning(WarningChit c){
+    	for(Object o : discoveries){
+    		if(o instanceof WarningChit){
+    			if(((WarningChit) o).getName() == c.getName()){
+    				return true;
+    			}
+    		}
+    	}
+    	return false;
+    }
 
     public void unAlertWeapons(){
 		for (int j = 0; j < weapons.size(); j++ ) {
