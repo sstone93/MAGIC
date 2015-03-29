@@ -24,7 +24,6 @@ import model.WarningChit;
 import model.WhiteKnight;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import utils.Config;
 import utils.Utility;
@@ -424,7 +423,7 @@ public class ServerController extends Handler{
     	for(MapChit mapChit : mapC){
 
     		System.out.println("!!! map chit name: " + mapChit.getName());
-    		SoundChits name = mapChit.getName();
+    		//SoundChits name = mapChit.getName();
     		WarningChit warningChit = player.getLocation().parent.getWarningChit();
     		TileType type = player.getLocation().parent.getType();
 
@@ -766,11 +765,11 @@ public class ServerController extends Handler{
     }
 
     // gets the player that just finished
-    private void getFinishedPlayer() {
+    /*private void getFinishedPlayer() {
     	for (int i = 0; i < players.size(); i++) {
     		// check if they're done
     	}
-    }
+    }*/
 
     public void collectCombat(){
 
@@ -866,7 +865,7 @@ public class ServerController extends Handler{
      */
     private void summonMonstersToTile() {    	
     	for (int i = 0; i < players.size(); i ++) {
-    		ArrayList<MapChit> mapChit = players.get(i).getLocation().parent.getMapChit();
+    		//ArrayList<MapChit> mapChit = players.get(i).getLocation().parent.getMapChit();
     		//TODO: take out map chit parameter 
 	    	//discoverMonstersWithSiteChits(players.get(i), mapChit); 
 	    	

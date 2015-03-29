@@ -158,7 +158,6 @@ public class ActivitiesPanel extends JPanel{
 	}
 
 	public void update(){
-		//TODO set the phases here?
 		ArrayList<Phase> phases = this.control.model.getPlayer().getPhases();
 		PhaseType[] p = new PhaseType[phases.size()];
 		for(int i=0; i<phases.size(); i++){

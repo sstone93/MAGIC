@@ -12,8 +12,13 @@ public class Clearing implements Serializable{
     public int location;		 		// indicating which clearing on the tile this is CHANGED BACK TO AN INT
     public Tile parent;
     ClearingType type;
-    public int xOffset;
-    public int yOffset;
+    private int xOffset;
+    private int yOffset;
+    
+    //used by the view to place items, calculated from tile rotation, offsets, and parent coordinates
+    public int x;
+    public int y;
+    
     TreasureSite site = null;
     
     ArrayList<Path> connections = new ArrayList<Path>();
@@ -27,6 +32,7 @@ public class Clearing implements Serializable{
         this.type = t;
         this.xOffset = x;
         this.yOffset = y;
+        this.calculateXandY();
     }
 
     public ArrayList<Path> getConnections(){
@@ -154,5 +160,30 @@ public class Clearing implements Serializable{
 		}
 		return "";
 	}
+    
+    private void calculateXandY(){
+    	if(parent.getRot() == 0.00){
+    		this.x = this.parent.getX() + this.xOffset;
+    		this.y = this.parent.getY() + this.yOffset;
+    	}
+    	else if(parent.getRot() == 180.00){
+    		this.x = this.parent.getX() - this.xOffset;
+    		this.y = this.parent.getY() - this.yOffset;
+    	}
+    	else{
+    		double hyp = Math.sqrt(Math.pow(this.xOffset, 2) + Math.pow(this.yOffset, 2));
+    		double angle = Math.acos(this.xOffset/hyp);
+    		
+    		//correcting for angles below the x-axis.
+    		if(this.yOffset > 0){
+    			angle = Math.toRadians(360.00) - angle;
+    		}
+    		
+    		angle += Math.toRadians(360 - this.parent.getRot());//adding the rotation(inverted because image rotation is opposite)
+    		System.out.println(this.parent.getName().toString() + this.location + " " + Math.toDegrees(angle));
+    		this.x = this.parent.getX() + (int) (Math.cos(angle) * hyp);
+    		this.y = this.parent.getY() + (int) (Math.sin(angle) * hyp *-1);//needs to be corrected because above center is treated as negative y.
+    	}
+    }
 
 }

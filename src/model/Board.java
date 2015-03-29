@@ -81,26 +81,26 @@ public class Board implements Serializable{
 	 */
 	private void setupBoard(){
 		//CREATE ALL THE TILES (THIS IS SETUP INTERNAL CLEARINGS AUTOMATICALLY)
-		tiles.add(new Tile(TileName.CLIFF, 550, 232));
-		tiles.add(new Tile(TileName.EVILVALLEY, 403, 317));
-		tiles.add(new Tile(TileName.LEDGES, 550, 402));
-		tiles.add(new Tile(TileName.CRAG, 697, 487));
-		tiles.add(new Tile(TileName.DARKVALLEY, 844, 572));
-		tiles.add(new Tile(TileName.HIGHPASS, 256, 402));
-		tiles.add(new Tile(TileName.BORDERLAND, 403, 487));
-		tiles.add(new Tile(TileName.OAKWOODS, 550, 572));
-		tiles.add(new Tile(TileName.DEEPWOODS, 697, 657));
-		tiles.add(new Tile(TileName.CURSTVALLEY, 844, 742));
-		tiles.add(new Tile(TileName.CAVERN, 256, 572));
-		tiles.add(new Tile(TileName.BADVALLEY, 403, 657));
-		tiles.add(new Tile(TileName.MAPLEWOODS, 550, 742));
-		tiles.add(new Tile(TileName.NUTWOODS, 697, 827));
-		tiles.add(new Tile(TileName.MOUNTAIN, 256, 742));
-		tiles.add(new Tile(TileName.CAVES, 403, 827));
-		tiles.add(new Tile(TileName.RUINS, 550, 912));
-		tiles.add(new Tile(TileName.AWFULVALLEY, 697, 997));
-		tiles.add(new Tile(TileName.PINEWOODS, 256, 912));
-		tiles.add(new Tile(TileName.LINDENWOODS, 550, 1082));
+		tiles.add(new Tile(TileName.CLIFF, 550, 232, 300.00));
+		tiles.add(new Tile(TileName.EVILVALLEY, 403, 317, 120.00));
+		tiles.add(new Tile(TileName.LEDGES, 550, 402, 240.00));
+		tiles.add(new Tile(TileName.CRAG, 697, 487, 180.00));
+		tiles.add(new Tile(TileName.DARKVALLEY, 844, 572, 120.00));
+		tiles.add(new Tile(TileName.HIGHPASS, 256, 402, 120.00));
+		tiles.add(new Tile(TileName.BORDERLAND, 403, 487, 300.00));
+		tiles.add(new Tile(TileName.OAKWOODS, 550, 572, 240.00));
+		tiles.add(new Tile(TileName.DEEPWOODS, 697, 657, 0.00));
+		tiles.add(new Tile(TileName.CURSTVALLEY, 844, 742, 0.00));
+		tiles.add(new Tile(TileName.CAVERN, 256, 572, 60.00));
+		tiles.add(new Tile(TileName.BADVALLEY, 403, 657, 300.00));
+		tiles.add(new Tile(TileName.MAPLEWOODS, 550, 742, 120.00));
+		tiles.add(new Tile(TileName.NUTWOODS, 697, 827, 180.00));
+		tiles.add(new Tile(TileName.MOUNTAIN, 256, 742, 300.00));
+		tiles.add(new Tile(TileName.CAVES, 403, 827, 120.00));
+		tiles.add(new Tile(TileName.RUINS, 550, 912, 120.00));
+		tiles.add(new Tile(TileName.AWFULVALLEY, 697, 997, 0.00));
+		tiles.add(new Tile(TileName.PINEWOODS, 256, 912, 0.00));
+		tiles.add(new Tile(TileName.LINDENWOODS, 550, 1082, 60.00));
 
 		//MANUALLY SET TILE CONNECTIONS (DOES BOTH ENDS IN 1 CONNECT)
 		connect(tiles.get(0), tiles.get(1), 1, 2);		//cliff and evil valley
