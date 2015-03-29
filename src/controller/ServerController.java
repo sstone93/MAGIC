@@ -1295,6 +1295,19 @@ public class ServerController extends Handler{
 		}
 		else {
 			level = player.getActiveWeapon().getWeight();
+			
+			if (player.hasTreasure(SmallTreasureName.GLOVES_OF_STRENGTH.toString())) {
+				level = ItemWeight.TREMENDOUS;
+			}
+			else if (player.hasTreasure(SmallTreasureName.POWER_GAUNTLETS.toString()) && (level == ItemWeight.MEDIUM || level == ItemWeight.LIGHT || level == ItemWeight.NEGLIGIBLE)){
+				level = ItemWeight.HEAVY;
+			}
+			else if (player.hasTreasure(SmallTreasureName.HANDY_GLOVES.toString()) && (level == ItemWeight.LIGHT || level == ItemWeight.NEGLIGIBLE)) {
+				level = ItemWeight.MEDIUM;
+			}
+			else if (player.hasTreasure(SmallTreasureName.DEFT_GLOVES.toString()) && (level == ItemWeight.NEGLIGIBLE)) {
+				level = ItemWeight.LIGHT;
+			}
 		}
 
 		network.broadCast(player.getCharacter().getName() + " has hit " + monster.getName());
@@ -1465,7 +1478,16 @@ public class ServerController extends Handler{
 			deadPlayer(player, monster);
 		}
 		else if (level == ItemWeight.HEAVY) {
-			deadPlayer(player, monster);
+			if (player.getCharacter().getName() == CharacterName.BERSERKER) {
+				player.setHealth(player.getHealth() + 1);
+				network.broadCast(player.getCharacter().getName() + " has been wounded!");
+				if (player.getHealth() == 4) {
+					deadPlayer(player, monster);
+				}
+			}
+			else {
+				deadPlayer(player, monster);
+			}
 		}
 		else if (level == player.getCharacter().getWeight()) {
 			deadPlayer(player, monster);
@@ -1535,6 +1557,19 @@ public class ServerController extends Handler{
 		}
 		else {
 			level = attacker.getActiveWeapon().getWeight();
+			
+			if (attacker.hasTreasure(SmallTreasureName.GLOVES_OF_STRENGTH.toString())) {
+				level = ItemWeight.TREMENDOUS;
+			}
+			else if (attacker.hasTreasure(SmallTreasureName.POWER_GAUNTLETS.toString()) && (level == ItemWeight.MEDIUM || level == ItemWeight.LIGHT || level == ItemWeight.NEGLIGIBLE)){
+				level = ItemWeight.HEAVY;
+			}
+			else if (attacker.hasTreasure(SmallTreasureName.HANDY_GLOVES.toString()) && (level == ItemWeight.LIGHT || level == ItemWeight.NEGLIGIBLE)) {
+				level = ItemWeight.MEDIUM;
+			}
+			else if (attacker.hasTreasure(SmallTreasureName.DEFT_GLOVES.toString()) && (level == ItemWeight.NEGLIGIBLE)) {
+				level = ItemWeight.LIGHT;
+			}
 		}
 
 		network.broadCast(attacker.getCharacter().getName() + " has hit " + defender.getCharacter().getName());
@@ -1592,7 +1627,16 @@ public class ServerController extends Handler{
 			deadPlayer(attacker, defender);
 		}
 		else if (level == ItemWeight.HEAVY) {
-			deadPlayer(attacker, defender);
+			if (defender.getCharacter().getName() == CharacterName.BERSERKER) {
+				defender.setHealth(defender.getHealth() + 1);
+				network.broadCast(defender.getCharacter().getName() + " has been wounded!");
+				if (defender.getHealth() == 4) {
+					deadPlayer(attacker, defender);
+				}
+			}
+			else {
+				deadPlayer(attacker, defender);
+			}
 		}
 		else if (level == defender.getCharacter().getWeight()) {
 			deadPlayer(attacker, defender);
