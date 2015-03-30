@@ -412,7 +412,7 @@ public class Board implements Serializable{
 		}
 		
 		int howManyCanProwl = 0;
-		if (name == MonsterName.HEAVY_DRAGON || name == MonsterName.VIPER || name == MonsterName.HEAVY_SPIDER) ) {
+		if (name == MonsterName.HEAVY_DRAGON || name == MonsterName.VIPER || name == MonsterName.HEAVY_SPIDER) {
 			howManyCanProwl = 5; 
 		}
 		else if (name == MonsterName.WOLF) {

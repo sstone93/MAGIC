@@ -326,11 +326,11 @@ public class ServerController extends Handler{
 
 			//if you know about the site and are stading on the clearing containing it.
 			TreasureSite site = player.getLocation().getSite();
-			
+
 			if(site != null && player.knowsSite(site)){
-				
+
 				ArrayList<Treasure> treasures = site.getTreasures();
-				
+
 				if (roll <= treasures.size()) {
 					player.addTreasure(treasures.get(roll-1));
 					network.send(player.getID(), "you've found "+treasures.get(roll-1).getName()+"!!");
@@ -397,7 +397,7 @@ public class ServerController extends Handler{
     				player.addDiscovery(m);
     			}
     			network.send(player.getID(), "You've discovered " + mapChit + "!");
-    			discoverMonstersWithSiteChits(player, mapChit);
+    			discoverMonstersWithSiteChits(player);
     		} else {
     			network.send(player.getID(), "No map chits to discover!");
     		}
@@ -413,114 +413,148 @@ public class ServerController extends Handler{
     	p.setBlocked(true);
     	finishedPlayers +=1;
     }
-    
-    
-    
-    // TODO: I think this is correct behaviour, not entirely sure
-    // TODO; needs to take into account other things then just the monster roll
-    private void discoverMonstersWithSiteChits(Player player, ArrayList<MapChit> mapC) {
 
+    // TODO: add warning chit to players discoveries?
+    // TODO: make sure that map chit isn't null
+    private void discoverMonstersWithSiteChits(Player player) {
+    	ArrayList<MapChit> mapC = player.getLocation().parent.getMapChit();
     	for(MapChit mapChit : mapC){
 
     		System.out.println("!!! map chit name: " + mapChit.getName());
-    		//SoundChits name = mapChit.getName();
-    		WarningChit warningChit = player.getLocation().parent.getWarningChit();
-    		TileType type = player.getLocation().parent.getType();
 
-    		System.out.println("warning chit name: " + warningChit.getName());
+    		SoundChits soundName     = null;
+    		WarningChit warningChit  = player.getLocation().parent.getWarningChit();
+    		WarningChits warningName = warningChit.getName();
+    		TileType type            = player.getLocation().parent.getType();
+    		MonsterName monsterName  = null;
+
+    		if (mapChit != null) {
+    			soundName = mapChit.getName();
+    		}
+
+    		System.out.println("warning chit name: " + warningName);
     		System.out.println("tile type: " + type);
-    		MonsterName monsterName = null;
 
     		if (type == TileType.WOODS) {
-    			if (warningChit != null) {
-    				if (warningChit.getName() == WarningChits.DANK) {
-    					monsterName = MonsterName.VIPER;
-    				}
-    				else if (warningChit.getName() == WarningChits.RUINS) {
-    					monsterName = MonsterName.WOLF;
-    				}
-    			}
+				if (warningName == WarningChits.DANK) {
+					monsterName = MonsterName.VIPER;
+				}
+				else if (warningName == WarningChits.RUINS) {
+					monsterName = MonsterName.WOLF;
+				}
     		}
     		else if (type == TileType.MOUNTAINS) {
     			if (monsterRoll == 1) {
-    				if (mapChit.getName() == SoundChits.SLITHER_3 || mapChit.getName() == SoundChits.SLITHER_6) {
+    				if (warningName == WarningChits.SMOKE) {
     					monsterName = MonsterName.HEAVY_DRAGON;
     				}
-    				else if (mapChit.getName() == SoundChits.FLUTTER_1 || mapChit.getName() == SoundChits.FLUTTER_2) {
-    					monsterName = MonsterName.HEAVY_DRAGON;
-    				}
-    				else if (warningChit.getName() == WarningChits.SMOKE) {
-    					monsterName = MonsterName.HEAVY_DRAGON;
+    				else if (soundName != null) {
+	    				if (soundName == SoundChits.SLITHER_3 || soundName == SoundChits.SLITHER_6) {
+	    					monsterName = MonsterName.HEAVY_DRAGON;
+	    				}
+	    				else if (soundName == SoundChits.FLUTTER_1 || soundName == SoundChits.FLUTTER_2) {
+	    					monsterName = MonsterName.HEAVY_DRAGON;
+	    				}
     				}
     			}
     			else if (monsterRoll == 2) {
-    				if (mapChit.getName() == SoundChits.SLITHER_3 || mapChit.getName() == SoundChits.SLITHER_6) {
-    					monsterName = MonsterName.VIPER;
+    				if (soundName != null) {
+	    				if (soundName == SoundChits.SLITHER_3 || soundName == SoundChits.SLITHER_6) {
+	    					monsterName = MonsterName.VIPER;
+	    				}
     				}
     			}
     			else if (monsterRoll == 4) {
-    				if (warningChit.getName() == WarningChits.BONES || warningChit.getName() == WarningChits.STINK   ) {
+    				if (warningName == WarningChits.BONES || warningName == WarningChits.STINK   ) {
     					monsterName = MonsterName.GIANT;
     				}
-    				else if (mapChit.getName() == SoundChits.ROAR_4 || mapChit.getName() == SoundChits.ROAR_6) {
-    					monsterName = MonsterName.HEAVY_TROLL;
+    				else if (soundName != null) {
+	    				if (soundName == SoundChits.ROAR_4 || soundName == SoundChits.ROAR_6) {
+	    					monsterName = MonsterName.HEAVY_TROLL;
+	    				}
     				}
     			}
     			else if (monsterRoll == 5) {
-    				// spiders
+    				if (warningName == WarningChits.STINK || warningName == WarningChits.DANK) {
+    					monsterName = MonsterName.HEAVY_SPIDER;
+    				}
+    				else if (soundName != null) {
+	    				if (soundName == SoundChits.PATTER_2 || soundName == SoundChits.PATTER_5) {
+	    					monsterName = MonsterName.HEAVY_SPIDER;
+	    				}
+    				}
     			}
     			else if (monsterRoll == 6) {
-    				// bats
+    				if (warningName == WarningChits.BONES || warningName == WarningChits.RUINS ) {
+    					monsterName = MonsterName.GIANT_BAT;
+    				}
+    				else if (soundName != null) {
+	    				if (soundName == SoundChits.HOWL_4 || soundName == SoundChits.HOWL_5) {
+	    					monsterName = MonsterName.GIANT_BAT;
+	    				}
+	    				else if (soundName == SoundChits.FLUTTER_1 || soundName == SoundChits.FLUTTER_2) {
+	    					monsterName = MonsterName.GIANT_BAT;
+	    				}
+    				}
     			}
     		}
     		else if (type == TileType.CAVES) {
     			if (monsterRoll == 1) {
-    				if (mapChit.getName() == SoundChits.SLITHER_3 || mapChit.getName() == SoundChits.SLITHER_6) {
+    				if (warningName == WarningChits.SMOKE) {
     					monsterName = MonsterName.HEAVY_DRAGON;
     				}
-    				else if (mapChit.getName() == SoundChits.ROAR_4 || mapChit.getName() == SoundChits.ROAR_6) {
-    					monsterName = MonsterName.HEAVY_DRAGON;
-    				}
-    				else if (mapChit.getName() == SoundChits.FLUTTER_1 || mapChit.getName() == SoundChits.FLUTTER_2) {
-    					monsterName = MonsterName.HEAVY_DRAGON;
-    				}
-    				else if (warningChit.getName() == WarningChits.SMOKE) {
-    					monsterName = MonsterName.HEAVY_DRAGON;
+    				else if (soundName != null) {
+	    				if (soundName == SoundChits.SLITHER_3 || soundName == SoundChits.SLITHER_6) {
+	    					monsterName = MonsterName.HEAVY_DRAGON;
+	    				}
+	    				else if (soundName == SoundChits.ROAR_4 || soundName == SoundChits.ROAR_6) {
+	    					monsterName = MonsterName.HEAVY_DRAGON;
+	    				}
+	    				else if (soundName == SoundChits.FLUTTER_1 || soundName == SoundChits.FLUTTER_2) {
+	    					monsterName = MonsterName.HEAVY_DRAGON;
+	    				}
     				}
     			}
     			else if (monsterRoll == 2) {
-    				if (mapChit.getName() == SoundChits.SLITHER_3 || mapChit.getName() == SoundChits.SLITHER_6) {
+    				if (warningName == WarningChits.DANK) {
     					monsterName = MonsterName.VIPER;
     				}
-    				else if (warningChit.getName() == WarningChits.DANK) {
-    					monsterName = MonsterName.VIPER;
+    				else if (soundName != null) {
+	    				if (soundName == SoundChits.SLITHER_3 || soundName == SoundChits.SLITHER_6) {
+	    					monsterName = MonsterName.VIPER;
+	    				}
     				}
     			}
     			else if (monsterRoll == 3) {
-    				if (warningChit.getName() == WarningChits.RUINS ) {
+    				if (warningName == WarningChits.RUINS ) {
     					// goblins, but replaced with trolls
     					monsterName = MonsterName.HEAVY_TROLL;
     				}
-    				else if (mapChit.getName() == SoundChits.HOWL_4 || mapChit.getName() == SoundChits.HOWL_5 ) {
-    					monsterName = MonsterName.HEAVY_TROLL; // replaced goblins with trolls
-    				}
-    				else if (mapChit.getName() == SoundChits.PATTER_2 || mapChit.getName() == SoundChits.PATTER_5 ) {
-    					monsterName = MonsterName.HEAVY_TROLL; // replaced goblins with trolls
+    				else if (soundName != null) {
+	    				if (soundName == SoundChits.HOWL_4 || soundName == SoundChits.HOWL_5 ) {
+	    					monsterName = MonsterName.HEAVY_TROLL; // replaced goblins with trolls
+	    				}
+	    				else if (soundName == SoundChits.PATTER_2 || soundName == SoundChits.PATTER_5 ) {
+	    					monsterName = MonsterName.HEAVY_TROLL; // replaced goblins with trolls
+	    				}
     				}
     			}
     			else if (monsterRoll == 4) {
-    				if (warningChit.getName() == WarningChits.BONES || warningChit.getName() == WarningChits.STINK   ) {
+    				if (warningName == WarningChits.BONES || warningName == WarningChits.STINK   ) {
     					monsterName = MonsterName.HEAVY_TROLL;
     				}
-    				else if (mapChit.getName() == SoundChits.ROAR_4 || mapChit.getName() == SoundChits.ROAR_6) {
-    					monsterName = MonsterName.HEAVY_TROLL;
+    				else if (soundName != null) {
+	    				if (soundName == SoundChits.ROAR_4 || soundName == SoundChits.ROAR_6) {
+	    					monsterName = MonsterName.HEAVY_TROLL;
+	    				}
     				}
-    			}
-    			else if (monsterRoll == 5) {
-    				// spiders
     			}
     			else if (monsterRoll == 6) {
-    				// bats
+    				if (soundName != null) {
+	    				if (soundName == SoundChits.FLUTTER_1 || soundName == SoundChits.FLUTTER_2) {
+	    					monsterName = MonsterName.GIANT_BAT;
+	    				}
+    				}
     			}
     		}
 
@@ -538,7 +572,7 @@ public class ServerController extends Handler{
     			network.broadCast("player has summoned " + monsterName + "!"  );
     		}
 
-    		if (!player.isBlocked() && !player.isHidden())
+    		if (!player.isBlocked() && !player.isHidden()) {
     			for (int i = 0; i < monstersInClearing.size(); i++) {
     				if (!monstersInClearing.get(i).isBlocked()) {
     					monstersInClearing.get(i).setBlocked(true);
@@ -547,6 +581,7 @@ public class ServerController extends Handler{
     					break;
     				}
     			}
+    		}
     	}
     }
 
@@ -591,7 +626,7 @@ public class ServerController extends Handler{
         	players.get(i).setGoneInCave(false);
         	players.get(i).setBlocked(false);
         }
-        
+
         // reset map chits and warning chits so they can summon monsters
         for (int i = 0; i < board.tiles.size(); i++) {
         	board.tiles.get(i).getWarningChit().setSummoned(false);
@@ -601,7 +636,7 @@ public class ServerController extends Handler{
             	}
         	}
         }
-        
+
         System.out.println("ResetDay end");
         return true;
     }
@@ -685,7 +720,7 @@ public class ServerController extends Handler{
             int fameScore      = players.get(i).getFame();
             int notorietyScore = players.get(i).getNotoriety();
             int goldScore      = players.get(i).getGold();
-            
+
             for (int j = 0; j < players.get(i).getTreasures().size(); j++) {
             	if (players.get(i).getTreasures().get(j) != null) {
             		notorietyScore += players.get(i).getTreasures().get(j).getNotoriety();
@@ -697,12 +732,12 @@ public class ServerController extends Handler{
             fameScore = fameScore / 10;
             notorietyScore = notorietyScore / 20;
             goldScore = goldScore / 30;
-            
+
             basicScore = fameScore + notorietyScore + goldScore;
             player.setFinalScore(basicScore);
 
             network.send(player.getID(), player.getFinalScore() + " is your score!");
-            
+
             if (basicScore > winner.getFinalScore()) {
                 winner = player;
             }
@@ -857,20 +892,20 @@ public class ServerController extends Handler{
     		}
     	}
     }
-    
+
     /*
      * players turn over the tiles in their clearing, and monsters are appropriately summoned
      * the monsters that are in the same tile as the player are "summoned" to their clearing and block the player (if they're unhidden)
-     * 
+     *
      */
-    private void summonMonstersToTile() {    	
+    private void summonMonstersToTile() {
     	for (int i = 0; i < players.size(); i ++) {
     		//ArrayList<MapChit> mapChit = players.get(i).getLocation().parent.getMapChit();
-    		//TODO: take out map chit parameter 
-	    	//discoverMonstersWithSiteChits(players.get(i), mapChit); 
-	    	
+    		//TODO: take out map chit parameter
+	    	//discoverMonstersWithSiteChits(players.get(i), mapChit);
+
 	    	ArrayList<Clearing> clearings = players.get(i).getLocation().parent.getClearings();
-	    	
+
 	    	for (int j = 0; j < clearings.size(); j++) {
 	    		if (!clearings.get(j).equals(players.get(i).getLocation())) {
 	    			ArrayList<Monster> monsters = clearings.get(j).getMonsters();
@@ -1295,7 +1330,7 @@ public class ServerController extends Handler{
 		}
 		else {
 			level = player.getActiveWeapon().getWeight();
-			
+
 			if (player.hasTreasure(SmallTreasureName.GLOVES_OF_STRENGTH.toString())) {
 				level = ItemWeight.TREMENDOUS;
 			}
@@ -1557,7 +1592,7 @@ public class ServerController extends Handler{
 		}
 		else {
 			level = attacker.getActiveWeapon().getWeight();
-			
+
 			if (attacker.hasTreasure(SmallTreasureName.GLOVES_OF_STRENGTH.toString())) {
 				level = ItemWeight.TREMENDOUS;
 			}
