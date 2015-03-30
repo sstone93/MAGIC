@@ -392,7 +392,7 @@ public class ServerController extends Handler{
 
     		ArrayList<MapChit> mapChit = player.getLocation().parent.getMapChit();
 
-    		if (mapChit != null) {
+    		if (mapChit.isEmpty() != true) {
     			for(MapChit m : mapChit){
     				player.addDiscovery(m);
     			}
@@ -841,23 +841,23 @@ public class ServerController extends Handler{
     	// ghost, giant, heavydragon, heavytroll, viper, wolf
 
     	setProwlingMonsters(MonsterName.GHOST);
-    	if (roll == 1) { // dragons are on the prowl
+    	if (roll == 1) {
     		network.broadCast("Ghosts and Heavy Dragons are on the prowl!");
     		setProwlingMonsters(MonsterName.HEAVY_DRAGON);
-    	} else if (roll == 2) { // serpents, demons, woodfolk
+    	} else if (roll == 2) {
     		network.broadCast("Ghosts and Vipers are on the prowl!");
     		setProwlingMonsters(MonsterName.VIPER);
-    	} else if (roll == 3) { // wolves, ogres, goblins, octopus
+    	} else if (roll == 3) {
     		network.broadCast("Ghosts and Wolves are on the prowl!");
     		setProwlingMonsters(MonsterName.WOLF);
-    	} else if (roll == 4) { // giants, trolls, lancers
+    	} else if (roll == 4) {
     		network.broadCast("Ghosts, Heavy Trolls, and Giants are on the prowl!");
     		setProwlingMonsters(MonsterName.HEAVY_TROLL);
     		setProwlingMonsters(MonsterName.GIANT);
-    	} else if (roll == 5) { // spiders, imp, bashkars, rogues
-    		network.broadCast("Ghosts are on the prowl!");
-    	} else if (roll == 6) { // bats, visitor/mission chits flip, guard, order
-    		network.broadCast("Ghosts are on the prowl!");
+    	} else if (roll == 5) {
+    		network.broadCast("Ghosts and Heavy Spiders are on the prowl!");
+    	} else if (roll == 6) {
+    		network.broadCast("Ghosts and Giant Bats are on the prowl!");
     	}
     }
 
