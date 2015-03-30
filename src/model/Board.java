@@ -411,81 +411,32 @@ public class Board implements Serializable{
 			}
 		}
 		
-		if (name == MonsterName.HEAVY_DRAGON || name == MonsterName.VIPER) {
-			if (numberProwling == 0) {
-				monsters.get(0).setStartingLocation(clearing);
-				clearing.addMonster(monsters.get(0));
-			}
-			else {
-				// set 2 prowling
-				int toProwl = 0; 
-				for (int i = 0; i < monsters.size(); i++) {
-					if (monsters.get(i).getStartingLocation() != null) {
-						monsters.get(i).setStartingLocation(clearing);
-						clearing.addMonster(monsters.get(i));
-						toProwl++;
-						if (toProwl == 2) {
-							break;
-						}
-						
-					} 
-				}
-			}
+		int howManyCanProwl = 0;
+		if (name == MonsterName.HEAVY_DRAGON || name == MonsterName.VIPER || name == MonsterName.HEAVY_SPIDER) {
+			howManyCanProwl = 5; 
+		}
+		else if (name == MonsterName.WOLF) {
+			howManyCanProwl = 6;
+		}
+		else if (name == MonsterName.HEAVY_TROLL || name == MonsterName.GIANT_BAT) {
+			howManyCanProwl = 3;
+		} 
+		else if (name == MonsterName.GIANT) {
+			howManyCanProwl = 2; 
 		}
 		
-		if (name == MonsterName.WOLF) {
-			if (numberProwling == 0) {
-				monsters.get(0).setStartingLocation(clearing);
-				monsters.get(1).setStartingLocation(clearing);
-				clearing.addMonster(monsters.get(0));
-				clearing.addMonster(monsters.get(1));
-			}
-			else {
-				int toProwl; 
-				if (numberProwling == 2) { toProwl = 3; }
-				else { toProwl = 1; }
-				
-				for (int i = 0; i < monsters.size(); i++) {
-					if (monsters.get(i).getStartingLocation() != null) {
-						monsters.get(i).setStartingLocation(clearing);
-						clearing.addMonster(monsters.get(i));
-						toProwl--;
-						if (toProwl == 0) {
-							break;
-						}
-						
-					} 
-				}
-			}
-		}
-		
-		if (name == MonsterName.GIANT) {
-			if (numberProwling == 0) {
-				monsters.get(0).setStartingLocation(clearing);
-				monsters.get(1).setStartingLocation(clearing);
-				clearing.addMonster(monsters.get(0));
-				clearing.addMonster(monsters.get(1));
-			}
-		}
-		
-		if (name == MonsterName.HEAVY_TROLL) {
-			if (numberProwling == 0) {
-				monsters.get(0).setStartingLocation(clearing);
-				monsters.get(1).setStartingLocation(clearing);
-				clearing.addMonster(monsters.get(0));
-				clearing.addMonster(monsters.get(1));
-			}
-			else {				
-				for (int i = 0; i < monsters.size(); i++) {
-					if (monsters.get(i).getStartingLocation() != null) {
-						monsters.get(i).setStartingLocation(clearing);
-						clearing.addMonster(monsters.get(i));
-					} 
-				}
+		// add one prowling monster to the board
+		if (numberProwling < howManyCanProwl) {
+			for (int i = 0; i < monsters.size(); i++) {
+				if (monsters.get(i).getStartingLocation() != null) {
+					monsters.get(i).setStartingLocation(clearing);
+					clearing.addMonster(monsters.get(i));
+					break;
+				} 
 			}
 		}
 	}
-
+		
 	public void placeChits(ArrayList<Object> a, int[] temps){
 		for(int i=0; i<temps.length; i++){
 			if(a.get(0) instanceof LostPlace){//lost
