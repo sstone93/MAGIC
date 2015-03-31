@@ -166,9 +166,9 @@ public class Utility {
     		case PATTER_2: return "/images/patter2.jpg";
     		case PATTER_5: return "/images/patter5.jpg";
     		case ROAR_4: return "/images/roar4.jpg";
-    		case ROAR_6: return "images/roar6.jpg";
-    		case SLITHER_3: return "images/slither3.jpg";
-    		case SLITHER_6: return "images/slither6.jpg";
+    		case ROAR_6: return "/images/roar6.jpg";
+    		case SLITHER_3: return "/images/slither3.jpg";
+    		case SLITHER_6: return "/images/slither6.jpg";
     		default: return null;
     	}
     }
