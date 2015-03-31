@@ -837,8 +837,6 @@ public class ServerController extends Handler{
     	int roll = roll(6);
     	network.broadCast("Monster roll: " + roll);
     	monsterRoll = roll;
-    	// the ones we have:
-    	// ghost, giant, heavydragon, heavytroll, viper, wolf
 
     	setProwlingMonsters(MonsterName.GHOST);
     	if (roll == 1) {
@@ -856,8 +854,10 @@ public class ServerController extends Handler{
     		setProwlingMonsters(MonsterName.GIANT);
     	} else if (roll == 5) {
     		network.broadCast("Ghosts and Heavy Spiders are on the prowl!");
+    		setProwlingMonsters(MonsterName.HEAVY_SPIDER);
     	} else if (roll == 6) {
     		network.broadCast("Ghosts and Giant Bats are on the prowl!");
+    		setProwlingMonsters(MonsterName.GIANT_BAT);
     	}
     }
 
@@ -900,9 +900,8 @@ public class ServerController extends Handler{
      */
     private void summonMonstersToTile() {
     	for (int i = 0; i < players.size(); i ++) {
-    		//ArrayList<MapChit> mapChit = players.get(i).getLocation().parent.getMapChit();
-    		//TODO: take out map chit parameter
-	    	//discoverMonstersWithSiteChits(players.get(i), mapChit);
+	    	// add warning chit to discoveries
+	   		players.get(i).addDiscovery(players.get(i).getLocation().parent.getWarningChit());
 
 	    	ArrayList<Clearing> clearings = players.get(i).getLocation().parent.getClearings();
 
