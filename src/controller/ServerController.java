@@ -417,93 +417,125 @@ public class ServerController extends Handler{
     // TODO: add warning chit to players discoveries?
     // TODO: make sure that map chit isn't null
     private void discoverMonstersWithSiteChits(Player player) {
-    	ArrayList<MapChit> mapC = player.getLocation().parent.getMapChit();
-    	for(MapChit mapChit : mapC){
-
-    		System.out.println("!!! map chit name: " + mapChit.getName());
-
-    		SoundChits soundName     = null;
-    		WarningChit warningChit  = player.getLocation().parent.getWarningChit();
-    		WarningChits warningName = warningChit.getName();
-    		TileType type            = player.getLocation().parent.getType();
-    		MonsterName monsterName  = null;
-
-    		if (mapChit != null) {
-    			soundName = mapChit.getName();
+    	ArrayList<MapChit> mapC  = player.getLocation().parent.getMapChit();
+    	WarningChit  warningChit = player.getLocation().parent.getWarningChit();
+		WarningChits warningName = warningChit.getName();
+		TileType     type        = player.getLocation().parent.getType();
+		MonsterName  monsterName = null;
+		
+		System.out.println("warning chit name: " + warningName);
+		System.out.println("tile type: " + type);
+		
+		if (warningChit.hasSummoned() == false) {
+			if (type == TileType.WOODS) {
+    			if (monsterRoll == 2) {
+					if (warningName == WarningChits.DANK) {
+						monsterName = MonsterName.VIPER;
+					}
+    			}
+    			else if (monsterRoll == 3) {
+					if (warningName == WarningChits.RUINS) {
+						monsterName = MonsterName.WOLF;
+					}
+    			}
     		}
-
-    		System.out.println("warning chit name: " + warningName);
-    		System.out.println("tile type: " + type);
-
-    		if (type == TileType.WOODS) {
-				if (warningName == WarningChits.DANK) {
-					monsterName = MonsterName.VIPER;
-				}
-				else if (warningName == WarningChits.RUINS) {
-					monsterName = MonsterName.WOLF;
-				}
-    		}
-    		else if (type == TileType.MOUNTAINS) {
+			else if (type == TileType.MOUNTAINS) {
     			if (monsterRoll == 1) {
     				if (warningName == WarningChits.SMOKE) {
     					monsterName = MonsterName.HEAVY_DRAGON;
-    				}
-    				else if (soundName != null) {
-	    				if (soundName == SoundChits.SLITHER_3 || soundName == SoundChits.SLITHER_6) {
-	    					monsterName = MonsterName.HEAVY_DRAGON;
-	    				}
-	    				else if (soundName == SoundChits.FLUTTER_1 || soundName == SoundChits.FLUTTER_2) {
-	    					monsterName = MonsterName.HEAVY_DRAGON;
-	    				}
-    				}
-    			}
-    			else if (monsterRoll == 2) {
-    				if (soundName != null) {
-	    				if (soundName == SoundChits.SLITHER_3 || soundName == SoundChits.SLITHER_6) {
-	    					monsterName = MonsterName.VIPER;
-	    				}
     				}
     			}
     			else if (monsterRoll == 4) {
     				if (warningName == WarningChits.BONES || warningName == WarningChits.STINK   ) {
     					monsterName = MonsterName.GIANT;
     				}
-    				else if (soundName != null) {
-	    				if (soundName == SoundChits.ROAR_4 || soundName == SoundChits.ROAR_6) {
-	    					monsterName = MonsterName.HEAVY_TROLL;
-	    				}
-    				}
     			}
     			else if (monsterRoll == 5) {
     				if (warningName == WarningChits.STINK || warningName == WarningChits.DANK) {
     					monsterName = MonsterName.HEAVY_SPIDER;
-    				}
-    				else if (soundName != null) {
-	    				if (soundName == SoundChits.PATTER_2 || soundName == SoundChits.PATTER_5) {
-	    					monsterName = MonsterName.HEAVY_SPIDER;
-	    				}
     				}
     			}
     			else if (monsterRoll == 6) {
     				if (warningName == WarningChits.BONES || warningName == WarningChits.RUINS ) {
     					monsterName = MonsterName.GIANT_BAT;
     				}
-    				else if (soundName != null) {
+    			}
+			}
+			else if (type == TileType.CAVES) {
+				if (monsterRoll == 1) {
+					if (warningName == WarningChits.SMOKE) {
+    					monsterName = MonsterName.HEAVY_DRAGON;
+    				}
+				}
+				else if (monsterRoll == 2) {
+					if (warningName == WarningChits.DANK) {
+    					monsterName = MonsterName.VIPER;
+    				}
+				}
+				else if (monsterRoll == 3) {
+					if (warningName == WarningChits.RUINS ) {
+    					monsterName = MonsterName.HEAVY_TROLL;
+    				}
+				}
+				else if (monsterRoll == 4) {
+					if (warningName == WarningChits.BONES || warningName == WarningChits.STINK   ) {
+    					monsterName = MonsterName.HEAVY_TROLL;
+    				}
+				}
+			}
+		}
+		if (monsterName != null) {
+			placeMonsterAndBlock(player, monsterName);
+			warningChit.setSummoned(true);
+		}
+		if (monsterName == null) { // this means that warning chit didn't place anything
+	    	for(MapChit mapChit : mapC) {
+	    		if (mapChit == null) {
+	    			continue;
+	    		}
+	    		if (mapChit.hasSummoned() == true) {
+	    			continue;
+	    		}
+	    		System.out.println("!!! map chit name: " + mapChit.getName());
+	    		monsterName          = null;
+	    		SoundChits soundName = mapChit.getName();
+	
+	
+	    		if (type == TileType.MOUNTAINS) {
+	    			if (monsterRoll == 1) {
+	    				if (soundName == SoundChits.SLITHER_3 || soundName == SoundChits.SLITHER_6) {
+	    					monsterName = MonsterName.HEAVY_DRAGON;
+	    				}
+	    				else if (soundName == SoundChits.FLUTTER_1 || soundName == SoundChits.FLUTTER_2) {
+	    					monsterName = MonsterName.HEAVY_DRAGON;
+	    				}
+	    			}
+	    			else if (monsterRoll == 2) {
+	    				if (soundName == SoundChits.SLITHER_3 || soundName == SoundChits.SLITHER_6) {
+	    					monsterName = MonsterName.VIPER;
+	    				}
+	    			}
+	    			else if (monsterRoll == 4) {
+	    				if (soundName == SoundChits.ROAR_4 || soundName == SoundChits.ROAR_6) {
+	    					monsterName = MonsterName.HEAVY_TROLL;
+	    				}
+	    			}
+	    			else if (monsterRoll == 5) {
+	    				if (soundName == SoundChits.PATTER_2 || soundName == SoundChits.PATTER_5) {
+	    					monsterName = MonsterName.HEAVY_SPIDER;
+	    				}
+	    			}
+	    			else if (monsterRoll == 6) {
 	    				if (soundName == SoundChits.HOWL_4 || soundName == SoundChits.HOWL_5) {
 	    					monsterName = MonsterName.GIANT_BAT;
 	    				}
 	    				else if (soundName == SoundChits.FLUTTER_1 || soundName == SoundChits.FLUTTER_2) {
 	    					monsterName = MonsterName.GIANT_BAT;
 	    				}
-    				}
-    			}
-    		}
-    		else if (type == TileType.CAVES) {
-    			if (monsterRoll == 1) {
-    				if (warningName == WarningChits.SMOKE) {
-    					monsterName = MonsterName.HEAVY_DRAGON;
-    				}
-    				else if (soundName != null) {
+	    			}
+	    		}
+	    		else if (type == TileType.CAVES) {
+	    			if (monsterRoll == 1) {
 	    				if (soundName == SoundChits.SLITHER_3 || soundName == SoundChits.SLITHER_6) {
 	    					monsterName = MonsterName.HEAVY_DRAGON;
 	    				}
@@ -513,76 +545,60 @@ public class ServerController extends Handler{
 	    				else if (soundName == SoundChits.FLUTTER_1 || soundName == SoundChits.FLUTTER_2) {
 	    					monsterName = MonsterName.HEAVY_DRAGON;
 	    				}
-    				}
-    			}
-    			else if (monsterRoll == 2) {
-    				if (warningName == WarningChits.DANK) {
-    					monsterName = MonsterName.VIPER;
-    				}
-    				else if (soundName != null) {
+	    			}
+	    			else if (monsterRoll == 2) {
 	    				if (soundName == SoundChits.SLITHER_3 || soundName == SoundChits.SLITHER_6) {
 	    					monsterName = MonsterName.VIPER;
 	    				}
-    				}
-    			}
-    			else if (monsterRoll == 3) {
-    				if (warningName == WarningChits.RUINS ) {
-    					// goblins, but replaced with trolls
-    					monsterName = MonsterName.HEAVY_TROLL;
-    				}
-    				else if (soundName != null) {
+	    			}
+	    			else if (monsterRoll == 3) {
 	    				if (soundName == SoundChits.HOWL_4 || soundName == SoundChits.HOWL_5 ) {
 	    					monsterName = MonsterName.HEAVY_TROLL; // replaced goblins with trolls
 	    				}
 	    				else if (soundName == SoundChits.PATTER_2 || soundName == SoundChits.PATTER_5 ) {
 	    					monsterName = MonsterName.HEAVY_TROLL; // replaced goblins with trolls
 	    				}
-    				}
-    			}
-    			else if (monsterRoll == 4) {
-    				if (warningName == WarningChits.BONES || warningName == WarningChits.STINK   ) {
-    					monsterName = MonsterName.HEAVY_TROLL;
-    				}
-    				else if (soundName != null) {
+	    			}
+	    			else if (monsterRoll == 4) {
 	    				if (soundName == SoundChits.ROAR_4 || soundName == SoundChits.ROAR_6) {
 	    					monsterName = MonsterName.HEAVY_TROLL;
 	    				}
-    				}
-    			}
-    			else if (monsterRoll == 6) {
-    				if (soundName != null) {
+	    			}
+	    			else if (monsterRoll == 6) {
 	    				if (soundName == SoundChits.FLUTTER_1 || soundName == SoundChits.FLUTTER_2) {
 	    					monsterName = MonsterName.GIANT_BAT;
 	    				}
-    				}
-    			}
-    		}
+	    			}
+	    		}
+	    		if (monsterName != null) {
+	    			mapChit.setSummoned(true);
+	    			placeMonsterAndBlock(player, monsterName);
+	    		}
+	    	}
+		}
+    }
+    
+    /**
+     * places new monster in clearing based on @monsterName
+     * monster blocks @player in clearing if they are unhidden 
+     **/
+    private void placeMonsterAndBlock(Player player, MonsterName monsterName) {
+		ArrayList<Monster> monstersInClearing = player.getLocation().getMonsters();
+		if (monsterName != null) {
+			board.placeMonstersAtStartingLocation(monsterName, player.getLocation());
+			network.broadCast("player has summoned " + monsterName + "!"  );
+		}
 
-    		System.out.println(player.getLocation().getMonsters());
-    		ArrayList<Monster> monstersInClearing = player.getLocation().getMonsters();
-
-    		for (int i = 0; i < monstersInClearing.size(); i++) {
-    			System.out.println(monstersInClearing.get(i).getName() + " in clearing!!!!");
-    		}
-
-    		System.out.println("monster name: " + monsterName);
-
-    		if (monsterName != null) {
-    			board.placeMonstersAtStartingLocation(monsterName, player.getLocation());
-    			network.broadCast("player has summoned " + monsterName + "!"  );
-    		}
-
-    		if (!player.isBlocked() && !player.isHidden()) {
-    			for (int i = 0; i < monstersInClearing.size(); i++) {
-    				if (!monstersInClearing.get(i).isBlocked()) {
-    					monstersInClearing.get(i).setBlocked(true);
-    					block(player);
-    					network.send(player.getID(), "You've been blocked by " + monstersInClearing.get(i).getName());
-    					break;
-    				}
-    			}
-    		}
-    	}
+		if (!player.isBlocked() && !player.isHidden()) {
+			for (int i = 0; i < monstersInClearing.size(); i++) {
+				if (!monstersInClearing.get(i).isBlocked()) {
+					monstersInClearing.get(i).setBlocked(true);
+					block(player);
+					network.send(player.getID(), "You've been blocked by " + monstersInClearing.get(i).getName());
+					break;
+				}
+			}
+		}
     }
 
     private void printBoard() {
