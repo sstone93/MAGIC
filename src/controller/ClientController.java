@@ -113,6 +113,18 @@ public class ClientController extends Handler{
 		//state = GameState.NULL;
 		view.updateNonBoardGUI(null);//sending null rather than the player object, null checks make this safe
 	}
+	
+	public void handleBlockSubmit(Player p){
+		ArrayList<Object> mes = new ArrayList<Object>();
+		mes.add(p);
+		
+		network.send(new Message(MessageType.BLOCK, mes));
+		model.addMessage("Sent block");
+
+		state = GameState.NULL;
+		view.updateNonBoardGUI(null);//sending null rather than the player object, null checks make this safe
+		
+	}
 
 	/**
 	 * Should send the selected combat moves to the server

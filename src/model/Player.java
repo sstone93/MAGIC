@@ -32,6 +32,7 @@ public class Player implements Serializable{
     boolean finishedDaylight = false;
     boolean finishedBasic = false;
     boolean addedSunlight = false;
+    boolean blockState = false;
 
     Character character;
     CombatMoves moves;
@@ -105,6 +106,10 @@ public class Player implements Serializable{
     	//shoes of stealth = light strength restriction??
     	//handy gloves = medium strength restriction?
     	
+    }
+    
+    public void setBlockState(boolean b){
+    	this.blockState = b;
     }
     
     public boolean hasTreasure(String name){
@@ -423,6 +428,8 @@ public class Player implements Serializable{
 	}
 
 	public void usePhase(Phase data) {
+		
+		blockState = false;
 		
 		//TODO THIS ASSUMES THAT PHASE EQUALITY MEANS JUST THE TYPES MATCH (which i think i did)
 	

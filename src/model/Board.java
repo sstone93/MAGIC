@@ -591,6 +591,7 @@ public class Board implements Serializable{
     	player.getLocation().removeOccupant(player);
 		player.setLocation(newClearing);
 		newClearing.addOccupant(player);
+		player.setBlockState(true);
     }
 
     /**

@@ -129,15 +129,18 @@ public class ServerController extends Handler{
 
 						//check to see if basics are over, if so add sunlight
 						p.checkAndAddSunlight();
-
+						
+						
+						
 						//broadcast new board and player states
-						updateClients();	//PROBLEM IS WITH PLAYER DISTRIBUTION HERE
+						updateClients();	
 
 						//see if that was their last action
 						if(p.getDaylight()){
 							finishedPlayers += 1;
 							network.send(ID, "NO PHASES LEFT");
 						}
+						
 
 					} else {
 						//return error to client
@@ -160,6 +163,11 @@ public class ServerController extends Handler{
 				}else{
 					network.send(ID, "NOT ACCEPTING COMBAT TARGETS ATM");
 				}
+			}
+			if( m.getType() == MessageType.BLOCK){
+				Player blockTarget = (Player) m.getData().get(0);
+				block(blockTarget);
+				block(findPlayer(ID));
 			}
 			if( m.getType() == MessageType.COMBAT_MOVES){
 				if(state == GameState.CHOOSE_COMBATMOVES){
