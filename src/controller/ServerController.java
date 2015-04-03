@@ -26,11 +26,13 @@ import model.WarningChit;
 import model.Weapon;
 import model.WhiteKnight;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import utils.Config;
 import utils.Utility;
-import utils.Utility.MonsterName;
 import utils.Utility.*;
 import view.ServerView;
 
@@ -2022,8 +2024,22 @@ public class ServerController extends Handler{
     	System.out.println("end selection loop");
     	state = GameState.NULL;
 
-		//instanciate the model
-		this.board = new Board(players);
+    	
+    	//if cheatmode, run the import
+    	if(Config.CHEAT_MODE){
+    		Scanner ourScanner;
+    		try {
+    			ourScanner = new Scanner(new File("settings.txt"));
+    			ourScanner.nextLine();
+    			this.board = new Board(players, ourScanner); //instanciate the model
+    			ourScanner.close();
+    		} catch (FileNotFoundException e) {
+    			e.printStackTrace();
+    		}
+    	}else{
+    		this.board = new Board(players); //instanciate the model
+    	}
+    	
 		System.out.println("Server Models Created.");
 
 		//starts the game (first thing called distributes characters and board
