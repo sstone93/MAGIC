@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 import utils.Utility.ArmourName;
 import utils.Utility.GarrisonName;
+import utils.Utility.LargeTreasureName;
+import utils.Utility.SmallTreasureName;
 import utils.Utility.WeaponName;
 
 public class Garrison implements Serializable{
@@ -70,6 +72,16 @@ public class Garrison implements Serializable{
 
 			this.armour.clear();
 			this.weapons.clear();
+			
+			//TREASURES ADDED FOR TESTING
+			this.treasures.add(new SmallTreasure(SmallTreasureName.CLOAK_OF_MIST));
+			this.treasures.add(new SmallTreasure(SmallTreasureName.DEFT_GLOVES));
+			this.treasures.add(new SmallTreasure(SmallTreasureName.SHOES_OF_STEALTH));
+			this.treasures.add(new SmallTreasure(SmallTreasureName.MAGIC_SPECTACLES));
+			this.treasures.add(new SmallTreasure(SmallTreasureName.HANDY_GLOVES));
+			this.treasures.add(new SmallTreasure(SmallTreasureName.LEAGUE_BOOTS_7));
+			this.treasures.add(new LargeTreasure(LargeTreasureName.REGENT_OF_JEWELS));
+			
 		}
 	}
 
@@ -93,8 +105,10 @@ public class Garrison implements Serializable{
 		return name;
 	}
 
-	public void setTreasures(ArrayList<Treasure> t){
-		treasures = t;
+	public void addTreasures(ArrayList<Treasure> t){
+		for(Treasure tr : t){
+			treasures.add(tr);
+		}
 	}
 
 	public ArrayList<Treasure> getTreasures() {

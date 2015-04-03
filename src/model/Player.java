@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 import utils.Utility;
 import utils.Utility.Actions;
-import utils.Utility.ClearingType;
 import utils.Utility.ItemWeight;
 import utils.Utility.LargeTreasureName;
 import utils.Utility.MonsterName;
@@ -18,7 +17,7 @@ public class Player implements Serializable{
 	private static final long serialVersionUID = 4084261472014880590L;
 	int ID;
     int victoryPoints = 0;
-    int gold          = 50; // can't be negative
+    int gold          = 200; // can't be negative
     int health        = 0;
     int fatigue       = 0;
     int fame          = 0;

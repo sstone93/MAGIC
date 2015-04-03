@@ -297,10 +297,10 @@ public class Board implements Serializable{
 
 		//garrisons (chapel, house, inn, guard(house)
 		//all 4 take 2 small treasures each
-		garrisons.get(0).setTreasures(createTreasureArray(2,0));
-		garrisons.get(1).setTreasures(createTreasureArray(2,0));
-		garrisons.get(2).setTreasures(createTreasureArray(2,0));
-		garrisons.get(3).setTreasures(createTreasureArray(2,0));
+		garrisons.get(0).addTreasures(createTreasureArray(2,0));
+		garrisons.get(1).addTreasures(createTreasureArray(2,0));
+		garrisons.get(2).addTreasures(createTreasureArray(2,0));
+		garrisons.get(3).addTreasures(createTreasureArray(2,0));
 		
 		//5 given to the lost city
 		ArrayList<MapChit> c1 = new ArrayList<MapChit>();
