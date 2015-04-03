@@ -28,7 +28,7 @@ public class BlockPanel extends JPanel{
 		
 		this.control = c;
 		
-		setBounds(700, 0, 750, 50);
+		setBounds(600, 0, 750, 150);
 		setBorder(new LineBorder(Color.GRAY));
 		setLayout(null);
 		
@@ -48,7 +48,7 @@ public class BlockPanel extends JPanel{
 			}
 		});
 		
-		send.setBounds(220, 145, 89, 23);
+		send.setBounds(0, 60, 30, 90);
 		add(send);
 	}
 	

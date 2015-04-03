@@ -124,20 +124,20 @@ public class View extends JFrame {
 			characterInfoPanel.update();
 			scrollPanel.getVerticalScrollBar().setValue(p.getLocation().y - 250);
 			scrollPanel.getHorizontalScrollBar().setValue(p.getLocation().x - 400);
+			//if the blockpanel should appear (other people in your clearing, and you are not blocked)
+			if(p.getLocation().getOccupants().size() > 1 && p.isBlocked() == false){
+				System.out.println("SHOWING BLOCK PANEL");
+				blockPanel.update(p);
+				blockPanel.setVisible(true);
+			}else{
+				blockPanel.setVisible(false);//if you are blocked or alone, remove the block panel
+				System.out.println("HIDING BLOCK PANEL");
+			}
 		}
 		updateNonBoardGUI();
 	}
 	
 	public void updateNonBoardGUI(){
-
-		//if the blockpanel should appear (other people in your clearing, and you are not blocked)
-		if(p.getLocation().getOccupants().size() > 1 && p.isBlocked() != false){
-			blockPanel.update(p);
-			blockPanel.setVisible(true);
-		}else{
-			blockPanel.setVisible(false);//if you are blocked or alone, remove the block panel
-		}
-		
 		
 		//UPDATES THE TEXTBOX
 		textDisplay.setText(control.model.getMessages());
