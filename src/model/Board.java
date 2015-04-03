@@ -3,10 +3,12 @@ package model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Scanner;
 
 import utils.Utility.ClearingType;
 import utils.Utility.GarrisonName;
 import utils.Utility.LargeTreasureName;
+import utils.Utility.LostName;
 import utils.Utility.MonsterName;
 import utils.Utility.PathType;
 import utils.Utility.SmallTreasureName;
@@ -45,23 +47,120 @@ public class Board implements Serializable{
 		
 	}
 	
-	public Board(ArrayList<Player> players, ArrayList<Object> manualInputs){		
+	public Board(ArrayList<Player> players, Scanner inputScanner){
+
 		setupBoard();		//creates all of the tiles and clearings. establishes all of the connections
-		
-		//placeWarningChits();//TODO GIVE IT MANUALY SELECTED WARNING CHITS
-		
-		initializeMonsters();
 		instanciateGarrisons();	//instanciates the garrisons
 		instanciateTreasures();
 		
-		//TODO FIX THESE MANUALLY?
-		//setUpMapChits();	//places the warning chits, places the treasures, places the map chits, places the garrisons
+		String[] lostCastle= inputScanner.nextLine().split(" ");
+		String[] lostCity= inputScanner.nextLine().split(" ");
+		
+		for(int i=0; i<20; i++){
+			String temp = inputScanner.nextLine();
+			String[] inputLine = temp.split(" ");
+			System.out.println(temp);
+			for(TileName name : TileName.values()){
+				if(inputLine[0].toString().equals(name.toString())){
+					Tile workingTile = tiles.get(convertTileName(name));
+					
+					for(int j=1; j< inputLine.length; j++){
+						
+						//identify what it is, add it (WARNING, SITE, SOUND)
+						identifyAndPlaceMapChit(inputLine[j], name, workingTile);
+						
+						//is it lost castle or lost city?
+						for(LostName l : LostName.values()){
+							if(inputLine[j].equals(l.toString())){
+								
+								if(l == LostName.LOST_CASTLE){
+									for(int k=1; k<6; k++){
+										identifyAndPlaceMapChit(lostCastle[k], name, workingTile);
+									}
+								}
+								if(l == LostName.LOST_CITY){
+									for(int k=1; k<6; k++){
+										identifyAndPlaceMapChit(lostCity[k], name, workingTile);
+									}
+								}
+
+							}
+						}
+						
+					}
+					
+				}
+			}
+			
+		}
+		
+		initializeMonsters();
+		
+		//garrisons (chapel, house, inn, guard(house)
+		//all 4 take 2 small treasures each
+		garrisons.get(0).addTreasures(createTreasureArray(2,0));
+		garrisons.get(1).addTreasures(createTreasureArray(2,0));
+		garrisons.get(2).addTreasures(createTreasureArray(2,0));
+		garrisons.get(3).addTreasures(createTreasureArray(2,0));
 		
 		placeGarrisons();	//reveal all of the VALLEY map chits (after character selection stuff done)
 		placePlayers(players);	//places the players based on their starting location
 		
 	}
 
+	public void identifyAndPlaceMapChit(String inputLine, TileName name, Tile workingTile){
+		//is it a warning chit?
+		for(WarningChits w : WarningChits.values()){
+			if(inputLine.equals(w.toString())){
+				workingTile.setWarningChit(new WarningChit(w));
+			}
+		}
+		
+		//is it a sound chit?
+		for(SoundChits s : SoundChits.values()){
+			if(inputLine.equals(s.toString())){
+				workingTile.addMapChit(new MapChit(s));
+			}
+		}
+		
+		//is it a site chit?
+		//is it a sound chit?
+		for(TreasureLocations t : TreasureLocations.values()){
+			if(inputLine.equals(t.toString())){
+				switch (t){
+				case ALTAR:
+					placeMapChit(new SiteChit(TreasureLocations.ALTAR, 1), convertTileName(name));
+					break;
+				case CAIRNS:
+					placeMapChit(new SiteChit(TreasureLocations.CAIRNS, 5), convertTileName(name));
+					break;
+				case HOARD:
+					placeMapChit(new SiteChit(TreasureLocations.HOARD, 6), convertTileName(name));
+					break;
+				case LAIR:
+					placeMapChit(new SiteChit(TreasureLocations.LAIR, 3), convertTileName(name));
+					break;
+				case POOL:
+					placeMapChit(new SiteChit(TreasureLocations.POOL, 6), convertTileName(name));
+					break;
+				case SHRINE:
+					placeMapChit(new SiteChit(TreasureLocations.SHRINE, 4), convertTileName(name));
+					break;
+				case STATUE:
+					placeMapChit(new SiteChit(TreasureLocations.STATUE, 2), convertTileName(name));
+					break;
+				case VAULT:
+					placeMapChit(new SiteChit(TreasureLocations.VAULT, 3), convertTileName(name));
+					break;
+				default:
+					break;
+				
+				}
+
+			}
+		}
+	}
+	
 
 	public int convertTileName(TileName n){
 		for(int i=0; i<20; i++){
@@ -223,15 +322,11 @@ public class Board implements Serializable{
 	}
 	
 	public void createAndPlaceWarningChits(TileType type){
-
 		ArrayList<WarningChit> temp = new ArrayList<WarningChit>();
-		
 		for(WarningChits n : WarningChits.values()){
 			temp.add(new WarningChit(n));
 		}
-		
 		Collections.shuffle(temp);
-		
 		for(int j=0; j<5; j++){
 			for(int i=0; i< tiles.size(); i++){
 				if(tiles.get(i).getType() == type && tiles.get(i).getWarningChit() == null){
@@ -510,15 +605,11 @@ public class Board implements Serializable{
 		for(int i=0; i < p.size(); i++){
 
 			GarrisonName startLoc = p.get(i).getCharacter().getStartingLocation();
-			//System.out.println(startLoc);
 
 			for(int j=0; j< garrisons.size(); j++){
 				if(garrisons.get(j).getName() == startLoc){
 					p.get(i).setLocation(garrisons.get(j).getLocation());
 					garrisons.get(j).getLocation().addOccupant(p.get(i));
-					//TODO ADDING TREASURES TO PLAYERS OFF THE START
-					//p.get(i).addTreasure(new SmallTreasure(SmallTreasureName.LEAGUE_BOOTS_7));
-					//p.get(i).addTreasure(new SmallTreasure(SmallTreasureName.CLOAK_OF_MIST));
 				}
 			}
 		}

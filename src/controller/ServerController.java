@@ -22,15 +22,18 @@ import model.Tile;
 import model.Treasure;
 import model.TreasurePile;
 import model.TreasureSite;
+import model.TreasureWithinTreasure;
 import model.WarningChit;
 import model.Weapon;
 import model.WhiteKnight;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import utils.Config;
 import utils.Utility;
-import utils.Utility.MonsterName;
 import utils.Utility.*;
 import view.ServerView;
 
@@ -466,7 +469,26 @@ public class ServerController extends Handler{
 				ArrayList<Treasure> treasures = site.getTreasures();
 
 				if (roll <= treasures.size()) {
-					player.addTreasure(treasures.get(roll-1));
+					if (treasures.get(roll-1) instanceof TreasureWithinTreasure) {
+						ArrayList<Treasure> treasure = treasures.get(roll-1).getTreasures();
+						ArrayList<Weapon> weapon = treasures.get(roll-1).getWeapons();
+						ArrayList<Armour> armour = treasures.get(roll-1).getArmour();
+						
+						for (int i = 0; i < treasure.size(); i++) {
+							player.addTreasure(treasure.get(i));
+						}
+						for (int i = 0; i < weapon.size(); i++) {
+							player.addWeapon(weapon.get(i));
+						}
+						for (int i = 0; i < armour.size(); i++) {
+							player.addArmour(armour.get(i));
+						}
+						
+						player.addGold(player.getGold() + treasures.get(roll-1).getGold());
+					}
+					else {
+						player.addTreasure(treasures.get(roll-1));
+					}
 					network.send(player.getID(), "you've found "+treasures.get(roll-1).getName()+"!!");
 					site.takeTreasure(treasures.get(roll-1));
 				}
@@ -2033,8 +2055,22 @@ public class ServerController extends Handler{
     	System.out.println("end selection loop");
     	state = GameState.NULL;
 
-		//instanciate the model
-		this.board = new Board(players);
+    	
+    	//if cheatmode, run the import
+    	if(Config.CHEAT_MODE){
+    		Scanner ourScanner;
+    		try {
+    			ourScanner = new Scanner(new File("settings.txt"));
+    			ourScanner.nextLine();
+    			this.board = new Board(players, ourScanner); //instanciate the model
+    			ourScanner.close();
+    		} catch (FileNotFoundException e) {
+    			e.printStackTrace();
+    		}
+    	}else{
+    		this.board = new Board(players); //instanciate the model
+    	}
+    	
 		System.out.println("Server Models Created.");
 
 		//starts the game (first thing called distributes characters and board

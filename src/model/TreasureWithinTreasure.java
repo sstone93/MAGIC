@@ -51,8 +51,16 @@ public class TreasureWithinTreasure extends Treasure{
 	}
 	}
 	
+	public ArrayList<Weapon> getWeapons() {
+		return this.weapon;
+	}
+	
 	public ArrayList<Treasure> getTreasures(){
 		return this.treasures;
+	}
+	
+	public ArrayList<Armour> getArmour() {
+		return this.armour;
 	}
 	
 	public void setTreasures(ArrayList<Treasure> t){

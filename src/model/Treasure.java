@@ -1,10 +1,11 @@
 package model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import utils.Utility;
 
-public class Treasure implements Serializable{
+public abstract class Treasure implements Serializable{
 
 	private static final long serialVersionUID = -2440018576886400929L;
     int     gold;
@@ -35,4 +36,10 @@ public class Treasure implements Serializable{
         return notoriety;
     }
 
+    public abstract ArrayList<Weapon> getWeapons();
+    
+    public abstract ArrayList<Treasure> getTreasures();
+    
+    public abstract ArrayList<Armour> getArmour();
+    
 }
