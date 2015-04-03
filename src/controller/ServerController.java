@@ -289,6 +289,10 @@ public class ServerController extends Handler{
 	 * @param object: the object to be bought or sold
 	 */
 	public void trade(Player player, Object object) {
+		if (object == null) {
+			network.send(player.getID(), "NOTHING TO TRADE HERE");
+			return;
+		}
 		if (object.toString().contains("BUY")) {			
 			String[] temp = object.toString().split("BUY");
 			ArrayList<Treasure> treasures = player.getLocation().getDwelling().getTreasures();
@@ -345,7 +349,6 @@ public class ServerController extends Handler{
 			}
 		}
 		else { // you're selling
-			System.out.println("SELLING" );
 			String[] temp = object.toString().split("SELL");
 			ArrayList<Treasure> treasures = player.getTreasures();
 			boolean soldSomething = false;
