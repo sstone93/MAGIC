@@ -122,9 +122,11 @@ public class Player implements Serializable{
     }
     
     public Weapon getActiveWeapon() {
-    	for (int i = 0; i < weapons.size(); i++) {
-    		if (this.weapons.get(i).isActive() == true) {
-    			return this.weapons.get(i);
+    	if (weapons != null) {
+    		for (int i = 0; i < weapons.size(); i++) {
+    			if (this.weapons.get(i).isActive() == true) {
+    				return this.weapons.get(i);
+    			}
     		}
     	}
     	return new Weapon(Utility.WeaponName.FIST);
@@ -215,11 +217,13 @@ public class Player implements Serializable{
     }
 
     public void unAlertWeapons(){
-		for (int j = 0; j < weapons.size(); j++ ) {
-			if (weapons.get(j) != null) {
-				weapons.get(j).setActive(false);
+    	if (weapons != null) {
+    		for (int j = 0; j < weapons.size(); j++ ) {
+				if (weapons.get(j) != null) {
+					weapons.get(j).setActive(false);
+				}
 			}
-		}
+    	}
     }
 
     public ArrayList<Phase> getPhases() {
@@ -335,33 +339,41 @@ public class Player implements Serializable{
         weapons.add(weapon);
     }
     
+    public void addArmour(Armour armour) {
+    	this.armour.add(armour);
+    }
+    
     public void removeWeaponsWithHigherWeight(ItemWeight weight) {
-        for (int i = 0; i < weapons.size(); i++) {
-            if (weapons.get(i).getWeight() == ItemWeight.NEGLIGIBLE)
-                continue;
-            if (weapons.get(i).getWeight() == weight) {
-                continue;
-            }
-            if (Utility.isWeightHeavier(weapons.get(i).getWeight(), weight)) {
-                weapons.remove(i);
-            }
+    	if (weapons != null) {
+    		for (int i = 0; i < weapons.size(); i++) {
+            	if (weapons.get(i).getWeight() == ItemWeight.NEGLIGIBLE)
+                	continue;
+            	if (weapons.get(i).getWeight() == weight) {
+                	continue;
+            	}
+            	if (Utility.isWeightHeavier(weapons.get(i).getWeight(), weight)) {
+                	weapons.remove(i);
+            	}
+        	}
         }
     }
 
     // removes armour from the array with a higher weight then the one sent in
     // ignores armour with negligible weight
     public void removeArmourWithHigherWeight(ItemWeight weight) {
-        for (int i = 0; i < armour.size(); i++) {
-            if (armour.get(i).getWeight() == ItemWeight.NEGLIGIBLE)
-                continue;
-            if (armour.get(i).getWeight() == weight) {
-                continue;
-            }
+    	if (armour != null) {
+    		for (int i = 0; i < armour.size(); i++) {
+        		if (armour.get(i).getWeight() == ItemWeight.NEGLIGIBLE)
+                	continue;
+            	if (armour.get(i).getWeight() == weight) {
+                	continue;
+            	}
 
-            if (Utility.isWeightHeavier(armour.get(i).getWeight(), weight)) {
-            	armour.remove(i);
-            }
-        }
+            	if (Utility.isWeightHeavier(armour.get(i).getWeight(), weight)) {
+            		armour.remove(i);
+            	}
+        	}
+    	}
     }
 
     public void checkAndAddSunlight(){
@@ -426,7 +438,25 @@ public class Player implements Serializable{
 	public Clearing getLastMove(){
 		return lastMove;
 	}
+	
+	public void removeAllWeapons(){
+		weapons = null;
+	}
+	
+	public void removeAllArmour(){
+		armour = null;
+	}
+	
+	public void removeAllTreasures(){
+		treasures = null;
+	}
 
+	public void removeAll(){
+		removeAllWeapons();
+		removeAllArmour();
+		removeAllTreasures();
+	}
+	
 	public void usePhase(Phase data) {
 		
 		blockState = false;

@@ -20,6 +20,7 @@ public class Clearing implements Serializable{
     public int y;
     
     TreasureSite site = null;
+    TreasurePile pile = null;
     
     ArrayList<Path> connections = new ArrayList<Path>();
     ArrayList<Treasure> treasures = new ArrayList<Treasure>();
@@ -53,6 +54,14 @@ public class Clearing implements Serializable{
     
     public void setSite(TreasureSite s){
     	site = s;
+    }
+    
+    public TreasurePile getPile(){
+    	return this.pile;
+    }
+    
+    public void setPile(TreasurePile p) {
+    	pile = p;
     }
     
     /**

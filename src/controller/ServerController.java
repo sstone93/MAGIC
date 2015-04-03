@@ -3,6 +3,7 @@ package controller;
 import networking.Message;
 import networking.NetworkServer;
 import model.Amazon;
+import model.Armour;
 import model.Berserker;
 import model.BlackKnight;
 import model.Board;
@@ -19,8 +20,10 @@ import model.Player;
 import model.Swordsman;
 import model.Tile;
 import model.Treasure;
+import model.TreasurePile;
 import model.TreasureSite;
 import model.WarningChit;
+import model.Weapon;
 import model.WhiteKnight;
 
 import java.util.ArrayList;
@@ -346,6 +349,41 @@ public class ServerController extends Handler{
 				}
 				else  {
 					network.send(player.getID(), "You didn't find any treasures this time");
+				}
+			}
+			
+			TreasurePile pile = player.getLocation().getPile();
+			
+			if(pile != null){
+				ArrayList<Treasure> treasures = pile.getTreasures();
+				ArrayList<Weapon> weapons = pile.getWeapons();
+				ArrayList<Armour> armour = pile.getArmour();
+				
+				if (roll <= treasures.size()) {
+					player.addTreasure(treasures.get(roll-1));
+					network.send(player.getID(), "you've found "+treasures.get(roll-1).getName()+"!!");
+					pile.takeTreasure(treasures.get(roll-1));
+				}
+				else  {
+					network.send(player.getID(), "You didn't find any treasures this time");
+				}
+				
+				if (roll <= weapons.size()) {
+					player.addWeapon(weapons.get(roll-1));
+					network.send(player.getID(), "you've found "+weapons.get(roll-1).getType()+"!!");
+					pile.takeWeapon(weapons.get(roll-1));
+				}
+				else  {
+					network.send(player.getID(), "You didn't find any weapons this time");
+				}
+				
+				if (roll <= armour.size()) {
+					player.addArmour(armour.get(roll-1));
+					network.send(player.getID(), "you've found "+armour.get(roll-1).getType()+"!!");
+					pile.takeArmour(armour.get(roll-1));
+				}
+				else  {
+					network.send(player.getID(), "You didn't find any armour this time");
 				}
 			}
 		}
@@ -744,12 +782,14 @@ public class ServerController extends Handler{
             int fameScore      = players.get(i).getFame();
             int notorietyScore = players.get(i).getNotoriety();
             int goldScore      = players.get(i).getGold();
-
-            for (int j = 0; j < players.get(i).getTreasures().size(); j++) {
-            	if (players.get(i).getTreasures().get(j) != null) {
-            		notorietyScore += players.get(i).getTreasures().get(j).getNotoriety();
-            		fameScore += players.get(i).getTreasures().get(j).getFame();
-            		goldScore += players.get(i).getTreasures().get(j).getGold();
+            
+            if (players.get(i).getTreasures() != null) {
+            	for (int j = 0; j < players.get(i).getTreasures().size(); j++) {
+            		if (players.get(i).getTreasures().get(j) != null) {
+            			notorietyScore += players.get(i).getTreasures().get(j).getNotoriety();
+            			fameScore += players.get(i).getTreasures().get(j).getFame();
+            			goldScore += players.get(i).getTreasures().get(j).getGold();
+            		}
             	}
             }
 
@@ -1727,13 +1767,15 @@ public class ServerController extends Handler{
 
 	public void deadPlayer(Player player, Monster monster) {
 		//TODO pile
+		TreasurePile pile = new TreasurePile(player.getTreasures(), player.getArmour(), player.getWeapons());
+		player.getLocation().setPile(pile);
+		player.removeAll();
 		player.kill();
 		network.send(player.getID(), "You are dead.");
 		network.broadCast(player.getCharacter().getName() + "has been killed!");
 	}
 
 	public void deadMonster(Player player, Monster monster) {
-		//TODO pile
 		player.addFame(monster.getFame());
 		player.addNotoriety(monster.getNotoriety());
 		monster.kill();
@@ -1742,6 +1784,9 @@ public class ServerController extends Handler{
 
 	public void deadPlayer(Player attacker, Player defender) {
 		//TODO pile
+		TreasurePile pile = new TreasurePile(defender.getTreasures(), defender.getArmour(), defender.getWeapons());
+		defender.getLocation().setPile(pile);
+		defender.removeAll();
 		attacker.addFame(10); // Arbitrary value
 		attacker.addGold(defender.getGold());
 		defender.removeGold(defender.getGold());
