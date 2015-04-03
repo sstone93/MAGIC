@@ -978,6 +978,12 @@ public class ServerController extends Handler{
     	state = GameState.CHOOSE_PLAYS;
     	finishedPlayers = 0;
 
+    	for (int i = 0; i < players.size(); i++) {
+    		if (players.get(i).isDead()) {
+    			finishedPlayers++;
+    		}
+    	}
+    	
     	while(finishedPlayers < playerCount){
     		try {
 				Thread.sleep(20);
@@ -1109,7 +1115,7 @@ public class ServerController extends Handler{
 	    		if (!clearings.get(j).equals(players.get(i).getLocation())) {
 	    			ArrayList<Monster> monsters = clearings.get(j).getMonsters();
 	    			for (int k = 0; k < monsters.size(); k++) {
-	    				if (monsters.get(k).isBlocked() == false) {
+	    				if (monsters.get(k).isBlocked() == false && monsters.get(k) != null) {
 	    					clearings.get(j).removeMonster(monsters.get(k));
 	    					monsters.get(k).setBlocked(false);
 	    					players.get(i).getLocation().addMonster(monsters.get(k));
