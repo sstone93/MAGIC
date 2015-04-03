@@ -124,7 +124,6 @@ public class View extends JFrame {
 			characterInfoPanel.update(p);
 			scrollPanel.getVerticalScrollBar().setValue(p.getLocation().y - 250);
 			scrollPanel.getHorizontalScrollBar().setValue(p.getLocation().x - 400);
-					
 		}
 		updateNonBoardGUI(p);
 	}
