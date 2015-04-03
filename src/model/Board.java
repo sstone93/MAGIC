@@ -48,7 +48,7 @@ public class Board implements Serializable{
 	}
 	
 	public Board(ArrayList<Player> players, Scanner inputScanner){
-		
+
 		setupBoard();		//creates all of the tiles and clearings. establishes all of the connections
 		instanciateGarrisons();	//instanciates the garrisons
 		instanciateTreasures();

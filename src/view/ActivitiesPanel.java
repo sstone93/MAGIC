@@ -53,7 +53,6 @@ public class ActivitiesPanel extends JPanel{
 		phase.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//somehow get the actions they can perform in that phase.
-				//TODO BASED ON THE SELECTED PHASE, GET THE LIST OF ACTIONS
 				
 				Actions[] arr;
 				

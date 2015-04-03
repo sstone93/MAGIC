@@ -23,7 +23,9 @@ public class Utility {
 
     	boolean onlyOne = false;
 
-    	if (player.hasTreasure(SmallTreasureName.SHOES_OF_STEALTH.toString()) && table == "hide")
+    	if (player.hasTreasure(LargeTreasureName.LUCKY_CHARM.toString()))
+    		onlyOne = true;
+    	else if (player.hasTreasure(SmallTreasureName.SHOES_OF_STEALTH.toString()) && table == "hide")
     		onlyOne = true;
     	else if (player.hasTreasure(SmallTreasureName.DEFT_GLOVES.toString()) && table == "loot")
     		onlyOne = true;
@@ -154,6 +156,8 @@ public class Utility {
     		case HEAVY_TROLL: return "/images/troll.gif";
     		case VIPER: return "/images/serpent.gif";
     		case WOLF: return "/images/wolf.gif";
+    		case HEAVY_SPIDER: return "/images/spider.gif";
+    		case GIANT_BAT: return "/images/bat.gif";
     		default: return null;
     	}
     }
