@@ -127,7 +127,7 @@ public class View extends JFrame {
 			//if the blockpanel should appear (other people in your clearing, and you are not blocked)
 			if(p.getLocation().getOccupants().size() > 1 && p.isBlocked() == false){
 				System.out.println("SHOWING BLOCK PANEL");
-				blockPanel.update(p);
+				blockPanel.update();
 				blockPanel.setVisible(true);
 			}else{
 				blockPanel.setVisible(false);//if you are blocked or alone, remove the block panel

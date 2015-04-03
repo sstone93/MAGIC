@@ -38,7 +38,7 @@ public class BlockPanel extends JPanel{
 		add(lblNewLabel_1);
 
 		target = new JComboBox();
-		target.setBounds(0, 30, 30, 40);
+		target.setBounds(0, 30, 100, 40);
 		add(target);
 
 		send = new JButton("Send");
@@ -53,7 +53,8 @@ public class BlockPanel extends JPanel{
 	}
 	
 	//called when state is true... no...
-	public void update(Player p){
+	public void update(){
+		Player p = control.model.getPlayer();
 		if (p != null) {
 			ArrayList<Player> others = p.getLocation().getOccupants();
 			if (others != null) {
