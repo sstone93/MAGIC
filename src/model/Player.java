@@ -18,7 +18,7 @@ public class Player implements Serializable{
 	private static final long serialVersionUID = 4084261472014880590L;
 	int ID;
     int victoryPoints = 0;
-    int gold          = 10; // can't be negative
+    int gold          = 50; // can't be negative
     int health        = 0;
     int fatigue       = 0;
     int fame          = 0;
@@ -418,6 +418,10 @@ public class Player implements Serializable{
 
     public void addTreasure(Treasure treasure) {
         this.treasures.add(treasure);
+    }
+    
+    public void removeTreasure(Treasure treasure) {
+    	treasures.remove(treasure);
     }
 
     public ArrayList<Treasure> getTreasures(){

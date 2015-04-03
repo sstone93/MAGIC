@@ -281,6 +281,49 @@ public class ServerController extends Handler{
         	player.setHealth(player.getHealth() - 1);
         }
     }
+	
+	/**
+	 * 
+	 * @param player: the player that's buying or selling an item
+	 * @param object: the object to be bought or sold
+	 */
+	public void trade(Player player, Object object) {
+		if (object.toString().contains("BUY")) {			
+			String[] temp = object.toString().split("BUY");
+			ArrayList<Treasure> treasures = player.getLocation().getDwelling().getTreasures();
+			for (Treasure t: treasures) {
+				if (t.getName().toString().trim().equals(temp[1].trim())) {
+					if (player.getGold() >= t.getGold()) {
+						player.addTreasure(t);
+						player.removeGold(t.getGold());
+						player.getLocation().getDwelling().removeTreasure(t);
+						network.send(player.getID(), "YOU BOUGHT " + t.getName() + "!");
+						break;
+					}
+					else {
+						network.send(player.getID(), "You didn't have enough gold to pay for this, you need " + t.getGold() + " gold!");
+						break;
+					}
+				}
+			}
+		}
+		else { // you're selling
+			System.out.println("SELLING" );
+			String[] temp = object.toString().split("SELL");
+			ArrayList<Treasure> treasures = player.getTreasures();
+			for (Treasure t: treasures) {
+				if (t.getName().toString().trim().equals(temp[1].trim())) {
+					player.addGold(t.getGold());
+					player.removeTreasure(t);
+					player.getLocation().getDwelling().addTreasure(t);
+					network.send(player.getID(), "YOU SOLD " + t.getName() + "!");
+					break;
+				}
+			}
+			
+			
+		}
+	}
 
 	/**
 	 * Determines which players a certain player is currently able to block
@@ -766,6 +809,7 @@ public class ServerController extends Handler{
     		break;
     	case TRADE:
     		//TODO MAKE TRADING A THING
+    		trade(p, a.getExtraInfo());
     		network.broadCast(p.getCharacter().getName() + " is trading!");
     		break;
     	case PASS:

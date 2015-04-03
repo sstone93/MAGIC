@@ -15,6 +15,7 @@ import javax.swing.border.LineBorder;
 
 import model.Path;
 import model.Phase;
+import model.Treasure;
 import model.Weapon;
 import controller.ClientController;
 import utils.Utility.Actions;
@@ -128,6 +129,23 @@ public class ActivitiesPanel extends JPanel{
 						extraInfo.setVisible(true);
 						break;
 					case TRADE:
+						ArrayList<Treasure> toBuy = control.model.getPlayer().getLocation().getDwelling().getTreasures();
+						System.out.println("TO BUY!!!!!!!! " + toBuy.size());
+						ArrayList<Treasure> toSell = control.model.getPlayer().getTreasures();
+						
+						System.out.println(toBuy);
+						arr = new String[toBuy.size() + toSell.size()];
+						int i = 0; 
+						for(Treasure t: toBuy){
+							arr[i] = "BUY " + t.getName();
+							i++;
+						}
+						for(Treasure t: toSell){
+							arr[i] = "SELL " + t.getName();
+							i++;
+						}
+						extraInfo.setVisible(true);
+						break;
 					case REST:
 					case HIDE:
 					case PASS:
