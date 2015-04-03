@@ -164,22 +164,13 @@ public class ServerController extends Handler{
 			if( m.getType() == MessageType.COMBAT_TARGET){
 				if(state == GameState.CHOOSE_COMBATTARGET){
 					recievedCombat += 1;
-					//TODO: the data will now contain 2 arrayLists, one for the player targets(<CharacterName>)
-					//and one for the monster targets(<MonsterName>)
-					//I have temporarily modified this to just take the first player, 
-					//but it will need to be changed so that the player has all of their targets.
-					//NOTE: right now it breaks if you try to fight no one(index out of bounds because it tries to go straight to 0
-					//even though size is 0, this will be fixed when we loop through)
-					System.out.println("This is the target's name!");
-					System.out.println(charToPlayer(((ArrayList<CharacterName>) m.getData().get(0)).get(0)));
-					Player temp = charToPlayer(((ArrayList<CharacterName>) m.getData().get(0)).get(0));
-					System.out.println(temp.getCharacter().getName());
+					for (int i = 0; i < ((ArrayList<MonsterName>) m.getData().get(1)).size(); i++) {
+						findPlayer(ID).setMonsterTarget(findPlayer(ID).getMonsterInSameClearing(((ArrayList<MonsterName>) m.getData().get(1)).get(i)));
+					}
 					
-					//this is how you would get the first monster in the arraylist.
-					//Monster mon = findPlayer(ID).getMonsterInSameClearing(((ArrayList<MonsterName>) m.getData().get(1)).get(0)));
-					
-					//turns the received character name into a player
-					findPlayer(ID).setTarget(charToPlayer(((ArrayList<CharacterName>) m.getData().get(0)).get(0)));
+					for (int i = 0; i < ((ArrayList<CharacterName>) m.getData().get(0)).size(); i++) {
+						findPlayer(ID).setTarget(charToPlayer(((ArrayList<CharacterName>) m.getData().get(0)).get(i)));
+					}
 				}else{
 					network.send(ID, "NOT ACCEPTING COMBAT TARGETS ATM");
 				}
@@ -314,7 +305,8 @@ public class ServerController extends Handler{
     	ArrayList<Player> blockablePlayers = monster.getLocation().getOccupants();
     	for (int i = 0; i < blockablePlayers.size(); i++) {
     		if (!blockablePlayers.get(i).isHidden()) {
-    			block(players.get(i));
+    			network.send(blockablePlayers.get(i).getID(), "Monster has blocked you!");
+    			block(blockablePlayers.get(i));
     		}
     	}
     }
@@ -479,6 +471,9 @@ public class ServerController extends Handler{
 
     private void block(Player p){
     	p.setBlocked(true);
+    	p.getPhases().clear();
+    	p.setFinishedBasic(true); // TODO: set finished sunlight to true as well
+    	network.send(p.getID(), "NO PHASES LEFT");
     	finishedPlayers +=1;
     }
 
@@ -791,7 +786,6 @@ public class ServerController extends Handler{
         Player winner = null;
         Player player = null;
 
-        // TODO: treasures
         for (int i = 0; i < playerCount; i++ ) {
             player = players.get(i);
             if (winner == null)
@@ -973,7 +967,7 @@ public class ServerController extends Handler{
     			}
     			if (!monster.isBlocked()) { // they can block others if they're not already blocked
 					System.out.println("MONSTER BLOCKING");
-					monster.block();
+					block(monster);
 				}
     		}
     	}
@@ -999,7 +993,7 @@ public class ServerController extends Handler{
 	    					clearings.get(j).removeMonster(monsters.get(k));
 	    					monsters.get(k).setBlocked(false);
 	    					players.get(i).getLocation().addMonster(monsters.get(k));
-	    					monsters.get(k).block();
+	    					block(monsters.get(k));
 	    				}
 	    			}
 	    		}
@@ -1043,6 +1037,16 @@ public class ServerController extends Handler{
         	players.get(i).removeTarget();
         }
 
+        for (int i = 0; i < players.size(); i++) {
+        	if (players.get(i).getMonsterTarget() != null) {
+        		for (int j = 0; j < players.get(i).getMonsterTarget().size(); j++) {
+        			encounter(players.get(i), players.get(i).getMonsterTarget().get(j));
+        		}
+        		System.out.println("Finished encounter");
+        	}
+        	players.get(i).removeMonsterTarget();
+        }
+        
         //Progresses to the next day or ends the game
         boolean thing = resetDay();
         if(thing == true){ //if it is not the 28th day....

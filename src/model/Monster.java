@@ -198,16 +198,4 @@ public class Monster implements Serializable{
     	newClearing.addMonster(this);
     	this.blocked = false;
     } 
-    
-    public void block() {
-    	ArrayList<Player> occupants = this.getLocation().getOccupants();
-    	for (int j = 0; j < occupants.size(); j++ ) {
-    		if (!occupants.get(j).isBlocked() && !occupants.get(j).isHidden()) {
-    			occupants.get(j).setBlocked(true);
-    			this.setBlocked(true);
-    			System.out.println("MONSTER HAS BLOCKED : " + occupants.get(j).getCharacter().getName());
-    			break; // monster can only block one player
-    		}
-		}
-    }
 }
