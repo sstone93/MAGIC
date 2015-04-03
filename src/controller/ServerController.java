@@ -27,6 +27,7 @@ import java.util.ArrayList;
 
 import utils.Config;
 import utils.Utility;
+import utils.Utility.MonsterName;
 import utils.Utility.*;
 import view.ServerView;
 
@@ -83,6 +84,7 @@ public class ServerController extends Handler{
 	 * @param ID The ID of the client sending the message
 	 * @param message the contents of the message
 	 */
+	@SuppressWarnings("unchecked")
 	public void handle(int ID, Object message){
 
 		if(message == null){
@@ -151,12 +153,22 @@ public class ServerController extends Handler{
 			if( m.getType() == MessageType.COMBAT_TARGET){
 				if(state == GameState.CHOOSE_COMBATTARGET){
 					recievedCombat += 1;
+					//TODO: the data will now contain 2 arrayLists, one for the player targets(<CharacterName>)
+					//and one for the monster targets(<MonsterName>)
+					//I have temporarily modified this to just take the first player, 
+					//but it will need to be changed so that the player has all of their targets.
+					//NOTE: right now it breaks if you try to fight no one(index out of bounds because it tries to go straight to 0
+					//even though size is 0, this will be fixed when we loop through)
 					System.out.println("This is the target's name!");
-					System.out.println(charToPlayer((CharacterName) m.getData().get(0)));
-					Player temp = charToPlayer((CharacterName) m.getData().get(0));
+					System.out.println(charToPlayer(((ArrayList<CharacterName>) m.getData().get(0)).get(0)));
+					Player temp = charToPlayer(((ArrayList<CharacterName>) m.getData().get(0)).get(0));
 					System.out.println(temp.getCharacter().getName());
+					
+					//this is how you would get the first monster in the arraylist.
+					//Monster mon = findPlayer(ID).getMonsterInSameClearing(((ArrayList<MonsterName>) m.getData().get(1)).get(0)));
+					
 					//turns the received character name into a player
-					findPlayer(ID).setTarget(charToPlayer((CharacterName) m.getData().get(0)));
+					findPlayer(ID).setTarget(charToPlayer(((ArrayList<CharacterName>) m.getData().get(0)).get(0)));
 				}else{
 					network.send(ID, "NOT ACCEPTING COMBAT TARGETS ATM");
 				}

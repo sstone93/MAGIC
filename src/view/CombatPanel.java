@@ -19,11 +19,12 @@ import utils.Utility.Maneuvers;
 
 @SuppressWarnings("serial")
 public class CombatPanel extends JPanel{
+	ClientController control;
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public CombatPanel(ClientController c){
 		
-		ClientController control = c;
+		control = c;
 
 		setBounds(750, 500, 524, 192);
 		setLayout(null);
