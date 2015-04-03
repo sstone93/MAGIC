@@ -40,6 +40,7 @@ public class Player implements Serializable{
     Clearing lastMove;
     
     ArrayList<Player> target = new ArrayList<Player>();
+    ArrayList<Monster> monsterTarget = new ArrayList<Monster>();
     ArrayList<Armour> armour = new ArrayList<Armour>();
     ArrayList<Weapon> weapons = new ArrayList<Weapon>();
     ArrayList<Treasure>  treasures = new ArrayList<Treasure>();
@@ -134,6 +135,10 @@ public class Player implements Serializable{
     	return this.target;
     }
     
+    public ArrayList<Monster> getMonsterTarget() {
+    	return this.monsterTarget;
+    }
+    
     public void setDaylight(Boolean s){
     	this.finishedDaylight = s;
     }
@@ -157,6 +162,14 @@ public class Player implements Serializable{
     
     public void removeTarget() {
     	this.target.clear();
+    }
+    
+    public void setMonsterTarget(Monster m) {
+    	this.monsterTarget.add(m);
+    }
+
+    public void removeMonsterTarget() {
+    	this.monsterTarget.clear();
     }
     
     public int getID(){

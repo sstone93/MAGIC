@@ -171,15 +171,21 @@ public class ServerController extends Handler{
 					//NOTE: right now it breaks if you try to fight no one(index out of bounds because it tries to go straight to 0
 					//even though size is 0, this will be fixed when we loop through)
 					System.out.println("This is the target's name!");
-					System.out.println(charToPlayer(((ArrayList<CharacterName>) m.getData().get(0)).get(0)));
+					if (m.getData().get(0) != null) {
+						System.out.println(charToPlayer(((ArrayList<CharacterName>) m.getData().get(0)).get(0)));
+					}
 					Player temp = charToPlayer(((ArrayList<CharacterName>) m.getData().get(0)).get(0));
 					System.out.println(temp.getCharacter().getName());
 					
 					//this is how you would get the first monster in the arraylist.
-					//Monster mon = findPlayer(ID).getMonsterInSameClearing(((ArrayList<MonsterName>) m.getData().get(1)).get(0)));
+					for (int i = 0; i < ((ArrayList<MonsterName>) m.getData().get(1)).size(); i++) {
+						findPlayer(ID).setMonsterTarget(findPlayer(ID).getMonsterInSameClearing(((ArrayList<MonsterName>) m.getData().get(1)).get(0)));
+					}
 					
 					//turns the received character name into a player
-					findPlayer(ID).setTarget(charToPlayer(((ArrayList<CharacterName>) m.getData().get(0)).get(0)));
+					for (int i = 0; i < ((ArrayList<CharacterName>) m.getData().get(0)).size(); i++) {
+						findPlayer(ID).setTarget(charToPlayer(((ArrayList<CharacterName>) m.getData().get(0)).get(0)));
+					}
 				}else{
 					network.send(ID, "NOT ACCEPTING COMBAT TARGETS ATM");
 				}
@@ -1047,6 +1053,16 @@ public class ServerController extends Handler{
         	players.get(i).removeTarget();
         }
 
+        for (int i = 0; i < players.size(); i++) {
+        	if (players.get(i).getMonsterTarget() != null) {
+        		for (int j = 0; j < players.get(i).getMonsterTarget().size(); j++) {
+        			encounter(players.get(i), players.get(i).getMonsterTarget().get(j));
+        		}
+        		System.out.println("Finished encounter");
+        	}
+        	players.get(i).removeMonsterTarget();
+        }
+        
         //Progresses to the next day or ends the game
         boolean thing = resetDay();
         if(thing == true){ //if it is not the 28th day....
