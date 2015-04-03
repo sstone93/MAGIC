@@ -43,7 +43,7 @@ public class Phase implements Serializable {
 	
     public boolean equals(Phase p) {
     	if(this.type == p.type){
-    		if(this.action != null && p.action != this.action){
+    		if(this.action != null && p.action != this.action || p.action == Actions.PASS){
     			return false;
     		}
     		return true;

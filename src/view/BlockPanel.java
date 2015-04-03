@@ -14,21 +14,19 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
 import model.Player;
-import utils.Utility.Actions;
-import utils.Utility.PhaseType;
+import utils.Utility.CharacterName;
 import controller.ClientController;
 
-@SuppressWarnings("serial")
+@SuppressWarnings({ "rawtypes", "unchecked", "serial" })
 public class BlockPanel extends JPanel{
 	
 	ClientController control;
 	JButton send;
-	@SuppressWarnings("rawtypes")
 	JComboBox target;
 	
 	public BlockPanel(ClientController c){
 		
-this.control = c;
+		this.control = c;
 		
 		setBounds(700, 0, 750, 50);
 		setBorder(new LineBorder(Color.GRAY));
@@ -42,49 +40,7 @@ this.control = c;
 		target = new JComboBox();
 		target.setBounds(0, 30, 30, 40);
 		add(target);
-		
-		phase = new JComboBox();
-		phase.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//somehow get the actions they can perform in that phase.
-				//TODO BASED ON THE SELECTED PHASE, GET THE LIST OF ACTIONS
-				
-				Actions[] arr;
-				
-				switch((PhaseType)phase.getSelectedItem()){
-					case BASIC:
-						arr = Actions.values();
-						break;
-					case SPECIAL:
-						arr = new Actions[2];
-						arr[0] = control.model.getPlayer().getPhases().get(phase.getSelectedIndex()).getAction();
-						arr[1] = Actions.PASS;
-						break;
-					case SUNLIGHT:
-						arr = Actions.values();
-						break;
-					case TREASURE:
-						ArrayList<Actions> actions = control.model.getPlayer().getTreasureActions();
-						arr = new Actions[actions.size() + 1];
-						for(int i = 0; i < actions.size(); i++){
-							arr[i] = actions.get(i);
-						}
-						arr[actions.size()] = Actions.PASS;
-						break;
-					default:
-						arr = new Actions[0];
-						break;
-				}
-				
-				option.setModel(new DefaultComboBoxModel(arr));
-				if(arr.length > 0){
-					option.setSelectedIndex(0);
-				}
-			}
-		});
-		phase.setBounds(10, 40, 125, 20);
-		add(phase);
-		
+
 		send = new JButton("Send");
 		send.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -97,13 +53,19 @@ this.control = c;
 	}
 	
 	//called when state is true... no...
+	public void update(Player p){
+		if (p != null) {
+			ArrayList<Player> others = p.getLocation().getOccupants();
+			if (others != null) {
+				CharacterName[] targets = new CharacterName[others.size()];
+				for (int i = 0; i < others.size(); i++){
+					if (others.get(i) != null)
+						targets[i] = others.get(i).getCharacter().getName();
+				}
 
-	change retarded state thing I just did
-	
-	public void update(){
-		
-		control.model.getPlayer().getLocation().getOccupants();
-		
+				target.setModel(new DefaultComboBoxModel(targets));
+			}
+		}
 	}
 
 }

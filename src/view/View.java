@@ -112,6 +112,7 @@ public class View extends JFrame {
 	
 	public void update(){
 		boardPanel.update();
+		
 		//UPDATES THE PLAYER PANEL
 		Player p = control.model.getPlayer();
 		if (p != null){

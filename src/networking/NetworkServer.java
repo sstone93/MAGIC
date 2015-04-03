@@ -25,6 +25,7 @@ public class NetworkServer extends NetworkEntity implements Runnable{
 		try{
 			System.out.println("Server is binding to port " + Config.DEFAULT_PORT + ", please wait....");
 			server = new ServerSocket(Config.DEFAULT_PORT);			//Server Port Hard Coded
+			System.out.println(server);
 			server.setReuseAddress(true);							//stops painfull testing issues
 			start();
 		} catch (IOException ioe) {
@@ -51,7 +52,7 @@ public class NetworkServer extends NetworkEntity implements Runnable{
 				controller.handle(Config.DEFAULT_PORT, "START GAME");
 			}		
 		} else {
-			System.out.println("Client refused: maximum " + clients.length + " reached.");
+			System.out.println("Client refused: Game in progress");
 		}
 	}
 	
