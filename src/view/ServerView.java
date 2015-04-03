@@ -26,7 +26,7 @@ public class ServerView extends JFrame implements ActionListener{
 	JComboBox rolls = new JComboBox();
 	ServerController control;
 	
-	ChitButtonGrid buttons;
+	//ChitButtonGrid buttons;
 
 	public ServerView(ServerController c) {
 		
@@ -49,10 +49,10 @@ public class ServerView extends JFrame implements ActionListener{
 		this.add(stop); 
 		setResizable(false);
 		
-		if(!Config.CHEAT_MODE){
+		//if(!Config.CHEAT_MODE){
 			setSize(new Dimension(100, 140));
-		}else{
-			setSize(new Dimension(800, 650));
+		//}else{
+			//setSize(new Dimension(800, 650));
 		
 			rolls.setBounds(110,0,140,20);
 			add(rolls);
@@ -71,10 +71,10 @@ public class ServerView extends JFrame implements ActionListener{
 			select.setBounds(110,30,130,20);
 			add(select);	
 			
-			buttons = new ChitButtonGrid(control); 
-			buttons.setLocation(50, 180);
-			add(buttons);
-			buttons.setVisible(true);
+			//buttons = new ChitButtonGrid(control); 
+			//buttons.setLocation(50, 180);
+			//add(buttons);
+			//buttons.setVisible(true);
 			
 			
 			//Causes network shutdown by clicking the close button on the window
@@ -87,7 +87,7 @@ public class ServerView extends JFrame implements ActionListener{
 	            }
 	        } );	
 		}
-	}
+	//}
 
 	//STAHPS THE SERVER
 	public void actionPerformed(ActionEvent e) {
