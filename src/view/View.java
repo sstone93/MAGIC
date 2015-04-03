@@ -26,6 +26,7 @@ public class View extends JFrame {
 	private CharacterSelectPanel characterSelectPanel;
 	private TargetPanel targetPanel;
 	private CharacterDetailsPanel characterDetailsPanel;
+	private BlockPanel blockPanel;
 
 	public View(final ClientController control) {
 		
@@ -104,6 +105,10 @@ public class View extends JFrame {
 		//creates a new targetpanel, exact same functionality as before, but in a seperate class to reduce clutter
 		targetPanel = new TargetPanel(control);
 		contentPane.add(targetPanel);
+		
+		//creates a new blockpanel
+		blockPanel = new BlockPanel(control);
+		contentPane.add(blockPanel);
 	}
 	
 	public void updateMessageBox(){
@@ -126,6 +131,15 @@ public class View extends JFrame {
 	
 	public void updateNonBoardGUI(Player p){
 
+		//if the blockpanel should appear (other people in your clearing, and you are not blocked)
+		if(p.getLocation().getOccupants().size() > 1 && p.isBlocked() != false){
+			blockPanel.update(p);
+			blockPanel.setVisible(true);
+		}else{
+			blockPanel.setVisible(false);//if you are blocked or alone, remove the block panel
+		}
+		
+		
 		//UPDATES THE TEXTBOX
 		textDisplay.setText(control.model.getMessages());
 
