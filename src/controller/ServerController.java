@@ -148,8 +148,13 @@ public class ServerController extends Handler{
 						
 
 					} else {
+						if (((Phase) m.getData().get(0)).getAction() == Actions.HIDE) {
+							handleAction(p, (Phase)m.getData().get(0));
+						}
 						//return error to client
-						network.send(ID, "ACTION FAILED, YOU ARE BLOCKED");
+						else {
+							network.send(ID, "ACTION FAILED, YOU ARE BLOCKED");
+						}
 					}
 
 				}else{
@@ -428,17 +433,22 @@ public class ServerController extends Handler{
     			}
     		}
     		if (!foundHidden) {
-    			network.send(player.getID(), "No paths to discover!");
+    			network.send(player.getID(), "No secret passageways to discover!");
     		}
     	}
     	else if (roll == 2 || roll == 3) {
     		// note: I'm taking out clues from the 2 roll
     		ArrayList<Path> connections = player.getLocation().getConnections() ;
+    		boolean foundHidden = false;
     		for (int i = 0; i < connections.size(); i++) {
     			if (connections.get(i).getType() == Utility.PathType.HIDDEN_PATH) {
     				player.addDiscovery(connections.get(i));
     				network.send(player.getID(), "You've discovered hidden paths!");
+    				foundHidden = true;
     			}
+    		}
+    		if (!foundHidden) {
+    			network.send(player.getID(), "No hidden paths to discover!");
     		}
     	}
     	else if (roll == 4) { // discover chits
