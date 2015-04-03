@@ -111,7 +111,7 @@ public class ClientController extends Handler{
 		model.addMessage("Sent activity");
 		
 		//state = GameState.NULL;
-		view.updateNonBoardGUI(null);//sending null rather than the player object, null checks make this safe
+		view.updateNonBoardGUI();
 	}
 	
 	public void handleBlockSubmit(Player p){
@@ -141,7 +141,7 @@ public class ClientController extends Handler{
 		network.send(new Message(MessageType.COMBAT_MOVES, mes));
 		model.addMessage("Sent COMBATMOVES");
 		state = GameState.NULL;
-		view.updateNonBoardGUI(null);//sending null rather than the player object, null checks make this safe
+		view.updateNonBoardGUI();
 	}
 	
 	/**
@@ -151,28 +151,28 @@ public class ClientController extends Handler{
 	public void handleCharacterSelection(CharacterName name, GarrisonName starting){
 		ArrayList<Object> mes = new ArrayList<Object>();
 		mes.add(name);
-		
-		//TODO MAKE THIS ATTACHED TO THE UI, SO THE USER CAN CHOOSE THE STARTING LOCATIION
 		mes.add(starting);
 		
 		network.send(new Message(MessageType.CHARACTER_SELECT, mes));
 		model.addMessage("Sent character select");
 		state = GameState.NULL;
-		view.updateNonBoardGUI(null);//sending null rather than the player object, null checks make this safe
+		view.updateNonBoardGUI();
 	}
 	
 	/**
 	 * Handles the selection of a target for combat
 	 * @param name the CharacterName of the player to target
 	 */
-	public void handleTargetSelection(CharacterName name){
+	public void handleTargetSelection(ArrayList<CharacterName> chars, ArrayList<MonsterName> monsters){
 		ArrayList<Object> mes = new ArrayList<Object>();
-		mes.add(name);
+		mes.add(chars);
+		mes.add(monsters);
 		network.send(new Message(MessageType.COMBAT_TARGET, mes));
 		model.addMessage("Sent target selection");
-		System.out.println(name);
+		System.out.println(chars);
+		System.out.println(monsters);
 		state = GameState.NULL;
-		view.updateNonBoardGUI(null);//sending null rather than the player object, null checks make this safe
+		view.updateNonBoardGUI();
 	}
 	
 	/**

@@ -50,7 +50,7 @@ public class View extends JFrame {
         } );
 
 		//Creates the characterinfo panel and adds it to the view
-		characterInfoPanel = new CharacterInfoPanel();
+		characterInfoPanel = new CharacterInfoPanel(control);
 		contentPane.add(characterInfoPanel);
 		
 		//creates the plays/activities panel
@@ -121,14 +121,14 @@ public class View extends JFrame {
 		//UPDATES THE PLAYER PANEL
 		Player p = control.model.getPlayer();
 		if (p != null){
-			characterInfoPanel.update(p);
+			characterInfoPanel.update();
 			scrollPanel.getVerticalScrollBar().setValue(p.getLocation().y - 250);
 			scrollPanel.getHorizontalScrollBar().setValue(p.getLocation().x - 400);
 		}
-		updateNonBoardGUI(p);
+		updateNonBoardGUI();
 	}
 	
-	public void updateNonBoardGUI(Player p){
+	public void updateNonBoardGUI(){
 
 		//if the blockpanel should appear (other people in your clearing, and you are not blocked)
 		if(p.getLocation().getOccupants().size() > 1 && p.isBlocked() != false){
@@ -157,9 +157,7 @@ public class View extends JFrame {
 			makePanelVisible(combatPanel);
 			break;
 		case CHOOSE_COMBATTARGET:
-			if (p != null){
-				targetPanel.update(p);
-			}
+			targetPanel.update();
 			makePanelVisible(targetPanel);
 			break;
 		case NULL:

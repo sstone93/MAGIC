@@ -4,20 +4,16 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import utils.Utility.SoundChits;
-import utils.Utility.TreasureLocations;
 
 public class TreasurePile extends MapChit implements Serializable{
 	
-	private static final long serialVersionUID = -3725905807462747523L;
-	private TreasureLocations name;
-	private ArrayList<MapChit> sounds = new ArrayList<MapChit>();
+	private static final long serialVersionUID = -1975754197391952827L;
 	private ArrayList<Treasure> treasures = new ArrayList<Treasure>();
 	private ArrayList<Armour> armour = new ArrayList<Armour>();
 	private ArrayList<Weapon> weapons = new ArrayList<Weapon>();
 	
-	public TreasurePile(TreasureLocations name, ArrayList<Treasure> t, ArrayList<Armour> a, ArrayList<Weapon> w){
+	public TreasurePile(ArrayList<Treasure> t, ArrayList<Armour> a, ArrayList<Weapon> w){
 		super(SoundChits.FLUTTER_1);
-		this.name = name;
 		this.treasures = t;
 		this.armour = a;
 		this.weapons = w;
@@ -34,17 +30,33 @@ public class TreasurePile extends MapChit implements Serializable{
 	public void setWeapons(ArrayList<Weapon> w) {
 		this.weapons = w;
 	}
+	
+	public ArrayList<Treasure> getTreasures(){
+		return treasures;
+	}
+	
+	public ArrayList<Armour> getArmour(){
+		return armour;
+	}
+	
+	public ArrayList<Weapon> getWeapons(){
+		return weapons;
+	}
+	
+	public void takeTreasure(Treasure t){
+		this.treasures.remove(t);
+	}
+	
+	public void takeWeapon(Weapon w){
+		this.weapons.remove(w);
+	}
+	
+	public void takeArmour(Armour a){
+		this.armour.remove(a);
+	}
 
 	public String toString(){
-		System.out.println("		"+name.toString()+":");
 		String t = "";
-		for(int i=0;i<this.sounds.size();i++){					//prints sounds it contains
-			if(sounds.get(i) != null){
-				t+=sounds.get(i)+", ";
-			}
-		}
-		System.out.println("			Contains Sounds: "+t);
-		t = "";
 		for(int i=0;i<this.treasures.size();i++){					//prints treasures it contains
 			if(treasures.get(i) != null){
 				t+=treasures.get(i)+", ";

@@ -8,6 +8,7 @@ import utils.Utility.Actions;
 import utils.Utility.ClearingType;
 import utils.Utility.ItemWeight;
 import utils.Utility.LargeTreasureName;
+import utils.Utility.MonsterName;
 import utils.Utility.PhaseType;
 import utils.Utility.CharacterName;
 import utils.Utility.SmallTreasureName;
@@ -117,9 +118,11 @@ public class Player implements Serializable{
     }
     
     public Weapon getActiveWeapon() {
-    	for (int i = 0; i < weapons.size(); i++) {
-    		if (this.weapons.get(i).isActive() == true) {
-    			return this.weapons.get(i);
+    	if (weapons != null) {
+    		for (int i = 0; i < weapons.size(); i++) {
+    			if (this.weapons.get(i).isActive() == true) {
+    				return this.weapons.get(i);
+    			}
     		}
     	}
     	return new Weapon(Utility.WeaponName.FIST);
@@ -151,7 +154,7 @@ public class Player implements Serializable{
     }
     
     public void removeTarget() {
-    	this.target = null;
+    	this.target.clear();
     }
     
     public int getID(){
@@ -210,11 +213,13 @@ public class Player implements Serializable{
     }
 
     public void unAlertWeapons(){
-		for (int j = 0; j < weapons.size(); j++ ) {
-			if (weapons.get(j) != null) {
-				weapons.get(j).setActive(false);
+    	if (weapons != null) {
+    		for (int j = 0; j < weapons.size(); j++ ) {
+				if (weapons.get(j) != null) {
+					weapons.get(j).setActive(false);
+				}
 			}
-		}
+    	}
     }
 
     public ArrayList<Phase> getPhases() {
@@ -330,33 +335,41 @@ public class Player implements Serializable{
         weapons.add(weapon);
     }
     
+    public void addArmour(Armour armour) {
+    	this.armour.add(armour);
+    }
+    
     public void removeWeaponsWithHigherWeight(ItemWeight weight) {
-        for (int i = 0; i < weapons.size(); i++) {
-            if (weapons.get(i).getWeight() == ItemWeight.NEGLIGIBLE)
-                continue;
-            if (weapons.get(i).getWeight() == weight) {
-                continue;
-            }
-            if (Utility.isWeightHeavier(weapons.get(i).getWeight(), weight)) {
-                weapons.remove(i);
-            }
+    	if (weapons != null) {
+    		for (int i = 0; i < weapons.size(); i++) {
+            	if (weapons.get(i).getWeight() == ItemWeight.NEGLIGIBLE)
+                	continue;
+            	if (weapons.get(i).getWeight() == weight) {
+                	continue;
+            	}
+            	if (Utility.isWeightHeavier(weapons.get(i).getWeight(), weight)) {
+                	weapons.remove(i);
+            	}
+        	}
         }
     }
 
     // removes armour from the array with a higher weight then the one sent in
     // ignores armour with negligible weight
     public void removeArmourWithHigherWeight(ItemWeight weight) {
-        for (int i = 0; i < armour.size(); i++) {
-            if (armour.get(i).getWeight() == ItemWeight.NEGLIGIBLE)
-                continue;
-            if (armour.get(i).getWeight() == weight) {
-                continue;
-            }
+    	if (armour != null) {
+    		for (int i = 0; i < armour.size(); i++) {
+        		if (armour.get(i).getWeight() == ItemWeight.NEGLIGIBLE)
+                	continue;
+            	if (armour.get(i).getWeight() == weight) {
+                	continue;
+            	}
 
-            if (Utility.isWeightHeavier(armour.get(i).getWeight(), weight)) {
-            	armour.remove(i);
-            }
-        }
+            	if (Utility.isWeightHeavier(armour.get(i).getWeight(), weight)) {
+            		armour.remove(i);
+            	}
+        	}
+    	}
     }
 
     public void checkAndAddSunlight(){
@@ -421,7 +434,25 @@ public class Player implements Serializable{
 	public Clearing getLastMove(){
 		return lastMove;
 	}
+	
+	public void removeAllWeapons(){
+		weapons.clear();
+	}
+	
+	public void removeAllArmour(){
+		armour.clear();
+	}
+	
+	public void removeAllTreasures(){
+		treasures.clear();
+	}
 
+	public void removeAll(){
+		removeAllWeapons();
+		removeAllArmour();
+		removeAllTreasures();
+	}
+	
 	public void usePhase(Phase data) {
 
 		//TODO THIS ASSUMES THAT PHASE EQUALITY MEANS JUST THE TYPES MATCH (which i think i did)
@@ -461,5 +492,15 @@ public class Player implements Serializable{
 			}
 		}
 		return arr;
+	}
+	
+	//returns the first monster with a matching name in the same clearing.
+	public Monster getMonsterInSameClearing(MonsterName name){
+		for(Monster m: this.location.monsters){
+			if(m.getName() == name){
+				return m;
+			}
+		}
+		return null;
 	}
 }

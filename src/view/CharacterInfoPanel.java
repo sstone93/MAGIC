@@ -10,6 +10,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
+import controller.ClientController;
 import model.Armour;
 import model.Player;
 import model.Treasure;
@@ -30,8 +31,10 @@ public class CharacterInfoPanel extends JPanel{
 	private JTextArea treasuresText;
 	private JTextArea weaponsText;
 	private JTextArea chitsText;
+	private ClientController control;
 	
-	public CharacterInfoPanel(){
+	public CharacterInfoPanel(ClientController c){
+		this.control = c;
 		setBounds(819, 0, 455, 500);
 		setBorder(new LineBorder(Color.GRAY));
 		setLayout(null);
@@ -162,7 +165,9 @@ public class CharacterInfoPanel extends JPanel{
 		add(chitsText);
 	}
 	
-	public void update(Player p){
+	public void update(){
+		
+		Player p = control.model.getPlayer();
 		
 		characterText.setText(p.getCharacter().getName().toString());
 		vpText.setText(p.getLocation().parent.getName().toString() + String.valueOf(p.getLocation().getClearingNumber())); // TODO: change later
