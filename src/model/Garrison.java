@@ -16,44 +16,44 @@ public class Garrison implements Serializable{
 	private ArrayList<Weapon> weapons  = new ArrayList<Weapon>();
 	private ArrayList<Armour> armour = new ArrayList<Armour>();
 	private ArrayList<Treasure> treasures = new ArrayList<Treasure>();
-	
+
 	public Garrison(GarrisonName n){
 		this.name = n;
 		setupGarrison();
 	}
-	
+
 	public void setLocation(Clearing l){
 		this.location = l;
 		l.setDwelling(this);
 	}
-	
+
 	public Clearing getLocation(){
 		return location;
 	}
-	
+
 	/**
 	 * Every garrison setups up the same way every game, so I can code it
 	 */
 	private void setupGarrison(){
 		if(name == GarrisonName.CHAPEL){
-			
+
 			WeaponName[] n = {WeaponName.GREAT_AXE, WeaponName.GREAT_AXE,
 					WeaponName.GREAT_SWORD, WeaponName.MORNING_STAR,
 					WeaponName.CROSSBOW};
 			this.weapons = generateWeapons(n);
-			
+
 			ArmourName[] a = {ArmourName.SUIT_OF_ARMOR, ArmourName.SUIT_OF_ARMOR};
 			this.armour = generateArmour(a);
-			
+
 		} else if (name == GarrisonName.GUARD){
-			
+
 			WeaponName[] n = {WeaponName.MACE, WeaponName.MACE,
 					WeaponName.AXE, WeaponName.AXE, WeaponName.BROADSWORD};
 			this.weapons = generateWeapons(n);
-			
+
 			ArmourName[] a = {ArmourName.HELMET, ArmourName.BREASTPLATE};
 			this.armour = generateArmour(a);
-			
+
 		}else if(name == GarrisonName.HOUSE){
 
 			WeaponName[] n = {WeaponName.SHORT_SWORD, WeaponName.SHORT_SWORD,
@@ -61,18 +61,18 @@ public class Garrison implements Serializable{
 					WeaponName.THRUSTING_SWORD, WeaponName.THRUSTING_SWORD,
 					WeaponName.STAFF, WeaponName.STAFF};
 			this.weapons = generateWeapons(n);
-			
+
 			ArmourName[] a = {ArmourName.HELMET, ArmourName.HELMET, ArmourName.HELMET,
 					ArmourName.SHIELD, ArmourName.SHIELD};
 			this.armour = generateArmour(a);
-			
+
 		} else if (name == GarrisonName.INN){
-			
+
 			this.armour = null;
 			this.weapons = null;
 		}
 	}
-	
+
 	private ArrayList<Weapon> generateWeapons(WeaponName[] names){
 		ArrayList<Weapon> w  = new ArrayList<Weapon>();
 		for(int i=0;i<names.length;i++){
@@ -80,7 +80,7 @@ public class Garrison implements Serializable{
 		}
 		return w;
 	}
-	
+
 	private ArrayList<Armour> generateArmour(ArmourName[] names){
 		ArrayList<Armour> a = new ArrayList<Armour>();
 		for(int i=0;i<names.length;i++){
@@ -88,15 +88,44 @@ public class Garrison implements Serializable{
 		}
 		return a;
 	}
-	
+
 	public GarrisonName getName(){
 		return name;
 	}
-	
+
 	public void setTreasures(ArrayList<Treasure> t){
 		treasures = t;
 	}
+
+	public ArrayList<Treasure> getTreasures() {
+		return treasures;
+	}
+	public void removeTreasure(Treasure t) {
+		treasures.remove(t);
+	}
+	public void addTreasure(Treasure t) {
+		treasures.add(t);
+	}
 	
+	public ArrayList<Weapon> getWeapons() {
+		return weapons;
+	}
+	public void removeWeapon(Weapon w) {
+		weapons.remove(w);
+	}
+	public void addWeapon(Weapon w) {
+		weapons.add(w);
+	}
+	public ArrayList<Armour> getArmour() {
+		return armour;
+	}
+	public void removeArmour(Armour a) {
+		armour.remove(a);
+	}
+	public void addArmour(Armour a) {
+		armour.add(a);
+	}
+
 	public String toString(){
 		String i = "";
 		if(this.weapons != null){
@@ -123,5 +152,5 @@ public class Garrison implements Serializable{
 		}
 		return "";
 	}
-	
+
 }
