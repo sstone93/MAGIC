@@ -1,11 +1,14 @@
 package view;
 
 import java.awt.*;
+
 import javax.swing.*;
 import javax.swing.border.*;
 
+import utils.Utility.GameState;
 import controller.ClientController;
 import model.Player;
+
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -61,7 +64,7 @@ public class View extends JFrame {
 		textDisplay = new JTextArea();
 		//upgradedText =  new JScrollPane (textDisplay, 
 				  // JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		textDisplay.setBounds(0, 500, 750, 192);
+		textDisplay.setBounds(0, 500, 500, 192);
 		textDisplay.setLineWrap(true);
 		//contentPane.add(upgradedText);
 		contentPane.add(textDisplay);
@@ -108,6 +111,7 @@ public class View extends JFrame {
 		
 		//creates a new blockpanel
 		blockPanel = new BlockPanel(control);
+		blockPanel.setVisible(false);
 		contentPane.add(blockPanel);
 	}
 	
@@ -125,13 +129,11 @@ public class View extends JFrame {
 			scrollPanel.getVerticalScrollBar().setValue(p.getLocation().y - 250);
 			scrollPanel.getHorizontalScrollBar().setValue(p.getLocation().x - 400);
 			//if the blockpanel should appear (other people in your clearing, and you are not blocked)
-			if(p.getLocation().getOccupants().size() > 1 && p.isBlocked() == false){
-				System.out.println("SHOWING BLOCK PANEL");
+			if(p.getLocation().getOccupants().size() > 1 && p.isBlocked() == false && control.blockState == true){
 				blockPanel.update();
 				blockPanel.setVisible(true);
 			}else{
 				blockPanel.setVisible(false);//if you are blocked or alone, remove the block panel
-				System.out.println("HIDING BLOCK PANEL");
 			}
 		}
 		updateNonBoardGUI();

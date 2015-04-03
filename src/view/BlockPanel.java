@@ -28,27 +28,27 @@ public class BlockPanel extends JPanel{
 		
 		this.control = c;
 		
-		setBounds(600, 0, 750, 150);
+		setBounds(500, 500, 250, 192);
 		setBorder(new LineBorder(Color.GRAY));
 		setLayout(null);
 		
 		JLabel lblNewLabel_1 = new JLabel("block someone");
 		lblNewLabel_1.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
-		lblNewLabel_1.setBounds(0, 0, 50, 20);
+		lblNewLabel_1.setBounds(65, 0, 250, 20);
 		add(lblNewLabel_1);
 
 		target = new JComboBox();
-		target.setBounds(0, 30, 100, 40);
+		target.setBounds(20, 30, 210, 40);
 		add(target);
 
 		send = new JButton("Send");
 		send.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				control.handleBlockSubmit((Player)target.getSelectedItem());
+				control.handleBlockSubmit((CharacterName)target.getSelectedItem());
 			}
 		});
 		
-		send.setBounds(0, 60, 30, 90);
+		send.setBounds(75, 80, 100, 20);
 		add(send);
 	}
 	
@@ -57,16 +57,19 @@ public class BlockPanel extends JPanel{
 		Player p = control.model.getPlayer();
 		if (p != null) {
 			ArrayList<Player> others = p.getLocation().getOccupants();
-			if (others != null) {
-				CharacterName[] targets = new CharacterName[others.size()];
-				for (int i = 0; i < others.size(); i++){
-					if (others.get(i) != null)
-						targets[i] = others.get(i).getCharacter().getName();
+			ArrayList<Player> finals = new ArrayList<Player>();
+			for(Player pl : others){
+				if(p.getCharacter().getName() != pl.getCharacter().getName()){
+					finals.add(pl);
 				}
-
-				target.setModel(new DefaultComboBoxModel(targets));
 			}
+			
+			CharacterName[] targets = new CharacterName[finals.size()];
+			for (int i = 0; i < finals.size(); i++){
+				targets[i] = finals.get(i).getCharacter().getName();
+			}
+
+			target.setModel(new DefaultComboBoxModel(targets));
 		}
 	}
-
 }

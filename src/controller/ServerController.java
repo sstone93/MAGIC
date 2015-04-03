@@ -176,7 +176,8 @@ public class ServerController extends Handler{
 				}
 			}
 			if( m.getType() == MessageType.BLOCK){
-				Player blockTarget = (Player) m.getData().get(0);
+				
+				Player blockTarget = charToPlayer((CharacterName) m.getData().get(0));
 				block(blockTarget);
 				block(findPlayer(ID));
 			}

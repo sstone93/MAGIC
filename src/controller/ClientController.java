@@ -26,6 +26,8 @@ public class ClientController extends Handler{
 	public ClientModel model;
 	public NetworkClient network;
 	public GameState state = GameState.NULL;
+	public boolean blockState = false;
+	
 	/**
 	 * Constructor for a ClientController
 	 */
@@ -84,9 +86,11 @@ public class ClientController extends Handler{
 			String text = ((String) message );
 			if(text.equalsIgnoreCase("SEND MOVES")){
 				state = GameState.CHOOSE_PLAYS;
+				blockState = true;
 				model.addMessage("Please Select Your Moves");
 			}else if(text.equalsIgnoreCase("SEND COMBAT")){
 				state = GameState.CHOOSE_COMBATTARGET;
+				blockState = false;
 				model.addMessage("Please Select Combat TARGET");
 			}else if(text.equalsIgnoreCase("SEND COMBATMOVES")){
 				state = GameState.CHOOSE_COMBATMOVES;
@@ -137,9 +141,9 @@ public class ClientController extends Handler{
 		view.updateNonBoardGUI();
 	}
 	
-	public void handleBlockSubmit(Player p){
+	public void handleBlockSubmit(CharacterName c){
 		ArrayList<Object> mes = new ArrayList<Object>();
-		mes.add(p);
+		mes.add(c);
 		
 		network.send(new Message(MessageType.BLOCK, mes));
 		model.addMessage("Sent block");
