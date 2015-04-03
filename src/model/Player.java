@@ -8,6 +8,7 @@ import utils.Utility.Actions;
 import utils.Utility.ClearingType;
 import utils.Utility.ItemWeight;
 import utils.Utility.LargeTreasureName;
+import utils.Utility.MonsterName;
 import utils.Utility.PhaseType;
 import utils.Utility.CharacterName;
 import utils.Utility.SmallTreasureName;
@@ -498,5 +499,15 @@ public class Player implements Serializable{
 			}
 		}
 		return arr;
+	}
+	
+	//returns the first monster with a matching name in the same clearing.
+	public Monster getMonsterInSameClearing(MonsterName name){
+		for(Monster m: this.location.monsters){
+			if(m.getName() == name){
+				return m;
+			}
+		}
+		return null;
 	}
 }
