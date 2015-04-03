@@ -1766,7 +1766,6 @@ public class ServerController extends Handler{
 	}
 
 	public void deadPlayer(Player player, Monster monster) {
-		//TODO pile
 		TreasurePile pile = new TreasurePile(player.getTreasures(), player.getArmour(), player.getWeapons());
 		player.getLocation().setPile(pile);
 		player.removeAll();
@@ -1783,7 +1782,6 @@ public class ServerController extends Handler{
 	}
 
 	public void deadPlayer(Player attacker, Player defender) {
-		//TODO pile
 		TreasurePile pile = new TreasurePile(defender.getTreasures(), defender.getArmour(), defender.getWeapons());
 		defender.getLocation().setPile(pile);
 		defender.removeAll();

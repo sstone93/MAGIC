@@ -158,7 +158,7 @@ public class Player implements Serializable{
     }
     
     public void removeTarget() {
-    	this.target = null;
+    	this.target.clear();
     }
     
     public int getID(){
@@ -440,15 +440,15 @@ public class Player implements Serializable{
 	}
 	
 	public void removeAllWeapons(){
-		weapons = null;
+		weapons.clear();
 	}
 	
 	public void removeAllArmour(){
-		armour = null;
+		armour.clear();
 	}
 	
 	public void removeAllTreasures(){
-		treasures = null;
+		treasures.clear();
 	}
 
 	public void removeAll(){
