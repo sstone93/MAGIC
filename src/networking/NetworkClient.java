@@ -20,13 +20,13 @@ public class NetworkClient extends NetworkEntity  implements Runnable{
 	 * Constructor for a NetworkClient
 	 * @param control This is a reference to the controller who created this object.
 	 */
-	public NetworkClient(ClientController control){
+	public NetworkClient(ClientController control, String defaultHost){
 		this.controller = control;		//stores the parent ServerController
 		
 		System.out.println("Client is Establishing connection. Please wait...");
 		
 		try {
-			this.socket = new Socket(Config.DEFAULT_HOST, Config.DEFAULT_PORT);
+			this.socket = new Socket(defaultHost, Config.DEFAULT_PORT);
 			int ID = socket.getLocalPort();
 			System.out.println(ID + ": Connected to server: " + socket.getInetAddress());
 			System.out.println(ID + ": Connected to portid: " + socket.getLocalPort());

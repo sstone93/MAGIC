@@ -23,6 +23,7 @@ public class ServerView extends JFrame implements ActionListener{
 	
 	JButton stop = new JButton();
 	JButton select = new JButton("SELECT");
+	JButton start = new JButton("START GAME (after next client joins)");
 	JComboBox rolls = new JComboBox();
 	ServerController control;
 	
@@ -46,13 +47,13 @@ public class ServerView extends JFrame implements ActionListener{
 		}
 		
 		stop.addActionListener(this);  
-		this.add(stop); 
+		this.add(stop);
 		setResizable(false);
 		
-		//if(!Config.CHEAT_MODE){
-			setSize(new Dimension(100, 140));
-		//}else{
-			//setSize(new Dimension(800, 650));
+		if(!Config.CHEAT_MODE){
+			setSize(new Dimension(450, 140));
+		}else{
+			setSize(new Dimension(450, 140));
 		
 			rolls.setBounds(110,0,140,20);
 			add(rolls);
@@ -69,13 +70,7 @@ public class ServerView extends JFrame implements ActionListener{
 			});
 
 			select.setBounds(110,30,130,20);
-			add(select);	
-			
-			//buttons = new ChitButtonGrid(control); 
-			//buttons.setLocation(50, 180);
-			//add(buttons);
-			//buttons.setVisible(true);
-			
+			add(select);
 			
 			//Causes network shutdown by clicking the close button on the window
 			this.addWindowListener( new WindowAdapter() {
@@ -87,7 +82,17 @@ public class ServerView extends JFrame implements ActionListener{
 	            }
 	        } );	
 		}
-	//}
+		
+		start.setBounds(110,60,270,20);
+		start.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				control.network.ready = true;
+			}
+		});
+		add(start);
+		
+		
+	}
 
 	//STAHPS THE SERVER
 	public void actionPerformed(ActionEvent e) {

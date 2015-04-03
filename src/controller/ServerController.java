@@ -1831,13 +1831,15 @@ public class ServerController extends Handler{
 	 */
 	public void startGame(){
 
+		this.playerCount = network.getClientCount();
+		
 		//ask clients to send moves!
 		state = GameState.CHOOSE_CHARACTER;
     	this.addedPlayers = 0;
     	network.broadCast("CHARACTER SELECT");
     	System.out.println("start selection loop");
 
-    	while(this.addedPlayers < Config.MAX_CLIENTS){
+    	while(this.addedPlayers < playerCount){
     		try {
 				Thread.sleep(20);
 			} catch (InterruptedException e) {

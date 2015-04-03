@@ -84,5 +84,9 @@ public abstract class NetworkEntity {
 			}
 		}
 	}
+	
+	public int getClientCount(){
+		return this.clientCount;
+	}
 
 }

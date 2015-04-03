@@ -15,6 +15,7 @@ import utils.Config;
 public class NetworkServer extends NetworkEntity implements Runnable{
 
 	private ServerSocket server = null;
+	public boolean ready = false;
 	
 	/**
 	 * Contructor for a NetworkServer
@@ -48,9 +49,7 @@ public class NetworkServer extends NetworkEntity implements Runnable{
 			} catch (IOException ioe){
 				System.out.println("Server Error adding new thread: ");
 			}
-			if(clientCount == Config.MAX_CLIENTS){						//checks to see if the clientCount has been reached and the game should start
-				controller.handle(Config.DEFAULT_PORT, "START GAME");
-			}		
+			
 		} else {
 			System.out.println("Client refused: Game in progress");
 		}
@@ -72,7 +71,10 @@ public class NetworkServer extends NetworkEntity implements Runnable{
 		while (thread != null) {				//runs until the stop method is run
 			try{
 				System.out.println("Waiting for clients ... ");
-				addThread(server.accept());		//spam accept requests, handles them via add thread
+				addThread(server.accept());		//spam accept requests, handles them via add thread]
+				if(ready == true){
+					controller.handle(Config.DEFAULT_PORT, "START GAME");
+				}
 			} catch (IOException ie){
 				System.out.println("Sever: IO Exception in NetworkServer run method");
 			}

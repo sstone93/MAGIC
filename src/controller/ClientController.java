@@ -1,6 +1,9 @@
 package controller;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import networking.Message;
 import networking.NetworkClient;
@@ -28,8 +31,10 @@ public class ClientController extends Handler{
 	 */
 	public ClientController(){
 
+		String serverIP = parseSettings();
+		
 		//instanciate the networking
-		this.network = new NetworkClient(this);
+		this.network = new NetworkClient(this, serverIP);
 		System.out.println("NetworkClient Successfully Created.");
 				
 		//instantiate the model
@@ -43,6 +48,24 @@ public class ClientController extends Handler{
 		
 		System.out.println("View Successfully Created.");
 		view.update();//can maybe change this to view.updateNotBoard
+	}
+	
+	private String parseSettings(){
+		//setup importing from config file
+		Scanner ourScanner;
+		String ip = "";
+		
+		try {
+			ourScanner = new Scanner(new File("settings.txt"));
+			ip = ourScanner.nextLine();
+			System.out.println("Using Server IP: "+ip);
+			ourScanner.close();
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+		return ip;
 	}
 	
 	/**
