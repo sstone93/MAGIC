@@ -1191,8 +1191,26 @@ public class ServerController extends Handler{
         
         //Dropping heavier items
         for (int i = 0; i < players.size(); i++) {
-        	players.get(i).removeWeaponsWithHigherWeight(players.get(i).getCharacter().getWeight());
-        	players.get(i).removeArmourWithHigherWeight(players.get(i).getCharacter().getWeight());
+        	ItemWeight weight = players.get(i).getCharacter().getWeight();
+        	
+        	if (players.get(i).hasTreasure(SmallTreasureName.LEAGUE_BOOTS_7.toString())) {
+    			weight = ItemWeight.TREMENDOUS;
+    		}
+    		else if (players.get(i).hasTreasure(SmallTreasureName.POWER_BOOTS.toString()) && (weight == ItemWeight.MEDIUM || weight == ItemWeight.LIGHT || weight == ItemWeight.NEGLIGIBLE)){
+    			weight = ItemWeight.HEAVY;
+    		}
+    		else if (players.get(i).hasTreasure(SmallTreasureName.QUICK_BOOTS.toString()) && (weight == ItemWeight.LIGHT || weight == ItemWeight.NEGLIGIBLE)) {
+    			weight = ItemWeight.MEDIUM;
+    		}
+    		else if (players.get(i).hasTreasure(SmallTreasureName.ELVEN_SLIPPERS.toString()) && (weight == ItemWeight.NEGLIGIBLE)) {
+    			weight = ItemWeight.LIGHT;
+    		}
+    		else if (players.get(i).hasTreasure(SmallTreasureName.SHOES_OF_STEALTH.toString()) && (weight == ItemWeight.NEGLIGIBLE)) {
+    			weight = ItemWeight.LIGHT;
+    		}
+        		
+        	players.get(i).removeWeaponsWithHigherWeight(weight);
+        	players.get(i).removeArmourWithHigherWeight(weight);
         }
         
         //Progresses to the next day or ends the game
