@@ -12,6 +12,7 @@ public class Weapon implements Serializable{
     boolean active;
     int     length; // on a scale of 0 - 18
     int     speed;
+    int     gold;
     ItemWeight weight;
 
     Weapon(WeaponName n) {
@@ -19,50 +20,58 @@ public class Weapon implements Serializable{
        if (type == WeaponName.SHORT_SWORD) {
     	   this.ranged = false;
     	   this.length = 3;
-    	   this.speed = 2;
+    	   this.speed  = 2;
     	   this.weight = ItemWeight.LIGHT;
+    	   this.gold   = 4;
    		}
        else if (type == WeaponName.GREAT_AXE) {
     	   this.ranged = false;
     	   this.length = 5;
     	   this.speed = 4;
     	   this.weight = ItemWeight.HEAVY;
+    	   this.gold   = 8;
        }
        else if (type == WeaponName.MACE) {
     	   this.ranged = false;
     	   this.length = 1;
     	   this.speed = 3;
     	   this.weight = ItemWeight.MEDIUM;
+    	   this.gold   = 6;
        }
        else if (type == WeaponName.LIGHT_BOW) {
     	   this.ranged = true;
     	   this.length = 14;
     	   this.speed = 1;
     	   this.weight = ItemWeight.LIGHT;
+    	   this.gold   = 6;
        }
        else if (type == WeaponName.THRUSTING_SWORD) {
     	   this.ranged = false;
     	   this.length = 4;
     	   this.speed = 2;
     	   this.weight = ItemWeight.LIGHT;
+    	   this.gold   = 6;
        }
        else if (type == WeaponName.GREAT_SWORD) {
     	   this.ranged = false;
     	   this.length = 8;
     	   this.speed = 6;
     	   this.weight = ItemWeight.HEAVY;
+    	   this.gold   = 10;
        }
        else if (type == WeaponName.FIST) {
     	   this.ranged = false;
     	   this.length = 1;
     	   this.speed = 1;
     	   this.weight = ItemWeight.NEGLIGIBLE;
+    	   this.gold   = 0;
        }
        else {
     	   this.ranged = false;
     	   this.length = 1;
     	   this.speed = 7;
     	   this.weight = ItemWeight.NEGLIGIBLE;
+    	   this.gold   = 0;
        }
        this.active = true;
     }
@@ -102,5 +111,8 @@ public class Weapon implements Serializable{
     }
     public String toString(){
     	return this.type.toString();
+    }
+    public int getGold() {
+    	return gold;
     }
 }

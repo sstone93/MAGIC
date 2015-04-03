@@ -291,6 +291,7 @@ public class ServerController extends Handler{
 		if (object.toString().contains("BUY")) {			
 			String[] temp = object.toString().split("BUY");
 			ArrayList<Treasure> treasures = player.getLocation().getDwelling().getTreasures();
+			boolean boughtSomething = false;
 			for (Treasure t: treasures) {
 				if (t.getName().toString().trim().equals(temp[1].trim())) {
 					if (player.getGold() >= t.getGold()) {
@@ -298,10 +299,45 @@ public class ServerController extends Handler{
 						player.removeGold(t.getGold());
 						player.getLocation().getDwelling().removeTreasure(t);
 						network.send(player.getID(), "YOU BOUGHT " + t.getName() + "!");
+						boughtSomething = true;
 						break;
 					}
 					else {
 						network.send(player.getID(), "You didn't have enough gold to pay for this, you need " + t.getGold() + " gold!");
+						break;
+					}
+				}
+			}
+			if (boughtSomething == false) {
+				ArrayList<Armour> armour = player.getLocation().getDwelling().getArmour();
+				for (Armour a: armour) {
+					if (a.getType().toString().trim().equals(temp[1].trim())) {
+						if (player.getGold() >= a.getGold()) {
+							player.removeGold(a.getGold());
+							player.addArmour(a);
+							player.getLocation().getDwelling().removeArmour(a);
+							network.send(player.getID(), "YOU BOUGHT " + a.getType() + "!");
+							boughtSomething = true;
+							break;
+						}else {
+							network.send(player.getID(), "You didn't have enough gold to pay for this, you need " + a.getGold() + " gold!");
+							break;
+						}
+					}
+				}
+			}
+			if (boughtSomething == false) {
+				ArrayList<Weapon> weapons = player.getLocation().getDwelling().getWeapons();
+				for (Weapon w: weapons) {
+					if (w.getType().toString().trim().equals(temp[1].trim())) {
+						player.removeGold(w.getGold());
+						player.addWeapon(w);
+						player.getLocation().getDwelling().removeWeapon(w);
+						network.send(player.getID(), "YOU BOUGHT " + w.getType() + "!");
+						boughtSomething = true;
+						break;
+					}else {
+						network.send(player.getID(), "You didn't have enough gold to pay for this, you need " + w.getGold() + " gold!");
 						break;
 					}
 				}
@@ -311,19 +347,48 @@ public class ServerController extends Handler{
 			System.out.println("SELLING" );
 			String[] temp = object.toString().split("SELL");
 			ArrayList<Treasure> treasures = player.getTreasures();
+			boolean soldSomething = false;
 			for (Treasure t: treasures) {
 				if (t.getName().toString().trim().equals(temp[1].trim())) {
 					player.addGold(t.getGold());
 					player.removeTreasure(t);
 					player.getLocation().getDwelling().addTreasure(t);
 					network.send(player.getID(), "YOU SOLD " + t.getName() + "!");
+					soldSomething = true;
 					break;
+				}
+			}
+			if (soldSomething == false) {
+				ArrayList<Armour> armour = player.getArmour();
+				for (Armour a: armour) {
+					if (a.getType().toString().trim().equals(temp[1].trim())) {
+						player.addGold(a.getGold());
+						player.removeArmour(a);
+						player.getLocation().getDwelling().addArmour(a);
+						network.send(player.getID(), "YOU SOLD " + a.getType() + "!");
+						soldSomething = true;
+						break;
+					}
+				}
+			}
+			if (soldSomething == false) {
+				ArrayList<Weapon> weapons = player.getWeapons();
+				for (Weapon w: weapons) {
+					if (w.getType().toString().trim().equals(temp[1].trim())) {
+						player.addGold(w.getGold());
+						player.removeWeapon(w);
+						player.getLocation().getDwelling().addWeapon(w);
+						network.send(player.getID(), "YOU SOLD " + w.getType() + "!");
+						soldSomething = true;
+						break;
+					}
 				}
 			}
 			
 			
 		}
 	}
+	
 
 	/**
 	 * Determines which players a certain player is currently able to block

@@ -349,9 +349,14 @@ public class Player implements Serializable{
     public void addWeapon(Weapon weapon) {
         weapons.add(weapon);
     }
-    
+    public void removeWeapon(Weapon w) {
+    	weapons.remove(w);
+    }
     public void addArmour(Armour armour) {
     	this.armour.add(armour);
+    }
+    public void removeArmour(Armour a) {
+    	armour.remove(a);
     }
     
     public void removeWeaponsWithHigherWeight(ItemWeight weight) {

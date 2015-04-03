@@ -106,6 +106,25 @@ public class Garrison implements Serializable{
 	public void addTreasure(Treasure t) {
 		treasures.add(t);
 	}
+	
+	public ArrayList<Weapon> getWeapons() {
+		return weapons;
+	}
+	public void removeWeapon(Weapon w) {
+		weapons.remove(w);
+	}
+	public void addWeapon(Weapon w) {
+		weapons.add(w);
+	}
+	public ArrayList<Armour> getArmour() {
+		return armour;
+	}
+	public void removeArmour(Armour a) {
+		armour.remove(a);
+	}
+	public void addArmour(Armour a) {
+		armour.add(a);
+	}
 
 	public String toString(){
 		String i = "";
