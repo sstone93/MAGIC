@@ -171,20 +171,20 @@ public class ServerController extends Handler{
 					//NOTE: right now it breaks if you try to fight no one(index out of bounds because it tries to go straight to 0
 					//even though size is 0, this will be fixed when we loop through)
 					System.out.println("This is the target's name!");
-					if (m.getData().get(0) != null) {
+					/*if (m.getData().get(0) != null) {
 						System.out.println(charToPlayer(((ArrayList<CharacterName>) m.getData().get(0)).get(0)));
 					}
 					Player temp = charToPlayer(((ArrayList<CharacterName>) m.getData().get(0)).get(0));
 					System.out.println(temp.getCharacter().getName());
-					
+					*/
 					//this is how you would get the first monster in the arraylist.
 					for (int i = 0; i < ((ArrayList<MonsterName>) m.getData().get(1)).size(); i++) {
-						findPlayer(ID).setMonsterTarget(findPlayer(ID).getMonsterInSameClearing(((ArrayList<MonsterName>) m.getData().get(1)).get(0)));
+						findPlayer(ID).setMonsterTarget(findPlayer(ID).getMonsterInSameClearing(((ArrayList<MonsterName>) m.getData().get(1)).get(i)));
 					}
 					
 					//turns the received character name into a player
 					for (int i = 0; i < ((ArrayList<CharacterName>) m.getData().get(0)).size(); i++) {
-						findPlayer(ID).setTarget(charToPlayer(((ArrayList<CharacterName>) m.getData().get(0)).get(0)));
+						findPlayer(ID).setTarget(charToPlayer(((ArrayList<CharacterName>) m.getData().get(0)).get(i)));
 					}
 				}else{
 					network.send(ID, "NOT ACCEPTING COMBAT TARGETS ATM");
