@@ -7,6 +7,7 @@ import utils.Utility.WarningChits;
 public class WarningChit implements Serializable{
 
 	private WarningChits name;
+	private Tile tile;
 	private static final long serialVersionUID = -5168229883049997240L;
 	private boolean summoned = false;
 	
@@ -28,5 +29,17 @@ public class WarningChit implements Serializable{
 	
 	public void setSummoned(boolean s) {
 		summoned = s;
+	}
+	
+	public Tile getTile(){
+		return tile;
+	}
+	
+	public void setTile(Tile t) {
+		tile = t;
+	}
+	
+	public boolean equals(WarningChit other) {
+		return (this.name == other.name) && (this.tile.equals(other.tile));
 	}
 }

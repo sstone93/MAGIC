@@ -9,6 +9,7 @@ public class MapChit implements Serializable{
 	private static final long serialVersionUID = 8505767754211085702L;
 	private SoundChits name;
 	private boolean    summoned = false;
+	protected Tile tile;
 	
 	public MapChit(SoundChits name){
 		this.name = name;
@@ -30,5 +31,15 @@ public class MapChit implements Serializable{
 		summoned = s;
 	}
 	
+	public Tile getTile(){
+		return tile;
+	}
+	
+	public void setTile(Tile t){
+		tile = t;
+	}
 
+	public boolean equals(MapChit other){
+		return (this.name == other.name) && (this.tile.equals(other.tile));
+	}
 }
