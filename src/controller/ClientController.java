@@ -122,7 +122,7 @@ public class ClientController extends Handler{
 		model.addMessage("Sent block");
 
 		state = GameState.NULL;
-		view.updateNonBoardGUI(null);//sending null rather than the player object, null checks make this safe
+		view.updateNonBoardGUI();//sending null rather than the player object, null checks make this safe
 		
 	}
 
