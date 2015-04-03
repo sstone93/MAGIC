@@ -1047,6 +1047,12 @@ public class ServerController extends Handler{
         	players.get(i).removeMonsterTarget();
         }
         
+        //Dropping heavier items
+        for (int i = 0; i < players.size(); i++) {
+        	players.get(i).removeWeaponsWithHigherWeight(players.get(i).getCharacter().getWeight());
+        	players.get(i).removeArmourWithHigherWeight(players.get(i).getCharacter().getWeight());
+        }
+        
         //Progresses to the next day or ends the game
         boolean thing = resetDay();
         if(thing == true){ //if it is not the 28th day....

@@ -355,6 +355,7 @@ public class Player implements Serializable{
     }
     
     public void removeWeaponsWithHigherWeight(ItemWeight weight) {
+    	System.out.println("Dropping weapons");
     	if (weapons != null) {
     		for (int i = 0; i < weapons.size(); i++) {
             	if (weapons.get(i).getWeight() == ItemWeight.NEGLIGIBLE)
@@ -372,6 +373,7 @@ public class Player implements Serializable{
     // removes armour from the array with a higher weight then the one sent in
     // ignores armour with negligible weight
     public void removeArmourWithHigherWeight(ItemWeight weight) {
+    	System.out.println("Dropping armour");
     	if (armour != null) {
     		for (int i = 0; i < armour.size(); i++) {
         		if (armour.get(i).getWeight() == ItemWeight.NEGLIGIBLE)
