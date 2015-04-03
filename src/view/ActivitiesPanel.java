@@ -139,19 +139,37 @@ public class ActivitiesPanel extends JPanel{
 								
 						
 						System.out.println(treasuresToBuy);
-						arr = new String[treasuresToBuy.size() + treasuresToSell.size() + armourToBuy.size() + armourToSell.size() + weaponsToBuy.size() + weaponsToSell.size()];
-						int i = 0; 
-						for(Treasure t: treasuresToBuy){
-							arr[i] = "BUY " + t.getName();
-							i++;
+						arr = null;
+						int size = 0; 
+						if (weaponsToBuy != null) {
+							size += weaponsToBuy.size();
 						}
-						for(Armour a: armourToBuy){
-							arr[i] = "BUY " + a.getType();
-							i++;
+						if (armourToBuy != null) {
+							size += armourToBuy.size();
 						}
-						for(Weapon w: weaponsToBuy){
-							arr[i] = "BUY " + w.getType();
-							i++;
+						if (treasuresToBuy != null) {
+							size += treasuresToBuy.size();
+						}
+						size += treasuresToSell.size() + armourToSell.size() + weaponsToSell.size();
+						arr = new String[size];
+						int i = 0;
+						if (treasuresToBuy != null) {
+							for(Treasure t: treasuresToBuy){
+								arr[i] = "BUY " + t.getName();
+								i++;
+							}
+						}
+						if (armourToBuy != null) {
+							for(Armour a: armourToBuy){
+								arr[i] = "BUY " + a.getType();
+								i++;
+							}
+						}
+						if (weaponsToBuy != null) {
+							for(Weapon w: weaponsToBuy){
+								arr[i] = "BUY " + w.getType();
+								i++;
+							}
 						}
 						for(Treasure t: treasuresToSell){
 							arr[i] = "SELL " + t.getName();
