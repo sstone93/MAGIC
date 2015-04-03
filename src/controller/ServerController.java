@@ -1097,6 +1097,7 @@ public class ServerController extends Handler{
 	   		players.get(i).addDiscovery(players.get(i).getLocation().parent.getWarningChit());
 
 	    	ArrayList<Clearing> clearings = players.get(i).getLocation().parent.getClearings();
+	    	discoverMonstersWithSiteChits(players.get(i));
 
 	    	for (int j = 0; j < clearings.size(); j++) {
 	    		if (!clearings.get(j).equals(players.get(i).getLocation())) {
