@@ -13,8 +13,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
+import model.Armour;
 import model.Path;
 import model.Phase;
+import model.Treasure;
 import model.Weapon;
 import controller.ClientController;
 import utils.Utility.Actions;
@@ -128,6 +130,43 @@ public class ActivitiesPanel extends JPanel{
 						extraInfo.setVisible(true);
 						break;
 					case TRADE:
+						ArrayList<Treasure> treasuresToBuy  = control.model.getPlayer().getLocation().getDwelling().getTreasures();
+						ArrayList<Treasure> treasuresToSell = control.model.getPlayer().getTreasures();
+						ArrayList<Armour>   armourToBuy     = control.model.getPlayer().getLocation().getDwelling().getArmour();
+						ArrayList<Armour>   armourToSell    = control.model.getPlayer().getArmour();
+						ArrayList<Weapon>   weaponsToBuy    = control.model.getPlayer().getLocation().getDwelling().getWeapons();
+						ArrayList<Weapon>   weaponsToSell   = control.model.getPlayer().getWeapons();
+								
+						
+						System.out.println(treasuresToBuy);
+						arr = new String[treasuresToBuy.size() + treasuresToSell.size() + armourToBuy.size() + armourToSell.size() + weaponsToBuy.size() + weaponsToSell.size()];
+						int i = 0; 
+						for(Treasure t: treasuresToBuy){
+							arr[i] = "BUY " + t.getName();
+							i++;
+						}
+						for(Armour a: armourToBuy){
+							arr[i] = "BUY " + a.getType();
+							i++;
+						}
+						for(Weapon w: weaponsToBuy){
+							arr[i] = "BUY " + w.getType();
+							i++;
+						}
+						for(Treasure t: treasuresToSell){
+							arr[i] = "SELL " + t.getName();
+							i++;
+						}
+						for(Armour a: armourToSell){
+							arr[i] = "SELL " + a.getType();
+							i++;
+						}
+						for(Weapon w: weaponsToSell){
+							arr[i] = "SELL " + w.getType();
+							i++;
+						}
+						extraInfo.setVisible(true);
+						break;
 					case REST:
 					case HIDE:
 					case PASS:

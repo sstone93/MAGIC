@@ -18,7 +18,7 @@ public class Player implements Serializable{
 	private static final long serialVersionUID = 4084261472014880590L;
 	int ID;
     int victoryPoints = 0;
-    int gold          = 10; // can't be negative
+    int gold          = 50; // can't be negative
     int health        = 0;
     int fatigue       = 0;
     int fame          = 0;
@@ -349,12 +349,18 @@ public class Player implements Serializable{
     public void addWeapon(Weapon weapon) {
         weapons.add(weapon);
     }
-    
+    public void removeWeapon(Weapon w) {
+    	weapons.remove(w);
+    }
     public void addArmour(Armour armour) {
     	this.armour.add(armour);
     }
+    public void removeArmour(Armour a) {
+    	armour.remove(a);
+    }
     
     public void removeWeaponsWithHigherWeight(ItemWeight weight) {
+    	System.out.println("Dropping weapons");
     	if (weapons != null) {
     		for (int i = 0; i < weapons.size(); i++) {
             	if (weapons.get(i).getWeight() == ItemWeight.NEGLIGIBLE)
@@ -372,6 +378,7 @@ public class Player implements Serializable{
     // removes armour from the array with a higher weight then the one sent in
     // ignores armour with negligible weight
     public void removeArmourWithHigherWeight(ItemWeight weight) {
+    	System.out.println("Dropping armour");
     	if (armour != null) {
     		for (int i = 0; i < armour.size(); i++) {
         		if (armour.get(i).getWeight() == ItemWeight.NEGLIGIBLE)
@@ -416,6 +423,10 @@ public class Player implements Serializable{
 
     public void addTreasure(Treasure treasure) {
         this.treasures.add(treasure);
+    }
+    
+    public void removeTreasure(Treasure treasure) {
+    	treasures.remove(treasure);
     }
 
     public ArrayList<Treasure> getTreasures(){
