@@ -428,7 +428,7 @@ public class Board implements Serializable{
 		// add one prowling monster to the board
 		if (numberProwling < howManyCanProwl) {
 			for (int i = 0; i < monsters.size(); i++) {
-				if (monsters.get(i).getStartingLocation() != null) {
+				if (monsters.get(i).getStartingLocation() == null) {
 					monsters.get(i).setStartingLocation(clearing);
 					clearing.addMonster(monsters.get(i));
 					break;
