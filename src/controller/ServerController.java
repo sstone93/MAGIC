@@ -1116,10 +1116,11 @@ public class ServerController extends Handler{
 	    			ArrayList<Monster> monsters = clearings.get(j).getMonsters();
 	    			for (int k = 0; k < monsters.size(); k++) {
 	    				if (monsters.get(k).isBlocked() == false && monsters.get(k) != null) {
+	    					Monster monster = monsters.get(k);
 	    					clearings.get(j).removeMonster(monsters.get(k));
-	    					monsters.get(k).setBlocked(false);
-	    					players.get(i).getLocation().addMonster(monsters.get(k));
-	    					block(monsters.get(k));
+	    					monster.setBlocked(false);
+	    					players.get(i).getLocation().addMonster(monster);
+	    					block(monster);
 	    				}
 	    			}
 	    		}
