@@ -56,7 +56,7 @@ public class CharacterInfoPanel extends JPanel{
 		lblArmour.setBounds(10, 145, 46, 14);
 		add(lblArmour);
 		
-		JLabel lblScore = new JLabel("Location"); // TODO : rename. we actually want location
+		JLabel lblScore = new JLabel("Location");
 		lblScore.setBounds(10, 69, 81, 14);
 		add(lblScore);
 		
@@ -170,7 +170,7 @@ public class CharacterInfoPanel extends JPanel{
 		Player p = control.model.getPlayer();
 		
 		characterText.setText(p.getCharacter().getName().toString());
-		vpText.setText(p.getLocation().parent.getName().toString() + String.valueOf(p.getLocation().getClearingNumber())); // TODO: change later
+		vpText.setText(p.getLocation().parent.getName().toString() + String.valueOf(p.getLocation().getClearingNumber()));
 		healthText.setText(Integer.toString(p.getHealth()));
 		goldText.setText(Integer.toString(p.getGold()));
 		fatigueText.setText(Integer.toString(p.getFatigue()));

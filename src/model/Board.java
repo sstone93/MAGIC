@@ -45,11 +45,7 @@ public class Board implements Serializable{
 		
 	}
 	
-	public Board(ArrayList<Player> players, ArrayList<Object> manualInputs){
-		
-		//TODO USE MANUALINPUTS TO SET THE SOUND AND WARNING CHITS
-		//TODO ASDASDASDA
-		
+	public Board(ArrayList<Player> players, ArrayList<Object> manualInputs){		
 		setupBoard();		//creates all of the tiles and clearings. establishes all of the connections
 		
 		//placeWarningChits();//TODO GIVE IT MANUALY SELECTED WARNING CHITS
@@ -528,44 +524,7 @@ public class Board implements Serializable{
 		}
 	}
 
-	 // TODO: this is the function for monsters changing clearings
-    //public boolean move(Monster monster, Clearing newClearing) {
-    	//boolean canChange =  (monster.getLocation().canChangeClearing(newClearing));
-    	//block(monster); // see if it can block any players
-    	//return canChange;
-   // }
-
-    //private boolean weightRestrictions(){
-    	 //  ItemWeight highestWeight = Utility.ItemWeight.NEGLIGIBLE;
-
-        // find the highest weight of the active move chits of the player
-//        for (int i = 0; i < chits.length; i++) {
-//            if (chits[i].isVisible()) {
-//                if (chits[i].getType() == Utility.Actions.MOVE) {
-//                    ItemWeight currentWeight = Utility.getItemWeight(chits[i].getName());
-//                    boolean check = Utility.isWeightHeavier(currentWeight, highestWeight);
-//                    if (check) {
-//                        highestWeight = currentWeight;
-//                    }
-//                }
-//            }
-//        }
-
-        // remove items that have a higher weight than the characters weight
-      //  ItemWeight currentWeight = player.getCharacter().getWeight();
-       // boolean check = Utility.isWeightHeavier(currentWeight, highestWeight);
-	  //  if (check) {
-	    //	highestWeight = currentWeight;
-	  //  }
-
-    	// discard anything that player can't carry
-        //player.removeWeaponsWithHigherWeight(highestWeight);
-        //player.removeArmourWithHigherWeight(highestWeight);
-
-    //}
-
     public boolean canUsePath(Player player, Path route){
-    	//TODO ANYTHING SPECIAL
     	switch(route.type){
 		case HIDDEN_PATH:
 			if(player.knowsPath(route)){
@@ -586,7 +545,6 @@ public class Board implements Serializable{
     	}
     }
 
-    //TODO IS IT A DIFFERENT INSTANCEOF CLEARING THAN THE BOARD HAS?
     public void move(Player player, Clearing newClearing){
     	player.getLocation().removeOccupant(player);
 		player.setLocation(newClearing);

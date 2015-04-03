@@ -185,7 +185,6 @@ public class ServerController extends Handler{
 				if(state == GameState.CHOOSE_COMBATMOVES){
 					recievedCombat += 1;
 					findPlayer(ID).setMoves((CombatMoves) m.getData().get(0));
-					//TODO remove console printout
 					System.out.println(findPlayer(ID).getCharacter().getName());
 					System.out.println(findPlayer(ID).getMoves().getAttack());
 				}else{
@@ -562,8 +561,6 @@ public class ServerController extends Handler{
     		}
     	}
     	else if (roll == 4) { // discover chits
-    		// TODO: discover every site chit in the clearing you are searching
-
     		//    		You secretly look at the map chits in the tile you are searching.
     		//    		You discover every Site chit in the clearing you are searching and cross it off your Discoveries list.
     		//    		Henceforward, you can LOOT this Site chit whenever you are in its clearing.
@@ -590,13 +587,11 @@ public class ServerController extends Handler{
     private void block(Player p){
     	p.setBlocked(true);
     	p.getPhases().clear();
-    	p.setFinishedBasic(true); // TODO: set finished sunlight to true as well
+    	p.setFinishedBasic(true);
     	network.send(p.getID(), "NO PHASES LEFT");
     	finishedPlayers +=1;
     }
 
-    // TODO: add warning chit to players discoveries?
-    // TODO: make sure that map chit isn't null
     private void discoverMonstersWithSiteChits(Player player) {
     	ArrayList<MapChit> mapC  = player.getLocation().parent.getMapChit();
     	WarningChit  warningChit = player.getLocation().parent.getWarningChit();
@@ -815,8 +810,6 @@ public class ServerController extends Handler{
 
     	unAlertWeapons();
 
-        //TODO face up map chits (except lost city and lost castle) are turned face down
-
         // reset their fatigue
         for (int i = 0; i < playerCount; i++) {
         	players.get(i).setFatigue(0);
@@ -883,7 +876,6 @@ public class ServerController extends Handler{
     		search(p, (SearchTables) a.getExtraInfo());
     		break;
     	case TRADE:
-    		//TODO MAKE TRADING A THING
     		trade(p, a.getExtraInfo());
     		network.broadCast(p.getCharacter().getName() + " is trading!");
     		break;

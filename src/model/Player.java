@@ -77,7 +77,6 @@ public class Player implements Serializable{
         	phases.add(new Phase(PhaseType.BASIC));
         	
         	//determines + adds character special phases
-        	//TODO CALCULATE SPECIAL PHASES
         	if(this.getCharacter().getName() == CharacterName.AMAZON)
         		phases.add(new Phase(PhaseType.SPECIAL, new Actions[] {Actions.MOVE, Actions.PASS}));
             if(this.getCharacter().getName() == CharacterName.BERSERKER)
@@ -106,17 +105,7 @@ public class Player implements Serializable{
         	//7=league boots = move
         	if(this.hasTreasure(SmallTreasureName.LEAGUE_BOOTS_7.toString()))
         		phases.add(new Phase(PhaseType.TREASURE, new Actions[] {Actions.MOVE, Actions.PASS}));
-        	
-        	//shielded lantern = anything (ONCE PER DAY, MUST BE IN CAVE)
-        	//ancient telescope = peer (must be in mountain clering, specify other mountain clearing you are peering)
-        	
-        	
-        	//7=league boots = move, + tremendous strength??, + open vault and crypt of the knight
-        	//ALL GLOVE AND BOOT RESTRICTIONS //TODO
-        	//shoes of stealth = light strength restriction??
-        	//handy gloves = medium strength restriction?
     	}
-    		
     }
 
     public void updateSpecial(){
@@ -438,7 +427,7 @@ public class Player implements Serializable{
             	phases.add(new Phase(PhaseType.SUNLIGHT));
     		}
     	}
-		//if the player's turn is done	//TODO A SECOND CHECK, CAN REMOVE FIRST CHECK IN USE PHASE IF WE WNAT
+		//if the player's turn is done
 		if(phases.size() == 0 && addedSunlight == true){
 			finishedDaylight = true;
 			System.out.println(this.character.getName()+ " is finished daylight");
@@ -513,11 +502,6 @@ public class Player implements Serializable{
 	}
 	
 	public void usePhase(Phase data) {
-		
-		
-		//TODO THIS ASSUMES THAT PHASE EQUALITY MEANS JUST THE TYPES MATCH (which i think i did)
-	
-		//TODO THIS IS A TESTING MEASURE, REMOVE ME PLEASE, SHOULD BE A SPECIFIC PHASE, NOT PHASE AT POSITION 0
 		for(Phase p : phases){
 			
 			if(this.getCharacter() instanceof Captain && p.equals(new Phase(PhaseType.SPECIAL, Actions.values()))){
