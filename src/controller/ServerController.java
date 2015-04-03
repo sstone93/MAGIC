@@ -314,7 +314,8 @@ public class ServerController extends Handler{
     	ArrayList<Player> blockablePlayers = monster.getLocation().getOccupants();
     	for (int i = 0; i < blockablePlayers.size(); i++) {
     		if (!blockablePlayers.get(i).isHidden()) {
-    			block(players.get(i));
+    			network.send(blockablePlayers.get(i).getID(), "Monster has blocked you!");
+    			block(blockablePlayers.get(i));
     		}
     	}
     }
@@ -479,6 +480,9 @@ public class ServerController extends Handler{
 
     private void block(Player p){
     	p.setBlocked(true);
+    	p.getPhases().clear();
+    	p.setFinishedBasic(true); // TODO: set finished sunlight to true as well
+    	network.send(p.getID(), "NO PHASES LEFT");
     	finishedPlayers +=1;
     }
 
@@ -973,7 +977,7 @@ public class ServerController extends Handler{
     			}
     			if (!monster.isBlocked()) { // they can block others if they're not already blocked
 					System.out.println("MONSTER BLOCKING");
-					monster.block();
+					block(monster);
 				}
     		}
     	}
@@ -999,7 +1003,7 @@ public class ServerController extends Handler{
 	    					clearings.get(j).removeMonster(monsters.get(k));
 	    					monsters.get(k).setBlocked(false);
 	    					players.get(i).getLocation().addMonster(monsters.get(k));
-	    					monsters.get(k).block();
+	    					block(monsters.get(k));
 	    				}
 	    			}
 	    		}
