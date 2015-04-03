@@ -1150,6 +1150,21 @@ public class ServerController extends Handler{
         allowMonstersToProwl();
         summonMonstersToTile();
 
+        for (int i = 0; i < board.tiles.size(); i++) {
+        	for (int j = 0; j < board.tiles.get(i).getClearings().size(); j++) {
+        		ArrayList<Monster> monsters = board.tiles.get(i).getClearings().get(j).getMonsters();
+        		ArrayList<Player> players = board.tiles.get(i).getClearings().get(j).getOccupants();
+        		if (monsters != null && players != null) {
+        			for (int k = 0; k < monsters.size(); k++) {
+        				for (int l = 0; l < players.size(); l++) {
+        					network.send(players.get(l).getID(), "You are being attacked by a " + monsters.get(k).getName());
+        					encounter(players.get(l), monsters.get(k));
+        				}
+            		}
+        		}
+        	}
+        }
+        
         collectCombat(); //2 players, 1 attacker 1 defender
 
         //All players choose attackers
