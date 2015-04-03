@@ -477,6 +477,7 @@ public class Player implements Serializable{
 		removeAllWeapons();
 		removeAllArmour();
 		removeAllTreasures();
+		gold = 0;
 	}
 	
 	public void usePhase(Phase data) {

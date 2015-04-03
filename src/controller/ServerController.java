@@ -479,6 +479,7 @@ public class ServerController extends Handler{
 				ArrayList<Treasure> treasures = pile.getTreasures();
 				ArrayList<Weapon> weapons = pile.getWeapons();
 				ArrayList<Armour> armour = pile.getArmour();
+				int gold = pile.getMoney();
 				
 				if (roll <= treasures.size()) {
 					player.addTreasure(treasures.get(roll-1));
@@ -506,6 +507,11 @@ public class ServerController extends Handler{
 				else  {
 					network.send(player.getID(), "You didn't find any armour this time");
 				}
+				
+				player.addGold(gold);
+				pile.takeMoney();
+				
+				network.send(player.getID(), "You've found " + gold + " gold pieces!");
 			}
 		}
     }
@@ -1912,7 +1918,7 @@ public class ServerController extends Handler{
 	}
 
 	public void deadPlayer(Player player, Monster monster) {
-		TreasurePile pile = new TreasurePile(player.getTreasures(), player.getArmour(), player.getWeapons());
+		TreasurePile pile = new TreasurePile(player.getTreasures(), player.getArmour(), player.getWeapons(), player.getGold());
 		player.getLocation().setPile(pile);
 		player.removeAll();
 		player.kill();
@@ -1928,12 +1934,12 @@ public class ServerController extends Handler{
 	}
 
 	public void deadPlayer(Player attacker, Player defender) {
-		TreasurePile pile = new TreasurePile(defender.getTreasures(), defender.getArmour(), defender.getWeapons());
+		TreasurePile pile = new TreasurePile(defender.getTreasures(), defender.getArmour(), defender.getWeapons(), defender.getGold());
 		defender.getLocation().setPile(pile);
 		defender.removeAll();
 		attacker.addFame(10); // Arbitrary value
-		attacker.addGold(defender.getGold());
-		defender.removeGold(defender.getGold());
+		//attacker.addGold(defender.getGold());
+		//defender.removeGold(defender.getGold());
 		attacker.addNotoriety(defender.getNotoriety());
 		defender.removeNotoriety(defender.getNotoriety());
 		defender.kill();
