@@ -352,9 +352,9 @@ public class ServerController extends Handler{
 			for (Treasure t: treasures) {
 				if (t.getName().toString().trim().equals(temp[1].trim())) {
 					player.addGold(t.getGold());
-					player.removeTreasure(t);
-					player.getLocation().getDwelling().addTreasure(t);
 					network.send(player.getID(), "YOU SOLD " + t.getName() + "!");
+					player.getLocation().getDwelling().addTreasure(t);
+					player.removeTreasure(t);
 					soldSomething = true;
 					break;
 				}
@@ -364,9 +364,9 @@ public class ServerController extends Handler{
 				for (Armour a: armour) {
 					if (a.getType().toString().trim().equals(temp[1].trim())) {
 						player.addGold(a.getGold());
-						player.removeArmour(a);
-						player.getLocation().getDwelling().addArmour(a);
 						network.send(player.getID(), "YOU SOLD " + a.getType() + "!");
+						player.getLocation().getDwelling().addArmour(a);
+						player.removeArmour(a);
 						soldSomething = true;
 						break;
 					}
@@ -377,9 +377,9 @@ public class ServerController extends Handler{
 				for (Weapon w: weapons) {
 					if (w.getType().toString().trim().equals(temp[1].trim())) {
 						player.addGold(w.getGold());
-						player.removeWeapon(w);
-						player.getLocation().getDwelling().addWeapon(w);
 						network.send(player.getID(), "YOU SOLD " + w.getType() + "!");
+						player.getLocation().getDwelling().addWeapon(w);
+						player.removeWeapon(w);
 						soldSomething = true;
 						break;
 					}
