@@ -279,6 +279,9 @@ public class ServerController extends Handler{
         player.setFatigue(0);
         if (player.getHealth() > 0) {
         	player.setHealth(player.getHealth() - 1);
+        	if (player.getTreasures().contains(Utility.SmallTreasureName.POULTICE_OF_HEALTH) && player.getHealth() > 0) {
+        		player.setHealth(player.getHealth() - 1);
+        	}
         }
     }
 	

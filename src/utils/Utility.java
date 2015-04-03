@@ -22,7 +22,9 @@ public class Utility {
 
     	boolean onlyOne = false;
 
-    	if (player.hasTreasure(SmallTreasureName.SHOES_OF_STEALTH.toString()) && table == "hide")
+    	if (player.hasTreasure(LargeTreasureName.LUCKY_CHARM.toString()))
+    		onlyOne = true;
+    	else if (player.hasTreasure(SmallTreasureName.SHOES_OF_STEALTH.toString()) && table == "hide")
     		onlyOne = true;
     	else if (player.hasTreasure(SmallTreasureName.DEFT_GLOVES.toString()) && table == "loot")
     		onlyOne = true;
