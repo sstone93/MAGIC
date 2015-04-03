@@ -23,7 +23,7 @@ public class ServerView extends JFrame implements ActionListener{
 	
 	JButton stop = new JButton();
 	JButton select = new JButton("SELECT");
-	JButton start = new JButton("START GAME (after next client joins)");
+	JButton start = new JButton("START GAME");
 	JComboBox rolls = new JComboBox();
 	ServerController control;
 	
@@ -51,9 +51,9 @@ public class ServerView extends JFrame implements ActionListener{
 		setResizable(false);
 		
 		if(!Config.CHEAT_MODE){
-			setSize(new Dimension(450, 140));
+			setSize(new Dimension(300, 140));
 		}else{
-			setSize(new Dimension(450, 140));
+			setSize(new Dimension(300, 140));
 		
 			rolls.setBounds(110,0,140,20);
 			add(rolls);
@@ -83,10 +83,16 @@ public class ServerView extends JFrame implements ActionListener{
 	        } );	
 		}
 		
-		start.setBounds(110,60,270,20);
+		start.setBounds(110,60,130,20);
 		start.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				control.network.ready = true;
+				try {
+					control.network.server.close();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		add(start);

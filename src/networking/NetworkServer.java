@@ -14,7 +14,7 @@ import utils.Config;
  */
 public class NetworkServer extends NetworkEntity implements Runnable{
 
-	private ServerSocket server = null;
+	public ServerSocket server = null;
 	public boolean ready = false;
 	
 	/**
@@ -69,12 +69,13 @@ public class NetworkServer extends NetworkEntity implements Runnable{
 	 */
 	public void run() {
 		while (thread != null) {				//runs until the stop method is run
+			if(ready == true){
+				controller.handle(Config.DEFAULT_PORT, "START GAME");
+			}
 			try{
 				System.out.println("Waiting for clients ... ");
 				addThread(server.accept());		//spam accept requests, handles them via add thread]
-				if(ready == true){
-					controller.handle(Config.DEFAULT_PORT, "START GAME");
-				}
+				System.out.println("test");
 			} catch (IOException ie){
 				System.out.println("Sever: IO Exception in NetworkServer run method");
 			}
