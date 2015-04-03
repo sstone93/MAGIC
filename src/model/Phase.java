@@ -52,12 +52,16 @@ public class Phase implements Serializable {
     		return true;
     	}
     	if(this.type == p.type && p.type == PhaseType.TREASURE){
-    		//for(Actions a : p.action){
-    			if(this.action == p.action){
-    				return true;
+    		if(this.action == p.action){
+    			return true;
+    		}else{
+    			for(Actions a : this.action){
+    				if(a == p.action[0]){
+    					return true;
+    				}
     			}
-    		//}
-    		return false;
+    			return false;
+    		}
     	}else{
     		return false;
     	}
