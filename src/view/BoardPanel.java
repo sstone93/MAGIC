@@ -33,6 +33,7 @@ import model.Clearing;
 import model.MapChit;
 import model.Monster;
 import model.Player;
+import model.SiteChit;
 import model.Tile;
 import model.WarningChit;
 
@@ -263,68 +264,135 @@ public class BoardPanel extends JLayeredPane {
 					if(control.model.getPlayer() != null){
 						ArrayList<MapChit> mapChits = b.tiles.get(i).getMapChit();
 						for(int j = 0; j < mapChits.size(); j++){
-							String lblString;
-							if(control.model.getPlayer().knowsSound(mapChits.get(j))){
-								pic = ImageIO.read(this.getClass().getResource(Utility.getSoundImage(mapChits.get(j).getName())));
-								lblString = mapChits.get(j).getName().toString();
-							}
-							else {
-								pic = ImageIO.read(this.getClass().getResource("/images/facedownsound.jpg"));
-								lblString = "Sound Chit";
-							}
-							
-							JLabel l = new JLabel(new ImageIcon(pic));
-							l.setBounds(b.tiles.get(i).getX() - 25, b.tiles.get(i).getY() - 25, 50, 50);
-							add(l, new Integer(5), 0);
-								
-							if (!tileHoverOvers.containsKey(b.tiles.get(i))){
-								JPanel newPane = new JPanel();
-								newPane.setBounds(b.tiles.get(i).getX(), b.tiles.get(i).getY(), 200, 300);
-								newPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-								newPane.setBorder(new LineBorder(Color.GRAY));
-								newPane.setVisible(false);
-								
-								JLabel lbl = new JLabel(b.tiles.get(i).getName().toString(), SwingConstants.CENTER);
-								lbl.setPreferredSize(new Dimension(200, 20));
-								lbl.setAlignmentX(CENTER_ALIGNMENT);
-								lbl.setFont(new Font("Trebuchet MS", Font.BOLD, 18));
-								newPane.add(lbl);
-								
-								add(newPane, new Integer(10), 0);
-								tileHoverOvers.put(b.tiles.get(i), newPane);
-							}
-							
-							JPanel panel = new JPanel();
-							panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-							panel.setPreferredSize(new Dimension(90, 75));
-							
-							JLabel img = new JLabel(new ImageIcon(pic));
-							img.setSize(50, 50);
-							panel.add(img);
-							
-							JLabel lbl = new JLabel(lblString, SwingConstants.CENTER);
-							lbl.setPreferredSize(new Dimension(90, 15));
-							lbl.setAlignmentY(CENTER_ALIGNMENT);
-							panel.add(lbl);
-							
-							tileHoverOvers.get(b.tiles.get(i)).add(panel);
-							
-							final int index = i;
-							
-							l.addMouseListener(new MouseAdapter() {
-								@Override
-								public void mouseEntered(MouseEvent e) {
-									tileHoverOvers.get(b.tiles.get(index)).setVisible(true);
+							if(mapChits.get(j) instanceof SiteChit){
+								String lblString;
+								if(control.model.getPlayer().knowsSite((SiteChit)mapChits.get(j))){
+									pic = ImageIO.read(this.getClass().getResource(Utility.getSiteImage(((SiteChit) mapChits.get(j)).getLocation())));
+									lblString = ((SiteChit)mapChits.get(j)).getLocation().toString();
 								}
-							});
-							l.addMouseListener(new MouseAdapter() {
-								@Override
-								public void mouseExited(MouseEvent e) {
-									tileHoverOvers.get(b.tiles.get(index)).setVisible(false);
+								else {
+									continue;
+									//pic = ImageIO.read(this.getClass().getResource("/images/facedownsound.jpg"));
+									//lblString = "Sound Chit";
 								}
-							});
-							
-							labels.add(l);
+								
+								JLabel l = new JLabel(new ImageIcon(pic));
+								l.setBounds(b.tiles.get(i).getX() - 25, b.tiles.get(i).getY() - 25, 50, 50);
+								add(l, new Integer(5), 0);
+									
+								if (!tileHoverOvers.containsKey(b.tiles.get(i))){
+									JPanel newPane = new JPanel();
+									newPane.setBounds(b.tiles.get(i).getX(), b.tiles.get(i).getY(), 200, 300);
+									newPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+									newPane.setBorder(new LineBorder(Color.GRAY));
+									newPane.setVisible(false);
+									
+									JLabel lbl = new JLabel(b.tiles.get(i).getName().toString(), SwingConstants.CENTER);
+									lbl.setPreferredSize(new Dimension(200, 20));
+									lbl.setAlignmentX(CENTER_ALIGNMENT);
+									lbl.setFont(new Font("Trebuchet MS", Font.BOLD, 18));
+									newPane.add(lbl);
+									
+									add(newPane, new Integer(10), 0);
+									tileHoverOvers.put(b.tiles.get(i), newPane);
+								}
+								
+								JPanel panel = new JPanel();
+								panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+								panel.setPreferredSize(new Dimension(90, 75));
+								
+								JLabel img = new JLabel(new ImageIcon(pic));
+								img.setSize(50, 50);
+								panel.add(img);
+								
+								JLabel lbl = new JLabel(lblString, SwingConstants.CENTER);
+								lbl.setPreferredSize(new Dimension(90, 15));
+								lbl.setAlignmentY(CENTER_ALIGNMENT);
+								panel.add(lbl);
+								
+								tileHoverOvers.get(b.tiles.get(i)).add(panel);
+								
+								final int index = i;
+								
+								l.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseEntered(MouseEvent e) {
+										tileHoverOvers.get(b.tiles.get(index)).setVisible(true);
+									}
+								});
+								l.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseExited(MouseEvent e) {
+										tileHoverOvers.get(b.tiles.get(index)).setVisible(false);
+									}
+								});
+								
+								labels.add(l);
+							}
+							else{
+								String lblString;
+								if(control.model.getPlayer().knowsSound(mapChits.get(j))){
+									pic = ImageIO.read(this.getClass().getResource(Utility.getSoundImage(mapChits.get(j).getName())));
+									lblString = mapChits.get(j).getName().toString();
+								}
+								else {
+									pic = ImageIO.read(this.getClass().getResource("/images/facedownsound.jpg"));
+									lblString = "Sound Chit";
+								}
+								
+								JLabel l = new JLabel(new ImageIcon(pic));
+								l.setBounds(b.tiles.get(i).getX() - 25, b.tiles.get(i).getY() - 25, 50, 50);
+								add(l, new Integer(5), 0);
+									
+								if (!tileHoverOvers.containsKey(b.tiles.get(i))){
+									JPanel newPane = new JPanel();
+									newPane.setBounds(b.tiles.get(i).getX(), b.tiles.get(i).getY(), 200, 300);
+									newPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+									newPane.setBorder(new LineBorder(Color.GRAY));
+									newPane.setVisible(false);
+									
+									JLabel lbl = new JLabel(b.tiles.get(i).getName().toString(), SwingConstants.CENTER);
+									lbl.setPreferredSize(new Dimension(200, 20));
+									lbl.setAlignmentX(CENTER_ALIGNMENT);
+									lbl.setFont(new Font("Trebuchet MS", Font.BOLD, 18));
+									newPane.add(lbl);
+									
+									add(newPane, new Integer(10), 0);
+									tileHoverOvers.put(b.tiles.get(i), newPane);
+								}
+								
+								JPanel panel = new JPanel();
+								panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+								panel.setPreferredSize(new Dimension(90, 75));
+								
+								JLabel img = new JLabel(new ImageIcon(pic));
+								img.setSize(50, 50);
+								panel.add(img);
+								
+								JLabel lbl = new JLabel(lblString, SwingConstants.CENTER);
+								lbl.setPreferredSize(new Dimension(90, 15));
+								lbl.setAlignmentY(CENTER_ALIGNMENT);
+								panel.add(lbl);
+								
+								tileHoverOvers.get(b.tiles.get(i)).add(panel);
+								
+								final int index = i;
+								
+								l.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseEntered(MouseEvent e) {
+										tileHoverOvers.get(b.tiles.get(index)).setVisible(true);
+									}
+								});
+								l.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseExited(MouseEvent e) {
+										tileHoverOvers.get(b.tiles.get(index)).setVisible(false);
+									}
+								});
+								
+								labels.add(l);
+							}
 						}
 						WarningChit warningChit = b.tiles.get(i).getWarningChit();
 						if(warningChit != null){

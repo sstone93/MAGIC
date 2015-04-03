@@ -214,8 +214,8 @@ public class Player implements Serializable{
     
     public boolean knowsSound(MapChit c){
     	for(Object o : discoveries){
-    		if(o instanceof MapChit){
-    			if(((MapChit) o).getName() == c.getName()){
+    		if(o instanceof MapChit && !(o instanceof SiteChit)){
+    			if(((MapChit) o).equals(c)){
     				return true;
     			}
     		}
@@ -226,7 +226,18 @@ public class Player implements Serializable{
     public boolean knowsWarning(WarningChit c){
     	for(Object o : discoveries){
     		if(o instanceof WarningChit){
-    			if(((WarningChit) o).getName() == c.getName()){
+    			if(((WarningChit) o).equals(c)){
+    				return true;
+    			}
+    		}
+    	}
+    	return false;
+    }
+    
+    public boolean knowsSite(SiteChit c){
+    	for(Object o : discoveries){
+    		if(o instanceof SiteChit){
+    			if(((SiteChit) o).equals(c)){
     				return true;
     			}
     		}
