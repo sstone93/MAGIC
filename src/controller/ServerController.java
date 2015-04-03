@@ -1273,7 +1273,13 @@ public class ServerController extends Handler{
 	    		return;
 	    	}
 	    	else {
-	    		player.setFatigue(player.getFatigue() + player.getMoves().getAttackFatigue() + player.getMoves().getManeuverFatigue());
+	    		int fatigue = player.getMoves().getAttackFatigue() + player.getMoves().getManeuverFatigue();
+	    		
+	    		if (player.getTreasures().contains(Utility.SmallTreasureName.REFLECTION_GREASE)) {
+	    			fatigue--;
+	    		}
+	    		
+	    		player.setFatigue(player.getFatigue() + fatigue);
 	    		if (player.getFatigue() >= 10) {
 	    			player.getActiveWeapon().setActive(!player.getActiveWeapon().isActive());
 	    			network.send(player.getID(), "You are overfatigued!");
@@ -1352,8 +1358,18 @@ public class ServerController extends Handler{
         		return;
         	}
         	else {
-        		attacker.setFatigue(attacker.getFatigue() + attacker.getMoves().getAttackFatigue() + attacker.getMoves().getManeuverFatigue());
-        		defender.setFatigue(defender.getFatigue() + defender.getMoves().getAttackFatigue() + defender.getMoves().getManeuverFatigue());
+        		int attackerFatigue = attacker.getMoves().getAttackFatigue() + attacker.getMoves().getManeuverFatigue();
+        		int defenderFatigue = defender.getMoves().getAttackFatigue() + defender.getMoves().getManeuverFatigue();
+        		
+	    		if (attacker.getTreasures().contains(Utility.SmallTreasureName.REFLECTION_GREASE)) {
+	    			attackerFatigue--;
+	    		}
+	    		if (defender.getTreasures().contains(Utility.SmallTreasureName.REFLECTION_GREASE)) {
+	    			defenderFatigue--;
+	    		}
+        		
+        		attacker.setFatigue(attacker.getFatigue() + attackerFatigue);
+        		defender.setFatigue(defender.getFatigue() + defenderFatigue);
         		if (attacker.getFatigue() >= 10) {
 	    			attacker.getActiveWeapon().setActive(!attacker.getActiveWeapon().isActive());
 	    			network.send(attacker.getID(), "You are overfatigued!");
