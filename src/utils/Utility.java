@@ -153,6 +153,8 @@ public class Utility {
     		case HEAVY_TROLL: return "/images/troll.gif";
     		case VIPER: return "/images/serpent.gif";
     		case WOLF: return "/images/wolf.gif";
+    		case HEAVY_SPIDER: return "/images/spider.gif";
+    		case GIANT_BAT: return "/images/bat.gif";
     		default: return null;
     	}
     }
