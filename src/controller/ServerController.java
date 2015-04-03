@@ -289,6 +289,10 @@ public class ServerController extends Handler{
 	 * @param object: the object to be bought or sold
 	 */
 	public void trade(Player player, Object object) {
+		if (object == null) {
+			network.send(player.getID(), "NOTHING TO TRADE HERE");
+			return;
+		}
 		if (object.toString().contains("BUY")) {			
 			String[] temp = object.toString().split("BUY");
 			ArrayList<Treasure> treasures = player.getLocation().getDwelling().getTreasures();
@@ -345,16 +349,15 @@ public class ServerController extends Handler{
 			}
 		}
 		else { // you're selling
-			System.out.println("SELLING" );
 			String[] temp = object.toString().split("SELL");
 			ArrayList<Treasure> treasures = player.getTreasures();
 			boolean soldSomething = false;
 			for (Treasure t: treasures) {
 				if (t.getName().toString().trim().equals(temp[1].trim())) {
 					player.addGold(t.getGold());
-					player.removeTreasure(t);
-					player.getLocation().getDwelling().addTreasure(t);
 					network.send(player.getID(), "YOU SOLD " + t.getName() + "!");
+					player.getLocation().getDwelling().addTreasure(t);
+					player.removeTreasure(t);
 					soldSomething = true;
 					break;
 				}
@@ -364,9 +367,9 @@ public class ServerController extends Handler{
 				for (Armour a: armour) {
 					if (a.getType().toString().trim().equals(temp[1].trim())) {
 						player.addGold(a.getGold());
-						player.removeArmour(a);
-						player.getLocation().getDwelling().addArmour(a);
 						network.send(player.getID(), "YOU SOLD " + a.getType() + "!");
+						player.getLocation().getDwelling().addArmour(a);
+						player.removeArmour(a);
 						soldSomething = true;
 						break;
 					}
@@ -377,9 +380,9 @@ public class ServerController extends Handler{
 				for (Weapon w: weapons) {
 					if (w.getType().toString().trim().equals(temp[1].trim())) {
 						player.addGold(w.getGold());
-						player.removeWeapon(w);
-						player.getLocation().getDwelling().addWeapon(w);
 						network.send(player.getID(), "YOU SOLD " + w.getType() + "!");
+						player.getLocation().getDwelling().addWeapon(w);
+						player.removeWeapon(w);
 						soldSomething = true;
 						break;
 					}
@@ -476,6 +479,7 @@ public class ServerController extends Handler{
 				ArrayList<Treasure> treasures = pile.getTreasures();
 				ArrayList<Weapon> weapons = pile.getWeapons();
 				ArrayList<Armour> armour = pile.getArmour();
+				int gold = pile.getMoney();
 				
 				if (roll <= treasures.size()) {
 					player.addTreasure(treasures.get(roll-1));
@@ -503,6 +507,11 @@ public class ServerController extends Handler{
 				else  {
 					network.send(player.getID(), "You didn't find any armour this time");
 				}
+				
+				player.addGold(gold);
+				pile.takeMoney();
+				
+				network.send(player.getID(), "You've found " + gold + " gold pieces!");
 			}
 		}
     }
@@ -969,6 +978,12 @@ public class ServerController extends Handler{
     	state = GameState.CHOOSE_PLAYS;
     	finishedPlayers = 0;
 
+    	for (int i = 0; i < players.size(); i++) {
+    		if (players.get(i).isDead()) {
+    			finishedPlayers++;
+    		}
+    	}
+    	
     	while(finishedPlayers < playerCount){
     		try {
 				Thread.sleep(20);
@@ -1094,16 +1109,18 @@ public class ServerController extends Handler{
 	   		players.get(i).addDiscovery(players.get(i).getLocation().parent.getWarningChit());
 
 	    	ArrayList<Clearing> clearings = players.get(i).getLocation().parent.getClearings();
+	    	discoverMonstersWithSiteChits(players.get(i));
 
 	    	for (int j = 0; j < clearings.size(); j++) {
 	    		if (!clearings.get(j).equals(players.get(i).getLocation())) {
 	    			ArrayList<Monster> monsters = clearings.get(j).getMonsters();
 	    			for (int k = 0; k < monsters.size(); k++) {
-	    				if (monsters.get(k).isBlocked() == false) {
+	    				if (monsters.get(k).isBlocked() == false && monsters.get(k) != null) {
+	    					Monster monster = monsters.get(k);
 	    					clearings.get(j).removeMonster(monsters.get(k));
-	    					monsters.get(k).setBlocked(false);
-	    					players.get(i).getLocation().addMonster(monsters.get(k));
-	    					block(monsters.get(k));
+	    					monster.setBlocked(false);
+	    					players.get(i).getLocation().addMonster(monster);
+	    					block(monster);
 	    				}
 	    			}
 	    		}
@@ -1134,6 +1151,21 @@ public class ServerController extends Handler{
         allowMonstersToProwl();
         summonMonstersToTile();
 
+        for (int i = 0; i < board.tiles.size(); i++) {
+        	for (int j = 0; j < board.tiles.get(i).getClearings().size(); j++) {
+        		ArrayList<Monster> monsters = board.tiles.get(i).getClearings().get(j).getMonsters();
+        		ArrayList<Player> players = board.tiles.get(i).getClearings().get(j).getOccupants();
+        		if (monsters != null && players != null) {
+        			for (int k = 0; k < monsters.size(); k++) {
+        				for (int l = 0; l < players.size(); l++) {
+        					network.send(players.get(l).getID(), "You are being attacked by a " + monsters.get(k).getName());
+        					encounter(players.get(l), monsters.get(k));
+        				}
+            		}
+        		}
+        	}
+        }
+        
         collectCombat(); //2 players, 1 attacker 1 defender
 
         //All players choose attackers
@@ -1908,7 +1940,7 @@ public class ServerController extends Handler{
 	}
 
 	public void deadPlayer(Player player, Monster monster) {
-		TreasurePile pile = new TreasurePile(player.getTreasures(), player.getArmour(), player.getWeapons());
+		TreasurePile pile = new TreasurePile(player.getTreasures(), player.getArmour(), player.getWeapons(), player.getGold());
 		player.getLocation().setPile(pile);
 		player.removeAll();
 		player.kill();
@@ -1924,12 +1956,12 @@ public class ServerController extends Handler{
 	}
 
 	public void deadPlayer(Player attacker, Player defender) {
-		TreasurePile pile = new TreasurePile(defender.getTreasures(), defender.getArmour(), defender.getWeapons());
+		TreasurePile pile = new TreasurePile(defender.getTreasures(), defender.getArmour(), defender.getWeapons(), defender.getGold());
 		defender.getLocation().setPile(pile);
 		defender.removeAll();
 		attacker.addFame(10); // Arbitrary value
-		attacker.addGold(defender.getGold());
-		defender.removeGold(defender.getGold());
+		//attacker.addGold(defender.getGold());
+		//defender.removeGold(defender.getGold());
 		attacker.addNotoriety(defender.getNotoriety());
 		defender.removeNotoriety(defender.getNotoriety());
 		defender.kill();

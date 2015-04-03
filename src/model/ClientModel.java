@@ -16,7 +16,7 @@ public class ClientModel {
 	private int    numPlayers = 2; //just temporary, should be set by the server.
 	
 	public ClientModel(){
-
+		messages = "";
 	}
 	
 	public Board getBoard(){

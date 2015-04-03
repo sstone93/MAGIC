@@ -68,8 +68,8 @@ public class Garrison implements Serializable{
 
 		} else if (name == GarrisonName.INN){
 
-			this.armour = null;
-			this.weapons = null;
+			this.armour.clear();
+			this.weapons.clear();
 		}
 	}
 

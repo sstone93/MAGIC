@@ -32,4 +32,16 @@ public class SiteChit extends MapChit implements Serializable{
     		return false;
     	}
     }
+	
+	public Tile getTile(){
+		return tile;
+	}
+	
+	public void setTitle(Tile t){
+		tile = t;
+	}
+
+	public boolean equals(SiteChit other){
+		return (this.location == other.location) && (this.tile.equals(other.tile));
+	}
 }

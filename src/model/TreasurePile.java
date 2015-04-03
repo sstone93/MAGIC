@@ -11,12 +11,14 @@ public class TreasurePile extends MapChit implements Serializable{
 	private ArrayList<Treasure> treasures = new ArrayList<Treasure>();
 	private ArrayList<Armour> armour = new ArrayList<Armour>();
 	private ArrayList<Weapon> weapons = new ArrayList<Weapon>();
+	private int money;
 	
-	public TreasurePile(ArrayList<Treasure> t, ArrayList<Armour> a, ArrayList<Weapon> w){
+	public TreasurePile(ArrayList<Treasure> t, ArrayList<Armour> a, ArrayList<Weapon> w, int m){
 		super(SoundChits.FLUTTER_1);
 		this.treasures = t;
 		this.armour = a;
 		this.weapons = w;
+		this.money = m;
 	}
 	
 	public void setTreasures(ArrayList<Treasure> t){
@@ -31,6 +33,10 @@ public class TreasurePile extends MapChit implements Serializable{
 		this.weapons = w;
 	}
 	
+	public void setMoney (int m) {
+		this.money = m;
+	}
+	
 	public ArrayList<Treasure> getTreasures(){
 		return treasures;
 	}
@@ -41,6 +47,10 @@ public class TreasurePile extends MapChit implements Serializable{
 	
 	public ArrayList<Weapon> getWeapons(){
 		return weapons;
+	}
+	
+	public int getMoney() {
+		return money;
 	}
 	
 	public void takeTreasure(Treasure t){
@@ -55,6 +65,10 @@ public class TreasurePile extends MapChit implements Serializable{
 		this.armour.remove(a);
 	}
 
+	public void takeMoney() {
+		this.money = 0;
+	}
+	
 	public String toString(){
 		String t = "";
 		for(int i=0;i<this.treasures.size();i++){					//prints treasures it contains

@@ -51,6 +51,7 @@ public class Tile implements Serializable{
 	
 	public void setWarningChit(WarningChit s){
 		this.warning = s;
+		s.setTile(this);
 	}
 	
 	public WarningChit getWarningChit(){
@@ -63,6 +64,7 @@ public class Tile implements Serializable{
 	
 	public void addMapChit(MapChit m){
 		sound.add(m);
+		m.setTile(this);
 	}
 	
 	/**

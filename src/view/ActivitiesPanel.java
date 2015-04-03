@@ -128,42 +128,62 @@ public class ActivitiesPanel extends JPanel{
 						extraInfo.setVisible(true);
 						break;
 					case TRADE:
-						ArrayList<Treasure> treasuresToBuy  = control.model.getPlayer().getLocation().getDwelling().getTreasures();
-						ArrayList<Treasure> treasuresToSell = control.model.getPlayer().getTreasures();
-						ArrayList<Armour>   armourToBuy     = control.model.getPlayer().getLocation().getDwelling().getArmour();
-						ArrayList<Armour>   armourToSell    = control.model.getPlayer().getArmour();
-						ArrayList<Weapon>   weaponsToBuy    = control.model.getPlayer().getLocation().getDwelling().getWeapons();
-						ArrayList<Weapon>   weaponsToSell   = control.model.getPlayer().getWeapons();
-								
-						
-						System.out.println(treasuresToBuy);
-						arr = new String[treasuresToBuy.size() + treasuresToSell.size() + armourToBuy.size() + armourToSell.size() + weaponsToBuy.size() + weaponsToSell.size()];
-						int i = 0; 
-						for(Treasure t: treasuresToBuy){
-							arr[i] = "BUY " + t.getName();
-							i++;
+						if (control.model.getPlayer().getLocation().getDwelling() != null) {
+							ArrayList<Treasure> treasuresToBuy  = control.model.getPlayer().getLocation().getDwelling().getTreasures();
+							ArrayList<Treasure> treasuresToSell = control.model.getPlayer().getTreasures();
+							ArrayList<Armour>   armourToBuy     = control.model.getPlayer().getLocation().getDwelling().getArmour();
+							ArrayList<Armour>   armourToSell    = control.model.getPlayer().getArmour();
+							ArrayList<Weapon>   weaponsToBuy    = control.model.getPlayer().getLocation().getDwelling().getWeapons();
+							ArrayList<Weapon>   weaponsToSell   = control.model.getPlayer().getWeapons();
+									
+							
+							System.out.println(treasuresToBuy);
+							arr = null;
+							int size = 0; 
+							if (weaponsToBuy != null) {
+								size += weaponsToBuy.size();
+							}
+							if (armourToBuy != null) {
+								size += armourToBuy.size();
+							}
+							if (treasuresToBuy != null) {
+								size += treasuresToBuy.size();
+							}
+							size += treasuresToSell.size() + armourToSell.size() + weaponsToSell.size();
+							arr = new String[size];
+							int i = 0;
+							if (treasuresToBuy != null) {
+								for(Treasure t: treasuresToBuy){
+									arr[i] = "BUY " + t.getName();
+									i++;
+								}
+							}
+							if (armourToBuy != null) {
+								for(Armour a: armourToBuy){
+									arr[i] = "BUY " + a.getType();
+									i++;
+								}
+							}
+							if (weaponsToBuy != null) {
+								for(Weapon w: weaponsToBuy){
+									arr[i] = "BUY " + w.getType();
+									i++;
+								}
+							}
+							for(Treasure t: treasuresToSell){
+								arr[i] = "SELL " + t.getName();
+								i++;
+							}
+							for(Armour a: armourToSell){
+								arr[i] = "SELL " + a.getType();
+								i++;
+							}
+							for(Weapon w: weaponsToSell){
+								arr[i] = "SELL " + w.getType();
+								i++;
+							}
+							extraInfo.setVisible(true);
 						}
-						for(Armour a: armourToBuy){
-							arr[i] = "BUY " + a.getType();
-							i++;
-						}
-						for(Weapon w: weaponsToBuy){
-							arr[i] = "BUY " + w.getType();
-							i++;
-						}
-						for(Treasure t: treasuresToSell){
-							arr[i] = "SELL " + t.getName();
-							i++;
-						}
-						for(Armour a: armourToSell){
-							arr[i] = "SELL " + a.getType();
-							i++;
-						}
-						for(Weapon w: weaponsToSell){
-							arr[i] = "SELL " + w.getType();
-							i++;
-						}
-						extraInfo.setVisible(true);
 						break;
 					case REST:
 					case HIDE:

@@ -3,7 +3,10 @@ package model;
 import java.io.Serializable;
 
 import utils.Utility;
+import utils.Utility.Attacks;
+import utils.Utility.Defenses;
 import utils.Utility.ItemWeight;
+import utils.Utility.Maneuvers;
 import utils.Utility.MonsterName;
 
 public class Monster implements Serializable{
@@ -170,7 +173,50 @@ public class Monster implements Serializable{
 
     // TODO randomize monster moves
     public void setMoves() {
-
+     	int roll;
+    	Attacks attack;
+    	int attackFatigue;
+    	Maneuvers maneuver;
+    	int maneuverFatigue;
+    	Defenses defense;
+    	
+    	roll = Utility.roll(3);
+    	if (roll == 1) {
+    		attack = Utility.Attacks.SMASH;
+    	}
+    	else if (roll == 2) {
+    		attack = Utility.Attacks.THRUST;
+    	}
+    	else {
+    		attack = Utility.Attacks.SWING;
+    	}
+    	
+    	roll = Utility.roll(3);
+    	if (roll == 1) {
+    		maneuver = Utility.Maneuvers.CHARGE;
+    	}
+    	else if (roll == 2) {
+    		maneuver = Utility.Maneuvers.DODGE;
+    	}
+    	else {
+    		maneuver = Utility.Maneuvers.DUCK;
+    	}
+    	
+    	roll = Utility.roll(3);
+    	if (roll == 1) {
+    		defense = Utility.Defenses.ABOVE;
+    	}
+    	else if (roll == 2) {
+    		defense = Utility.Defenses.AHEAD;
+    	}
+    	else {
+    		defense = Utility.Defenses.SIDE;
+    	}
+    	
+    	attackFatigue = Utility.roll(2);
+    	maneuverFatigue = Utility.roll(2);
+    	
+    	this.moves = new CombatMoves(attack, attackFatigue, maneuver, maneuverFatigue, defense);
     }
     
     public boolean isProwling() {
