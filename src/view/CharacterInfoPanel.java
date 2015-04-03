@@ -32,6 +32,8 @@ public class CharacterInfoPanel extends JPanel{
 	private JTextArea weaponsText;
 	private JTextArea chitsText;
 	private ClientController control;
+	private JTextField blockedText;
+	private JTextField deadText;
 	
 	public CharacterInfoPanel(ClientController c){
 		this.control = c;
@@ -53,7 +55,7 @@ public class CharacterInfoPanel extends JPanel{
 		add(lblHealth);
 		
 		JLabel lblArmour = new JLabel("Armour");
-		lblArmour.setBounds(10, 145, 46, 14);
+		lblArmour.setBounds(10, 171, 46, 14);
 		add(lblArmour);
 		
 		JLabel lblScore = new JLabel("Location");
@@ -63,7 +65,7 @@ public class CharacterInfoPanel extends JPanel{
 		this.armourText = new JTextArea();
 		armourText.setEditable(false);
 		armourText.setLineWrap(true);
-		armourText.setBounds(10, 164, 177, 142);
+		armourText.setBounds(10, 188, 177, 142);
 		add(armourText);
 		
 		this.characterText = new JTextField();
@@ -85,13 +87,13 @@ public class CharacterInfoPanel extends JPanel{
 		healthText.setEditable(false);
 		
 		JLabel lblTreasures = new JLabel("Treasures");
-		lblTreasures.setBounds(10, 317, 65, 14);
+		lblTreasures.setBounds(10, 332, 65, 14);
 		add(lblTreasures);
 		
 		this.treasuresText = new JTextArea();
 		treasuresText.setEditable(false);
 		treasuresText.setLineWrap(true);
-		treasuresText.setBounds(10, 342, 177, 142);
+		treasuresText.setBounds(10, 347, 177, 142);
 		add(treasuresText);
 		
 		JLabel lblGold = new JLabel("Gold");
@@ -145,24 +147,44 @@ public class CharacterInfoPanel extends JPanel{
 		add(lblHidden);
 		
 		JLabel lblWeapons = new JLabel("Weapons");
-		lblWeapons.setBounds(224, 148, 65, 14);
+		lblWeapons.setBounds(224, 171, 65, 14);
 		add(lblWeapons);
 		
 		this.weaponsText = new JTextArea();
 		weaponsText.setEditable(false);
 		weaponsText.setLineWrap(true);
-		weaponsText.setBounds(224, 167, 177, 142);
+		weaponsText.setBounds(224, 188, 177, 142);
 		add(weaponsText);
 		
 		JLabel lblChits = new JLabel("Discoveries");
-		lblChits.setBounds(224, 317, 65, 14);
+		lblChits.setBounds(224, 332, 86, 14);
 		add(lblChits);
 		
 		this.chitsText = new JTextArea();
 		chitsText.setEditable(false);
 		chitsText.setLineWrap(true);
-		chitsText.setBounds(224, 342, 177, 142);
+		chitsText.setBounds(224, 347, 177, 142);
 		add(chitsText);
+		
+		JLabel lblBlocked = new JLabel("Blocked");
+		lblBlocked.setBounds(10, 148, 46, 14);
+		add(lblBlocked);
+		
+		blockedText = new JTextField();
+		blockedText.setEditable(false);
+		blockedText.setColumns(10);
+		blockedText.setBounds(101, 145, 86, 20);
+		add(blockedText);
+		
+		JLabel lblDead = new JLabel("Dead");
+		lblDead.setBounds(224, 151, 46, 14);
+		add(lblDead);
+		
+		deadText = new JTextField();
+		deadText.setEditable(false);
+		deadText.setColumns(10);
+		deadText.setBounds(315, 145, 86, 20);
+		add(deadText);
 	}
 	
 	public void update(){
@@ -177,6 +199,8 @@ public class CharacterInfoPanel extends JPanel{
 		fameText.setText(Integer.toString(p.getFame()));
 		notorietyText.setText(Integer.toString(p.getNotoriety()));
 		hiddenText.setText(String.valueOf(p.isHidden()));
+		blockedText.setText(String.valueOf(p.isBlocked()));
+		deadText.setText(String.valueOf(p.isDead()));
 		
 		ArrayList<Armour> armour = p.getArmour();
 		String armourS = "";
@@ -223,5 +247,4 @@ public class CharacterInfoPanel extends JPanel{
 		}
 		chitsText.setText(discoveries);
 	}
-	
 }
