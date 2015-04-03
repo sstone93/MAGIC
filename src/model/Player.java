@@ -78,27 +78,33 @@ public class Player implements Serializable{
     	//determines + adds character special phases
     	//TODO CALCULATE SPECIAL PHASES
     	if(this.getCharacter().getName() == CharacterName.AMAZON)
-    		phases.add(new Phase(PhaseType.SPECIAL, Actions.MOVE));
+    		phases.add(new Phase(PhaseType.SPECIAL, new Actions[] {Actions.MOVE, Actions.PASS}));
         if(this.getCharacter().getName() == CharacterName.BERSERKER)
-        	phases.add(new Phase(PhaseType.SPECIAL, Actions.REST));
+        	phases.add(new Phase(PhaseType.SPECIAL, new Actions[] {Actions.REST, Actions.PASS}));
         if(this.getCharacter().getName() == CharacterName.ELF)
-        	phases.add(new Phase(PhaseType.SPECIAL, Actions.HIDE));
+        	phases.add(new Phase(PhaseType.SPECIAL, new Actions[] {Actions.HIDE, Actions.PASS}));
         if(this.getCharacter().getName() == CharacterName.WHITE_KNIGHT)
-        	phases.add(new Phase(PhaseType.SPECIAL, Actions.REST));
+        	phases.add(new Phase(PhaseType.SPECIAL, new Actions[] {Actions.REST, Actions.PASS}));
+        
+        //THE CAPTAIN SPECIAL ABILITY, cant have used it, and be the captain
+        if(this.getCharacter() instanceof Captain){
+        	((Captain) this.getCharacter()).usedSpecial = false;
+        	updateSpecial();
+        }
         
     	//determines + adds treasure special phases
     	//cloak of mists = hide
     	if(this.hasTreasure(SmallTreasureName.CLOAK_OF_MIST.toString()))
-    		phases.add(new Phase(PhaseType.TREASURE, Actions.HIDE));
+    		phases.add(new Phase(PhaseType.TREASURE, new Actions[] {Actions.HIDE, Actions.PASS}));
     	//magic spectacles = search
     	if(this.hasTreasure(SmallTreasureName.MAGIC_SPECTACLES.toString()))
-    		phases.add(new Phase(PhaseType.TREASURE, Actions.SEARCH));
+    		phases.add(new Phase(PhaseType.TREASURE, new Actions[] {Actions.SEARCH, Actions.PASS}));
     	//regent of jewels = trade
     	if(this.hasTreasure(LargeTreasureName.REGENT_OF_JEWELS.toString()))
-    		phases.add(new Phase(PhaseType.TREASURE, Actions.TRADE));
+    		phases.add(new Phase(PhaseType.TREASURE, new Actions[] {Actions.TRADE, Actions.PASS}));
     	//7=league boots = move
     	if(this.hasTreasure(SmallTreasureName.LEAGUE_BOOTS_7.toString()))
-    		phases.add(new Phase(PhaseType.TREASURE, Actions.MOVE));
+    		phases.add(new Phase(PhaseType.TREASURE, new Actions[] {Actions.MOVE, Actions.PASS}));
     	
     	//shielded lantern = anything (ONCE PER DAY, MUST BE IN CAVE)
     	//ancient telescope = peer (must be in mountain clering, specify other mountain clearing you are peering)
@@ -109,6 +115,19 @@ public class Player implements Serializable{
     	//shoes of stealth = light strength restriction??
     	//handy gloves = medium strength restriction?
     	
+    }
+    
+    public void updateSpecial(){
+    	if(!((Captain) this.getCharacter()).usedSpecial && this.location.dwelling != null){
+    		phases.add(new Phase(PhaseType.SPECIAL, Actions.values()));
+    	} else if (this.location.dwelling == null){
+    		for(Phase p : phases){
+    			if(p.equals(new Phase(PhaseType.SPECIAL, Actions.values()))){
+    				phases.remove(p);
+    				break;
+    			}
+    		}
+    	}
     }
     
     public boolean hasTreasure(String name){
@@ -480,14 +499,26 @@ public class Player implements Serializable{
 	}
 	
 	public void usePhase(Phase data) {
-
+		
+		
 		//TODO THIS ASSUMES THAT PHASE EQUALITY MEANS JUST THE TYPES MATCH (which i think i did)
 	
 		//TODO THIS IS A TESTING MEASURE, REMOVE ME PLEASE, SHOULD BE A SPECIFIC PHASE, NOT PHASE AT POSITION 0
 		for(Phase p : phases){
-			if(p.equals(data)){
+			
+			if(this.getCharacter() instanceof Captain && p.equals(new Phase(PhaseType.SPECIAL, Actions.values()))){
+				System.out.println(p+" equals "+data);
+				System.out.println("USED CAPTAIN SPECIAL");
+				((Captain) this.getCharacter()).usedSpecial = true;
 				phases.remove(p);
 				break;
+			}else if(p.equals(data)){
+				System.out.println(p+" equals "+data);
+				phases.remove(p);
+				break;
+			}else{
+				System.out.println(p+" NOT equals "+data);
+				//System.out.println(p+" NOT equals "+data);
 			}
 		}
 		
@@ -497,8 +528,11 @@ public class Player implements Serializable{
 		for(int i=0; i<phases.size(); i++){
 			if(phases.get(i).getType() == PhaseType.BASIC){
 				finishedBasic = false;
-				System.out.println(this.character.getName()+ " is done basic");
 			}
+		}
+		
+		if(finishedBasic){
+			System.out.println(this.character.getName()+ " is done basic");
 		}
 		
 		//if the player's turn is done
@@ -514,7 +548,9 @@ public class Player implements Serializable{
 		ArrayList<Actions> arr = new ArrayList<Actions>();
 		for(int i = 0; i < phases.size(); i++){
 			if(phases.get(i).getType() == PhaseType.TREASURE){
-				arr.add(phases.get(i).getAction());
+				for(Actions a : phases.get(i).getAction()){
+					arr.add(a);
+				}
 			}
 		}
 		return arr;

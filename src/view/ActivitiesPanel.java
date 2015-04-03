@@ -62,9 +62,7 @@ public class ActivitiesPanel extends JPanel{
 						arr = Actions.values();
 						break;
 					case SPECIAL:
-						arr = new Actions[2];
-						arr[0] = control.model.getPlayer().getPhases().get(phase.getSelectedIndex()).getAction();
-						arr[1] = Actions.PASS;
+						arr = control.model.getPlayer().getPhases().get(phase.getSelectedIndex()).getAction();
 						break;
 					case SUNLIGHT:
 						arr = Actions.values();
@@ -188,7 +186,7 @@ public class ActivitiesPanel extends JPanel{
 		JButton btnRecord = new JButton("Send");
 		btnRecord.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				control.handlePlaySubmit((PhaseType)phase.getSelectedItem(), (Actions)option.getSelectedItem(), extraInfo.getSelectedItem());
+				control.handlePlaySubmit((PhaseType)phase.getSelectedItem(), new Actions[] {(Actions) option.getSelectedItem()}, extraInfo.getSelectedItem());
 			}
 		});
 		

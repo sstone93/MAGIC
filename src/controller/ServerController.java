@@ -117,17 +117,17 @@ public class ServerController extends Handler{
 					if(p.isBlocked() == false){
 						//do it
 
+						//subtract from queue
+						p.usePhase((Phase) m.getData().get(0));
+						
 						//if it is a move, then don't reset last move
-						if(((Phase) m.getData().get(0)).getAction() == Actions.MOVE){
+						if(((Phase) m.getData().get(0)).getAction()[0] == Actions.MOVE){
 							handleAction(p,(Phase)m.getData().get(0));
 						}else{
 							//if the action was not a move, reset player's last move
 							p.setLastMove(null);
 							handleAction(p,(Phase)m.getData().get(0));
 						}
-
-						//subtract from queue
-						p.usePhase((Phase) m.getData().get(0));
 
 						//tell client it worked
 						network.send(ID, "ACTION SUCCEEDED");
@@ -148,7 +148,7 @@ public class ServerController extends Handler{
 						
 
 					} else {
-						if (((Phase) m.getData().get(0)).getAction() == Actions.HIDE) {
+						if (((Phase) m.getData().get(0)).getAction()[0] == Actions.HIDE) {
 							handleAction(p, (Phase)m.getData().get(0));
 						}
 						//return error to client
@@ -854,7 +854,7 @@ public class ServerController extends Handler{
     }
 
     public void handleAction(Player p, Phase a){
-    	switch(a.getAction()) {
+    	switch(a.getAction()[0]) {
     	case MOVE:
     		boolean move = board.move(p, a);
     		network.broadCast(p.getCharacter().getName() + " is moving? : " + move);

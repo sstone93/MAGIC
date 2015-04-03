@@ -5,7 +5,6 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
-import utils.Utility.GameState;
 import controller.ClientController;
 import model.Player;
 

@@ -10,7 +10,8 @@ public class Captain extends Character {
 	private static final long serialVersionUID = -1293193372571286411L;
 	
 	public static GarrisonName[] possibleStartingLocations = {GarrisonName.INN, GarrisonName.GUARD};
-
+	public boolean usedSpecial = false;
+	
 	public Captain() { // might want the name to be sent in
         this.name             = CharacterName.CAPTAIN;
         this.weight           = ItemWeight.MEDIUM;

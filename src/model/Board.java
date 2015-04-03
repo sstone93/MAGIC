@@ -591,6 +591,9 @@ public class Board implements Serializable{
     	player.getLocation().removeOccupant(player);
 		player.setLocation(newClearing);
 		newClearing.addOccupant(player);
+		if(player.getCharacter() instanceof Captain){
+			player.updateSpecial();
+		}
     }
 
     /**

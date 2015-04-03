@@ -9,7 +9,7 @@ public class Phase implements Serializable {
 	
 	private static final long serialVersionUID = 1039169659229492652L;
 	PhaseType type;
-	Actions action;
+	Actions[] action;
 	Object extraInfo;
 
 	public Phase(PhaseType t) {
@@ -17,13 +17,13 @@ public class Phase implements Serializable {
 		type = t;
 	}
 
-	public Phase(PhaseType t, Actions a) {
+	public Phase(PhaseType t, Actions[] a) {
 		// TODO Handles special phases?
 		type = t;
 		action = a;
 	}
 	
-	public Phase(PhaseType t, Actions a, Object o) {
+	public Phase(PhaseType t, Actions[] a, Object o) {
 		type = t;
 		action = a;
 		extraInfo = o;
@@ -33,7 +33,7 @@ public class Phase implements Serializable {
 		return type;
 	}
 	
-	public Actions getAction(){
+	public Actions[] getAction(){
 		return action;
 	}
 	
@@ -42,11 +42,37 @@ public class Phase implements Serializable {
 	}
 	
     public boolean equals(Phase p) {
-    	if(this.type == p.type){
+    	if(this.type == p.type && p.type == PhaseType.BASIC){
     		return true;
+    	}
+    	if(this.type == p.type && p.type == PhaseType.SUNLIGHT){
+    		return true;
+    	}
+    	if(this.type == p.type && p.type == PhaseType.SPECIAL){
+    		return true;
+    	}
+    	if(this.type == p.type && p.type == PhaseType.TREASURE){
+    		//for(Actions a : p.action){
+    			if(this.action == p.action){
+    				return true;
+    			}
+    		//}
+    		return false;
     	}else{
     		return false;
     	}
+    }
+    
+    public String toString(){
+    	String mes = type.toString()+" ";
+    	if(action != null){
+    		for(Actions a : action)
+    			mes+=a.toString()+" ";
+    	}
+    	if(extraInfo != null){
+    		mes+=extraInfo;
+    	}
+    	return mes;
     }
 	
 }
