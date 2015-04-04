@@ -98,16 +98,21 @@ public class BoardPanel extends JLayeredPane {
 	
 	@SuppressWarnings("rawtypes")
 	public void update(){
+		
+		//1. GETS THE BOARD FROM THE MODEL
 		Board b = control.model.getBoard();
 		if (b != null) {
 			
-			//ENSURE TH BOARD IS ONLY DRAWN ONCE
+			//ENSURES THE BOARD IS ONLY DRAWN ONCE
 			if (!this.boardMade){
 				makeBoard();
 			}
 			
+			//Iterates over tile hover overs, removes null panels
 			Iterator it = tileHoverOvers.entrySet().iterator();
 			
+			
+			//TODO IS THIS NEEDED???????? GARBAGE COLLECTION?
 			while (it.hasNext()) {
 				JPanel panel = (JPanel)((HashMap.Entry)it.next()).getValue();
 				if(panel != null){
@@ -119,6 +124,7 @@ public class BoardPanel extends JLayeredPane {
 			
 			it = clearingHoverOvers.entrySet().iterator();
 			
+			//TODO IS THIS ENEDED? GARBAGE COLLECTION?
 			while (it.hasNext()) {
 				JPanel panel = (JPanel)((HashMap.Entry)it.next()).getValue();
 				if(panel != null){
@@ -128,6 +134,7 @@ public class BoardPanel extends JLayeredPane {
 
 			clearingHoverOvers.clear();
 			
+			///REMOVES ALL LABELS ALREADY DRAWN (CHARACTERS, SOUND CHITS, MAP CHITS, WARNING CHITS)
 			for(int i = 0; i < labels.size(); i++){
 				remove(labels.get(i));
 			}
@@ -145,6 +152,8 @@ public class BoardPanel extends JLayeredPane {
 						ArrayList<Player> occupants = clearings.get(j).getOccupants();
 						//3. Gets all Occupants of a clearing, and cycles through them. (occupant k)
 						for(int k = 0; k < occupants.size(); k++){
+							
+							//adds the character label
 							CharacterName character = occupants.get(k).getCharacter().getName();
 							pic = ImageIO.read(this.getClass().getResource(Utility.getCharacterImage(character)));
 							JLabel l = new JLabel(new ImageIcon(pic));
@@ -245,12 +254,14 @@ public class BoardPanel extends JLayeredPane {
 							
 							final int index = j;
 							
+							//Make clearing hover over appear
 							l.addMouseListener(new MouseAdapter() {
 								@Override
 								public void mouseEntered(MouseEvent e) {
 									clearingHoverOvers.get(clearings.get(index)).setVisible(true);
 								}
 							});
+							//Make clearing hover over DISAPPEAR
 							l.addMouseListener(new MouseAdapter() {
 								@Override
 								public void mouseExited(MouseEvent e) {
@@ -258,7 +269,7 @@ public class BoardPanel extends JLayeredPane {
 								}
 							});
 							
-							labels.add(l);
+							labels.add(l);//adds the label to the labels array
 						}
 					}
 					if(control.model.getPlayer() != null){
@@ -316,12 +327,14 @@ public class BoardPanel extends JLayeredPane {
 							
 							final int index = i;
 							
+							//Makes center tile hoverover appear
 							l.addMouseListener(new MouseAdapter() {
 								@Override
 								public void mouseEntered(MouseEvent e) {
 									tileHoverOvers.get(b.tiles.get(index)).setVisible(true);
 								}
 							});
+							//makes center tile hoverover disappear
 							l.addMouseListener(new MouseAdapter() {
 								@Override
 								public void mouseExited(MouseEvent e) {
@@ -329,8 +342,9 @@ public class BoardPanel extends JLayeredPane {
 								}
 							});
 							
-							labels.add(l);
+							labels.add(l);//adds it to the array of labels
 						}
+						
 						WarningChit warningChit = b.tiles.get(i).getWarningChit();
 						if(warningChit != null){
 							String lblString;
