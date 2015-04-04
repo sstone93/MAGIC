@@ -316,6 +316,7 @@ public class Player implements Serializable{
 
     public void kill() {
     	dead = true;
+    	phases.clear();
     }
 
     public int getFatigue() {
