@@ -807,6 +807,21 @@ public class ServerController extends Handler{
     	for (int i = 0; i < tiles.size(); i++) {
     		Tile tile = tiles.get(i);
     		System.out.println("tile and type : " + tile.getName() + ", " + tile.getType() + " with warning chit: " + tile.getWarningChit() + " map chit: " + tile.getMapChit());
+    		ArrayList<Clearing> clearings = tile.getClearings();
+    		for (Clearing c: clearings) {
+    			ArrayList<Monster> monsters = c.getMonsters();
+    			if (monsters.isEmpty() == false) {
+    				System.out.println("monsters in clearing #" + c.getClearingNumber() );
+    				for (Monster m: monsters) {
+    					System.out.println(m.getName());
+    				}
+    			}
+    		}
+    	}
+//    	ArrayList<Clearing> clearings = tiles
+    	for (int i = 0; i < tiles.size(); i++) {
+    		Tile tile = tiles.get(i);
+    		System.out.println("tile and type : " + tile.getName() + ", " + tile.getType() + " with warning chit: " + tile.getWarningChit() + " map chit: " + tile.getMapChit());
     	}
     }
 
@@ -1167,6 +1182,7 @@ public class ServerController extends Handler{
         startActivitiesHandler();
         allowMonstersToProwl();
         summonMonstersToTile();
+        updateClients();
 
         for (int i = 0; i < board.tiles.size(); i++) {
         	for (int j = 0; j < board.tiles.get(i).getClearings().size(); j++) {
