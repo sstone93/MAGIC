@@ -455,13 +455,16 @@ public class Board implements Serializable{
 			monsters.add(new Monster(MonsterName.HEAVY_DRAGON));
 			monsters.add(new Monster(MonsterName.VIPER));
 			monsters.add(new Monster(MonsterName.WOLF));
+			monsters.add(new Monster(MonsterName.HEAVY_SPIDER));
 		}
 		for (int i = 0; i < 2; i++) {
 			monsters.add(new Monster(MonsterName.HEAVY_TROLL));
+			monsters.add(new Monster(MonsterName.GIANT_BAT));
 			monsters.add(new Monster(MonsterName.GIANT));
 			monsters.add(new Monster(MonsterName.GHOST));
 		}
 		monsters.add(new Monster(MonsterName.HEAVY_TROLL));
+		monsters.add(new Monster(MonsterName.GIANT_BAT));
 
 	}
 	
@@ -520,6 +523,7 @@ public class Board implements Serializable{
 		if (numberProwling < howManyCanProwl) {
 			for (int i = 0; i < monsters.size(); i++) {
 				if (monsters.get(i).getStartingLocation() == null) {
+					System.out.println("placing monster!!");
 					monsters.get(i).setStartingLocation(clearing);
 					clearing.addMonster(monsters.get(i));
 					break;
