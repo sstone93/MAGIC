@@ -46,6 +46,7 @@ public class ServerController extends Handler{
 	public Board board;		//THIS IS THE MODEL
 	public NetworkServer network;
 	ArrayList<Player> players = new ArrayList<Player>();
+	
 	int addedPlayers = 0;
     int playerCount    = Config.MAX_CLIENTS;
     int currentDay     = 0;
@@ -218,16 +219,27 @@ public class ServerController extends Handler{
 						 temp = null;
 					break;
 					}
-
-					this.addedPlayers += 1;
-					temp.getCharacter().setStartingLocation((GarrisonName) m.getData().get(1)); //sets the starting location
-					players.add(temp);
-					System.out.println("Added ");
-					//System.out.println((CharacterName) m.getData().get(0));
-					//System.out.println(addedPlayers);
+					
+					boolean state = false;
+					
+					for(Player p : players){
+						if(p.getCharacter().getName() == temp.getCharacter().getName()){
+							state = true;
+						}
+					}
+					
+					if(state){//character already chosen
+						network.send(ID, "THAT CHARACTER HAS ALREADY BEEN CHOSEN");
+						
+					}else{//character OK
+						this.addedPlayers += 1;
+						temp.getCharacter().setStartingLocation((GarrisonName) m.getData().get(1)); //sets the starting location
+						players.add(temp);
+						System.out.println(temp.getCharacter().getName()+" has been selected");
+					}
 
 				}else{
-					network.send(ID, "NOT ACCEPTING CHARACTER SELECT ATM");
+					network.send(ID, "NOT ACCEPTING CHARACTER SELECT YET");
 				}
 			}
 		}

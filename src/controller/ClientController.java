@@ -98,9 +98,12 @@ public class ClientController extends Handler{
 			}else if(text.equalsIgnoreCase("CHARACTER SELECT")){
 				state = GameState.CHOOSE_CHARACTER;
 				model.addMessage("START CHARACTER SELECT");
-			}else if(text.equalsIgnoreCase("NOT ACCEPTING CHARACTER SELECT ATM")){
+			}else if(text.equalsIgnoreCase("NOT ACCEPTING CHARACTER SELECT YET")){
 				state = GameState.CHOOSE_CHARACTER;
-				model.addMessage("RE-START CHARACTER SELECT");
+				model.addMessage(text);
+			}else if(text.equalsIgnoreCase("THAT CHARACTER HAS ALREADY BEEN CHOSEN")){
+				state = GameState.CHOOSE_CHARACTER;
+				model.addMessage(text);
 			}else if(text.equalsIgnoreCase("NO PHASES LEFT")){
 				state = GameState.NULL;
 				model.addMessage("No phases remaining");
