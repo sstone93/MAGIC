@@ -146,8 +146,10 @@ public class ServerController extends Handler{
 
 						//see if that was their last action
 						if(p.getDaylight()){
-							finishedPlayers += 1;
-							network.send(ID, "NO PHASES LEFT");
+							if (p.isDead() == false) {
+								finishedPlayers += 1;
+								network.send(ID, "NO PHASES LEFT");
+							}
 						}
 						
 
@@ -157,7 +159,12 @@ public class ServerController extends Handler{
 						}
 						//return error to client
 						else {
-							network.send(ID, "ACTION FAILED, YOU ARE BLOCKED");
+							if (p.isDead() == false) {
+								network.send(ID, "ACTION FAILED, YOU ARE BLOCKED");
+							}
+							else {
+								network.send(ID, "ACTION FAILED, YOU ARE DEAD");
+							}
 						}
 					}
 
