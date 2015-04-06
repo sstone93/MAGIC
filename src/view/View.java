@@ -4,6 +4,7 @@ import java.awt.*;
 
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.text.DefaultCaret;
 
 import controller.ClientController;
 import model.Player;
@@ -17,7 +18,7 @@ public class View extends JFrame {
 	private ClientController control;
 	private JPanel contentPane;
 	private JScrollPane scrollPanel;
-	//private JScrollPane upgradedText;
+	private JScrollPane upgradedText;
 	private JTextArea textDisplay;
 	private JPanel	blankPanel;
 
@@ -61,14 +62,14 @@ public class View extends JFrame {
 		
 		//adds the text box
 		textDisplay = new JTextArea();
-		//upgradedText =  new JScrollPane (textDisplay, 
-				  // JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		textDisplay.setBounds(0, 500, 500, 192);
+		upgradedText =  new JScrollPane (textDisplay, 
+				  JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		upgradedText.setBounds(0, 500, 500, 192);
 		textDisplay.setLineWrap(true);
-		//contentPane.add(upgradedText);
-		contentPane.add(textDisplay);
+		DefaultCaret caret = (DefaultCaret)textDisplay.getCaret();
+		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+		contentPane.add(upgradedText);
 		textDisplay.setEditable(false);
-		//upgradedText.setVisible(true);
 		
 		//adds the scroll bars
 		scrollPanel = new JScrollPane();
@@ -141,7 +142,7 @@ public class View extends JFrame {
 	public void updateNonBoardGUI(){
 		
 		//UPDATES THE TEXTBOX
-		textDisplay.setText(control.model.getMessages());
+		updateMessageBox();
 
 		//UPDATES THE INPUT PANEL BASED ON IT'S TYPE
 		switch(control.state){

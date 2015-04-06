@@ -12,7 +12,7 @@ public class ClientModel {
 	private Board board;
 	private Player player;
 	private String messages;
-	private int    messageCount;
+	//private int    messageCount;
 	private int    numPlayers = 2; //just temporary, should be set by the server.
 	
 	public ClientModel(){
@@ -36,12 +36,12 @@ public class ClientModel {
 	}
 	
 	public void addMessage(String m){
-		messageCount++;
-		if (messageCount == 10) {
+		//messageCount++;
+		/*if (messageCount == 10) {
 			this.messages = m+"\n";
 			messageCount = 0;
 		}
-		else
+		else*/
 			this.messages += m+"\n";
 	}
 	
