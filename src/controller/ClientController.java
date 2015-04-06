@@ -114,10 +114,10 @@ public class ClientController extends Handler{
 			}
 		}else if(message instanceof Board){
 			model.setBoard((Board) message);
-			model.addMessage("New Board Recieved");
+			//model.addMessage("New Board Recieved");
 		}else if(message instanceof Player){
 			model.setPlayer((Player) message);
-			model.addMessage("New Player Recieved");
+			//model.addMessage("New Player Recieved");
 		}
 		
 		if(view != null && needsUpdate){
