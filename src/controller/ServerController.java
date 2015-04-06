@@ -1060,8 +1060,17 @@ public class ServerController extends Handler{
     	state = GameState.CHOOSE_COMBATTARGET;
 
     	recievedCombat = 0;
+    	
+    	for (int i = 0; i < players.size(); i++) {
+    		if (players.get(i).isDead() == false) {
+    			network.send(players.get(i).getID(), "SEND COMBAT");
+    		}
+    		else {
+    			recievedCombat++;
+    		}
+    	}
 
-    	network.broadCast("SEND COMBAT");
+    	//network.broadCast("SEND COMBAT");
 
     	while(recievedCombat < playerCount){
     		try {
