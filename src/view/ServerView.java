@@ -87,6 +87,7 @@ public class ServerView extends JFrame implements ActionListener{
 		start.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				control.network.ready = true;
+				start.setEnabled(false);
 				try {
 					control.network.server.close();
 				} catch (IOException e1) {

@@ -59,7 +59,7 @@ public class Board implements Serializable{
 		for(int i=0; i<20; i++){
 			String temp = inputScanner.nextLine();
 			String[] inputLine = temp.split(" ");
-			System.out.println(temp);
+			//System.out.println(temp);
 			for(TileName name : TileName.values()){
 				if(inputLine[0].toString().equals(name.toString())){
 					Tile workingTile = tiles.get(convertTileName(name));
@@ -534,10 +534,8 @@ public class Board implements Serializable{
 		
 	public void placeChits(ArrayList<Object> a, int[] temps){
 		for(int i=0; i<temps.length; i++){
-			if(a.get(0) instanceof LostPlace){//lost
-				//System.out.println("CITY/SADAS");
+			if(a.get(0) instanceof LostPlace){
 				for(MapChit m : ((LostPlace) a.get(0)).getChits()){
-					//System.out.println("Asda");
 					placeMapChit(m, temps[i]);
 				}
 			}else{//sounds
@@ -549,9 +547,8 @@ public class Board implements Serializable{
 	}
 	
 	private void placeMapChit(MapChit m, int i){
-		if(m instanceof SiteChit){//sites
+		if(m instanceof SiteChit){
 			tiles.get(i).addMapChit(m);
-			//System.out.println("placed "+ ((SiteChit)m).getLocation()+" on "+tiles.get(i).getName()+" "+((SiteChit)m).getNumber());
 			switch(((SiteChit)m).getLocation()){
 			
 			case ALTAR:
@@ -581,35 +578,20 @@ public class Board implements Serializable{
 			default:
 				break;
 			}
-			//System.out.println("placed "+ ((SiteChit)m).getLocation()+" on "+tiles.get(i).getName()+" "+((SiteChit)m).getNumber());
 		}else{//sounds
 			tiles.get(i).addMapChit(m);
 		}
 	}
-	
-	/*private Clearing matchClearing(Clearing c){
-		for(int i=0; i< tiles.size();i++){
-			for(int j=0; j< tiles.get(i).getClearings().size();j++){
-				if(tiles.get(i).getClearings().get(j).equals(c)){
-					return tiles.get(i).getClearings().get(j);
-				}
-			}
-		}
-		return null;
-	}*/
 
 	public void placePlayers(ArrayList<Player> p){
-
-		//cycle through lsit of characters
-		//set their current location as the INN
-		// note: you can grab the players characters startingLocation by doing player.getCharacter().getStartingLocation();
-		// which right now is a garrison name
-		//update the INN with all the new occupants
-
 		for(int i=0; i < p.size(); i++){
 
 			GarrisonName startLoc = p.get(i).getCharacter().getStartingLocation();
-
+			
+			for(int t : getAllTiles(TileType.VALLEY)){
+				p.get(i).addDiscovery(tiles.get(t).getWarningChit());
+			}
+			
 			for(int j=0; j< garrisons.size(); j++){
 				if(garrisons.get(j).getName() == startLoc){
 					p.get(i).setLocation(garrisons.get(j).getLocation());
@@ -670,7 +652,6 @@ public class Board implements Serializable{
     	//		-To climb a mountain, need 2 consecutive moves ON THE SAME TURN
     	//		-Cannot enter a cave on a turn where sunlight phase was used?
     	//4. Weight Restrictions
-    	//5. Special Move Abilities !!! <Captain, Dwarf>
 
     	//1. Checks for clearings being connected.
     	Path route = (player.getLocation().routeTo(newClearing));

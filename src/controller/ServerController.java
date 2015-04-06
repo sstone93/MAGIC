@@ -824,7 +824,7 @@ public class ServerController extends Handler{
     	ArrayList<Tile> tiles = board.tiles;
     	for (int i = 0; i < tiles.size(); i++) {
     		Tile tile = tiles.get(i);
-    		System.out.println("tile and type : " + tile.getName() + ", " + tile.getType() + " with warning chit: " + tile.getWarningChit() + " map chit: " + tile.getMapChit());
+    		//System.out.println("tile and type : " + tile.getName() + ", " + tile.getType() + " with warning chit: " + tile.getWarningChit() + " map chit: " + tile.getMapChit());
     		ArrayList<Clearing> clearings = tile.getClearings();
     		for (Clearing c: clearings) {
     			ArrayList<Monster> monsters = c.getMonsters();
@@ -839,7 +839,12 @@ public class ServerController extends Handler{
 //    	ArrayList<Clearing> clearings = tiles
     	for (int i = 0; i < tiles.size(); i++) {
     		Tile tile = tiles.get(i);
-    		System.out.println("tile and type : " + tile.getName() + ", " + tile.getType() + " with warning chit: " + tile.getWarningChit() + " map chit: " + tile.getMapChit());
+    		
+    		//TODO OUTPUT ME TO A FILE
+    		
+    		System.out.println(tile.getName() + ": Type = " + tile.getType() + ", Warning chit: " + tile.getWarningChit() + ", Map chit: " + tile.getMapChit());
+    	
+    	
     	}
     }
 
@@ -861,7 +866,7 @@ public class ServerController extends Handler{
      * @return returns true if day was reset, false if it's the 28th day
      */
     public boolean resetDay() {
-    	System.out.println("ResetDay start");
+    	
     	if (currentDay == 28) {
     		return false;
     	}
@@ -884,8 +889,6 @@ public class ServerController extends Handler{
             	}
         	}
         }
-
-        System.out.println("ResetDay end");
         return true;
     }
 
@@ -992,7 +995,11 @@ public class ServerController extends Handler{
             }
         }
 
-        network.broadCast(winner.getCharacter().getName()+ " is the winner");
+        //this stops a null pointer crash when you play a game with no players....
+        if(winner != null){
+            network.broadCast(winner.getCharacter().getName()+ " is the winner");
+        }
+        
         network.stop();
     }
 
@@ -1046,28 +1053,14 @@ public class ServerController extends Handler{
     		try {
 				Thread.sleep(20);
 			} catch (InterruptedException e) {
-				// Auto-generated catch block
 				e.printStackTrace();
 			}
-    	}	//TODO HANDLE PLAYERS DROPPING OUT DURING THIS STEP
+    	}
 
     	//5. Finish phase collection and move on
     	state = GameState.NULL;
     	System.out.println("ALL PLAYERS FINISHED DAYLIGHT PHASE.");
-    	/*try {
-			Thread.sleep(20);
-		} catch (InterruptedException e) {
-			// Auto-generated catch block
-			e.printStackTrace();
-		}*/
     }
-
-    // gets the player that just finished
-    /*private void getFinishedPlayer() {
-    	for (int i = 0; i < players.size(); i++) {
-    		// check if they're done
-    	}
-    }*/
 
     public void collectCombat(){
 
@@ -1400,9 +1393,6 @@ public class ServerController extends Handler{
     		int attackerHurt = attacker.getHealth();
     		int defenderHurt = defender.getHealth();
 
-        	//System.out.println(attacker.getTarget().getCharacter().getName());
-        	//System.out.println(defender.getTarget().getCharacter().getName());
-
         	//ask clients to send moves!
         	state = GameState.CHOOSE_COMBATMOVES;
         	recievedCombat = 0;
@@ -1413,7 +1403,6 @@ public class ServerController extends Handler{
         		try {
     				Thread.sleep(20);
     			} catch (InterruptedException e) {
-    				// Auto-generated catch block
     				e.printStackTrace();
     			}
         	}
@@ -2091,7 +2080,6 @@ public class ServerController extends Handler{
 		state = GameState.CHOOSE_CHARACTER;
     	this.addedPlayers = 0;
     	network.broadCast("CHARACTER SELECT");
-    	System.out.println("start selection loop");
 
     	while(this.addedPlayers < playerCount){
     		try {
@@ -2102,11 +2090,8 @@ public class ServerController extends Handler{
 			}
     	}
 
-    	//can't get past here until the list of players is done
-    	System.out.println("end selection loop");
     	state = GameState.NULL;
 
-    	
     	//if cheatmode, run the import
     	if(Config.CHEAT_MODE){
     		Scanner ourScanner;
