@@ -1000,7 +1000,9 @@ public class ServerController extends Handler{
 
     public void calculatePhases(){
     	for(int i=0;i<playerCount;i++){
-			players.get(i).calculatePhases();
+    		if (players.get(i).isDead() == false) {
+    			players.get(i).calculatePhases();
+    		}
 		}
     }
 
@@ -1016,6 +1018,12 @@ public class ServerController extends Handler{
     	distributeCharacters();		//tell the client's their options
 
     	//1. Send each player their notice for 2 basic moves
+    	for (int i = 0; i < players.size(); i++) {
+    		if (players.get(i).isDead() == false) {
+    			network.send(players.get(i).getID(), "SEND MOVES");
+    		}
+    	}
+    	
     	network.broadCast("SEND MOVES");
 
     	//2. START HANDLER FOR MOVE SUBMISSIONS
