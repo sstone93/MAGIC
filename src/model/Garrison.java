@@ -7,6 +7,7 @@ import utils.Utility.ArmourName;
 import utils.Utility.GarrisonName;
 import utils.Utility.LargeTreasureName;
 import utils.Utility.SmallTreasureName;
+import utils.Utility.TreasureWithinTreasureName;
 import utils.Utility.WeaponName;
 
 public class Garrison implements Serializable{
@@ -73,7 +74,7 @@ public class Garrison implements Serializable{
 			this.armour.clear();
 			this.weapons.clear();
 			
-			//TREASURES ADDED FOR TESTING
+			//SMALL TREASURES ADDED FOR TESTING
 			this.treasures.add(new SmallTreasure(SmallTreasureName.CLOAK_OF_MIST));
 			this.treasures.add(new SmallTreasure(SmallTreasureName.DEFT_GLOVES));
 			this.treasures.add(new SmallTreasure(SmallTreasureName.SHOES_OF_STEALTH));
@@ -85,7 +86,16 @@ public class Garrison implements Serializable{
 			this.treasures.add(new SmallTreasure(SmallTreasureName.GLOVES_OF_STRENGTH));
 			this.treasures.add(new SmallTreasure(SmallTreasureName.POWER_BOOTS));
 			this.treasures.add(new SmallTreasure(SmallTreasureName.POWER_GAUNTLETS));
+			this.treasures.add(new SmallTreasure(SmallTreasureName.POULTICE_OF_HEALTH));
+			this.treasures.add(new SmallTreasure(SmallTreasureName.REFLECTION_GREASE));
+			
+			//LARGE TREASURES FOR TESTING
 			this.treasures.add(new LargeTreasure(LargeTreasureName.REGENT_OF_JEWELS));
+			this.treasures.add(new LargeTreasure(LargeTreasureName.LUCKY_CHARM));
+			
+			//treasure within treasures for testing
+			this.treasures.add(new TreasureWithinTreasure(TreasureWithinTreasureName.MOULDY_SKELETON, new ArrayList<Treasure>()));
+			
 		}
 	}
 

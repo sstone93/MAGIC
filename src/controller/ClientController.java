@@ -26,6 +26,7 @@ public class ClientController extends Handler{
 	public ClientModel model;
 	public NetworkClient network;
 	public GameState state = GameState.NULL;
+	public boolean deadstate = true;
 	public boolean blockState = false;
 	
 	/**
