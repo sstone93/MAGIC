@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
@@ -65,8 +66,9 @@ public class CharacterInfoPanel extends JPanel{
 		this.armourText = new JTextArea();
 		armourText.setEditable(false);
 		armourText.setLineWrap(true);
-		armourText.setBounds(10, 188, 177, 142);
-		add(armourText);
+		JScrollPane pane1 = new JScrollPane(armourText, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		pane1.setBounds(10, 188, 177, 142);
+		add(pane1);
 		
 		this.characterText = new JTextField();
 		characterText.setBounds(101, 41, 86, 20);
@@ -93,8 +95,9 @@ public class CharacterInfoPanel extends JPanel{
 		this.treasuresText = new JTextArea();
 		treasuresText.setEditable(false);
 		treasuresText.setLineWrap(true);
-		treasuresText.setBounds(10, 347, 177, 142);
-		add(treasuresText);
+		JScrollPane pane2 = new JScrollPane(treasuresText, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		pane2.setBounds(10, 347, 177, 142);
+		add(pane2);
 		
 		JLabel lblGold = new JLabel("Gold");
 		lblGold.setBounds(10, 94, 46, 14);
@@ -153,8 +156,9 @@ public class CharacterInfoPanel extends JPanel{
 		this.weaponsText = new JTextArea();
 		weaponsText.setEditable(false);
 		weaponsText.setLineWrap(true);
-		weaponsText.setBounds(224, 188, 177, 142);
-		add(weaponsText);
+		JScrollPane pane3 = new JScrollPane(weaponsText, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		pane3.setBounds(224, 188, 177, 142);
+		add(pane3);
 		
 		JLabel lblChits = new JLabel("Discoveries");
 		lblChits.setBounds(224, 332, 86, 14);
@@ -163,8 +167,9 @@ public class CharacterInfoPanel extends JPanel{
 		this.chitsText = new JTextArea();
 		chitsText.setEditable(false);
 		chitsText.setLineWrap(true);
-		chitsText.setBounds(224, 347, 177, 142);
-		add(chitsText);
+		JScrollPane pane4 = new JScrollPane(chitsText, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		pane4.setBounds(224, 347, 177, 142);
+		add(pane4);
 		
 		JLabel lblBlocked = new JLabel("Blocked");
 		lblBlocked.setBounds(10, 148, 46, 14);
