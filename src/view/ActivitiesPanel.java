@@ -153,32 +153,32 @@ public class ActivitiesPanel extends JPanel{
 							int i = 0;
 							if (treasuresToBuy != null) {
 								for(Treasure t: treasuresToBuy){
-									arr[i] = "BUY " + t.getName();
+									arr[i] = "BUY:" + t.getGold() + " " + t.getName();
 									i++;
 								}
 							}
 							if (armourToBuy != null) {
 								for(Armour a: armourToBuy){
-									arr[i] = "BUY " + a.getType();
+									arr[i] = "BUY:" + a.getGold() + " " + a.getType();
 									i++;
 								}
 							}
 							if (weaponsToBuy != null) {
 								for(Weapon w: weaponsToBuy){
-									arr[i] = "BUY " + w.getType();
+									arr[i] = "BUY:" + w.getGold() + " "  + w.getType();
 									i++;
 								}
 							}
 							for(Treasure t: treasuresToSell){
-								arr[i] = "SELL " + t.getName();
+								arr[i] = "SELL:" + t.getGold() + " " + t.getName();
 								i++;
 							}
 							for(Armour a: armourToSell){
-								arr[i] = "SELL " + a.getType();
+								arr[i] = "SELL:" + a.getGold() + " "  + a.getType();
 								i++;
 							}
 							for(Weapon w: weaponsToSell){
-								arr[i] = "SELL " + w.getType();
+								arr[i] = "SELL:" + w.getGold() + " " + w.getType();
 								i++;
 							}
 							extraInfo.setVisible(true);

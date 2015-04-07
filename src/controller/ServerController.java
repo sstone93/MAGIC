@@ -331,7 +331,7 @@ public class ServerController extends Handler{
 			return;
 		}
 		if (object.toString().contains("BUY")) {			
-			String[] temp = object.toString().split("BUY");
+			String[] temp = object.toString().split(" ");
 			ArrayList<Treasure> treasures = player.getLocation().getDwelling().getTreasures();
 			boolean boughtSomething = false;
 			for (Treasure t: treasures) {
@@ -386,7 +386,7 @@ public class ServerController extends Handler{
 			}
 		}
 		else { // you're selling
-			String[] temp = object.toString().split("SELL");
+			String[] temp = object.toString().split(" ");
 			ArrayList<Treasure> treasures = player.getTreasures();
 			boolean soldSomething = false;
 			for (Treasure t: treasures) {
