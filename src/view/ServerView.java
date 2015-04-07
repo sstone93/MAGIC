@@ -15,7 +15,6 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 
-import utils.Config;
 import controller.ServerController;
 
 @SuppressWarnings({"serial", "rawtypes", "unchecked" })
@@ -50,7 +49,7 @@ public class ServerView extends JFrame implements ActionListener{
 		this.add(stop);
 		setResizable(false);
 		
-		if(!Config.CHEAT_MODE){
+		if(!c.cheatmode){
 			setSize(new Dimension(300, 140));
 		}else{
 			setSize(new Dimension(300, 140));

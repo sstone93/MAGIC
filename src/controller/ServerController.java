@@ -57,6 +57,8 @@ public class ServerController extends Handler{
 	int finishedPlayers = 0;
 	public int nextRoll = 0;
 	private int monsterRoll;
+	public boolean cheatmode = false;
+	public Scanner ourScanner= null;
 
 	/**
 	 * Constructor for a ServerController
@@ -69,6 +71,15 @@ public class ServerController extends Handler{
 
 		//waits until player objects are done being made
 		System.out.println("Now waiting for clients to connect.");
+		
+    	try {
+    		ourScanner = new Scanner(new File("settings.txt"));
+    		ourScanner.nextLine();
+    		cheatmode = Boolean.valueOf((ourScanner.nextLine()).split(" ")[2]);
+   		} catch (FileNotFoundException e) {
+   			e.printStackTrace();
+   		}
+		
 	}
 
 	public Player charToPlayer(CharacterName n){
@@ -81,7 +92,7 @@ public class ServerController extends Handler{
 	}
 
 	public int roll(int max){
-		if(Config.CHEAT_MODE && this.nextRoll != 0){
+		if(cheatmode && this.nextRoll != 0){
 			return this.nextRoll;
 		}else{
 			return Utility.roll(max);
@@ -2123,17 +2134,18 @@ public class ServerController extends Handler{
 
     	state = GameState.NULL;
 
-    	//if cheatmode, run the import
-    	if(Config.CHEAT_MODE){
-    		Scanner ourScanner;
-    		try {
-    			ourScanner = new Scanner(new File("settings.txt"));
-    			ourScanner.nextLine();
-    			this.board = new Board(players, ourScanner); //instanciate the model
-    			ourScanner.close();
-    		} catch (FileNotFoundException e) {
-    			e.printStackTrace();
-    		}
+    	Scanner ourScanner = null;
+    	try {
+    		ourScanner = new Scanner(new File("settings.txt"));
+    		ourScanner.nextLine();
+    		cheatmode = Boolean.valueOf((ourScanner.nextLine()).split(" ")[2]);
+   		} catch (FileNotFoundException e) {
+   			e.printStackTrace();
+   		}
+    	
+    	if(cheatmode){
+    		this.board = new Board(players, ourScanner); //instanciate the model
+    		ourScanner.close();
     	}else{
     		this.board = new Board(players); //instanciate the model
     	}
