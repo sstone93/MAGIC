@@ -29,6 +29,8 @@ import model.WhiteKnight;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -836,16 +838,19 @@ public class ServerController extends Handler{
     			}
     		}
     	}
-//    	ArrayList<Clearing> clearings = tiles
-    	for (int i = 0; i < tiles.size(); i++) {
-    		Tile tile = tiles.get(i);
-    		
-    		//TODO OUTPUT ME TO A FILE
-    		
-    		System.out.println(tile.getName() + ": Type = " + tile.getType() + ", Warning chit: " + tile.getWarningChit() + ", Map chit: " + tile.getMapChit());
     	
-    	
-    	}
+    	//EXPORTS THE GENERATED BOARD TO A FILE
+		try {
+			PrintStream fileStream = new PrintStream(new File("generated_board.txt"));
+			
+	    	for (int i = 0; i < tiles.size(); i++) {
+	    		Tile tile = tiles.get(i);
+	    		fileStream.println(tile.getName() + ": Type = " + tile.getType() + ", Warning chit: " + tile.getWarningChit() + ", Map chit: " + tile.getMapChit());	
+	    	}
+	    	fileStream.close();		
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
 
     /**
