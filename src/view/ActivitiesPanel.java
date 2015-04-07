@@ -46,7 +46,7 @@ public class ActivitiesPanel extends JPanel{
 		add(lblNewLabel_1);
 
 		extraInfo = new JComboBox();
-		extraInfo.setBounds(389, 40, 125, 20);
+		extraInfo.setBounds(289, 40, 213, 20);
 		add(extraInfo);
 		
 		phase = new JComboBox();
@@ -199,7 +199,7 @@ public class ActivitiesPanel extends JPanel{
 			}
 		});
 		
-		option.setBounds(215, 40, 93, 20);
+		option.setBounds(163, 40, 93, 20);
 		add(option);
 		
 		JButton btnRecord = new JButton("Send");
@@ -214,13 +214,49 @@ public class ActivitiesPanel extends JPanel{
 	}
 
 	public void update(){
-		ArrayList<Phase> phases = this.control.model.getPlayer().getPhases();
-		PhaseType[] p = new PhaseType[phases.size()];
-		for(int i=0; i<phases.size(); i++){
-			p[i] = (phases.get(i).getType());
+		PhaseType p = (PhaseType)phase.getSelectedItem();
+		Actions a = (Actions)option.getSelectedItem();
+		Object e = null;
+		
+		if(a != Actions.REST && a != Actions.PASS && a != Actions.HIDE){
+			e = extraInfo.getSelectedItem();
 		}
-		phase.setModel(new DefaultComboBoxModel(p));
-		if(phases.size() > 0){
+		
+		boolean valid = true;//flag for if previous selections are still valid
+		
+		ArrayList<Phase> phases = this.control.model.getPlayer().getPhases();
+		PhaseType[] pArr = new PhaseType[phases.size()];
+		for(int i=0; i<phases.size(); i++){
+			pArr[i] = (phases.get(i).getType());
+		}
+		phase.setModel(new DefaultComboBoxModel(pArr));
+		
+		//trying to reselect the previous selection
+		if(((DefaultComboBoxModel)phase.getModel()).getIndexOf(p) != -1){
+			phase.setSelectedItem(p);
+		}
+		else{
+			valid = false;
+		}
+		
+		if(valid && ((DefaultComboBoxModel)option.getModel()).getIndexOf(a) != -1){
+			option.setSelectedItem(a);
+		}
+		else{
+			valid = false;
+		}
+		
+		if(e == null){
+			//Do nothing, the third combobox was not being used before.
+		}
+		else if(valid && ((DefaultComboBoxModel)extraInfo.getModel()).getIndexOf(e) != -1){
+			extraInfo.setSelectedItem(e);
+		}
+		else{
+			valid = false;
+		}
+		
+		if(!valid && phases.size() > 0){
 			phase.setSelectedIndex(0);
 		}
 			
