@@ -2031,7 +2031,20 @@ public class ServerController extends Handler{
 	}
 
 	public void deadPlayer(Player player, Monster monster) {
-		TreasurePile pile = new TreasurePile(player.getTreasures(), player.getArmour(), player.getWeapons(), player.getGold());
+		ArrayList<Treasure> treasures = new ArrayList<Treasure>();
+		ArrayList<Armour> armour = new ArrayList<Armour>();
+		ArrayList<Weapon> weapons = new ArrayList<Weapon>();
+		for (int i = 0; i < player.getTreasures().size(); i++) {
+			treasures.add(player.getTreasures().get(i));
+		}
+		for (int i = 0; i < player.getArmour().size(); i++) {
+			armour.add(player.getArmour().get(i));
+		}
+		for (int i = 0; i < player.getWeapons().size(); i++) {
+			weapons.add(player.getWeapons().get(i));
+		}
+		
+		TreasurePile pile = new TreasurePile(treasures, armour, weapons, player.getGold());
 		player.getLocation().setPile(pile);
 		player.removeAll();
 		player.kill();
@@ -2047,7 +2060,20 @@ public class ServerController extends Handler{
 	}
 
 	public void deadPlayer(Player attacker, Player defender) {
-		TreasurePile pile = new TreasurePile(defender.getTreasures(), defender.getArmour(), defender.getWeapons(), defender.getGold());
+		ArrayList<Treasure> treasures = new ArrayList<Treasure>();
+		ArrayList<Armour> armour = new ArrayList<Armour>();
+		ArrayList<Weapon> weapons = new ArrayList<Weapon>();
+		for (int i = 0; i < defender.getTreasures().size(); i++) {
+			treasures.add(defender.getTreasures().get(i));
+		}
+		for (int i = 0; i < defender.getArmour().size(); i++) {
+			armour.add(defender.getArmour().get(i));
+		}
+		for (int i = 0; i < defender.getWeapons().size(); i++) {
+			weapons.add(defender.getWeapons().get(i));
+		}
+		
+		TreasurePile pile = new TreasurePile(treasures, armour, weapons, defender.getGold());
 		defender.getLocation().setPile(pile);
 		defender.removeAll();
 		attacker.addFame(10); // Arbitrary value
