@@ -203,6 +203,7 @@ public class ServerController extends Handler{
 				Player blockTarget = charToPlayer((CharacterName) m.getData().get(0));
 				block(blockTarget);
 				block(findPlayer(ID));
+				distributeCharacters();
 			}
 			if( m.getType() == MessageType.COMBAT_MOVES){
 				if(state == GameState.CHOOSE_COMBATMOVES){

@@ -59,7 +59,7 @@ public class BlockPanel extends JPanel{
 			ArrayList<Player> others = p.getLocation().getOccupants();
 			ArrayList<Player> finals = new ArrayList<Player>();
 			for(Player pl : others){
-				if(p.getCharacter().getName() != pl.getCharacter().getName()){
+				if(p.getCharacter().getName() != pl.getCharacter().getName() && pl.isBlocked() == false){
 					finals.add(pl);
 				}
 			}

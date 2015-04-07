@@ -36,6 +36,18 @@ public class Clearing implements Serializable{
         this.calculateXandY();
     }
 
+    public int getBlockable(Player p){
+    	int tally = 0;
+    	
+    	for(Player pl : occupants){
+    		if(p.getCharacter().getName() != pl.getCharacter().getName() && pl.isBlocked() == false){
+    			tally++;
+    		}
+    	}
+    	
+    	return tally;
+    }
+    
     public ArrayList<Path> getConnections(){
     	return this.connections;
     }
