@@ -1242,29 +1242,32 @@ public class ServerController extends Handler{
         		}
         	}
         }
+        int alivePlayers = checkLivingPlayers();
+    	if (alivePlayers > 1) {
+    		collectCombat(); //2 players, 1 attacker 1 defender
+
+            //All players choose attackers
+            for (int i = 0; i < players.size(); i++) {
+            	if (players.get(i).getTarget() != null) {
+            		for (int j = 0; j < players.get(i).getTarget().size(); j++) {
+            			encounter(players.get(i), players.get(i).getTarget().get(j));
+            		}
+            		System.out.println("Finished encounter");
+            	}
+            	players.get(i).removeTarget();
+            }
+
+            for (int i = 0; i < players.size(); i++) {
+            	if (players.get(i).getMonsterTarget() != null) {
+            		for (int j = 0; j < players.get(i).getMonsterTarget().size(); j++) {
+            			encounter(players.get(i), players.get(i).getMonsterTarget().get(j));
+            		}
+            		System.out.println("Finished encounter");
+            	}
+            	players.get(i).removeMonsterTarget();
+            }
+    	}
         
-        collectCombat(); //2 players, 1 attacker 1 defender
-
-        //All players choose attackers
-        for (int i = 0; i < players.size(); i++) {
-        	if (players.get(i).getTarget() != null) {
-        		for (int j = 0; j < players.get(i).getTarget().size(); j++) {
-        			encounter(players.get(i), players.get(i).getTarget().get(j));
-        		}
-        		System.out.println("Finished encounter");
-        	}
-        	players.get(i).removeTarget();
-        }
-
-        for (int i = 0; i < players.size(); i++) {
-        	if (players.get(i).getMonsterTarget() != null) {
-        		for (int j = 0; j < players.get(i).getMonsterTarget().size(); j++) {
-        			encounter(players.get(i), players.get(i).getMonsterTarget().get(j));
-        		}
-        		System.out.println("Finished encounter");
-        	}
-        	players.get(i).removeMonsterTarget();
-        }
         
         //Dropping heavier items
         for (int i = 0; i < players.size(); i++) {
@@ -1293,12 +1296,7 @@ public class ServerController extends Handler{
         //Progresses to the next day or ends the game
         boolean thing = resetDay();
         if(thing == true){ //if it is not the 28th day....
-        	int alivePlayers = 0;
-        	for (int i = 0; i < players.size(); i++) {
-        		if (players.get(i).isDead() == false) {
-        			alivePlayers++;
-        		}
-        	}
+        	alivePlayers = checkLivingPlayers();
         	if (alivePlayers > 1) {
         		startDay();
         	}
@@ -1310,6 +1308,16 @@ public class ServerController extends Handler{
         }
     }
 
+    public int checkLivingPlayers() {
+    	int alivePlayers = 0;
+    	for (int i = 0; i < players.size(); i++) {
+    		if (players.get(i).isDead() == false) {
+    			alivePlayers++;
+    		}
+    	}
+    	return alivePlayers;
+    }
+    
     public void encounter(Player player, Monster monster) {
 
     	int unhurtRounds = 0;
@@ -2066,6 +2074,11 @@ public class ServerController extends Handler{
 		player.kill();
 		network.send(player.getID(), "You are dead.");
 		network.broadCast(player.getCharacter().getName() + "has been killed!");
+		
+		int alivePlayers = checkLivingPlayers();
+    	if (alivePlayers <= 1) {
+    		endGame();
+    	}
 	}
 
 	public void deadMonster(Player player, Monster monster) {
@@ -2100,6 +2113,11 @@ public class ServerController extends Handler{
 		defender.kill();
 		network.send(defender.getID(), "You are dead.");
 		network.broadCast(defender.getCharacter().getName() + " has been killed!");
+		
+		int alivePlayers = checkLivingPlayers();
+    	if (alivePlayers <= 1) {
+    		endGame();
+    	}
 	}
 
 	/**
