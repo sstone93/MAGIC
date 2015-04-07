@@ -6,6 +6,7 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.text.DefaultCaret;
 
+import utils.Utility.GameState;
 import controller.ClientController;
 import model.Player;
 
@@ -129,7 +130,7 @@ public class View extends JFrame {
 			scrollPanel.getVerticalScrollBar().setValue(p.getLocation().y - 250);
 			scrollPanel.getHorizontalScrollBar().setValue(p.getLocation().x - 400);
 			//if the blockpanel should appear (other people in your clearing, and you are not blocked)
-			if(p.getLocation().getOccupants().size() > 1 && p.isBlocked() == false && control.blockState == true){
+			if(p.getLocation().getOccupants().size() > 1 && p.isBlocked() == false && control.blockState == true && !control.deadstate){
 				blockPanel.update();
 				blockPanel.setVisible(true);
 			}else{
@@ -140,32 +141,34 @@ public class View extends JFrame {
 	}
 	
 	public void updateNonBoardGUI(){
-		
-		//UPDATES THE TEXTBOX
 		updateMessageBox();
 
-		//UPDATES THE INPUT PANEL BASED ON IT'S TYPE
-		switch(control.state){
-		case CHOOSE_CHARACTER:
-			characterSelectPanel.update();
-			makePanelVisible(characterSelectPanel);
-			scrollPanel.setViewportView(characterDetailsPanel);//this must be called AFTER makePanelVisible
-			break;
-		case CHOOSE_PLAYS:
-			playsPanel.update();
-			makePanelVisible(playsPanel);
-			break;
-		case CHOOSE_COMBATMOVES:
-			makePanelVisible(combatPanel);
-			break;
-		case CHOOSE_COMBATTARGET:
-			targetPanel.update();
-			makePanelVisible(targetPanel);
-			break;
-		case NULL:
-			makePanelVisible(blankPanel);
-		default:
-			break;
+		if(!control.deadstate){
+			//UPDATES THE INPUT PANEL BASED ON IT'S TYPE
+			switch(control.state){
+			case CHOOSE_CHARACTER:
+				characterSelectPanel.update();
+				makePanelVisible(characterSelectPanel);
+				scrollPanel.setViewportView(characterDetailsPanel);//this must be called AFTER makePanelVisible
+				break;
+			case CHOOSE_PLAYS:
+				playsPanel.update();
+				makePanelVisible(playsPanel);
+				break;
+			case CHOOSE_COMBATMOVES:
+				makePanelVisible(combatPanel);
+				break;
+			case CHOOSE_COMBATTARGET:
+				targetPanel.update();
+				makePanelVisible(targetPanel);
+				break;
+			case NULL:
+				makePanelVisible(blankPanel);
+			default:
+				break;
+			}
+		}else{
+			control.state = GameState.NULL;
 		}
 	}
 	

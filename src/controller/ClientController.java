@@ -26,7 +26,7 @@ public class ClientController extends Handler{
 	public ClientModel model;
 	public NetworkClient network;
 	public GameState state = GameState.NULL;
-	public boolean deadstate = true;
+	public boolean deadstate = false;
 	public boolean blockState = false;
 	
 	/**
@@ -108,6 +108,10 @@ public class ClientController extends Handler{
 			}else if(text.equalsIgnoreCase("NO PHASES LEFT")){
 				state = GameState.NULL;
 				model.addMessage("No phases remaining");
+			}else if(text.equalsIgnoreCase("YOU WERE KILLED")){
+				deadstate = true;
+				state = GameState.NULL;
+				model.addMessage("YOU WERE KILLED");
 			}else{
 				model.addMessage((String) message);
 				view.updateMessageBox();

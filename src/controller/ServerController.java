@@ -1317,7 +1317,7 @@ public class ServerController extends Handler{
     	while (unhurtRounds < 2) {
 
 	    	if (player.isDead() == true) {
-	    		network.send(player.getID(), "You are dead");
+	    		network.send(player.getID(), "YOU WERE KILLED");
 	    		return;
 	    	}
 	    	else if (monster.isDead() == true) {
@@ -1398,11 +1398,11 @@ public class ServerController extends Handler{
 
     	while (unhurtRounds < 2) {
     		if (attacker.isDead() == true) {
-        		network.send(attacker.getID(), "You are dead.");
+        		network.send(attacker.getID(), "YOU WERE KILLED");
         		return;
         	}
         	else if (defender.isDead() == true) {
-        		network.send(defender.getID(), "You are dead.");
+        		network.send(defender.getID(), "YOU WERE KILLED");
         		return;
         	}
 
@@ -2064,15 +2064,15 @@ public class ServerController extends Handler{
 		player.getLocation().setPile(pile);
 		player.removeAll();
 		player.kill();
-		network.send(player.getID(), "You are dead.");
-		network.broadCast(player.getCharacter().getName() + "has been killed!");
+		network.send(player.getID(), "YOU WERE KILLED");
+		network.broadCast(player.getCharacter().getName() + "has been killed by "+monster.getName());
 	}
 
 	public void deadMonster(Player player, Monster monster) {
 		player.addFame(monster.getFame());
 		player.addNotoriety(monster.getNotoriety());
 		monster.kill();
-		network.broadCast(monster.getName() + "has been killed!");
+		network.broadCast(monster.getName() + "has been killed by "+ player.getCharacter().getName());
 	}
 
 	public void deadPlayer(Player attacker, Player defender) {
@@ -2098,8 +2098,8 @@ public class ServerController extends Handler{
 		attacker.addNotoriety(defender.getNotoriety());
 		defender.removeNotoriety(defender.getNotoriety());
 		defender.kill();
-		network.send(defender.getID(), "You are dead.");
-		network.broadCast(defender.getCharacter().getName() + " has been killed!");
+		network.send(defender.getID(), "YOU WERE KILLED");
+		network.broadCast(defender.getCharacter().getName() + " has been killed by "+attacker.getCharacter().getName());
 	}
 
 	/**
