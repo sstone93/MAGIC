@@ -40,7 +40,7 @@ public class Clearing implements Serializable{
     	int tally = 0;
     	
     	for(Player pl : occupants){
-    		if(p.getCharacter().getName() != pl.getCharacter().getName() && pl.isBlocked() == false){
+    		if(p.getCharacter().getName() != pl.getCharacter().getName() && pl.isBlocked() == false && pl.isHidden() == false){
     			tally++;
     		}
     	}
