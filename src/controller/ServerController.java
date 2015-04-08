@@ -304,10 +304,10 @@ public class ServerController extends Handler{
 		if (roll != 6) {
 			player.setHidden(true);
 			player.setBlocked(false);
-			network.broadCast( player.getCharacter().getName() + " is hidden!");
+			network.send(player.getID(), player.getCharacter().getName() + " is hidden!");
 		}
 		else {
-			network.broadCast("Hide had no effect on " + player.getCharacter().getName());
+			network.send(player.getID(), "Hide had no effect on you");
 		}
     }
 
@@ -339,13 +339,39 @@ public class ServerController extends Handler{
 			String[] temp = object.toString().split(" ");
 			ArrayList<Treasure> treasures = player.getLocation().getDwelling().getTreasures();
 			boolean boughtSomething = false;
-			for (Treasure t: treasures) {
+			for (Treasure t: treasures) { 
 				if (t.getName().toString().trim().equals(temp[1].trim())) {
 					if (player.getGold() >= t.getGold()) {
-						player.addTreasure(t);
+						if (t instanceof TreasureWithinTreasure) {
+							network.send(player.getID(), "YOU BOUGHT" + t.getName() );
+							ArrayList<Treasure> treasure = t.getTreasures();
+							ArrayList<Weapon> weapon     = t.getWeapons();
+							ArrayList<Armour> armour     = t.getArmour();
+							
+							player.addTreasure(t);
+							
+							for (int i = 0; i < treasure.size(); i++) {
+								player.addTreasure(treasure.get(i));
+								network.send(player.getID(), t.getName() + " INCLUDES: " + treasure.get(i).getName() );
+							}
+							for (int i = 0; i < weapon.size(); i++) {
+								player.addWeapon(weapon.get(i));
+								network.send(player.getID(), t.getName() + " INCLUDES: " + weapon.get(i).getType());
+							}
+							for (int i = 0; i < armour.size(); i++) {
+								player.addArmour(armour.get(i));
+								network.send(player.getID(), t.getName() + " INCLUDES: " + armour.get(i).getType() );
+							}
+							
+							
+						}
+						else {
+							player.addTreasure(t);
+							network.send(player.getID(), "YOU BOUGHT " + t.getName() + "!");
+						}
 						player.removeGold(t.getGold());
 						player.getLocation().getDwelling().removeTreasure(t);
-						network.send(player.getID(), "YOU BOUGHT " + t.getName() + "!");
+						
 						boughtSomething = true;
 						break;
 					}
@@ -584,10 +610,10 @@ public class ServerController extends Handler{
     	int roll = roll(6);
     	if (numberOfDie == 2) {
 	    	int roll2 = roll(6);
-	    	network.broadCast(player.getCharacter().getName() + " rolled " + roll + " and " + roll2 );
+	    	network.send(player.getID(), "You rolled " + roll + " and " + roll2 );
 	    	roll = Math.max(roll, roll2);
     	}
-		network.broadCast(player.getCharacter().getName() + " is using " + roll );
+		network.send(player.getID(), "You're using " + roll );
 
 		return roll;
     }
@@ -949,28 +975,27 @@ public class ServerController extends Handler{
     	switch(a.getAction()[0]) {
     	case MOVE:
     		boolean move = board.move(p, a);
-    		network.broadCast(p.getCharacter().getName() + " is moving? : " + move);
+    		network.send(p.getID(), "Are you moving?: " + move);
     		break;
     	case HIDE:
     		hide(p);
     		break;
     	case ALERT:
     		alert(p);
-    		network.broadCast(p.getCharacter().getName() + " is alerting their weapon!");
+    		network.send(p.getID(), "You've alerted your weapon!");
     		break;
     	case REST:
     		rest(p);
-    		network.broadCast(p.getCharacter().getName() + " is resting!");
+    		network.send(p.getID(), "You're resting!");
     		break;
     	case SEARCH:
     		search(p, (SearchTables) a.getExtraInfo());
     		break;
     	case TRADE:
     		trade(p, a.getExtraInfo());
-    		network.broadCast(p.getCharacter().getName() + " is trading!");
     		break;
     	case PASS:
-    		network.broadCast(p.getCharacter().getName() + " is PASSING!");
+    		network.send(p.getID(), p.getCharacter().getName() + " is PASSING!");
     		break;
     	default:
     		break;
@@ -2087,7 +2112,7 @@ public class ServerController extends Handler{
 		player.kill();
 		
 		network.send(player.getID(), "YOU WERE KILLED");
-		network.broadCast(player.getCharacter().getName() + "has been killed by "+monster.getName());
+		network.broadCast(player.getCharacter().getName() + " has been killed by "+monster.getName());
 		
 		int alivePlayers = checkLivingPlayers();
     	if (alivePlayers <= 1) {
@@ -2099,7 +2124,7 @@ public class ServerController extends Handler{
 		player.addFame(monster.getFame());
 		player.addNotoriety(monster.getNotoriety());
 		monster.kill();
-		network.broadCast(monster.getName() + "has been killed by "+ player.getCharacter().getName());
+		network.broadCast(monster.getName() + " has been killed by "+ player.getCharacter().getName());
 	}
 
 	public void deadPlayer(Player attacker, Player defender) {
