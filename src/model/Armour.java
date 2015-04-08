@@ -34,6 +34,22 @@ public class Armour implements Serializable {
     		this.weight = ItemWeight.HEAVY;
     		this.gold   = 17;
     	}
+    	else if (type == ArmourName.GOLD_HELMET){
+    		this.weight = ItemWeight.HEAVY;
+    		this.gold   = 30;
+    	}
+    	else if (type == ArmourName.JADE_SHIELD){
+    		this.weight = ItemWeight.HEAVY;
+    		this.gold   = 20;
+    	}
+    	else if (type == ArmourName.SILVER_BREASTPLATE){
+    		this.weight = ItemWeight.HEAVY;
+    		this.gold   = 25;
+    	}
+    	else if (type == ArmourName.TREMENDOUS_ARMOR){
+    		this.weight = ItemWeight.TREMENDOUS;
+    		this.gold   = 25;
+    	}
     	else {
     		this.weight = ItemWeight.NEGLIGIBLE;
     		this.gold   = 0;

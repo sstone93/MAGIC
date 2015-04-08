@@ -157,18 +157,16 @@ public class Garrison implements Serializable{
 	public String toString(){
 		String i = "";
 		if(this.weapons != null){
-			for(int z=0; z<this.weapons.size()-1;z++){
+			for(int z=0; z<this.weapons.size();z++){
 				i+= this.weapons.get(z)+", ";
 			}
-			i+= this.weapons.get(this.weapons.size() -1);
 			System.out.println("			-contains weapons: "+ i);
 		}
 		i = "";
 		if(this.armour != null){
-			for(int z=0; z<this.armour.size()-1;z++){
+			for(int z=0; z<this.armour.size();z++){
 				i+= this.armour.get(z)+", ";
 			}
-			i+= this.armour.get(this.armour.size() -1);
 			System.out.println("			-contains armour: "+ i);
 		}
 		i = "";

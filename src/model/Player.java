@@ -385,8 +385,9 @@ public class Player implements Serializable{
     	armour.remove(a);
     }
     
-    public void removeWeaponsWithHigherWeight(ItemWeight weight) {
-    	System.out.println("Dropping weapons");
+    public ArrayList<Weapon> removeWeaponsWithHigherWeight(ItemWeight weight) {
+    	ArrayList<Weapon> toDrop = new ArrayList<Weapon>();
+    	String s = "";
     	if (weapons != null) {
     		for (int i = 0; i < weapons.size(); i++) {
             	if (weapons.get(i).getWeight() == ItemWeight.NEGLIGIBLE)
@@ -395,16 +396,21 @@ public class Player implements Serializable{
                 	continue;
             	}
             	if (Utility.isWeightHeavier(weapons.get(i).getWeight(), weight)) {
+            		s+=weapons.get(i).getType();
+            		toDrop.add(weapons.get(i));
                 	weapons.remove(i);
             	}
         	}
         }
+    	System.out.println("Dropping weapons: "+s);
+    	return toDrop;
     }
 
     // removes armour from the array with a higher weight then the one sent in
     // ignores armour with negligible weight
-    public void removeArmourWithHigherWeight(ItemWeight weight) {
-    	System.out.println("Dropping armour");
+    public ArrayList<Armour> removeArmourWithHigherWeight(ItemWeight weight) {
+    	ArrayList<Armour> toDrop = new ArrayList<Armour>();
+    	String s = "";
     	if (armour != null) {
     		for (int i = 0; i < armour.size(); i++) {
         		if (armour.get(i).getWeight() == ItemWeight.NEGLIGIBLE)
@@ -414,10 +420,14 @@ public class Player implements Serializable{
             	}
 
             	if (Utility.isWeightHeavier(armour.get(i).getWeight(), weight)) {
+            		s+=armour.get(i).getType();
+            		toDrop.add(armour.get(i));
             		armour.remove(i);
             	}
         	}
     	}
+    	System.out.println("Dropping armour: "+s);
+    	return toDrop;
     }
 
     public void checkAndAddSunlight(){

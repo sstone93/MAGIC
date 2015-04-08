@@ -45,6 +45,34 @@ public class Weapon implements Serializable{
     	   this.weight = ItemWeight.LIGHT;
     	   this.gold   = 6;
        }
+       else if (type == WeaponName.BANE_SWORD) {
+    	   this.ranged = false;
+    	   this.length = 8;
+    	   this.speed = 2;//TODO
+    	   this.weight = ItemWeight.TREMENDOUS;
+    	   this.gold   = 20;
+       }
+       else if (type == WeaponName.DEVIL_SWORD) {
+    	   this.ranged = false;
+    	   this.length = 7;
+    	   this.speed = 3;//TODO
+    	   this.weight = ItemWeight.HEAVY;
+    	   this.gold   = 20;
+       }
+       else if (type == WeaponName.LIVING_SWORD) {
+    	   this.ranged = false;
+    	   this.length = 4;
+    	   this.speed = 2;//TODO
+    	   this.weight = ItemWeight.LIGHT;
+    	   this.gold   = 25;
+       }
+       else if (type == WeaponName.TRUESTEEL_SWORD) {
+    	   this.ranged = false;
+    	   this.length = 7;
+    	   this.speed = 1;//TODO
+    	   this.weight = ItemWeight.MEDIUM;
+    	   this.gold  = 25;
+       }
        else if (type == WeaponName.THRUSTING_SWORD) {
     	   this.ranged = false;
     	   this.length = 4;

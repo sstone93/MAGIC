@@ -604,7 +604,15 @@ public class ServerController extends Handler{
 				player.addGold(gold);
 				pile.takeMoney();
 				
-				network.send(player.getID(), "You've found " + gold + " gold pieces!");
+				if(gold > 0){
+					network.send(player.getID(), "You've found " + gold + " gold pieces!");
+				}
+				
+				if(treasures.isEmpty() && weapons.isEmpty() && armour.isEmpty() && gold == 0){
+					network.send(player.getID(), "You've emptied the treasure pile");
+					pile = null;
+				}
+				
 			}
 		}
     }
@@ -1319,23 +1327,39 @@ public class ServerController extends Handler{
         	ItemWeight weight = players.get(i).getCharacter().getWeight();
         	
         	if (players.get(i).hasTreasure(SmallTreasureName.LEAGUE_BOOTS_7.toString())) {
+        		network.send(players.get(i).getID(), "Using the '7-League Boots' for Weight Restrictions");
     			weight = ItemWeight.TREMENDOUS;
     		}
     		else if (players.get(i).hasTreasure(SmallTreasureName.POWER_BOOTS.toString()) && (weight == ItemWeight.MEDIUM || weight == ItemWeight.LIGHT || weight == ItemWeight.NEGLIGIBLE)){
+        		network.send(players.get(i).getID(), "Using the 'Power Boots' for Weight Restrictions");
     			weight = ItemWeight.HEAVY;
     		}
     		else if (players.get(i).hasTreasure(SmallTreasureName.QUICK_BOOTS.toString()) && (weight == ItemWeight.LIGHT || weight == ItemWeight.NEGLIGIBLE)) {
+        		network.send(players.get(i).getID(), "Using the 'Quick Boots' for Weight Restrictions");
     			weight = ItemWeight.MEDIUM;
     		}
     		else if (players.get(i).hasTreasure(SmallTreasureName.ELVEN_SLIPPERS.toString()) && (weight == ItemWeight.NEGLIGIBLE)) {
+        		network.send(players.get(i).getID(), "Using the 'Elven Slippers' for Weight Restrictions");
     			weight = ItemWeight.LIGHT;
     		}
     		else if (players.get(i).hasTreasure(SmallTreasureName.SHOES_OF_STEALTH.toString()) && (weight == ItemWeight.NEGLIGIBLE)) {
+        		network.send(players.get(i).getID(), "Using the 'Shoes of Stealth' for Weight Restrictions");
     			weight = ItemWeight.LIGHT;
     		}
-        		
-        	players.get(i).removeWeaponsWithHigherWeight(weight);
-        	players.get(i).removeArmourWithHigherWeight(weight);
+        	
+        	ArrayList<Weapon> w = players.get(i).removeWeaponsWithHigherWeight(weight);
+        	ArrayList<Armour> a = players.get(i).removeArmourWithHigherWeight(weight);
+        	if(w.size() > 0 || a.size() >0){
+        		for(Weapon x : w){
+        			network.send(players.get(i).getID(), "You were overburdened and dropped "+ x.getType());
+        		}
+        		for(Armour s : a){
+        			network.send(players.get(i).getID(), "You were overburdened and dropped "+ s.getType());
+        		}
+        		network.broadCast("A Treasure Pile was Created at: "+players.get(i).getLocation().parent.getName()+" "+players.get(i).getLocation().getClearingNumber());
+        		TreasurePile pile = new TreasurePile(new ArrayList<Treasure>(), a, w, 0);
+        		players.get(i).getLocation().setPile(pile);
+        	}
         }
         
         //Progresses to the next day or ends the game
