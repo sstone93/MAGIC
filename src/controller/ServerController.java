@@ -201,12 +201,14 @@ public class ServerController extends Handler{
 			}
 			if( m.getType() == MessageType.BLOCK){
 				Player blockTarget = charToPlayer((CharacterName) m.getData().get(0));
+				
 				block(blockTarget);
 				block(findPlayer(ID));
-				//System.out.println("test2");
-				//network.send(blockTarget.getID(), blockTarget);
-				//distributeCharacters();
-				//System.out.println("test3");
+				
+				if(finishedPlayers < playerCount){
+	    			distributeCharacters();
+	    		}
+				
 			}
 			if( m.getType() == MessageType.COMBAT_MOVES){
 				if(state == GameState.CHOOSE_COMBATMOVES){
@@ -650,7 +652,13 @@ public class ServerController extends Handler{
     	p.setFinishedBasic(true);
     	System.out.println("test1");
     	network.send(p.getID(), "NO PHASES LEFT");
-    	finishedPlayers +=1;
+    	
+    	if(!p.getDaylight()){
+    		p.setDaylight(true);//tell game their turn is done
+    		finishedPlayers +=1;
+    		System.out.println(p.getCharacter().getClass()+" finished day due to being BLOCKED");
+    	}
+    	
     }
 
     private void discoverMonstersWithSiteChits(Player player) {
@@ -1077,12 +1085,6 @@ public class ServerController extends Handler{
 				e.printStackTrace();
 			}
     	}
-
-    	try {
-			Thread.sleep(30);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
     	
     	//5. Finish phase collection and move on
     	state = GameState.NULL;
