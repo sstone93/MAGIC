@@ -32,6 +32,8 @@ public class Player implements Serializable{
     boolean finishedDaylight = false;
     boolean finishedBasic = false;
     boolean addedSunlight = false;
+    
+    public boolean actuallydone = false;
 
     Character character;
     CombatMoves moves;
@@ -62,6 +64,7 @@ public class Player implements Serializable{
         	finishedBasic = true;
         	addedSunlight = true;
         	goneInCave = true;
+        	actuallydone = true;
     	} else {
     		
     		blocked = false;
@@ -69,6 +72,7 @@ public class Player implements Serializable{
         	finishedBasic = false;
         	addedSunlight = false;
         	goneInCave = false;
+        	actuallydone = false;
         	
         	phases = new ArrayList<Phase>();
     		

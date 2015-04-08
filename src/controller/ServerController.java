@@ -158,8 +158,9 @@ public class ServerController extends Handler{
 						updateClients();	
 
 						//see if that was their last action
-						if(p.getDaylight()){
+						if(p.getDaylight() && !p.actuallydone){
 							if (p.isDead() == false) {
+								p.actuallydone = true;
 								finishedPlayers += 1;
 								network.send(ID, "NO PHASES LEFT");
 							}
@@ -342,25 +343,28 @@ public class ServerController extends Handler{
 			for (Treasure t: treasures) { 
 				if (t.getName().toString().trim().equals(temp[1].trim())) {
 					if (player.getGold() >= t.getGold()) {
+						
 						if (t instanceof TreasureWithinTreasure) {
-							network.send(player.getID(), "YOU BOUGHT" + t.getName() );
+							network.send(player.getID(), "You bought (and opened!) the " + t.getName() );
+							
 							ArrayList<Treasure> treasure = t.getTreasures();
 							ArrayList<Weapon> weapon     = t.getWeapons();
 							ArrayList<Armour> armour     = t.getArmour();
 							
-							player.addTreasure(t);
+							network.send(player.getID(), t.getName() + " contained: " + t.getGold()+" gold");
+							player.addGold(t.getGold());
 							
 							for (int i = 0; i < treasure.size(); i++) {
 								player.addTreasure(treasure.get(i));
-								network.send(player.getID(), t.getName() + " INCLUDES: " + treasure.get(i).getName() );
+								network.send(player.getID(), t.getName() + " contained: " + treasure.get(i).getName() );
 							}
 							for (int i = 0; i < weapon.size(); i++) {
 								player.addWeapon(weapon.get(i));
-								network.send(player.getID(), t.getName() + " INCLUDES: " + weapon.get(i).getType());
+								network.send(player.getID(), t.getName() + " contained: " + weapon.get(i).getType());
 							}
 							for (int i = 0; i < armour.size(); i++) {
 								player.addArmour(armour.get(i));
-								network.send(player.getID(), t.getName() + " INCLUDES: " + armour.get(i).getType() );
+								network.send(player.getID(), t.getName() + " contained: " + armour.get(i).getType() );
 							}
 							
 							
@@ -678,11 +682,10 @@ public class ServerController extends Handler{
     	p.setBlocked(true);
     	p.getPhases().clear();
     	p.setFinishedBasic(true);
-    	System.out.println("test1");
     	network.send(p.getID(), "NO PHASES LEFT");
     	
-    	if(!p.getDaylight()){
-    		p.setDaylight(true);//tell game their turn is done
+    	if(!p.actuallydone){
+    		p.actuallydone = true;
     		finishedPlayers +=1;
     		System.out.println(p.getCharacter().getClass()+" finished day due to being BLOCKED");
     	}
