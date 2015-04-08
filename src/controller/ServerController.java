@@ -484,9 +484,11 @@ public class ServerController extends Handler{
     public void block(Monster monster) {
     	ArrayList<Player> blockablePlayers = monster.getLocation().getOccupants();
     	for (int i = 0; i < blockablePlayers.size(); i++) {
-    		if (!blockablePlayers.get(i).isHidden()) {
+    		if (blockablePlayers.get(i).isHidden() == false && blockablePlayers.get(i).isBlocked() == false) {
+    			monster.setBlocked(true);
     			network.send(blockablePlayers.get(i).getID(), "Monster has blocked you!");
     			block(blockablePlayers.get(i));
+    			break;
     		}
     	}
     }
