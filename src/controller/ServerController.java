@@ -1327,24 +1327,27 @@ public class ServerController extends Handler{
         	ItemWeight weight = players.get(i).getCharacter().getWeight();
         	
         	if (players.get(i).hasTreasure(SmallTreasureName.LEAGUE_BOOTS_7.toString())) {
-        		network.send(players.get(i).getID(), "Using the '7-League Boots' for Weight Restrictions");
+        		network.send(players.get(i).getID(), "Using the '7-League Boots' for weight restrictions");
     			weight = ItemWeight.TREMENDOUS;
     		}
     		else if (players.get(i).hasTreasure(SmallTreasureName.POWER_BOOTS.toString()) && (weight == ItemWeight.MEDIUM || weight == ItemWeight.LIGHT || weight == ItemWeight.NEGLIGIBLE)){
-        		network.send(players.get(i).getID(), "Using the 'Power Boots' for Weight Restrictions");
+        		network.send(players.get(i).getID(), "Using the 'Power Boots' for weight restrictions");
     			weight = ItemWeight.HEAVY;
     		}
     		else if (players.get(i).hasTreasure(SmallTreasureName.QUICK_BOOTS.toString()) && (weight == ItemWeight.LIGHT || weight == ItemWeight.NEGLIGIBLE)) {
-        		network.send(players.get(i).getID(), "Using the 'Quick Boots' for Weight Restrictions");
+        		network.send(players.get(i).getID(), "Using the 'Quick Boots' for weight restrictions");
     			weight = ItemWeight.MEDIUM;
     		}
     		else if (players.get(i).hasTreasure(SmallTreasureName.ELVEN_SLIPPERS.toString()) && (weight == ItemWeight.NEGLIGIBLE)) {
-        		network.send(players.get(i).getID(), "Using the 'Elven Slippers' for Weight Restrictions");
+        		network.send(players.get(i).getID(), "Using the 'Elven Slippers' for weight restrictions");
     			weight = ItemWeight.LIGHT;
     		}
     		else if (players.get(i).hasTreasure(SmallTreasureName.SHOES_OF_STEALTH.toString()) && (weight == ItemWeight.NEGLIGIBLE)) {
-        		network.send(players.get(i).getID(), "Using the 'Shoes of Stealth' for Weight Restrictions");
+        		network.send(players.get(i).getID(), "Using the 'Shoes of Stealth' for weight restrictions");
     			weight = ItemWeight.LIGHT;
+    		}
+    		else{
+    			network.send(players.get(i).getID(), "Using base character weight class for weight restrictions");
     		}
         	
         	ArrayList<Weapon> w = players.get(i).removeWeaponsWithHigherWeight(weight);

@@ -413,12 +413,6 @@ public class Player implements Serializable{
     	String s = "";
     	if (armour != null) {
     		for (int i = 0; i < armour.size(); i++) {
-        		if (armour.get(i).getWeight() == ItemWeight.NEGLIGIBLE)
-                	continue;
-            	if (armour.get(i).getWeight() == weight) {
-                	continue;
-            	}
-
             	if (Utility.isWeightHeavier(armour.get(i).getWeight(), weight)) {
             		s+=armour.get(i).getType();
             		toDrop.add(armour.get(i));

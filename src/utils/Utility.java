@@ -49,25 +49,34 @@ public class Utility {
 
     // checking: the one you're checking to see if it has a heavier weight
     public static boolean isWeightHeavier(ItemWeight checking, ItemWeight against) {
-        if (checking == Utility.ItemWeight.NEGLIGIBLE)
-            return false;
+    	
+    	int c=0;
+    	int a=0;
+    	
+    	if(checking == ItemWeight.LIGHT)
+    		c=1;
+    	if(checking == ItemWeight.MEDIUM)
+    		c=2;
+    	if(checking == ItemWeight.HEAVY)
+    		c=3;
+    	if(checking == ItemWeight.TREMENDOUS)
+    		c=4;
+    	
+    	if(against == ItemWeight.LIGHT)
+    		a=1;
+    	if(against == ItemWeight.MEDIUM)
+    		a=2;
+    	if(against == ItemWeight.HEAVY)
+    		a=3;
+    	if(against == ItemWeight.TREMENDOUS)
+    		a=4;
+    	
+    	if(c > a){
+    		return true;
+    	}else{
+    		return false;
+    	}
 
-        if (checking == Utility.ItemWeight.HEAVY)
-            return true;
-
-        if (checking == Utility.ItemWeight.LIGHT) {
-            if (against == Utility.ItemWeight.NEGLIGIBLE)
-                return true;
-            else
-                return false;
-        }
-        if (checking == Utility.ItemWeight.MEDIUM) {
-            if (against == Utility.ItemWeight.HEAVY)
-                return false;
-            else
-                return true;
-        }
-        return false;
     }
 
     public static String getTileImage(TileName name) {
