@@ -63,8 +63,15 @@ public class CombatPanel extends JPanel{
 		JButton btnSelect = new JButton("Select");
 		btnSelect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				control.handleCombatMoves((Attacks)attack.getSelectedItem(), (Defenses)defense.getSelectedItem(), 
-						(Maneuvers)maneuvers.getSelectedItem(), (int)attackFatigue.getSelectedItem(), (int)maneuversFatigue.getSelectedItem());
+				
+				if((int)attackFatigue.getSelectedItem() + (int) maneuversFatigue.getSelectedItem() > 2){
+					control.model.addMessage("YOU CANNOT USE MORE THAN 2 FATIGUE AT ONCE");
+					control.view.updateMessageBox();
+				}else{
+					control.model.addMessage("You used Move: "+(Attacks)attack.getSelectedItem()+", You used Manuver: "+(Maneuvers)maneuvers.getSelectedItem()+", You moved shield to position: "+(Defenses)defense.getSelectedItem());
+					control.handleCombatMoves((Attacks)attack.getSelectedItem(), (Defenses)defense.getSelectedItem(), 
+							(Maneuvers)maneuvers.getSelectedItem(), (int)attackFatigue.getSelectedItem(), (int)maneuversFatigue.getSelectedItem());
+				}
 			}
 		});
 		

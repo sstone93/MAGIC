@@ -203,7 +203,10 @@ public class ServerController extends Handler{
 				Player blockTarget = charToPlayer((CharacterName) m.getData().get(0));
 				block(blockTarget);
 				block(findPlayer(ID));
-				distributeCharacters();
+				//System.out.println("test2");
+				//network.send(blockTarget.getID(), blockTarget);
+				//distributeCharacters();
+				//System.out.println("test3");
 			}
 			if( m.getType() == MessageType.COMBAT_MOVES){
 				if(state == GameState.CHOOSE_COMBATMOVES){
@@ -645,6 +648,7 @@ public class ServerController extends Handler{
     	p.setBlocked(true);
     	p.getPhases().clear();
     	p.setFinishedBasic(true);
+    	System.out.println("test1");
     	network.send(p.getID(), "NO PHASES LEFT");
     	finishedPlayers +=1;
     }
@@ -1074,6 +1078,12 @@ public class ServerController extends Handler{
 			}
     	}
 
+    	try {
+			Thread.sleep(30);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+    	
     	//5. Finish phase collection and move on
     	state = GameState.NULL;
     	System.out.println("ALL PLAYERS FINISHED DAYLIGHT PHASE.");
@@ -2148,7 +2158,6 @@ public class ServerController extends Handler{
     		try {
 				Thread.sleep(20);
 			} catch (InterruptedException e) {
-				// Auto-generated catch block
 				e.printStackTrace();
 			}
     	}
