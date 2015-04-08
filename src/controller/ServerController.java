@@ -977,7 +977,9 @@ public class ServerController extends Handler{
     	switch(a.getAction()[0]) {
     	case MOVE:
     		boolean move = board.move(p, a);
-    		network.send(p.getID(), "Are you moving?: " + move);
+    		if (move == false) {
+    			network.send(p.getID(), "Unable to move!");
+    		}
     		break;
     	case HIDE:
     		hide(p);
