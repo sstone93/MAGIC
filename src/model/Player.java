@@ -33,6 +33,7 @@ public class Player implements Serializable{
     boolean finishedDaylight = false;
     boolean finishedBasic = false;
     boolean addedSunlight = false;
+    boolean usedLantern = false;
     
     public boolean actuallydone = false;
 
@@ -66,6 +67,7 @@ public class Player implements Serializable{
         	addedSunlight = true;
         	goneInCave = true;
         	actuallydone = true;
+        	usedLantern = true;
     	} else {
     		
     		blocked = false;
@@ -73,6 +75,7 @@ public class Player implements Serializable{
         	finishedBasic = false;
         	addedSunlight = false;
         	actuallydone = false;
+        	usedLantern = false;
  
         	if(location.getType() != ClearingType.CAVE){
         		goneInCave = false;
@@ -115,6 +118,8 @@ public class Player implements Serializable{
         	//7=league boots = move
         	if(this.hasTreasure(SmallTreasureName.LEAGUE_BOOTS_7.toString()))
         		phases.add(new Phase(PhaseType.TREASURE, new Actions[] {Actions.MOVE, Actions.PASS}));
+        	if(this.hasTreasure(SmallTreasureName.SHIELDED_LANTERN.toString()))
+        		updateLantern();
     	}
     }
 
@@ -124,6 +129,19 @@ public class Player implements Serializable{
     	} else if (this.location.dwelling == null){
     		for(Phase p : phases){
     			if(p.equals(new Phase(PhaseType.SPECIAL, Actions.values()))){
+    				phases.remove(p);
+    				break;
+    			}
+    		}
+    	}
+    }
+    
+    public void updateLantern(){
+    	if(!usedLantern && this.location.getType() == ClearingType.CAVE){
+    		phases.add(new Phase(PhaseType.TREASURE, Actions.values()));
+    	} else {
+    		for(Phase p : phases){
+    			if(p.equals(new Phase(PhaseType.TREASURE, Actions.values()))){
     				phases.remove(p);
     				break;
     			}
@@ -529,6 +547,12 @@ public class Player implements Serializable{
 				System.out.println(p+" equals "+data);
 				System.out.println("USED CAPTAIN SPECIAL");
 				((Captain) this.getCharacter()).usedSpecial = true;
+				phases.remove(p);
+				break;
+			} else if(hasTreasure(SmallTreasureName.SHIELDED_LANTERN.toString()) && p.equals(new Phase(PhaseType.TREASURE, Actions.values()))){
+				System.out.println(p+" equals "+data);
+				System.out.println("USED SHEILDED LANTERN");
+				usedLantern = true;
 				phases.remove(p);
 				break;
 			}else if(p.equals(data)){

@@ -88,6 +88,7 @@ public class Garrison implements Serializable{
 			this.treasures.add(new SmallTreasure(SmallTreasureName.POWER_GAUNTLETS));
 			this.treasures.add(new SmallTreasure(SmallTreasureName.POULTICE_OF_HEALTH));
 			this.treasures.add(new SmallTreasure(SmallTreasureName.REFLECTION_GREASE));
+			this.treasures.add(new SmallTreasure(SmallTreasureName.SHIELDED_LANTERN));
 			
 			//LARGE TREASURES FOR TESTING
 			this.treasures.add(new LargeTreasure(LargeTreasureName.REGENT_OF_JEWELS));

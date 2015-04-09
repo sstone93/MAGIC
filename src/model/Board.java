@@ -629,6 +629,9 @@ public class Board implements Serializable{
 		if(player.getCharacter() instanceof Captain){
 			player.updateSpecial();
 		}
+		if(player.hasTreasure(SmallTreasureName.SHIELDED_LANTERN.toString())){
+			player.updateLantern();
+		}
     }
 
     /**
