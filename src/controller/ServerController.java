@@ -296,7 +296,12 @@ public class ServerController extends Handler{
 		int roll;
 		boolean oneDie = Utility.checkRollOneDie(player, "hide");
 		if (oneDie) {
-			network.send(player.getID(), "Congrats, you had the shoes of stealth which allows you to roll only 1 die!");
+			if (player.hasTreasure(LargeTreasureName.LUCKY_CHARM.toString())) {
+				network.send(player.getID(), "Congrats, you had the lucky charm which allows you to roll only 1 die!");
+			}
+			else {
+				network.send(player.getID(), "Congrats, you had the shoes of stealth which allows you to roll only 1 die!");
+			}
 			roll = rollForTables(player, 1);
 		}
 		else {
@@ -319,9 +324,12 @@ public class ServerController extends Handler{
 	 */
 	public void rest(Player player) {
         player.setFatigue(0);
+        if (player.hasTreasure((Utility.SmallTreasureName.POULTICE_OF_HEALTH).toString())) {
+        	network.send(player.getID(), "You heal an extra wound by using the Poulice of Health!");
+        }
         if (player.getHealth() > 0) {
         	player.setHealth(player.getHealth() - 1);
-        	if (player.getTreasures().contains(Utility.SmallTreasureName.POULTICE_OF_HEALTH) && player.getHealth() > 0) {
+        	if (player.hasTreasure((Utility.SmallTreasureName.POULTICE_OF_HEALTH).toString()) && player.getHealth() > 0) {
         		player.setHealth(player.getHealth() - 1);
         	}
         }
@@ -1495,7 +1503,8 @@ public class ServerController extends Handler{
 	    	else {
 	    		int fatigue = player.getMoves().getAttackFatigue() + player.getMoves().getManeuverFatigue();
 	    		
-	    		if (player.getTreasures().contains(Utility.SmallTreasureName.REFLECTION_GREASE)) {
+	    		if (player.hasTreasure((Utility.SmallTreasureName.REFLECTION_GREASE).toString())) {
+	    			network.send(player.getID(), "You use less fatigue due to the Reflection Grease!");
 	    			fatigue--;
 	    		}
 	    		
@@ -1577,11 +1586,13 @@ public class ServerController extends Handler{
         		int attackerFatigue = attacker.getMoves().getAttackFatigue() + attacker.getMoves().getManeuverFatigue();
         		int defenderFatigue = defender.getMoves().getAttackFatigue() + defender.getMoves().getManeuverFatigue();
         		
-	    		if (attacker.getTreasures().contains(Utility.SmallTreasureName.REFLECTION_GREASE)) {
+	    		if (attacker.hasTreasure((Utility.SmallTreasureName.REFLECTION_GREASE).toString())) {
 	    			attackerFatigue--;
+	    			network.send(attacker.getID(), "You use less fatigue due to the Reflection Grease!");
 	    		}
-	    		if (defender.getTreasures().contains(Utility.SmallTreasureName.REFLECTION_GREASE)) {
+	    		if (defender.hasTreasure((Utility.SmallTreasureName.REFLECTION_GREASE).toString())) {
 	    			defenderFatigue--;
+	    			network.send(defender.getID(), "You use less fatigue due to the Reflection Grease!");
 	    		}
         		
         		attacker.setFatigue(attacker.getFatigue() + attackerFatigue);
@@ -1783,7 +1794,12 @@ public class ServerController extends Handler{
 			int roll;
 			boolean oneDie = Utility.checkRollOneDie(player, "missile");
 			if (oneDie) {
-				network.send(player.getID(), "Congrats, you are an elf so you only roll one die!");
+				if (player.hasTreasure(LargeTreasureName.LUCKY_CHARM.toString())) {
+					network.send(player.getID(), "Congrats, you have the lucky charm so you only roll one die!");
+				}
+				else {
+					network.send(player.getID(), "Congrats, you are an elf so you only roll one die!");
+				}
 				roll = rollForTables(player, 1);
 			}
 			else {
