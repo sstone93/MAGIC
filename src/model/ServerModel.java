@@ -1,4 +1,4 @@
-package model;
+/*package model;
 
 public class ServerModel {
 	
@@ -16,4 +16,4 @@ public class ServerModel {
 	}
 
 		
-}
+}*/

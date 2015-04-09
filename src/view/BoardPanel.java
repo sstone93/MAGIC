@@ -267,7 +267,6 @@ public class BoardPanel extends JLayeredPane {
 	
 	@SuppressWarnings("rawtypes")
 	public void update(){
-		System.out.println("In boardPanel update");
 		//1. GETS THE BOARD FROM THE MODEL
 		Board b = control.model.getBoard();
 		if (b != null) {

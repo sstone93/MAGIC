@@ -127,8 +127,10 @@ public class View extends JFrame {
 		Player p = control.model.getPlayer();
 		if (p != null){
 			characterInfoPanel.update();
-			scrollPanel.getVerticalScrollBar().setValue(p.getLocation().y - 250);
-			scrollPanel.getHorizontalScrollBar().setValue(p.getLocation().x - 400);
+			if(!p.isDead()){//since dead people are not shown it shouldn't center on their location
+				scrollPanel.getVerticalScrollBar().setValue(p.getLocation().y - 250);
+				scrollPanel.getHorizontalScrollBar().setValue(p.getLocation().x - 400);
+			}
 			//if the blockpanel should appear (other people in your clearing, and you are not blocked)
 			if(p.getLocation().getBlockable(p) > 0 && p.isBlocked() == false && control.blockState == true && !control.deadstate){
 				blockPanel.update();
