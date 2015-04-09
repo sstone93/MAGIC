@@ -14,6 +14,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 import controller.ServerController;
 
@@ -24,6 +26,8 @@ public class ServerView extends JFrame implements ActionListener{
 	JButton select = new JButton("SELECT");
 	JButton start = new JButton("START GAME");
 	JComboBox rolls = new JComboBox();
+	JLabel lbl = new JLabel("The next roll will be: ");
+	JTextField nextRoll = new JTextField("not fixed");
 	ServerController control;
 	
 	//ChitButtonGrid buttons;
@@ -41,8 +45,6 @@ public class ServerView extends JFrame implements ActionListener{
 		try {
 			stop.setIcon(new ImageIcon(ImageIO.read(this.getClass().getResource("/images/stop.png"))));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		
 		stop.addActionListener(this);  
@@ -64,23 +66,32 @@ public class ServerView extends JFrame implements ActionListener{
 			select.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					control.nextRoll = rolls.getSelectedIndex();
-					System.out.println(control.nextRoll);
+					//System.out.println(control.nextRoll);
+					update();
 				}
 			});
 
 			select.setBounds(110,30,130,20);
 			add(select);
 			
-			//Causes network shutdown by clicking the close button on the window
-			this.addWindowListener( new WindowAdapter() {
-	            @Override
-	            public void windowClosing(WindowEvent we) {
-	                System.out.println("Window Was Closed: Triggering Shutdown");
-	                control.network.stop();
-	                System.exit(0);
-	            }
-	        } );	
+			lbl.setBounds(110,90,120,20);
+			add(lbl);
+			
+			nextRoll.setBounds(240,90,50,20);
+			nextRoll.setEditable(false);
+			add(nextRoll);
+				
 		}
+		
+		//Causes network shutdown by clicking the close button on the window
+		this.addWindowListener( new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent we) {
+                System.out.println("Window Was Closed: Triggering Shutdown");
+                control.network.stop();
+                System.exit(0);
+            }
+        } );
 		
 		start.setBounds(110,60,130,20);
 		start.addActionListener(new ActionListener() {
@@ -90,7 +101,6 @@ public class ServerView extends JFrame implements ActionListener{
 				try {
 					control.network.server.close();
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -105,6 +115,15 @@ public class ServerView extends JFrame implements ActionListener{
 		if (this.stop == e.getSource()){
 			control.network.stop();
 			System.exit(0);
+		}
+	}
+	
+	public void update(){
+		if(control.nextRoll == 0){
+			nextRoll.setText("not fixed");
+		}
+		else{
+			nextRoll.setText(Integer.toString(control.nextRoll));
 		}
 	}
 }
