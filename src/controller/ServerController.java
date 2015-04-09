@@ -67,10 +67,10 @@ public class ServerController extends Handler{
 
 		//instanciate the network, gives the network object a reference to this controller
 		this.network = new NetworkServer(this);
-		System.out.println("Network Server Created.");
+		//System.out.println("Network Server Created.");
 
 		//waits until player objects are done being made
-		System.out.println("Now waiting for clients to connect.");
+		//System.out.println("Now waiting for clients to connect.");
 		
     	try {
     		ourScanner = new Scanner(new File("settings.txt"));
@@ -114,7 +114,7 @@ public class ServerController extends Handler{
 		if(message instanceof String){
 			String text = ((String) message );
 			if(text.equalsIgnoreCase("START GAME")){
-				System.out.println("Server Controller told to START THE GAME.");
+				//System.out.println("Server Controller told to START THE GAME.");
 				startGame();
 			}
 		}
@@ -215,8 +215,8 @@ public class ServerController extends Handler{
 				if(state == GameState.CHOOSE_COMBATMOVES){
 					recievedCombat += 1;
 					findPlayer(ID).setMoves((CombatMoves) m.getData().get(0));
-					System.out.println(findPlayer(ID).getCharacter().getName());
-					System.out.println(findPlayer(ID).getMoves().getAttack());
+					//System.out.println(findPlayer(ID).getCharacter().getName());
+					//System.out.println(findPlayer(ID).getMoves().getAttack());
 				}else{
 					network.send(ID, "NOT ACCEPTING COMBAT MOVES ATM");
 				}
@@ -261,7 +261,7 @@ public class ServerController extends Handler{
 						this.addedPlayers += 1;
 						temp.getCharacter().setStartingLocation((GarrisonName) m.getData().get(1)); //sets the starting location
 						players.add(temp);
-						System.out.println(temp.getCharacter().getName()+" has been selected");
+						//System.out.println(temp.getCharacter().getName()+" has been selected");
 					}
 
 				}else{
@@ -282,7 +282,7 @@ public class ServerController extends Handler{
 				return players.get(i);
 			}
 		}
-		System.out.println("failed to find player");
+		//System.out.println("failed to find player");
 		return null;
 	}
 
@@ -333,7 +333,7 @@ public class ServerController extends Handler{
 	 */
 	public void trade(Player player, Object object) {
 		if (object == null) {
-			network.send(player.getID(), "NOTHING TO TRADE HERE");
+			network.send(player.getID(), "Nothing to trade here.");
 			return;
 		}
 		if (object.toString().contains("BUY")) {			
@@ -371,7 +371,7 @@ public class ServerController extends Handler{
 						}
 						else {
 							player.addTreasure(t);
-							network.send(player.getID(), "YOU BOUGHT " + t.getName() + "!");
+							network.send(player.getID(), "You bought " + t.getName() + "!");
 						}
 						player.removeGold(t.getGold());
 						player.getLocation().getDwelling().removeTreasure(t);
@@ -393,7 +393,7 @@ public class ServerController extends Handler{
 							player.removeGold(a.getGold());
 							player.addArmour(a);
 							player.getLocation().getDwelling().removeArmour(a);
-							network.send(player.getID(), "YOU BOUGHT " + a.getType() + "!");
+							network.send(player.getID(), "You bought " + a.getType() + "!");
 							boughtSomething = true;
 							break;
 						}else {
@@ -410,7 +410,7 @@ public class ServerController extends Handler{
 						player.removeGold(w.getGold());
 						player.addWeapon(w);
 						player.getLocation().getDwelling().removeWeapon(w);
-						network.send(player.getID(), "YOU BOUGHT " + w.getType() + "!");
+						network.send(player.getID(), "You bought " + w.getType() + "!");
 						boughtSomething = true;
 						break;
 					}else {
@@ -427,7 +427,7 @@ public class ServerController extends Handler{
 			for (Treasure t: treasures) {
 				if (t.getName().toString().trim().equals(temp[1].trim())) {
 					player.addGold(t.getGold());
-					network.send(player.getID(), "YOU SOLD " + t.getName() + "!");
+					network.send(player.getID(), "You sold " + t.getName() + "!");
 					player.getLocation().getDwelling().addTreasure(t);
 					player.removeTreasure(t);
 					soldSomething = true;
@@ -439,7 +439,7 @@ public class ServerController extends Handler{
 				for (Armour a: armour) {
 					if (a.getType().toString().trim().equals(temp[1].trim())) {
 						player.addGold(a.getGold());
-						network.send(player.getID(), "YOU SOLD " + a.getType() + "!");
+						network.send(player.getID(), "You sold " + a.getType() + "!");
 						player.getLocation().getDwelling().addArmour(a);
 						player.removeArmour(a);
 						soldSomething = true;
@@ -452,7 +452,7 @@ public class ServerController extends Handler{
 				for (Weapon w: weapons) {
 					if (w.getType().toString().trim().equals(temp[1].trim())) {
 						player.addGold(w.getGold());
-						network.send(player.getID(), "YOU SOLD " + w.getType() + "!");
+						network.send(player.getID(), "You sold " + w.getType() + "!");
 						player.getLocation().getDwelling().addWeapon(w);
 						player.removeWeapon(w);
 						soldSomething = true;
@@ -695,7 +695,7 @@ public class ServerController extends Handler{
     	if(!p.actuallydone){
     		p.actuallydone = true;
     		finishedPlayers +=1;
-    		System.out.println(p.getCharacter().getClass()+" finished day due to being BLOCKED");
+    		//System.out.println(p.getCharacter().getClass()+" finished day due to being BLOCKED");
     	}
     	
     }
@@ -707,8 +707,8 @@ public class ServerController extends Handler{
 		TileType     type        = player.getLocation().parent.getType();
 		MonsterName  monsterName = null;
 		
-		System.out.println("warning chit name: " + warningName);
-		System.out.println("tile type: " + type);
+		//System.out.println("warning chit name: " + warningName);
+		//System.out.println("tile type: " + type);
 		
 		if (warningChit.hasSummoned() == false) {
 			if (type == TileType.WOODS) {
@@ -780,7 +780,7 @@ public class ServerController extends Handler{
 	    		if (mapChit.hasSummoned() == true) {
 	    			continue;
 	    		}
-	    		System.out.println("!!! map chit name: " + mapChit.getName());
+	    		//System.out.println("!!! map chit name: " + mapChit.getName());
 	    		monsterName          = null;
 	    		SoundChits soundName = mapChit.getName();
 	
@@ -889,7 +889,7 @@ public class ServerController extends Handler{
     	ArrayList<Tile> tiles = board.tiles;
     	for (int i = 0; i < tiles.size(); i++) {
     		Tile tile = tiles.get(i);
-    		//System.out.println("tile and type : " + tile.getName() + ", " + tile.getType() + " with warning chit: " + tile.getWarningChit() + " map chit: " + tile.getMapChit());
+    		System.out.println("tile and type : " + tile.getName() + ", " + tile.getType() + " with warning chit: " + tile.getWarningChit() + " map chit: " + tile.getMapChit());
     		ArrayList<Clearing> clearings = tile.getClearings();
     		for (Clearing c: clearings) {
     			ArrayList<Monster> monsters = c.getMonsters();
@@ -988,8 +988,19 @@ public class ServerController extends Handler{
     	switch(a.getAction()[0]) {
     	case MOVE:
     		boolean move = board.move(p, a);
+    		String[] temp = ((String) a.getExtraInfo()).split(" ");
+        	Clearing newClearing =  board.tiles.get(board.convertTileName(TileName.valueOf(temp[0]))).getClearing(Integer.parseInt(temp[1]));
+        	
     		if (move == false) {
-    			network.send(p.getID(), "Unable to move!");
+    			if(p.getLastMove() == newClearing){
+    				network.send(p.getID(), newClearing.parent.getName() + " " + newClearing.location + " is a mountain, move again to climb it!");
+    			}
+    			else{
+    				network.send(p.getID(), "Unable to move!");
+    			}
+    		}
+    		else{
+    			network.send(p.getID(), "You moved to " + newClearing.parent.getName() + " " + newClearing.location);
     		}
     		break;
     	case HIDE:
@@ -1023,7 +1034,7 @@ public class ServerController extends Handler{
      */
     public void endGame() {
 
-    	System.out.println("End Game Called");
+    	//System.out.println("End Game Called");
         Player winner = null;
         Player player = null;
 
@@ -1100,11 +1111,12 @@ public class ServerController extends Handler{
     	distributeCharacters();		//tell the client's their options
 
     	//1. Send each player their notice for 2 basic moves
-    	for (int i = 0; i < players.size(); i++) {
+    	//Commented out because we don't need to send to everyone AND broadcast, right?
+    	/*for (int i = 0; i < players.size(); i++) {
     		if (players.get(i).isDead() == false) {
     			network.send(players.get(i).getID(), "SEND MOVES");
     		}
-    	}
+    	}*/
     	
     	network.broadCast("SEND MOVES");
 
@@ -1128,7 +1140,7 @@ public class ServerController extends Handler{
     	
     	//5. Finish phase collection and move on
     	state = GameState.NULL;
-    	System.out.println("ALL PLAYERS FINISHED DAYLIGHT PHASE.");
+    	//System.out.println("ALL PLAYERS FINISHED DAYLIGHT PHASE.");
     }
 
     public void collectCombat(){
@@ -1157,7 +1169,7 @@ public class ServerController extends Handler{
 			}
     	}	//TODO HANDLE PLAYERS DROPPING OUT DURING THIS STEP
     	state = GameState.NULL;
-    	System.out.println("FINISH COLLECTING COMBATTARGET");
+    	//System.out.println("FINISH COLLECTING COMBATTARGET");
     }
 
     // sets specific monsters (based on the monster roll) to prowling
@@ -1215,12 +1227,12 @@ public class ServerController extends Handler{
     			monster = prowlingMonsters.get(i);
 
     			if (monster.isProwling()) {
-    				System.out.println("MONSTER IS MOVING");
+    				//System.out.println("MONSTER IS MOVING");
     				// then they can prowl
     				monster.move();
     			}
     			if (!monster.isBlocked()) { // they can block others if they're not already blocked
-					System.out.println("MONSTER BLOCKING");
+					//System.out.println("MONSTER BLOCKING");
 					block(monster);
 				}
     		}
@@ -1305,7 +1317,7 @@ public class ServerController extends Handler{
             		for (int j = 0; j < players.get(i).getTarget().size(); j++) {
             			encounter(players.get(i), players.get(i).getTarget().get(j));
             		}
-            		System.out.println("Finished encounter");
+            		//System.out.println("Finished encounter");
             	}
             	players.get(i).removeTarget();
             }
@@ -1315,7 +1327,7 @@ public class ServerController extends Handler{
             		for (int j = 0; j < players.get(i).getMonsterTarget().size(); j++) {
             			encounter(players.get(i), players.get(i).getMonsterTarget().get(j));
             		}
-            		System.out.println("Finished encounter");
+            		//System.out.println("Finished encounter");
             	}
             	players.get(i).removeMonsterTarget();
             }
@@ -1423,7 +1435,7 @@ public class ServerController extends Handler{
 
 	    	monster.setMoves();
 
-	    	System.out.println("got combat moves");
+	    	//System.out.println("got combat moves");
 	    	state = GameState.NULL;
 
 	    	if (player.getMoves() == null) {
@@ -1503,7 +1515,7 @@ public class ServerController extends Handler{
     			}
         	}
 
-        	System.out.println("got combat moves");
+        	//System.out.println("got combat moves");
         	state = GameState.NULL;
 
 
@@ -2241,7 +2253,7 @@ public class ServerController extends Handler{
     		this.board = new Board(players); //instanciate the model
     	}
     	
-		System.out.println("Server Models Created.");
+		//System.out.println("Server Models Created.");
 
 		//starts the game (first thing called distributes characters and board
 		startDay();								//starts the game!

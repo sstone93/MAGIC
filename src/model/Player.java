@@ -319,6 +319,7 @@ public class Player implements Serializable{
     }
 
     public void kill() {
+    	this.location.removeOccupant(this);
     	dead = true;
     	phases.clear();
     }

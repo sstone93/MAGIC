@@ -38,18 +38,18 @@ public class ClientController extends Handler{
 		
 		//instanciate the networking
 		this.network = new NetworkClient(this, serverIP);
-		System.out.println("NetworkClient Successfully Created.");
+		//System.out.println("NetworkClient Successfully Created.");
 				
 		//instantiate the model
 		this.model = new ClientModel();
-		System.out.println("Client Model Successfully Created.");
+		//System.out.println("Client Model Successfully Created.");
 		
 		//instantiate the view
 		this.view = new View(this);
 		state = GameState.CHOOSE_CHARACTER;
 		view.setVisible(true);									//Activates the GUI
 		
-		System.out.println("View Successfully Created.");
+		//System.out.println("View Successfully Created.");
 		view.update();//can maybe change this to view.updateNotBoard
 	}
 	
@@ -61,7 +61,7 @@ public class ClientController extends Handler{
 		try {
 			ourScanner = new Scanner(new File("settings.txt"));
 			ip = ourScanner.nextLine();
-			System.out.println("Using Server IP: "+ip);
+			//System.out.println("Using Server IP: "+ip);
 			ourScanner.close();
 			
 		} catch (FileNotFoundException e) {
@@ -204,8 +204,6 @@ public class ClientController extends Handler{
 		mes.add(monsters);
 		network.send(new Message(MessageType.COMBAT_TARGET, mes));
 		model.addMessage("Sent target selection");
-		System.out.println(chars);
-		System.out.println(monsters);
 		state = GameState.NULL;
 		view.updateNonBoardGUI();
 	}
