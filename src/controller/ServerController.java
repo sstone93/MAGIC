@@ -987,7 +987,11 @@ public class ServerController extends Handler{
     public void handleAction(Player p, Phase a){
     	switch(a.getAction()[0]) {
     	case MOVE:
+    		
+    		
+    		Clearing old = p.getLocation();
     		boolean move = board.move(p, a);
+    		
     		String[] temp = ((String) a.getExtraInfo()).split(" ");
         	Clearing newClearing =  board.tiles.get(board.convertTileName(TileName.valueOf(temp[0]))).getClearing(Integer.parseInt(temp[1]));
         	
@@ -1001,6 +1005,7 @@ public class ServerController extends Handler{
     		}
     		else{
     			network.send(p.getID(), "You moved to " + newClearing.parent.getName() + " " + newClearing.location);
+    			applyWeightRestrictions(p, old);//MAKE IT APPLY TO A SINGLE PALYER
     		}
     		break;
     	case HIDE:
@@ -1042,9 +1047,6 @@ public class ServerController extends Handler{
             player = players.get(i);
             if (winner == null)
                 winner = players.get(i);
-
-            player.removeArmourWithHigherWeight(player.getCharacter().getWeight());
-            player.removeWeaponsWithHigherWeight(player.getCharacter().getWeight());
 
             int basicScore     = 0;
             int fameScore      = players.get(i).getFame();
@@ -1332,51 +1334,7 @@ public class ServerController extends Handler{
             	players.get(i).removeMonsterTarget();
             }
     	}
-        
-        
-        //Dropping heavier items
-        for (int i = 0; i < players.size(); i++) {
-        	ItemWeight weight = players.get(i).getCharacter().getWeight();
-        	
-        	if (players.get(i).hasTreasure(SmallTreasureName.LEAGUE_BOOTS_7.toString())) {
-        		network.send(players.get(i).getID(), "Using the '7-League Boots' for weight restrictions");
-    			weight = ItemWeight.TREMENDOUS;
-    		}
-    		else if (players.get(i).hasTreasure(SmallTreasureName.POWER_BOOTS.toString()) && (weight == ItemWeight.MEDIUM || weight == ItemWeight.LIGHT || weight == ItemWeight.NEGLIGIBLE)){
-        		network.send(players.get(i).getID(), "Using the 'Power Boots' for weight restrictions");
-    			weight = ItemWeight.HEAVY;
-    		}
-    		else if (players.get(i).hasTreasure(SmallTreasureName.QUICK_BOOTS.toString()) && (weight == ItemWeight.LIGHT || weight == ItemWeight.NEGLIGIBLE)) {
-        		network.send(players.get(i).getID(), "Using the 'Quick Boots' for weight restrictions");
-    			weight = ItemWeight.MEDIUM;
-    		}
-    		else if (players.get(i).hasTreasure(SmallTreasureName.ELVEN_SLIPPERS.toString()) && (weight == ItemWeight.NEGLIGIBLE)) {
-        		network.send(players.get(i).getID(), "Using the 'Elven Slippers' for weight restrictions");
-    			weight = ItemWeight.LIGHT;
-    		}
-    		else if (players.get(i).hasTreasure(SmallTreasureName.SHOES_OF_STEALTH.toString()) && (weight == ItemWeight.NEGLIGIBLE)) {
-        		network.send(players.get(i).getID(), "Using the 'Shoes of Stealth' for weight restrictions");
-    			weight = ItemWeight.LIGHT;
-    		}
-    		else{
-    			network.send(players.get(i).getID(), "Using base character weight class for weight restrictions");
-    		}
-        	
-        	ArrayList<Weapon> w = players.get(i).removeWeaponsWithHigherWeight(weight);
-        	ArrayList<Armour> a = players.get(i).removeArmourWithHigherWeight(weight);
-        	if(w.size() > 0 || a.size() >0){
-        		for(Weapon x : w){
-        			network.send(players.get(i).getID(), "You were overburdened and dropped "+ x.getType());
-        		}
-        		for(Armour s : a){
-        			network.send(players.get(i).getID(), "You were overburdened and dropped "+ s.getType());
-        		}
-        		network.broadCast("A Treasure Pile was Created at: "+players.get(i).getLocation().parent.getName()+" "+players.get(i).getLocation().getClearingNumber());
-        		TreasurePile pile = new TreasurePile(new ArrayList<Treasure>(), a, w, 0);
-        		players.get(i).getLocation().setPile(pile);
-        	}
-        }
-        
+      
         //Progresses to the next day or ends the game
         boolean thing = resetDay();
         if(thing == true){ //if it is not the 28th day....
@@ -1392,6 +1350,50 @@ public class ServerController extends Handler{
         }
     }
 
+    private void applyWeightRestrictions(Player p, Clearing c){
+
+    	ItemWeight weight = p.getCharacter().getWeight();
+
+    	if (p.hasTreasure(SmallTreasureName.LEAGUE_BOOTS_7.toString())) {
+    		network.send(p.getID(), "Using the '7-League Boots' for weight restrictions");
+    		weight = ItemWeight.TREMENDOUS;
+    	}
+    	else if (p.hasTreasure(SmallTreasureName.POWER_BOOTS.toString()) && (weight == ItemWeight.MEDIUM || weight == ItemWeight.LIGHT || weight == ItemWeight.NEGLIGIBLE)){
+    		network.send(p.getID(), "Using the 'Power Boots' for weight restrictions");
+    		weight = ItemWeight.HEAVY;
+    	}
+    	else if (p.hasTreasure(SmallTreasureName.QUICK_BOOTS.toString()) && (weight == ItemWeight.LIGHT || weight == ItemWeight.NEGLIGIBLE)) {
+    		network.send(p.getID(), "Using the 'Quick Boots' for weight restrictions");
+    		weight = ItemWeight.MEDIUM;
+    	}
+    	else if (p.hasTreasure(SmallTreasureName.ELVEN_SLIPPERS.toString()) && (weight == ItemWeight.NEGLIGIBLE)) {
+    		network.send(p.getID(), "Using the 'Elven Slippers' for weight restrictions");
+    		weight = ItemWeight.LIGHT;
+    	}
+    	else if (p.hasTreasure(SmallTreasureName.SHOES_OF_STEALTH.toString()) && (weight == ItemWeight.NEGLIGIBLE)) {
+    		network.send(p.getID(), "Using the 'Shoes of Stealth' for weight restrictions");
+    		weight = ItemWeight.LIGHT;
+    	}
+    	else{
+    		network.send(p.getID(), "Using base character weight class for weight restrictions");
+    	}
+
+    	ArrayList<Weapon> w = p.removeWeaponsWithHigherWeight(weight);
+    	ArrayList<Armour> a = p.removeArmourWithHigherWeight(weight);
+    	
+    	if(w.size() > 0 || a.size() >0){
+    		for(Weapon x : w){
+    			network.send(p.getID(), "You were overburdened and dropped "+ x.getType());
+    		}
+    		for(Armour s : a){
+    			network.send(p.getID(), "You were overburdened and dropped "+ s.getType());
+    		}
+    		network.broadCast("A Treasure Pile was Created at: "+c.parent.getName()+" "+c.getClearingNumber());
+    		TreasurePile pile = new TreasurePile(new ArrayList<Treasure>(), a, w, 0);
+    		c.setPile(pile);
+    	}
+    }
+    
     public int checkLivingPlayers() {
     	int alivePlayers = 0;
     	for (int i = 0; i < players.size(); i++) {
