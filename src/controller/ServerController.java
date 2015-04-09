@@ -1315,23 +1315,35 @@ public class ServerController extends Handler{
 
             //All players choose attackers
             for (int i = 0; i < players.size(); i++) {
-            	if (players.get(i).getTarget() != null) {
-            		for (int j = 0; j < players.get(i).getTarget().size(); j++) {
-            			encounter(players.get(i), players.get(i).getTarget().get(j));
+            	if (alivePlayers > 1) {
+            		if (players.get(i).getTarget() != null) {
+            			for (int j = 0; j < players.get(i).getTarget().size(); j++) {
+            				encounter(players.get(i), players.get(i).getTarget().get(j));
+            			}
+            			//System.out.println("Finished encounter");
             		}
-            		//System.out.println("Finished encounter");
+            		players.get(i).removeTarget();
+            		alivePlayers = checkLivingPlayers();
+            		if (alivePlayers <= 1) {
+            			endGame();
+            		}
             	}
-            	players.get(i).removeTarget();
             }
 
             for (int i = 0; i < players.size(); i++) {
-            	if (players.get(i).getMonsterTarget() != null) {
-            		for (int j = 0; j < players.get(i).getMonsterTarget().size(); j++) {
-            			encounter(players.get(i), players.get(i).getMonsterTarget().get(j));
+            	if (alivePlayers > 1) {
+            		if (players.get(i).getMonsterTarget() != null) {
+            			for (int j = 0; j < players.get(i).getMonsterTarget().size(); j++) {
+            				encounter(players.get(i), players.get(i).getMonsterTarget().get(j));
+            			}
+            			//System.out.println("Finished encounter");
             		}
-            		//System.out.println("Finished encounter");
+            		players.get(i).removeMonsterTarget();
+            		alivePlayers = checkLivingPlayers();
+            		if (alivePlayers <= 1) {
+            			endGame();
+            		}
             	}
-            	players.get(i).removeMonsterTarget();
             }
     	}
       
@@ -2161,11 +2173,6 @@ public class ServerController extends Handler{
 		
 		network.send(player.getID(), "YOU WERE KILLED");
 		network.broadCast(player.getCharacter().getName() + " has been killed by "+monster.getName());
-		
-		int alivePlayers = checkLivingPlayers();
-    	if (alivePlayers <= 1) {
-    		endGame();
-    	}
 	}
 
 	public void deadMonster(Player player, Monster monster) {
@@ -2203,11 +2210,6 @@ public class ServerController extends Handler{
 		
 		network.send(defender.getID(), "YOU WERE KILLED");
 		network.broadCast(defender.getCharacter().getName() + " has been killed by "+attacker.getCharacter().getName());
-		
-		int alivePlayers = checkLivingPlayers();
-    	if (alivePlayers <= 1) {
-    		endGame();
-    	}
 	}
 
 	/**
