@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import utils.Utility;
 import utils.Utility.Actions;
+import utils.Utility.ClearingType;
 import utils.Utility.ItemWeight;
 import utils.Utility.LargeTreasureName;
 import utils.Utility.MonsterName;
@@ -71,8 +72,13 @@ public class Player implements Serializable{
     		finishedDaylight = false;
         	finishedBasic = false;
         	addedSunlight = false;
-        	goneInCave = false;
         	actuallydone = false;
+ 
+        	if(location.getType() != ClearingType.CAVE){
+        		goneInCave = false;
+        	}else{
+        		goneInCave = true;
+        	}
         	
         	phases = new ArrayList<Phase>();
     		

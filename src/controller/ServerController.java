@@ -1292,9 +1292,36 @@ public class ServerController extends Handler{
         rollForMonsters();
 
         startActivitiesHandler();
+        
+        try {
+			Thread.sleep(40);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+        
         allowMonstersToProwl();
+        
+        try {
+			Thread.sleep(40);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+        
         summonMonstersToTile();
+        
+        try {
+			Thread.sleep(40);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+        
         updateClients();
+        
+        try {
+			Thread.sleep(40);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 
         for (int i = 0; i < board.tiles.size(); i++) {
         	for (int j = 0; j < board.tiles.get(i).getClearings().size(); j++) {
