@@ -147,9 +147,6 @@ public class ServerController extends Handler{
 							handleAction(p,(Phase)m.getData().get(0));
 						}
 
-						//tell client it worked
-						network.send(ID, "ACTION SUCCEEDED");
-
 						//check to see if basics are over, if so add sunlight
 						p.checkAndAddSunlight();
 						
@@ -1114,12 +1111,6 @@ public class ServerController extends Handler{
     	distributeCharacters();		//tell the client's their options
 
     	//1. Send each player their notice for 2 basic moves
-    	//Commented out because we don't need to send to everyone AND broadcast, right?
-    	/*for (int i = 0; i < players.size(); i++) {
-    		if (players.get(i).isDead() == false) {
-    			network.send(players.get(i).getID(), "SEND MOVES");
-    		}
-    	}*/
     	
     	network.broadCast("SEND MOVES");
 
