@@ -391,17 +391,17 @@ public class Player implements Serializable{
     	String s = "";
     	if (weapons != null) {
     		for (int i = 0; i < weapons.size(); i++) {
-            	if (weapons.get(i).getWeight() == ItemWeight.NEGLIGIBLE)
-                	continue;
-            	if (weapons.get(i).getWeight() == weight) {
-                	continue;
-            	}
             	if (Utility.isWeightHeavier(weapons.get(i).getWeight(), weight)) {
             		s+=weapons.get(i).getType();
             		toDrop.add(weapons.get(i));
-                	weapons.remove(i);
+                	//weapons.remove(i);
             	}
         	}
+    		
+    		for(Weapon w : toDrop){
+        		weapons.remove(w);
+    		}
+    		
         }
     	System.out.println("Dropping weapons: "+s);
     	return toDrop;
@@ -417,9 +417,14 @@ public class Player implements Serializable{
             	if (Utility.isWeightHeavier(armour.get(i).getWeight(), weight)) {
             		s+=armour.get(i).getType();
             		toDrop.add(armour.get(i));
-            		armour.remove(i);
             	}
         	}
+    		
+    		for(Armour a : toDrop){
+        		armour.remove(a);
+    		}
+    		
+    		
     	}
     	System.out.println("Dropping armour: "+s);
     	return toDrop;
