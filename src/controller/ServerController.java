@@ -2003,6 +2003,7 @@ public class ServerController extends Handler{
 		}
 		else if (level == ItemWeight.HEAVY) {
 			if (player.getCharacter().getName() == CharacterName.BERSERKER) {
+				network.broadCast("The Berserker is berserking!");
 				player.setHealth(player.getHealth() + 1);
 				network.broadCast(player.getCharacter().getName() + " has been wounded!");
 				if (player.getHealth() == 4) {
@@ -2152,6 +2153,7 @@ public class ServerController extends Handler{
 		}
 		else if (level == ItemWeight.HEAVY) {
 			if (defender.getCharacter().getName() == CharacterName.BERSERKER) {
+				network.broadCast("The Berserker is berserking!");
 				defender.setHealth(defender.getHealth() + 1);
 				network.broadCast(defender.getCharacter().getName() + " has been wounded!");
 				if (defender.getHealth() == 4) {
@@ -2208,6 +2210,7 @@ public class ServerController extends Handler{
 		TreasurePile pile = new TreasurePile(treasures, armour, weapons, player.getGold());
 		player.getLocation().setPile(pile);
 		player.removeAll();
+		player.setHealth(player.getHealth() + 4);
 		player.kill();
 		
 		network.send(player.getID(), "YOU WERE KILLED");
@@ -2246,6 +2249,7 @@ public class ServerController extends Handler{
 		}
 		defender.removeFame(defender.getFame());
 		defender.removeNotoriety(defender.getNotoriety());
+		defender.setHealth(defender.getHealth() + 4);
 		defender.kill();
 		
 		network.send(defender.getID(), "YOU WERE KILLED");
