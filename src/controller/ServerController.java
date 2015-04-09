@@ -59,6 +59,7 @@ public class ServerController extends Handler{
 	private int monsterRoll;
 	public boolean cheatmode = false;
 	public Scanner ourScanner= null;
+	public boolean endGame = false;
 
 	/**
 	 * Constructor for a ServerController
@@ -1081,7 +1082,7 @@ public class ServerController extends Handler{
         if(winner != null){
             network.broadCast(winner.getCharacter().getName()+ " is the winner");
         }
-        
+        endGame = true;
         network.stop();
     }
 
@@ -1310,12 +1311,12 @@ public class ServerController extends Handler{
         	}
         }
         int alivePlayers = checkLivingPlayers();
-    	if (alivePlayers > 1) {
+    	if (alivePlayers > 1 && endGame == false) {
     		collectCombat(); //2 players, 1 attacker 1 defender
 
             //All players choose attackers
             for (int i = 0; i < players.size(); i++) {
-            	if (alivePlayers > 1) {
+            	if (alivePlayers > 1 && endGame == false) {
             		if (players.get(i).getTarget() != null) {
             			for (int j = 0; j < players.get(i).getTarget().size(); j++) {
             				encounter(players.get(i), players.get(i).getTarget().get(j));
@@ -1324,14 +1325,14 @@ public class ServerController extends Handler{
             		}
             		players.get(i).removeTarget();
             		alivePlayers = checkLivingPlayers();
-            		if (alivePlayers <= 1) {
+            		if (alivePlayers <= 1  && endGame == false) {
             			endGame();
             		}
             	}
             }
 
             for (int i = 0; i < players.size(); i++) {
-            	if (alivePlayers > 1) {
+            	if (alivePlayers > 1 && endGame == false) {
             		if (players.get(i).getMonsterTarget() != null) {
             			for (int j = 0; j < players.get(i).getMonsterTarget().size(); j++) {
             				encounter(players.get(i), players.get(i).getMonsterTarget().get(j));
@@ -1340,7 +1341,7 @@ public class ServerController extends Handler{
             		}
             		players.get(i).removeMonsterTarget();
             		alivePlayers = checkLivingPlayers();
-            		if (alivePlayers <= 1) {
+            		if (alivePlayers <= 1 && endGame == false) {
             			endGame();
             		}
             	}
@@ -1351,14 +1352,18 @@ public class ServerController extends Handler{
         boolean thing = resetDay();
         if(thing == true){ //if it is not the 28th day....
         	alivePlayers = checkLivingPlayers();
-        	if (alivePlayers > 1) {
+        	if (alivePlayers > 1 && endGame == false) {
         		startDay();
         	}
         	else {
-        		endGame();
+        		if (endGame == false) {
+        			endGame();
+        		}
         	}
         } else {
-        	endGame();
+        	 if (endGame == false) {
+        		 endGame();
+        	 }
         }
     }
 
