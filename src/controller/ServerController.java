@@ -2199,12 +2199,13 @@ public class ServerController extends Handler{
 		TreasurePile pile = new TreasurePile(treasures, armour, weapons, defender.getGold());
 		defender.getLocation().setPile(pile);
 		defender.removeAll();
-		if (attacker.isDead() == false) {
-			attacker.addFame(10); // Arbitrary value
+		if (attacker.isDead() == false && defender.isDead() == false) {
+			attacker.addFame(10 + defender.getFame()); // Arbitrary value
 			//attacker.addGold(defender.getGold());
 			//defender.removeGold(defender.getGold());
 			attacker.addNotoriety(defender.getNotoriety());
 		}
+		defender.removeFame(defender.getFame());
 		defender.removeNotoriety(defender.getNotoriety());
 		defender.kill();
 		
