@@ -1651,7 +1651,7 @@ public class ServerController extends Handler{
 				hit(player, monster);
 			}
 		}
-		if (player.isDead() == false && monster.isDead() == false) {
+		//if (player.isDead() == false && monster.isDead() == false) {
 			if ((player.getCharacter().getSpeed() - monster.getMoves().getAttackFatigue()) <= (monster.getAttackSpeed() - player.getMoves().getManeuverFatigue())) {
 				hit(monster, player);
 			}
@@ -1664,7 +1664,7 @@ public class ServerController extends Handler{
 			else if (monster.getMoves().getAttack() == Attacks.SMASH && player.getMoves().getManeuver() == Maneuvers.DUCK) {
 				hit(monster, player);
 			}
-		}
+		//}
 	}
 
 	public void checkHit(Monster monster, Player player) {
@@ -1682,7 +1682,7 @@ public class ServerController extends Handler{
 				hit(monster, player);
 			}
 		}
-		if (player.isDead() == false && monster.isDead() == false) {
+		//if (player.isDead() == false && monster.isDead() == false) {
 			if ((monster.getAttackSpeed() - player.getMoves().getAttackFatigue()) <= (player.getCharacter().getSpeed() - monster.getMoves().getManeuverFatigue())) {
 				hit(player, monster);
 			}
@@ -1695,7 +1695,7 @@ public class ServerController extends Handler{
 			else if (player.getMoves().getAttack() == Attacks.SMASH && monster.getMoves().getManeuver() == Maneuvers.DUCK) {
 				hit(player, monster);
 			}
-		}
+		//}
 	}
 
 	public void checkHit(Player attacker, Player defender) {
@@ -1713,7 +1713,7 @@ public class ServerController extends Handler{
 				hit(attacker, defender);
 			}
 		}
-		if (defender.isDead() == false && attacker.isDead() == false) {
+		//if (defender.isDead() == false && attacker.isDead() == false) {
 			if ((attacker.getActiveWeapon().getSpeed() - defender.getMoves().getAttackFatigue()) <= (defender.getCharacter().getSpeed() - attacker.getMoves().getManeuverFatigue())) {
 				hit(defender, attacker);
 			}
@@ -1726,7 +1726,7 @@ public class ServerController extends Handler{
 			else if (defender.getMoves().getAttack() == Attacks.SMASH && attacker.getMoves().getManeuver() == Maneuvers.DUCK) {
 				hit(defender, attacker);
 			}
-		}
+		//}
     }
 
 	public void hit(Player player, Monster monster) {
@@ -2190,10 +2190,12 @@ public class ServerController extends Handler{
 		TreasurePile pile = new TreasurePile(treasures, armour, weapons, defender.getGold());
 		defender.getLocation().setPile(pile);
 		defender.removeAll();
-		attacker.addFame(10); // Arbitrary value
-		//attacker.addGold(defender.getGold());
-		//defender.removeGold(defender.getGold());
-		attacker.addNotoriety(defender.getNotoriety());
+		if (attacker.isDead() == false) {
+			attacker.addFame(10); // Arbitrary value
+			//attacker.addGold(defender.getGold());
+			//defender.removeGold(defender.getGold());
+			attacker.addNotoriety(defender.getNotoriety());
+		}
 		defender.removeNotoriety(defender.getNotoriety());
 		defender.kill();
 		
